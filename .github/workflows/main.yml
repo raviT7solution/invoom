@@ -1,0 +1,64 @@
+name: build
+
+on: [push]
+
+env:
+  DATABASE_URL: postgres://postgres@localhost/backend_test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        image: postgres:alpine
+        ports:
+          - 5432:5432
+
+    steps:
+      # Install
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: 3.1.2
+          working-directory: ./backend
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          cache: pnpm
+          cache-dependency-path: |
+            ./frontend/pnpm-lock.yaml
+          node-version: 18.17.1
+      - uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
+
+      # Lint
+      - run: bundle exec rubocop
+        working-directory: ./backend
+      - run: bundle exec rubocop ../tests
+        working-directory: ./backend
+      - run: pnpm install --frozen-lockfile
+        working-directory: ./frontend
+      - run: pnpm lint
+        working-directory: ./frontend
+
+      - run: pnpm build
+        working-directory: ./frontend
+
+      # Tests
+      - run: bundle exec rails db:create
+        working-directory: ./backend
+        env:
+          RAILS_ENV: test
+      - run: bundle exec rails test
+        working-directory: ./backend
+      - run: FERRUM_NODE_MOVING_WAIT=0.5 RUBYOPT="-I tests" ./backend/bin/rails test "tests/**/*_test.rb"
+        env:
+          FERRUM_NODE_MOVING_WAIT: 0.5
+          RUBYOPT: -I tests
