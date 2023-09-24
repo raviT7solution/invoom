@@ -51,6 +51,19 @@ jobs:
       - run: pnpm build
         working-directory: ./frontend
 
+      # Graphql schema validator
+      - name: Generate graphql schema
+        run: |
+          bundle exec rails runner 'require "graphql/rake_task"; GraphQL::RakeTask.new(schema_name: "BackendSchema"); Rake::Task["graphql:schema:dump"].invoke'
+        working-directory: ./backend
+      - name: Validate graphql schema usage
+        run: |
+          pnpm codegen
+          git diff --exit-code src/api/base.ts
+        working-directory: ./frontend
+        env:
+          SCHEMA_PATH: ../backend/schema.graphql
+
       # Tests
       - run: bundle exec rails db:create
         working-directory: ./backend

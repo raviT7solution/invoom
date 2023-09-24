@@ -1,0 +1,15 @@
+overwrite: true
+schema: ${SCHEMA_PATH}
+documents: "src/**/*.{ts,tsx}"
+generates:
+  src/api/base.ts:
+    config:
+      skipTypename: true
+    plugins:
+      - add:
+          content: |
+            /* eslint-disable */
+            // @ts-nocheck
+      - typescript
+      - typescript-operations
+      - typed-document-node
