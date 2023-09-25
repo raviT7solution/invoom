@@ -99,6 +99,13 @@ GEM
       irb (>= 1.5.0)
       reline (>= 0.3.1)
     erubi (1.12.0)
+    factory_bot (6.2.1)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.2.0)
+      factory_bot (~> 6.2.0)
+      railties (>= 5.0.0)
+    faker (3.2.1)
+      i18n (>= 1.8.11, < 2)
     ferrum (0.13)
       addressable (~> 2.5)
       concurrent-ruby (~> 1.1)
@@ -211,6 +218,8 @@ GEM
       parser (>= 3.2.1.0)
     rubocop-capybara (2.19.0)
       rubocop (~> 1.41)
+    rubocop-factory_bot (2.24.0)
+      rubocop (~> 1.33)
     rubocop-graphql (1.4.0)
       rubocop (>= 0.90, < 2)
     rubocop-minitest (0.31.1)
@@ -245,6 +254,8 @@ DEPENDENCIES
   capybara
   cuprite
   debug
+  factory_bot_rails
+  faker
   graphql
   pg (~> 1.1)
   phantom!
@@ -253,6 +264,7 @@ DEPENDENCIES
   rails (~> 7.0.4, >= 7.0.4.3)
   rubocop
   rubocop-capybara
+  rubocop-factory_bot
   rubocop-graphql
   rubocop-minitest
   rubocop-ordered_methods

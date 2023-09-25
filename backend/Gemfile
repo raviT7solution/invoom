@@ -41,8 +41,11 @@ gem "rack-cors"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: [:mri, :mingw, :x64_mingw]
+  gem "factory_bot_rails"
+  gem "faker"
   gem "rubocop"
   gem "rubocop-capybara"
+  gem "rubocop-factory_bot"
   gem "rubocop-graphql"
   gem "rubocop-minitest"
   gem "rubocop-ordered_methods"
