@@ -71,7 +71,4 @@ jobs:
           RAILS_ENV: test
       - run: bundle exec rails test
         working-directory: ./backend
-      - run: FERRUM_NODE_MOVING_WAIT=0.5 RUBYOPT="-I tests" ./backend/bin/rails test "tests/**/*_test.rb"
-        env:
-          FERRUM_NODE_MOVING_WAIT: 0.5
-          RUBYOPT: -I tests
+      - run: FERRUM_NODE_MOVING_WAIT=0.1 RUBYOPT="-I tests" ./backend/bin/rails test "tests/**/*_test.rb"
