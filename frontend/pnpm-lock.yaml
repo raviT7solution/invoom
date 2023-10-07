@@ -49,6 +49,9 @@ devDependencies:
   '@graphql-typed-document-node/core':
     specifier: ^3.2.0
     version: 3.2.0(graphql@16.8.1)
+  '@tanstack/eslint-plugin-query':
+    specifier: ^4.36.1
+    version: 4.36.1(eslint@8.48.0)
   '@types/react':
     specifier: ^18.2.15
     version: 18.2.21
@@ -1863,6 +1866,14 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
+
+  /@tanstack/eslint-plugin-query@4.36.1(eslint@8.48.0):
+    resolution: {integrity: sha512-qFIYV/BuwWzg0t5mSRMcb+rzrOVtCO9EizYxeClFxuFq/c54cNhAQCnDrA3iCxFz/fqRv7I9rxxnR/ZWkX15cQ==}
+    peerDependencies:
+      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+    dependencies:
+      eslint: 8.48.0
+    dev: true
 
   /@tanstack/query-core@4.35.3:
     resolution: {integrity: sha512-PS+WEjd9wzKTyNjjQymvcOe1yg8f3wYc6mD+vb6CKyZAKvu4sIJwryfqfBULITKCla7P9C4l5e9RXePHvZOZeQ==}

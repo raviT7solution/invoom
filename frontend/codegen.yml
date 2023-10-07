@@ -4,6 +4,7 @@ documents: "src/api/base.graphql"
 generates:
   src/api/base.ts:
     config:
+      disableDescriptions: true
       skipTypename: true
     plugins:
       - add:

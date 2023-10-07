@@ -11,7 +11,8 @@
     "plugin:import/typescript",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
   ],
   "ignorePatterns": ["dist"],
   "overrides": [],
