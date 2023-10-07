@@ -5,4 +5,6 @@ class Mutations::BaseMutation < GraphQL::Schema::RelayClassicMutation
   field_class Types::BaseField
   input_object_class Types::BaseInputObject
   object_class Types::BaseObject
+
+  include ResponseConcern::Helpers
 end

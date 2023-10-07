@@ -8,6 +8,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :cuprite, options: { headless: ENV.fetch("CI", false) }
 
   include ActionDispatch::TestProcess::FixtureFile
+  include SessionsHelper
 
   setup do
     Capybara.current_session

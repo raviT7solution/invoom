@@ -1,6 +1,6 @@
 overwrite: true
 schema: ${SCHEMA_PATH}
-documents: "src/**/*.{ts,tsx}"
+documents: "src/api/base.graphql"
 generates:
   src/api/base.ts:
     config:
@@ -9,7 +9,6 @@ generates:
       - add:
           content: |
             /* eslint-disable */
-            // @ts-nocheck
       - typescript
       - typescript-operations
       - typed-document-node

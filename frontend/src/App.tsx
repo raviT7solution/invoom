@@ -1,6 +1,7 @@
+import { StyleProvider } from "@ant-design/cssinjs";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { useTest } from "./api";
+import { Switch } from "./Routes";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -10,17 +11,13 @@ const queryClient = new QueryClient({
   },
 });
 
-const Test = () => {
-  const { data } = useTest();
-
-  return <h1>{data?.testField}</h1>;
-};
-
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Test />
-    </QueryClientProvider>
+    <StyleProvider hashPriority="high">
+      <QueryClientProvider client={queryClient}>
+        <Switch />
+      </QueryClientProvider>
+    </StyleProvider>
   );
 };
 

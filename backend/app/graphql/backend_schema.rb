@@ -9,4 +9,6 @@ class BackendSchema < GraphQL::Schema
   validate_max_errors(100)
 
   disable_introspection_entry_points if Rails.env.production?
+
+  include ResponseConcern::ExceptionsHandler
 end
