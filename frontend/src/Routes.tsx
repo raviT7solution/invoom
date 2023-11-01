@@ -4,10 +4,10 @@ import { match } from "ts-pattern";
 
 import { Login } from "./Pages/Login";
 import { SettingsUsers } from "./Pages/Settings/Users";
-import { useUserSessionsStore } from "./stores/useUserSessionStore";
+import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 
 export const PrivateRoute = ({ children }: PropsWithChildren) => {
-  const token = useUserSessionsStore((s) => s.token);
+  const token = useAdminSessionStore((s) => s.token);
 
   if (!token) {
     Router.replace("Login");

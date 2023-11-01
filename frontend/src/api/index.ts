@@ -3,17 +3,17 @@ import { notification } from "antd";
 import { GraphQLClient } from "graphql-request";
 
 import {
-  UserSessionCreateDocument,
-  UserSessionCreateMutationVariables,
+  AdminSessionCreateDocument,
+  AdminSessionCreateMutationVariables,
 } from "./base";
 
-import { useUserSessionsStore } from "../stores/useUserSessionStore";
+import { useAdminSessionStore } from "../stores/useAdminSessionStore";
 
 const client = new GraphQLClient(
   `${import.meta.env.VITE_BACKEND_BASE_URL}/graphql`,
   {
     headers: () => ({
-      Authorization: `Bearer ${useUserSessionsStore.getState().token}`,
+      Authorization: `Bearer ${useAdminSessionStore.getState().token}`,
     }),
     responseMiddleware: (r) => {
       if ("response" in r && r.response.errors) {
@@ -25,9 +25,9 @@ const client = new GraphQLClient(
   },
 );
 
-export const useUserSessionCreate = () => {
+export const useAdminSessionCreate = () => {
   return useMutation({
-    mutationFn: (variables: UserSessionCreateMutationVariables) =>
-      client.request(UserSessionCreateDocument, variables),
+    mutationFn: (variables: AdminSessionCreateMutationVariables) =>
+      client.request(AdminSessionCreateDocument, variables),
   });
 };

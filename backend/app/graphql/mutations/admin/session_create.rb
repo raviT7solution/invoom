@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-class Mutations::User::SessionCreate < Mutations::BaseMutation
+class Mutations::Admin::SessionCreate < Mutations::BaseMutation
   argument :email, String, required: true
   argument :password, String, required: true
 
-  type Types::User::SessionType, null: false
+  type Types::Admin::SessionType, null: false
 
   def resolve(email:, password:)
-    user = User.find_by!(email: email)
+    admin = Admin.find_by!(email: email)
 
-    if user.authenticate(password)
-      user.session
+    if admin.authenticate(password)
+      admin.session
     else
       raise_error "Invalid password"
     end

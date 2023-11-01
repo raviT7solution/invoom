@@ -4,8 +4,8 @@ require "application_system_test_case"
 
 class DashboardTest < ApplicationSystemTestCase
   test "root page" do
-    user = create(:user)
-    sign_in(user)
+    admin = create(:admin)
+    sign_in(admin)
 
     visit path_for(:frontend, "/")
 

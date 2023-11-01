@@ -18,11 +18,11 @@ export type Scalars = {
 };
 
 export type Mutation = {
-  userSessionCreate: Session;
+  adminSessionCreate: Session;
 };
 
 
-export type MutationUserSessionCreateArgs = {
+export type MutationAdminSessionCreateArgs = {
   input: SessionCreateInput;
 };
 
@@ -40,12 +40,12 @@ export type SessionCreateInput = {
   password: Scalars['String']['input'];
 };
 
-export type UserSessionCreateMutationVariables = Exact<{
+export type AdminSessionCreateMutationVariables = Exact<{
   input: SessionCreateInput;
 }>;
 
 
-export type UserSessionCreateMutation = { userSessionCreate: { token: string } };
+export type AdminSessionCreateMutation = { adminSessionCreate: { token: string } };
 
 
-export const UserSessionCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"userSessionCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SessionCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userSessionCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<UserSessionCreateMutation, UserSessionCreateMutationVariables>;
+export const AdminSessionCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"adminSessionCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SessionCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"adminSessionCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<AdminSessionCreateMutation, AdminSessionCreateMutationVariables>;

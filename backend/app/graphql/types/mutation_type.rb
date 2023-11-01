@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 class Types::MutationType < Types::BaseObject
-  field :user_session_create, mutation: Mutations::User::SessionCreate, null: false
+  field :admin_session_create, mutation: Mutations::Admin::SessionCreate, null: false
 end

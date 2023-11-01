@@ -19,6 +19,6 @@ class User < ApplicationRecord
   end
 
   def session
-    User::Session.new(self)
+    Session.new(self)
   end
 end

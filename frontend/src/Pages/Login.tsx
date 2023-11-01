@@ -6,9 +6,9 @@ import {
 } from "@ant-design/icons";
 import { Button, Card, Checkbox, Form, Input } from "antd";
 
-import { useUserSessionCreate } from "../api";
+import { useAdminSessionCreate } from "../api";
 import { Router } from "../Routes";
-import { useUserSessionsStore } from "../stores/useUserSessionStore";
+import { useAdminSessionStore } from "../stores/useAdminSessionStore";
 
 type schema = {
   email: string;
@@ -18,11 +18,11 @@ type schema = {
 export const Login = () => {
   const [form] = Form.useForm<schema>();
 
-  const { isLoading, mutateAsync } = useUserSessionCreate();
-  const create = useUserSessionsStore((s) => s.create);
+  const { isLoading, mutateAsync } = useAdminSessionCreate();
+  const create = useAdminSessionStore((s) => s.create);
 
   const onFinish = async (values: schema) => {
-    create((await mutateAsync({ input: values })).userSessionCreate.token);
+    create((await mutateAsync({ input: values })).adminSessionCreate.token);
 
     Router.push("Dashboard");
   };

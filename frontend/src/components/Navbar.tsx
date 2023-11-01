@@ -9,7 +9,7 @@ import { Breadcrumb, Layout, Menu } from "antd";
 import { ReactNode } from "react";
 
 import { Router } from "../Routes";
-import { useUserSessionsStore } from "../stores/useUserSessionStore";
+import { useAdminSessionStore } from "../stores/useAdminSessionStore";
 
 import type { BreadcrumbProps, MenuProps } from "antd";
 
@@ -20,7 +20,7 @@ export const Navbar = ({
   breadcrumbItems: BreadcrumbProps["items"];
   children: ReactNode;
 }) => {
-  const destroy = useUserSessionsStore((s) => s.destroy);
+  const destroy = useAdminSessionStore((s) => s.destroy);
 
   const onLogout = () => {
     destroy();

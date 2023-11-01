@@ -7,7 +7,7 @@ type State = {
   destroy: () => void;
 };
 
-export const useUserSessionsStore = create<State>()(
+export const useAdminSessionStore = create<State>()(
   persist(
     (set) => ({
       token: undefined,

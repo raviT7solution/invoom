@@ -4,14 +4,14 @@ require "application_system_test_case"
 
 class LoginTest < ApplicationSystemTestCase
   test "valid credentials" do
-    user = create(:user)
+    admin = create(:admin)
 
     visit path_for(:frontend, "/")
 
     assert_selector ".ant-card-head-title", text: "Login"
 
-    fill_in "Email", with: user.email
-    fill_in "Password", with: user.password
+    fill_in "Email", with: admin.email
+    fill_in "Password", with: admin.password
 
     click_on "Login"
 
@@ -19,13 +19,13 @@ class LoginTest < ApplicationSystemTestCase
   end
 
   test "invalid credentials" do
-    user = create(:user)
+    admin = create(:admin)
 
     visit path_for(:frontend, "/")
 
     assert_selector ".ant-card-head-title", text: "Login"
 
-    fill_in "Email", with: user.email
+    fill_in "Email", with: admin.email
     fill_in "Password", with: "wrong"
 
     click_on "Login"
