@@ -18,7 +18,7 @@ type schema = {
 export const Login = () => {
   const [form] = Form.useForm<schema>();
 
-  const { isLoading, mutateAsync } = useAdminSessionCreate();
+  const { isPending, mutateAsync } = useAdminSessionCreate();
   const create = useAdminSessionStore((s) => s.create);
 
   const onFinish = async (values: schema) => {
@@ -56,7 +56,7 @@ export const Login = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button block htmlType="submit" loading={isLoading} type="primary">
+            <Button block htmlType="submit" loading={isPending} type="primary">
               Login
             </Button>
           </Form.Item>
