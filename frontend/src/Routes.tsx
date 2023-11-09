@@ -3,7 +3,7 @@ import { PropsWithChildren } from "react";
 import { match } from "ts-pattern";
 
 import { Login } from "./Pages/Login";
-import { SettingsUsers } from "./Pages/Settings/Users";
+import { Roles } from "./Pages/Teams/Roles";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 
 export const PrivateRoute = ({ children }: PropsWithChildren) => {
@@ -21,7 +21,7 @@ export const PrivateRoute = ({ children }: PropsWithChildren) => {
 const routes = {
   Dashboard: "/",
   Login: "/login",
-  SettingsUsers: "/settings/users",
+  Teams: "/teams",
 } as const;
 
 const paths = Object.keys(routes) as (keyof typeof routes)[];
@@ -35,12 +35,12 @@ export const Switch = () => {
     .with({ name: "Login" }, () => <Login />)
     .with({ name: "Dashboard" }, () => (
       <PrivateRoute>
-        <SettingsUsers />
+        <Roles />
       </PrivateRoute>
     ))
-    .with({ name: "SettingsUsers" }, () => (
+    .with({ name: "Teams" }, () => (
       <PrivateRoute>
-        <SettingsUsers />
+        <Roles />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");

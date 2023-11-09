@@ -14,6 +14,7 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  include AssertHelpers
   include FactoryBot::Syntax::Methods
   include GraphqlRequestHelper
 end

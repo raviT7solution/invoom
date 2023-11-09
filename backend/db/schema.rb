@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_01_150322) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_01_171917) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "admin_restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "admin_id", null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["admin_id", "restaurant_id"], name: "index_admin_restaurants_on_admin_id_and_restaurant_id", unique: true
+    t.index ["admin_id"], name: "index_admin_restaurants_on_admin_id"
+    t.index ["restaurant_id"], name: "index_admin_restaurants_on_restaurant_id"
+  end
 
   create_table "admins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
@@ -22,6 +32,43 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_01_150322) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admins_on_email", unique: true
+  end
+
+  create_table "restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "restaurant_id", null: false
+    t.string "name"
+    t.string "permissions", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id", "name"], name: "index_roles_on_restaurant_id_and_name", unique: true
+    t.index ["restaurant_id"], name: "index_roles_on_restaurant_id"
+  end
+
+  create_table "user_restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_user_restaurants_on_restaurant_id"
+    t.index ["user_id", "restaurant_id"], name: "index_user_restaurants_on_user_id_and_restaurant_id", unique: true
+    t.index ["user_id"], name: "index_user_restaurants_on_user_id"
+  end
+
+  create_table "user_roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_user_roles_on_role_id"
+    t.index ["user_id", "role_id"], name: "index_user_roles_on_user_id_and_role_id", unique: true
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -45,4 +92,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_01_150322) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "admin_restaurants", "admins"
+  add_foreign_key "admin_restaurants", "restaurants"
+  add_foreign_key "roles", "restaurants"
+  add_foreign_key "user_restaurants", "restaurants"
+  add_foreign_key "user_restaurants", "users"
+  add_foreign_key "user_roles", "roles"
+  add_foreign_key "user_roles", "users"
 end

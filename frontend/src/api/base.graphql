@@ -3,3 +3,87 @@ mutation adminSessionCreate($input: SessionCreateInput!) {
     token
   }
 }
+
+query currentAdmin {
+  currentAdmin {
+    restaurants {
+      id
+      name
+    }
+  }
+}
+
+mutation roleCreate($input: RoleCreateInput!) {
+  roleCreate(input: $input) {
+    id
+  }
+}
+
+mutation roleUpdate($input: RoleUpdateInput!) {
+  roleUpdate(input: $input) {
+    id
+  }
+}
+
+mutation roleDelete($id: ID!) {
+  roleDelete(input: { id: $id }) {
+    id
+  }
+}
+
+query role($id: ID!) {
+  role(id: $id) {
+    id
+    name
+    permissions
+  }
+}
+
+query roles($restaurantId: ID!) {
+  roles(restaurantId: $restaurantId) {
+    id
+    name
+    users {
+      id
+      fullName
+    }
+  }
+}
+
+mutation userCreate($input: UserCreateInput!) {
+  userCreate(input: $input) {
+    id
+  }
+}
+
+mutation userUpdate($input: UserUpdateInput!) {
+  userUpdate(input: $input) {
+    id
+  }
+}
+
+mutation userDelete($id: ID!) {
+  userDelete(input: { id: $id }) {
+    id
+  }
+}
+
+query user($id: ID!) {
+  user(id: $id) {
+    address
+    city
+    email
+    endDate
+    firstName
+    fullName
+    gender
+    id
+    lastName
+    phoneNumber
+    startDate
+    username
+    wage
+    zipCode
+    roleIds
+  }
+}

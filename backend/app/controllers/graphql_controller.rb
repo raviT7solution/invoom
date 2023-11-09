@@ -5,12 +5,20 @@ class GraphqlController < ApplicationController
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
-    context = {}
+    context = {
+      current_user: current_user
+    }
     result = BackendSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
   end
 
   private
+
+  def current_user
+    token = request.headers["Authorization"].try(:gsub, "Bearer ", "")
+
+    Session.find_by(token: token) if token.present?
+  end
 
   def prepare_variables(variables_param)
     case variables_param

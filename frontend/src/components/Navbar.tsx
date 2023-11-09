@@ -1,15 +1,16 @@
 import {
-  UserOutlined,
-  SettingOutlined,
   LogoutOutlined,
   DashboardOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
-import { Breadcrumb, Layout, Menu } from "antd";
-import { ReactNode } from "react";
+import { Breadcrumb, Layout, Menu, Select } from "antd";
+import { ReactNode, useEffect } from "react";
 
+import { useCurrentAdmin } from "../api";
 import { Router } from "../Routes";
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
+import { useRestaurantIdStore } from "../stores/useRestaurantIdStore";
 
 import type { BreadcrumbProps, MenuProps } from "antd";
 
@@ -20,7 +21,20 @@ export const Navbar = ({
   breadcrumbItems: BreadcrumbProps["items"];
   children: ReactNode;
 }) => {
+  const { data: currentAdmin } = useCurrentAdmin();
   const destroy = useAdminSessionStore((s) => s.destroy);
+  const restaurantIdStore = useRestaurantIdStore();
+
+  useEffect(() => {
+    if (
+      !currentAdmin ||
+      !currentAdmin.restaurants[0] ||
+      restaurantIdStore.restaurantId
+    )
+      return;
+
+    restaurantIdStore.create(currentAdmin.restaurants[0].id);
+  }, [restaurantIdStore, currentAdmin]);
 
   const onLogout = () => {
     destroy();
@@ -35,40 +49,41 @@ export const Navbar = ({
       key: "1",
     },
     {
-      label: "Setting",
-      icon: <SettingOutlined />,
+      label: <Link to={Router.Teams()}>Team</Link>,
+      icon: <TeamOutlined />,
       key: "2",
-      children: [
-        {
-          label: <Link to={Router.SettingsUsers()}>Users</Link>,
-          icon: <UserOutlined />,
-          key: "3",
-        },
-      ],
     },
     {
       label: "Logout",
       icon: <LogoutOutlined />,
-      key: "4",
+      key: "3",
       onClick: onLogout,
     },
   ];
 
+  const restaurantOptions = currentAdmin?.restaurants.map((r) => ({
+    value: r.id,
+    label: r.name,
+  }));
+
   return (
     <Layout className="h-screen">
-      <Layout.Sider collapsible>
-        <Menu
-          defaultSelectedKeys={["1"]}
-          items={items}
-          mode="vertical"
-          theme="dark"
+      <Layout.Sider collapsible theme="light">
+        <Select
+          bordered={false}
+          className="w-full !h-12"
+          onSelect={(v) => restaurantIdStore.create(v)}
+          options={restaurantOptions}
+          value={restaurantIdStore.restaurantId}
         />
+
+        <Menu items={items} mode="vertical" selectedKeys={[]} />
       </Layout.Sider>
       <Layout>
-        <Layout.Content className="mx-4">
+        <Layout.Content className="mx-4 flex flex-col">
           <Breadcrumb className="!my-4" items={breadcrumbItems} />
 
-          <div className="bg-white p-6">{children}</div>
+          <div className="bg-white p-6 flex-1 flex flex-col">{children}</div>
         </Layout.Content>
       </Layout>
     </Layout>
