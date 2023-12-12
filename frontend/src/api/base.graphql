@@ -87,3 +87,16 @@ query user($id: ID!) {
     roleIds
   }
 }
+
+query floorObjects($restaurantId: ID!) {
+  floorObjects(restaurantId: $restaurantId) {
+    id
+    name
+    objectType
+    data
+  }
+}
+
+mutation floorObjectUpdate($input: FloorObjectUpdateInput!) {
+  floorObjectUpdate(input: $input)
+}

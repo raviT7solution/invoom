@@ -2,6 +2,8 @@
 
 class Types::MutationType < Types::BaseObject
   field :admin_session_create, mutation: Mutations::Admin::SessionCreate, null: false
+  field :floor_object_update, mutation: Mutations::FloorObjectUpdate, null: false,
+                              authorize: "FloorObjectPolicy#update?"
   field :role_create, mutation: Mutations::RoleCreate, null: false, authorize: "RolePolicy#create?"
   field :role_delete, mutation: Mutations::RoleDelete, null: false, authorize: "RolePolicy#update?"
   field :role_update, mutation: Mutations::RoleUpdate, null: false, authorize: "RolePolicy#delete?"

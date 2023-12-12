@@ -12,8 +12,16 @@ class Types::QueryType < Types::BaseObject
     argument :id, ID, required: true
   end
 
+  field :floor_objects, [Types::FloorObjectType], null: false, authorize: "FloorObjectPolicy#index?" do
+    argument :restaurant_id, ID, required: true
+  end
+
   def current_admin
     context[:current_user]
+  end
+
+  def floor_objects(restaurant_id:)
+    FloorObjectPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
   end
 
   def role(id:)

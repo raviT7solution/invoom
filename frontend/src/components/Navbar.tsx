@@ -1,25 +1,34 @@
 import {
-  LogoutOutlined,
   DashboardOutlined,
+  FormatPainterOutlined,
+  LogoutOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
-import { Breadcrumb, Layout, Menu, Select } from "antd";
+import {
+  Breadcrumb,
+  BreadcrumbProps,
+  Layout,
+  Menu,
+  MenuProps,
+  Select,
+} from "antd";
 import { ReactNode, useEffect } from "react";
 
 import { useCurrentAdmin } from "../api";
+import { classNames } from "../helpers";
 import { Router } from "../Routes";
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
 import { useRestaurantIdStore } from "../stores/useRestaurantIdStore";
 
-import type { BreadcrumbProps, MenuProps } from "antd";
-
 export const Navbar = ({
   breadcrumbItems,
   children,
+  padding = true,
 }: {
   breadcrumbItems: BreadcrumbProps["items"];
   children: ReactNode;
+  padding?: boolean;
 }) => {
   const { data: currentAdmin } = useCurrentAdmin();
   const destroy = useAdminSessionStore((s) => s.destroy);
@@ -54,9 +63,14 @@ export const Navbar = ({
       key: "2",
     },
     {
+      label: <Link to={Router.FloorPlan()}>Floor Plan</Link>,
+      icon: <FormatPainterOutlined />,
+      key: "3",
+    },
+    {
       label: "Logout",
       icon: <LogoutOutlined />,
-      key: "3",
+      key: "4",
       onClick: onLogout,
     },
   ];
@@ -83,7 +97,14 @@ export const Navbar = ({
         <Layout.Content className="mx-4 flex flex-col">
           <Breadcrumb className="!my-4" items={breadcrumbItems} />
 
-          <div className="bg-white p-6 flex-1 flex flex-col">{children}</div>
+          <div
+            className={classNames(
+              "bg-white flex-1 flex flex-col nested-scroll-overflow-y-scroll",
+              padding ? "p-4" : "",
+            )}
+          >
+            {children}
+          </div>
         </Layout.Content>
       </Layout>
     </Layout>

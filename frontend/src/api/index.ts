@@ -6,6 +6,10 @@ import {
   AdminSessionCreateDocument,
   AdminSessionCreateMutationVariables,
   CurrentAdminDocument,
+  FloorObjectUpdateDocument,
+  FloorObjectUpdateMutationVariables,
+  FloorObjectsDocument,
+  FloorObjectsQueryVariables,
   RoleCreateDocument,
   RoleCreateMutationVariables,
   RoleDeleteDocument,
@@ -152,5 +156,27 @@ export const useUser = (id: string) => {
     enabled: id !== "",
     queryKey: ["user", id],
     queryFn: async () => (await client.request(UserDocument, { id })).user,
+  });
+};
+
+export const useFloorObjects = (variables: FloorObjectsQueryVariables) => {
+  return useQuery({
+    enabled: variables.restaurantId !== "",
+    initialData: [],
+    queryKey: ["floor_objects", variables],
+    queryFn: async () =>
+      (await client.request(FloorObjectsDocument, variables)).floorObjects,
+  });
+};
+
+export const useFloorObjectUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: FloorObjectUpdateMutationVariables) =>
+      client.request(FloorObjectUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["floor_objects"] });
+    },
   });
 };
