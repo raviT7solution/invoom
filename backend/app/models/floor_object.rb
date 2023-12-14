@@ -14,5 +14,6 @@ class FloorObject < ApplicationRecord
 
   validates :data, presence: true
   validates :name, presence: true
+  validates :name, uniqueness: { scope: :restaurant_id }
   validates :object_type, presence: true
 end
