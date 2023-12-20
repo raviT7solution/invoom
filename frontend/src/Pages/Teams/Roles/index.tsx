@@ -35,7 +35,7 @@ export const Roles = () => {
   };
 
   return (
-    <Navbar breadcrumbItems={[{ title: "Settings" }, { title: "Roles" }]}>
+    <Navbar breadcrumbItems={[{ title: "Teams" }]}>
       <UserEdit
         open={isUserEditOpen}
         showEditUser={showEditUser}

@@ -2,6 +2,7 @@ import { createRouter } from "@swan-io/chicane";
 import { PropsWithChildren } from "react";
 import { match } from "ts-pattern";
 
+import { Menus } from "./Pages/CuisineHub/Menu";
 import { FloorPlan } from "./Pages/FloorPlan";
 import { Login } from "./Pages/Login";
 import { Roles } from "./Pages/Teams/Roles";
@@ -20,6 +21,7 @@ export const PrivateRoute = ({ children }: PropsWithChildren) => {
 };
 
 const routes = {
+  CuisineHub: "/cuisine-hub/menus",
   Dashboard: "/",
   FloorPlan: "/floor-plan",
   Login: "/login",
@@ -48,6 +50,11 @@ export const Switch = () => {
     .with({ name: "FloorPlan" }, () => (
       <PrivateRoute>
         <FloorPlan />
+      </PrivateRoute>
+    ))
+    .with({ name: "CuisineHub" }, () => (
+      <PrivateRoute>
+        <Menus />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");

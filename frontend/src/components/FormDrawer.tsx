@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 type Props = {
   children: ReactNode;
   footer: ReactNode;
-  isFetching?: boolean;
+  isFetching: boolean;
   onClose: () => void;
   open: boolean;
   title: ReactNode;

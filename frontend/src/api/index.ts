@@ -10,6 +10,14 @@ import {
   FloorObjectUpdateMutationVariables,
   FloorObjectsDocument,
   FloorObjectsQueryVariables,
+  MenuCreateDocument,
+  MenuCreateMutationVariables,
+  MenuDeleteDocument,
+  MenuDeleteMutationVariables,
+  MenuDocument,
+  MenuUpdateDocument,
+  MenuUpdateMutationVariables,
+  MenusDocument,
   RoleCreateDocument,
   RoleCreateMutationVariables,
   RoleDeleteDocument,
@@ -177,6 +185,60 @@ export const useFloorObjectUpdate = () => {
       client.request(FloorObjectUpdateDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["floor_objects"] });
+    },
+  });
+};
+
+export const useMenus = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryFn: async () =>
+      (await client.request(MenusDocument, { restaurantId })).menus,
+    queryKey: ["menus", restaurantId],
+  });
+};
+
+export const useMenu = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryFn: async () => (await client.request(MenuDocument, { id })).menu,
+    queryKey: ["menu", id],
+  });
+};
+
+export const useMenuCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: MenuCreateMutationVariables) =>
+      client.request(MenuCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["menus"] });
+    },
+  });
+};
+
+export const useMenuDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: MenuDeleteMutationVariables) =>
+      client.request(MenuDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["menus"] });
+    },
+  });
+};
+
+export const useMenuUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: MenuUpdateMutationVariables) =>
+      client.request(MenuUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["menus"] });
     },
   });
 };

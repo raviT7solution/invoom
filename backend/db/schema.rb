@@ -45,6 +45,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_134439) do
     t.index ["restaurant_id"], name: "index_floor_objects_on_restaurant_id"
   end
 
+  create_table "menus", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description"
+    t.boolean "visible", default: true, null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "restaurant_id"], name: "index_menus_on_name_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_menus_on_restaurant_id"
+  end
+
   create_table "restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -106,6 +117,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_134439) do
   add_foreign_key "admin_restaurants", "admins"
   add_foreign_key "admin_restaurants", "restaurants"
   add_foreign_key "floor_objects", "restaurants"
+  add_foreign_key "menus", "restaurants"
   add_foreign_key "roles", "restaurants"
   add_foreign_key "user_restaurants", "restaurants"
   add_foreign_key "user_restaurants", "users"

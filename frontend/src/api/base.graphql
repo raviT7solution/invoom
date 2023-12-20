@@ -100,3 +100,33 @@ query floorObjects($restaurantId: ID!) {
 mutation floorObjectUpdate($input: FloorObjectUpdateInput!) {
   floorObjectUpdate(input: $input)
 }
+
+query menus($restaurantId: ID!) {
+  menus(restaurantId: $restaurantId) {
+    id
+    name
+    visible
+    description
+  }
+}
+
+query menu($id: ID!) {
+  menu(id: $id) {
+    id
+    name
+    visible
+    description
+  }
+}
+
+mutation menuCreate($input: MenuCreateInput!) {
+  menuCreate(input: $input)
+}
+
+mutation menuDelete($id: ID!) {
+  menuDelete(input: { id: $id })
+}
+
+mutation menuUpdate($input: MenuUpdateInput!) {
+  menuUpdate(input: $input)
+}
