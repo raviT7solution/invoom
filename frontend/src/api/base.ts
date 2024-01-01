@@ -47,7 +47,7 @@ export type FloorObjectUpdateInput = {
 };
 
 export type Menu = {
-  description?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   visible: Scalars['Boolean']['output'];
@@ -377,14 +377,14 @@ export type MenusQueryVariables = Exact<{
 }>;
 
 
-export type MenusQuery = { menus: Array<{ id: string, name: string, visible: boolean, description?: string | null }> };
+export type MenusQuery = { menus: Array<{ id: string, name: string, visible: boolean, description: string }> };
 
 export type MenuQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type MenuQuery = { menu: { id: string, name: string, visible: boolean, description?: string | null } };
+export type MenuQuery = { menu: { id: string, name: string, visible: boolean, description: string } };
 
 export type MenuCreateMutationVariables = Exact<{
   input: MenuCreateInput;

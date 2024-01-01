@@ -1,5 +1,5 @@
 import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Empty, Popconfirm, Space } from "antd";
+import { Button, Card, Empty, Popconfirm, Space, Typography } from "antd";
 import { useState } from "react";
 
 import { Edit } from "./Edit";
@@ -63,13 +63,24 @@ export const Menus = () => {
                   </Popconfirm>,
                 ]}
                 className={classNames(
-                  "shadow-md",
+                  "w-64 h-44 shadow-md",
                   menu.visible ? "" : "opacity-50",
                 )}
                 key={menu.id}
               >
                 <Card.Meta
-                  description={`Description: ${menu.description}`}
+                  className="h-20"
+                  description={
+                    <Typography.Paragraph
+                      ellipsis={{
+                        rows: 2,
+                        expandable: false,
+                      }}
+                      type="secondary"
+                    >
+                      {menu.description}
+                    </Typography.Paragraph>
+                  }
                   title={menu.name}
                 />
               </Card>
