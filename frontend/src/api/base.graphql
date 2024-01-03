@@ -130,3 +130,33 @@ mutation menuDelete($id: ID!) {
 mutation menuUpdate($input: MenuUpdateInput!) {
   menuUpdate(input: $input)
 }
+
+mutation createCategory($input: CategoryCreateInput!) {
+  categoryCreate(input: $input)
+}
+
+query categories($restaurantId: ID!) {
+  categories(restaurantId: $restaurantId) {
+    id
+    name
+    visible
+    menuIds
+  }
+}
+
+query category($id: ID!) {
+  category(id: $id) {
+    id
+    name
+    visible
+    menuIds
+  }
+}
+
+mutation categoryUpdate($input: CategoryUpdateInput!) {
+  categoryUpdate(input: $input)
+}
+
+mutation categoryDelete($id: ID!) {
+  categoryDelete(input: { id: $id })
+}

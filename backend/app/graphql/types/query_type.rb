@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class Types::QueryType < Types::BaseObject
+  field :categories, [Types::CategoryType], null: false, authorize: "CategoryPolicy#index?" do
+    argument :restaurant_id, ID, required: true
+  end
+  field :category, Types::CategoryType, null: false, authorize: "CategoryPolicy#show?" do
+    argument :id, ID, required: true
+  end
   field :current_admin, Types::AdminType, null: false, authorize: "AdminPolicy#show?"
   field :floor_objects, [Types::FloorObjectType], null: false, authorize: "FloorObjectPolicy#index?" do
     argument :restaurant_id, ID, required: true
@@ -19,6 +25,14 @@ class Types::QueryType < Types::BaseObject
   end
   field :user, Types::UserType, null: false, authorize: "UserPolicy#show?" do
     argument :id, ID, required: true
+  end
+
+  def categories(restaurant_id:)
+    CategoryPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  end
+
+  def category(id:)
+    CategoryPolicy.new(context[:current_user]).scope.find(id)
   end
 
   def current_admin

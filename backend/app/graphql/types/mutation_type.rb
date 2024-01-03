@@ -2,6 +2,9 @@
 
 class Types::MutationType < Types::BaseObject
   field :admin_session_create, mutation: Mutations::Admin::SessionCreate, null: false
+  field :category_create, mutation: Mutations::CategoryCreate, null: false, authorize: "CategoryPolicy#create?"
+  field :category_delete, mutation: Mutations::CategoryDelete, null: false, authorize: "CategoryPolicy#delete?"
+  field :category_update, mutation: Mutations::CategoryUpdate, null: false, authorize: "CategoryPolicy#update?"
   field :floor_object_update, mutation: Mutations::FloorObjectUpdate, null: false,
                               authorize: "FloorObjectPolicy#update?"
   field :menu_create, mutation: Mutations::MenuCreate, null: false, authorize: "MenuPolicy#create?"

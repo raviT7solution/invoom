@@ -1,9 +1,10 @@
 import {
+  BookOutlined,
+  ContainerOutlined,
   DashboardOutlined,
   FormatPainterOutlined,
   LogoutOutlined,
-  BookOutlined,
-  SettingOutlined,
+  ReconciliationOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
@@ -67,13 +68,18 @@ export const Navbar = ({
 
     {
       label: "Cuisine Hub",
-      icon: <SettingOutlined />,
+      icon: <ReconciliationOutlined />,
       key: "3",
       children: [
         {
-          label: <Link to={Router.CuisineHub()}>Menu</Link>,
+          label: <Link to={Router.CuisineHubMenus()}>Menu</Link>,
           icon: <BookOutlined />,
           key: "3.1",
+        },
+        {
+          label: <Link to={Router.CuisineHubCategories()}>Category</Link>,
+          icon: <ContainerOutlined />,
+          key: "6",
         },
       ],
     },

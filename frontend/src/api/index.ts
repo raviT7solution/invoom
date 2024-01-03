@@ -5,6 +5,14 @@ import { GraphQLClient } from "graphql-request";
 import {
   AdminSessionCreateDocument,
   AdminSessionCreateMutationVariables,
+  CategoriesDocument,
+  CategoryDeleteDocument,
+  CategoryDeleteMutationVariables,
+  CategoryDocument,
+  CategoryUpdateDocument,
+  CategoryUpdateMutationVariables,
+  CreateCategoryDocument,
+  CreateCategoryMutationVariables,
   CurrentAdminDocument,
   FloorObjectUpdateDocument,
   FloorObjectUpdateMutationVariables,
@@ -239,6 +247,60 @@ export const useMenuUpdate = () => {
       client.request(MenuUpdateDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["menus"] });
+    },
+  });
+};
+export const useCategoryCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: CreateCategoryMutationVariables) =>
+      client.request(CreateCategoryDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
+};
+
+export const useCategories = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryFn: async () =>
+      (await client.request(CategoriesDocument, { restaurantId })).categories,
+    queryKey: ["categories", restaurantId],
+  });
+};
+
+export const useCategory = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["category", id],
+    queryFn: async () =>
+      (await client.request(CategoryDocument, { id: id })).category,
+  });
+};
+
+export const useCategoryUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: CategoryUpdateMutationVariables) =>
+      client.request(CategoryUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
+};
+
+export const useCategoryDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: CategoryDeleteMutationVariables) =>
+      client.request(CategoryDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
   });
 };

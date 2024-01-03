@@ -34,6 +34,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_134439) do
     t.index ["email"], name: "index_admins_on_email", unique: true
   end
 
+  create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "visible", default: true, null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "restaurant_id"], name: "index_categories_on_name_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_categories_on_restaurant_id"
+  end
+
   create_table "floor_objects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "restaurant_id", null: false
     t.string "name", null: false
@@ -43,6 +53,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_134439) do
     t.datetime "updated_at", null: false
     t.index ["name", "restaurant_id"], name: "index_floor_objects_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_floor_objects_on_restaurant_id"
+  end
+
+  create_table "menu_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "menu_id", null: false
+    t.uuid "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_menu_categories_on_category_id"
+    t.index ["menu_id", "category_id"], name: "index_menu_categories_on_menu_id_and_category_id", unique: true
+    t.index ["menu_id"], name: "index_menu_categories_on_menu_id"
   end
 
   create_table "menus", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -116,7 +136,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_134439) do
 
   add_foreign_key "admin_restaurants", "admins"
   add_foreign_key "admin_restaurants", "restaurants"
+  add_foreign_key "categories", "restaurants"
   add_foreign_key "floor_objects", "restaurants"
+  add_foreign_key "menu_categories", "categories"
+  add_foreign_key "menu_categories", "menus"
   add_foreign_key "menus", "restaurants"
   add_foreign_key "roles", "restaurants"
   add_foreign_key "user_restaurants", "restaurants"
