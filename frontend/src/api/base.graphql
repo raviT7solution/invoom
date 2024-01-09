@@ -160,3 +160,37 @@ mutation categoryUpdate($input: CategoryUpdateInput!) {
 mutation categoryDelete($id: ID!) {
   categoryDelete(input: { id: $id })
 }
+
+query addons($restaurantId: ID!) {
+  addons(restaurantId: $restaurantId) {
+    id
+    name
+    price
+    takeoutPrice
+    deliveryPrice
+    visible
+  }
+}
+
+query addon($id: ID!) {
+  addon(id: $id) {
+    id
+    name
+    price
+    takeoutPrice
+    deliveryPrice
+    visible
+  }
+}
+
+mutation addonsCreate($input: AddonsCreateInput!) {
+  addonsCreate(input: $input)
+}
+
+mutation addonsUpdate($input: AddonsUpdateInput!) {
+  addonsUpdate(input: $input)
+}
+
+mutation addonsDelete($id: ID!) {
+  addonsDelete(input: { id: $id })
+}

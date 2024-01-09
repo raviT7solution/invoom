@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class Types::QueryType < Types::BaseObject
+  field :addon, Types::AddonsType, null: false, authorize: "AddonPolicy#show?" do
+    argument :id, ID, required: true
+  end
+  field :addons, [Types::AddonsType], null: false, authorize: "AddonPolicy#index?" do
+    argument :restaurant_id, ID, required: true
+  end
   field :categories, [Types::CategoryType], null: false, authorize: "CategoryPolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
@@ -25,6 +31,14 @@ class Types::QueryType < Types::BaseObject
   end
   field :user, Types::UserType, null: false, authorize: "UserPolicy#show?" do
     argument :id, ID, required: true
+  end
+
+  def addon(id:)
+    AddonPolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def addons(restaurant_id:)
+    AddonPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
   end
 
   def categories(restaurant_id:)

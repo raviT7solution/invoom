@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Types::MutationType < Types::BaseObject
+  field :addons_create, mutation: Mutations::AddonsCreate, null: false, authorize: "AddonPolicy#create?"
+  field :addons_delete, mutation: Mutations::AddonsDelete, null: false, authorize: "AddonPolicy#delete?"
+  field :addons_update, mutation: Mutations::AddonsUpdate, null: false, authorize: "AddonPolicy#update?"
   field :admin_session_create, mutation: Mutations::Admin::SessionCreate, null: false
   field :category_create, mutation: Mutations::CategoryCreate, null: false, authorize: "CategoryPolicy#create?"
   field :category_delete, mutation: Mutations::CategoryDelete, null: false, authorize: "CategoryPolicy#delete?"

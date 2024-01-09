@@ -4,6 +4,7 @@ import {
   DashboardOutlined,
   FormatPainterOutlined,
   LogoutOutlined,
+  PlusCircleOutlined,
   ReconciliationOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
@@ -79,7 +80,12 @@ export const Navbar = ({
         {
           label: <Link to={Router.CuisineHubCategories()}>Category</Link>,
           icon: <ContainerOutlined />,
-          key: "6",
+          key: "3.2",
+        },
+        {
+          label: <Link to={Router.CuisineHubAddons()}>Addons</Link>,
+          icon: <PlusCircleOutlined />,
+          key: "3.3",
         },
       ],
     },

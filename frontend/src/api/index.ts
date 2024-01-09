@@ -3,6 +3,14 @@ import { notification } from "antd";
 import { GraphQLClient } from "graphql-request";
 
 import {
+  AddonDocument,
+  AddonsCreateDocument,
+  AddonsCreateMutationVariables,
+  AddonsDeleteDocument,
+  AddonsDeleteMutationVariables,
+  AddonsDocument,
+  AddonsUpdateDocument,
+  AddonsUpdateMutationVariables,
   AdminSessionCreateDocument,
   AdminSessionCreateMutationVariables,
   CategoriesDocument,
@@ -301,6 +309,61 @@ export const useCategoryDelete = () => {
       client.request(CategoryDeleteDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
+};
+
+export const useAddons = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryKey: ["addons", restaurantId],
+    queryFn: async () =>
+      (await client.request(AddonsDocument, { restaurantId })).addons,
+  });
+};
+
+export const useAddon = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["addon", id],
+    queryFn: async () =>
+      (await client.request(AddonDocument, { id: id })).addon,
+  });
+};
+
+export const useAddonsCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: AddonsCreateMutationVariables) =>
+      client.request(AddonsCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["addons"] });
+    },
+  });
+};
+
+export const useAddonsUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: AddonsUpdateMutationVariables) =>
+      client.request(AddonsUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["addons"] });
+    },
+  });
+};
+
+export const useAddonsDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: AddonsDeleteMutationVariables) =>
+      client.request(AddonsDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["addons"] });
     },
   });
 };

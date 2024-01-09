@@ -14,6 +14,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_134439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "addons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.float "price", null: false
+    t.float "takeout_price", null: false
+    t.float "delivery_price", null: false
+    t.boolean "visible", default: true, null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "restaurant_id"], name: "index_addons_on_name_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_addons_on_restaurant_id"
+  end
+
   create_table "admin_restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "admin_id", null: false
     t.uuid "restaurant_id", null: false
@@ -134,6 +147,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_134439) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "addons", "restaurants"
   add_foreign_key "admin_restaurants", "admins"
   add_foreign_key "admin_restaurants", "restaurants"
   add_foreign_key "categories", "restaurants"
