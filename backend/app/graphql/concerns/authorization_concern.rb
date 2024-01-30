@@ -13,20 +13,21 @@ module AuthorizationConcern
     end
   end
 
-  class ScopeExtension < GraphQL::Schema::FieldExtension
+  class AuthorizedFieldExtension < GraphQL::Schema::FieldExtension
     def resolve(context:, object:, arguments:, **_rest)
-      scope = options.constantize.new(context[:current_user]).scope
-      arguments = arguments.dup.merge(scope: scope).freeze
+      authorized = options.constantize.new(context[:current_user]).authorized_fields.include?(field.method_sym)
+
+      raise GraphQL::ExecutionError, "Unauthorized" unless authorized
 
       yield object, arguments
     end
   end
 
-  def initialize(*args, authorize: nil, authorized_scope: nil, **kwargs, &block)
+  def initialize(*args, authorize: nil, authorize_field: nil, **kwargs, &block)
     extensions = (kwargs[:extensions] ||= [])
 
     extensions << { AuthorizationConcern::AuthorizeExtension => authorize } if authorize.present?
-    extensions << { AuthorizationConcern::ScopeExtension => authorized_scope } if authorized_scope.present?
+    extensions << { AuthorizationConcern::AuthorizedFieldExtension => authorize_field } if authorize_field.present?
 
     super(*args, **kwargs, &block)
   end
