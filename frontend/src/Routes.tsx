@@ -4,6 +4,7 @@ import { match } from "ts-pattern";
 
 import { Addons } from "./Pages/CuisineHub/Addons";
 import { Categories } from "./Pages/CuisineHub/Categories";
+import { Item } from "./Pages/CuisineHub/Item";
 import { Menus } from "./Pages/CuisineHub/Menu";
 import { FloorPlan } from "./Pages/FloorPlan";
 import { Login } from "./Pages/Login";
@@ -25,6 +26,7 @@ export const PrivateRoute = ({ children }: PropsWithChildren) => {
 const routes = {
   CuisineHubAddons: "/cuisine-hub/addons",
   CuisineHubCategories: "/cuisine-hub/categories",
+  CuisineHubItems: "/cuisine-hub/items",
   CuisineHubMenus: "/cuisine-hub/menus",
   Dashboard: "/",
   FloorPlan: "/floor-plan",
@@ -64,6 +66,11 @@ export const Switch = () => {
     .with({ name: "CuisineHubCategories" }, () => (
       <PrivateRoute>
         <Categories />
+      </PrivateRoute>
+    ))
+    .with({ name: "CuisineHubItems" }, () => (
+      <PrivateRoute>
+        <Item />
       </PrivateRoute>
     ))
     .with({ name: "CuisineHubAddons" }, () => (

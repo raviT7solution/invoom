@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class CategoryPolicy < ApplicationPolicy
+  def authorized_fields
+    if user.admin?
+      [:items]
+    else
+      []
+    end
+  end
+
   def create?
     user!.admin?
   end

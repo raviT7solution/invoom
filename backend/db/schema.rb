@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_17_134439) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_23_113322) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -66,6 +66,34 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_134439) do
     t.datetime "updated_at", null: false
     t.index ["name", "restaurant_id"], name: "index_floor_objects_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_floor_objects_on_restaurant_id"
+  end
+
+  create_table "item_addons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "item_id", null: false
+    t.uuid "addon_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["addon_id"], name: "index_item_addons_on_addon_id"
+    t.index ["item_id", "addon_id"], name: "index_item_addons_on_item_id_and_addon_id", unique: true
+    t.index ["item_id"], name: "index_item_addons_on_item_id"
+  end
+
+  create_table "items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "display_name", null: false
+    t.string "description", null: false
+    t.float "price", null: false
+    t.float "cost_of_production", null: false
+    t.float "take_out_price", null: false
+    t.float "delivery_price", null: false
+    t.boolean "visible", default: true, null: false
+    t.uuid "category_id", null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_items_on_category_id"
+    t.index ["name", "restaurant_id"], name: "index_items_on_name_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_items_on_restaurant_id"
   end
 
   create_table "menu_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -152,6 +180,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_134439) do
   add_foreign_key "admin_restaurants", "restaurants"
   add_foreign_key "categories", "restaurants"
   add_foreign_key "floor_objects", "restaurants"
+  add_foreign_key "item_addons", "addons"
+  add_foreign_key "item_addons", "items"
+  add_foreign_key "items", "categories"
+  add_foreign_key "items", "restaurants"
   add_foreign_key "menu_categories", "categories"
   add_foreign_key "menu_categories", "menus"
   add_foreign_key "menus", "restaurants"

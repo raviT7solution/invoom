@@ -10,6 +10,9 @@ class Types::MutationType < Types::BaseObject
   field :category_update, mutation: Mutations::CategoryUpdate, null: false, authorize: "CategoryPolicy#update?"
   field :floor_object_update, mutation: Mutations::FloorObjectUpdate, null: false,
                               authorize: "FloorObjectPolicy#update?"
+  field :item_create, mutation: Mutations::ItemCreate, null: false, authorize: "ItemPolicy#create?"
+  field :item_delete, mutation: Mutations::ItemDelete, null: false, authorize: "ItemPolicy#delete?"
+  field :item_update, mutation: Mutations::ItemUpdate, null: false, authorize: "ItemPolicy#update?"
   field :menu_create, mutation: Mutations::MenuCreate, null: false, authorize: "MenuPolicy#create?"
   field :menu_delete, mutation: Mutations::MenuDelete, null: false, authorize: "MenuPolicy#delete?"
   field :menu_update, mutation: Mutations::MenuUpdate, null: false, authorize: "MenuPolicy#update?"

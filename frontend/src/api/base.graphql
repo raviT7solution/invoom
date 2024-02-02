@@ -141,6 +141,19 @@ query categories($restaurantId: ID!) {
     name
     visible
     menuIds
+    items {
+      addonIds
+      categoryId
+      costOfProduction
+      deliveryPrice
+      description
+      displayName
+      id
+      name
+      price
+      takeOutPrice
+      visible
+    }
   }
 }
 
@@ -193,4 +206,32 @@ mutation addonsUpdate($input: AddonsUpdateInput!) {
 
 mutation addonsDelete($id: ID!) {
   addonsDelete(input: { id: $id })
+}
+
+mutation itemCreate($input: ItemCreateInput!) {
+  itemCreate(input: $input)
+}
+
+query item($id: ID!) {
+  item(id: $id) {
+    addonIds
+    categoryId
+    costOfProduction
+    deliveryPrice
+    description
+    displayName
+    id
+    name
+    price
+    takeOutPrice
+    visible
+  }
+}
+
+mutation itemUpdate($input: ItemUpdateInput!) {
+  itemUpdate(input: $input)
+}
+
+mutation itemDelete($id: ID!) {
+  itemDelete(input: { id: $id })
 }

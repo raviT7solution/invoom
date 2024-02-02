@@ -1,5 +1,6 @@
 import {
   BookOutlined,
+  CoffeeOutlined,
   ContainerOutlined,
   DashboardOutlined,
   FormatPainterOutlined,
@@ -86,6 +87,11 @@ export const Navbar = ({
           label: <Link to={Router.CuisineHubAddons()}>Addons</Link>,
           icon: <PlusCircleOutlined />,
           key: "3.3",
+        },
+        {
+          label: <Link to={Router.CuisineHubItems()}>Items</Link>,
+          icon: <CoffeeOutlined />,
+          key: "3.4",
         },
       ],
     },

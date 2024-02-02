@@ -30,7 +30,6 @@ export const Edit = ({
   const { mutateAsync: menuUpdate, isPending: isUpdating } = useMenuUpdate();
 
   const onFinish = async (values: schema) => {
-    console.log(values);
     isNew
       ? await menuCreate({
           input: { restaurantId: restaurantId, attributes: values },

@@ -6,5 +6,7 @@ class Types::CategoryType < Types::BaseObject
   field :visible, Boolean, null: false
 
   field :menu_ids, [ID], null: false
+
+  field :items, [Types::ItemType], null: false, authorize_field: "CategoryPolicy"
   field :restaurant, Types::RestaurantType, null: false
 end

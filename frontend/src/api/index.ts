@@ -26,6 +26,13 @@ import {
   FloorObjectUpdateMutationVariables,
   FloorObjectsDocument,
   FloorObjectsQueryVariables,
+  ItemCreateDocument,
+  ItemCreateMutationVariables,
+  ItemDeleteDocument,
+  ItemDeleteMutationVariables,
+  ItemDocument,
+  ItemUpdateDocument,
+  ItemUpdateMutationVariables,
   MenuCreateDocument,
   MenuCreateMutationVariables,
   MenuDeleteDocument,
@@ -364,6 +371,50 @@ export const useAddonsDelete = () => {
       client.request(AddonsDeleteDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["addons"] });
+    },
+  });
+};
+
+export const useItemCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ItemCreateMutationVariables) =>
+      client.request(ItemCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
+};
+
+export const useItem = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["item", id],
+    queryFn: async () => (await client.request(ItemDocument, { id: id })).item,
+  });
+};
+
+export const useItemUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ItemUpdateMutationVariables) =>
+      client.request(ItemUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
+};
+
+export const useItemDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ItemDeleteMutationVariables) =>
+      client.request(ItemDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
   });
 };

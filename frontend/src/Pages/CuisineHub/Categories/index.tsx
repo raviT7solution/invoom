@@ -24,7 +24,9 @@ export const Categories = () => {
   };
 
   return (
-    <Navbar breadcrumbItems={[{ title: "Cuisine Hub" }, { title: "Category" }]}>
+    <Navbar
+      breadcrumbItems={[{ title: "Cuisine Hub" }, { title: "Categories" }]}
+    >
       <div className="flex gap-4 mb-4 justify-end">
         <Button
           icon={<PlusOutlined />}
