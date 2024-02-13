@@ -41,6 +41,14 @@ import {
   MenuUpdateDocument,
   MenuUpdateMutationVariables,
   MenusDocument,
+  ModifierCreateDocument,
+  ModifierCreateMutationVariables,
+  ModifierDeleteDocument,
+  ModifierDeleteMutationVariables,
+  ModifierDocument,
+  ModifierUpdateDocument,
+  ModifierUpdateMutationVariables,
+  ModifiersDocument,
   RoleCreateDocument,
   RoleCreateMutationVariables,
   RoleDeleteDocument,
@@ -415,6 +423,61 @@ export const useItemDelete = () => {
       client.request(ItemDeleteDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
+};
+
+export const useModifiers = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryKey: ["modifiers", restaurantId],
+    queryFn: async () =>
+      (await client.request(ModifiersDocument, { restaurantId })).modifiers,
+  });
+};
+
+export const useModifierDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ModifierDeleteMutationVariables) =>
+      client.request(ModifierDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["modifiers"] });
+    },
+  });
+};
+
+export const useModifier = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["modifier", id],
+    queryFn: async () =>
+      (await client.request(ModifierDocument, { id: id })).modifier,
+  });
+};
+
+export const useModifierCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ModifierCreateMutationVariables) =>
+      client.request(ModifierCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["modifiers"] });
+    },
+  });
+};
+
+export const useModifierUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ModifierUpdateMutationVariables) =>
+      client.request(ModifierUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["modifiers"] });
     },
   });
 };

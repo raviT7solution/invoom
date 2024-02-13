@@ -26,6 +26,12 @@ class Types::QueryType < Types::BaseObject
   field :menus, [Types::MenuType], null: false, authorize: "MenuPolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
+  field :modifier, Types::ModifierType, null: false, authorize: "ModifierPolicy#show?" do
+    argument :id, ID, required: true
+  end
+  field :modifiers, [Types::ModifierType], null: false, authorize: "ModifierPolicy#index?" do
+    argument :restaurant_id, ID, required: true
+  end
   field :role, Types::RoleType, null: false, authorize: "RolePolicy#show?" do
     argument :id, ID, required: true
   end
@@ -70,6 +76,14 @@ class Types::QueryType < Types::BaseObject
 
   def menus(restaurant_id:)
     MenuPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  end
+
+  def modifier(id:)
+    ModifierPolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def modifiers(restaurant_id:)
+    ModifierPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
   end
 
   def role(id:)

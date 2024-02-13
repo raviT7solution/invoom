@@ -57,6 +57,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_113322) do
     t.index ["restaurant_id"], name: "index_categories_on_restaurant_id"
   end
 
+  create_table "category_modifiers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "category_id", null: false
+    t.uuid "modifier_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_category_modifiers_on_category_id"
+    t.index ["modifier_id"], name: "index_category_modifiers_on_modifier_id"
+  end
+
   create_table "floor_objects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "restaurant_id", null: false
     t.string "name", null: false
@@ -115,6 +124,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_113322) do
     t.datetime "updated_at", null: false
     t.index ["name", "restaurant_id"], name: "index_menus_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_menus_on_restaurant_id"
+  end
+
+  create_table "modifiers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "visible", default: true, null: false
+    t.boolean "global_modifier", default: true, null: false
+    t.boolean "multi_select", default: true, null: false
+    t.uuid "restaurant_id", null: false
+    t.string "values", null: false, array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "restaurant_id"], name: "index_modifiers_on_name_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_modifiers_on_restaurant_id"
   end
 
   create_table "restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -179,6 +201,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_113322) do
   add_foreign_key "admin_restaurants", "admins"
   add_foreign_key "admin_restaurants", "restaurants"
   add_foreign_key "categories", "restaurants"
+  add_foreign_key "category_modifiers", "categories"
+  add_foreign_key "category_modifiers", "modifiers"
   add_foreign_key "floor_objects", "restaurants"
   add_foreign_key "item_addons", "addons"
   add_foreign_key "item_addons", "items"
@@ -187,6 +211,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_113322) do
   add_foreign_key "menu_categories", "categories"
   add_foreign_key "menu_categories", "menus"
   add_foreign_key "menus", "restaurants"
+  add_foreign_key "modifiers", "restaurants"
   add_foreign_key "roles", "restaurants"
   add_foreign_key "user_restaurants", "restaurants"
   add_foreign_key "user_restaurants", "users"

@@ -235,3 +235,39 @@ mutation itemUpdate($input: ItemUpdateInput!) {
 mutation itemDelete($id: ID!) {
   itemDelete(input: { id: $id })
 }
+
+query modifiers($restaurantId: ID!) {
+  modifiers(restaurantId: $restaurantId) {
+    id
+    name
+    visible
+    categoryIds
+    globalModifier
+    multiSelect
+    values
+  }
+}
+
+query modifier($id: ID!) {
+  modifier(id: $id) {
+    id
+    name
+    visible
+    categoryIds
+    globalModifier
+    multiSelect
+    values
+  }
+}
+
+mutation modifierCreate($input: ModifierCreateInput!) {
+  modifierCreate(input: $input)
+}
+
+mutation modifierUpdate($input: ModifierUpdateInput!) {
+  modifierUpdate(input: $input)
+}
+
+mutation modifierDelete($id: ID!) {
+  modifierDelete(input: { id: $id })
+}
