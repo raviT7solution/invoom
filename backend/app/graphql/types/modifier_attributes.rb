@@ -8,4 +8,5 @@ class Types::ModifierAttributes < Types::BaseInputObject
   argument :visible, Boolean, required: false
 
   argument :category_ids, [ID], required: false
+  argument :item_ids, [ID], required: false
 end

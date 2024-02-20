@@ -9,6 +9,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
     admin.restaurants = [restaurant]
 
     category = create(:category, name: "Sandwich", restaurant: restaurant)
+    modifier = create(:modifier, name: "Jain", restaurant: restaurant)
 
     sign_in(admin)
 
@@ -22,6 +23,9 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
       fill_in "Display Name", with: "Vadapav"
       within ".ant-form-item", text: "Category" do
         fill_in_select with: "Sandwich"
+      end
+      within ".ant-form-item", text: "Modifiers" do
+        fill_in_select with: "Jain"
       end
       fill_in "Cost Of Production", with: 10
       fill_in "Price", with: 11
@@ -39,6 +43,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
                       delivery_price: 13,
                       description: "",
                       display_name: "Vadapav",
+                      modifier_ids: [modifier.id],
                       name: "Vadapav",
                       price: 11,
                       take_out_price: 12,
@@ -77,6 +82,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
     admin.restaurants = [restaurant]
 
     category = create(:category, name: "Sandwich", restaurant: restaurant)
+    modifier = create(:modifier, name: "Jain", restaurant: restaurant)
 
     item = create(:item, category: create(:category, restaurant: restaurant), restaurant: restaurant)
 
@@ -95,6 +101,9 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
       within ".ant-form-item", text: "Category" do
         fill_in_select with: "Sandwich"
       end
+      within ".ant-form-item", text: "Modifiers" do
+        fill_in_select with: "Jain"
+      end
       find(".ant-checkbox-wrapper", text: "Visible").click
 
       click_on "Submit"
@@ -108,6 +117,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
     assert_attributes item,
                       category_id: category.id,
                       description: "-",
+                      modifier_ids: [modifier.id],
                       name: "Vadapav",
                       visible: false
   end

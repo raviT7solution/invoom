@@ -6,6 +6,7 @@ import {
   useItem,
   useItemCreate,
   useItemUpdate,
+  useModifiers,
 } from "../../../api";
 import { FormDrawer } from "../../../components/FormDrawer";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
@@ -17,6 +18,7 @@ type schema = {
   deliveryPrice: number;
   description: string;
   displayName: string;
+  modifierIds: string[];
   name: string;
   price: number;
   takeOutPrice: number;
@@ -49,6 +51,7 @@ export const Edit = ({
   const { data: item, isFetching } = useItem(itemId);
   const { data: addons } = useAddons(restaurantId);
   const { data: categories } = useCategories(restaurantId);
+  const { data: modifiers } = useModifiers(restaurantId);
 
   const { mutateAsync: itemCreate, isPending: isCreating } = useItemCreate();
   const { mutateAsync: itemUpdate, isPending: isUpdating } = useItemUpdate();
@@ -116,6 +119,21 @@ export const Edit = ({
         >
           <Select
             options={categories.map((a) => ({ label: a.name, value: a.id }))}
+            placeholder="Select"
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Modifiers"
+          name="modifierIds"
+          rules={[{ required: false, message: "Required" }]}
+        >
+          <Select
+            mode="multiple"
+            options={modifiers.map((r) => ({
+              label: r.name,
+              value: r.id,
+            }))}
             placeholder="Select"
           />
         </Form.Item>

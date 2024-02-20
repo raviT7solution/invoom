@@ -20,6 +20,9 @@ class Types::QueryType < Types::BaseObject
   field :item, Types::ItemType, null: false, authorize: "ItemPolicy#show?" do
     argument :id, ID, required: true
   end
+  field :items, [Types::ItemType], null: false, authorize: "ItemPolicy#index?" do
+    argument :restaurant_id, ID, required: true
+  end
   field :menu, Types::MenuType, null: false, authorize: "MenuPolicy#show?" do
     argument :id, ID, required: true
   end
@@ -68,6 +71,10 @@ class Types::QueryType < Types::BaseObject
 
   def item(id:)
     ItemPolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def items(restaurant_id:)
+    ItemPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
   end
 
   def menu(id:)

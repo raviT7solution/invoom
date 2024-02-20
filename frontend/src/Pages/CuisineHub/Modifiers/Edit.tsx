@@ -3,6 +3,7 @@ import { Button, Checkbox, Form, Input, Select } from "antd";
 
 import {
   useCategories,
+  useItems,
   useModifier,
   useModifierCreate,
   useModifierUpdate,
@@ -46,6 +47,7 @@ export const Edit = ({
 
   const { data: modifier, isFetching } = useModifier(modifierId);
   const { data: categories } = useCategories(restaurantId);
+  const { data: items } = useItems(restaurantId);
 
   const onClose = () => showEditModifier("", false);
 
@@ -140,6 +142,21 @@ export const Edit = ({
           <Select
             mode="multiple"
             options={categories.map((r) => ({
+              label: r.name,
+              value: r.id,
+            }))}
+            placeholder="Select"
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Items"
+          name="itemIds"
+          rules={[{ required: false, message: "Required" }]}
+        >
+          <Select
+            mode="multiple"
+            options={items?.map((r) => ({
               label: r.name,
               value: r.id,
             }))}

@@ -9,6 +9,8 @@ class CuisineHubModifiersTest < ApplicationSystemTestCase
     admin.restaurants = [restaurant]
 
     category = create(:category, name: "Category 1", restaurant: restaurant)
+    item = create(:item, name: "Item 1", category: category, restaurant: restaurant)
+
     create(:menu_category, category: category, menu: create(:menu, restaurant: restaurant))
 
     sign_in(admin)
@@ -24,6 +26,9 @@ class CuisineHubModifiersTest < ApplicationSystemTestCase
       within ".ant-form-item", text: "Categories" do
         fill_in_select with: "Category 1"
       end
+      within ".ant-form-item", text: "Items" do
+        fill_in_select with: "Item 1"
+      end
       click_on "Submit"
     end
 
@@ -31,6 +36,7 @@ class CuisineHubModifiersTest < ApplicationSystemTestCase
 
     assert_attributes modifier, category_ids: [category.id],
                                 global_modifier: true,
+                                item_ids: [item.id],
                                 multi_select: true,
                                 name: "Spice",
                                 values: ["Low"],
@@ -67,6 +73,9 @@ class CuisineHubModifiersTest < ApplicationSystemTestCase
     restaurant = create(:restaurant)
     admin.restaurants = [restaurant]
 
+    category = create(:category, name: "Category 1", restaurant: restaurant)
+    item = create(:item, name: "Item 1", category: category, restaurant: restaurant)
+
     modifier = create(:modifier, restaurant: restaurant)
 
     sign_in(admin)
@@ -81,6 +90,12 @@ class CuisineHubModifiersTest < ApplicationSystemTestCase
     within ".ant-drawer" do
       fill_in "Name", with: "Spice"
       fill_in "Options", with: "Low"
+      within ".ant-form-item", text: "Categories" do
+        fill_in_select with: "Category 1"
+      end
+      within ".ant-form-item", text: "Items" do
+        fill_in_select with: "Item 1"
+      end
 
       find(".ant-checkbox-wrapper", text: "Visible").click
 
@@ -92,7 +107,12 @@ class CuisineHubModifiersTest < ApplicationSystemTestCase
 
     modifier.reload
 
-    assert_attributes modifier, name: "Spice", visible: false, global_modifier: false,
-                                multi_select: false, values: ["Low"]
+    assert_attributes modifier, category_ids: [category.id],
+                                global_modifier: false,
+                                item_ids: [item.id],
+                                multi_select: false,
+                                name: "Spice",
+                                values: ["Low"],
+                                visible: false
   end
 end

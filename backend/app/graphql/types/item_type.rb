@@ -13,4 +13,5 @@ class Types::ItemType < Types::BaseObject
 
   field :addon_ids, [ID], null: false
   field :category_id, ID, null: false
+  field :modifier_ids, [ID], null: false
 end

@@ -9,6 +9,10 @@ class ItemPolicy < ApplicationPolicy
     user!.admin?
   end
 
+  def index?
+    user!.admin?
+  end
+
   def scope
     if user!.admin?
       Item.where(restaurant: user!.restaurants)

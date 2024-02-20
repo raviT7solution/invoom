@@ -212,6 +212,23 @@ mutation itemCreate($input: ItemCreateInput!) {
   itemCreate(input: $input)
 }
 
+query items($restaurantId: ID!) {
+  items(restaurantId: $restaurantId) {
+    addonIds
+    categoryId
+    costOfProduction
+    deliveryPrice
+    description
+    displayName
+    id
+    modifierIds
+    name
+    price
+    takeOutPrice
+    visible
+  }
+}
+
 query item($id: ID!) {
   item(id: $id) {
     addonIds
@@ -221,6 +238,7 @@ query item($id: ID!) {
     description
     displayName
     id
+    modifierIds
     name
     price
     takeOutPrice
@@ -238,25 +256,27 @@ mutation itemDelete($id: ID!) {
 
 query modifiers($restaurantId: ID!) {
   modifiers(restaurantId: $restaurantId) {
-    id
-    name
-    visible
     categoryIds
     globalModifier
+    id
+    itemIds
     multiSelect
+    name
     values
+    visible
   }
 }
 
 query modifier($id: ID!) {
   modifier(id: $id) {
-    id
-    name
-    visible
     categoryIds
     globalModifier
+    id
+    itemIds
     multiSelect
+    name
     values
+    visible
   }
 }
 

@@ -33,6 +33,7 @@ import {
   ItemDocument,
   ItemUpdateDocument,
   ItemUpdateMutationVariables,
+  ItemsDocument,
   MenuCreateDocument,
   MenuCreateMutationVariables,
   MenuDeleteDocument,
@@ -400,6 +401,16 @@ export const useItem = (id: string) => {
     enabled: id !== "",
     queryKey: ["item", id],
     queryFn: async () => (await client.request(ItemDocument, { id: id })).item,
+  });
+};
+
+export const useItems = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryKey: ["items", restaurantId],
+    queryFn: async () =>
+      (await client.request(ItemsDocument, { restaurantId })).items,
   });
 };
 

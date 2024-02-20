@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_23_113322) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_29_112329) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -85,6 +85,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_113322) do
     t.index ["addon_id"], name: "index_item_addons_on_addon_id"
     t.index ["item_id", "addon_id"], name: "index_item_addons_on_item_id_and_addon_id", unique: true
     t.index ["item_id"], name: "index_item_addons_on_item_id"
+  end
+
+  create_table "item_modifiers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "item_id", null: false
+    t.uuid "modifier_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_item_modifiers_on_item_id"
+    t.index ["modifier_id"], name: "index_item_modifiers_on_modifier_id"
   end
 
   create_table "items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -206,6 +215,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_23_113322) do
   add_foreign_key "floor_objects", "restaurants"
   add_foreign_key "item_addons", "addons"
   add_foreign_key "item_addons", "items"
+  add_foreign_key "item_modifiers", "items"
+  add_foreign_key "item_modifiers", "modifiers"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "restaurants"
   add_foreign_key "menu_categories", "categories"

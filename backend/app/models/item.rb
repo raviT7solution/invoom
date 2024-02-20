@@ -5,8 +5,10 @@ class Item < ApplicationRecord
   belongs_to :restaurant
 
   has_many :item_addons, dependent: :destroy
+  has_many :item_modifiers, dependent: :destroy
 
   has_many :addons, through: :item_addons
+  has_many :modifiers, through: :item_modifiers
 
   validates :cost_of_production, presence: true
   validates :delivery_price, presence: true
