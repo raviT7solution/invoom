@@ -19,7 +19,7 @@ class LoginTest < ApplicationSystemTestCase
   end
 
   test "non admin can't login" do
-    user = create(:user)
+    user = create(:user, restaurant: create(:restaurant))
 
     visit path_for(:frontend, "/")
 

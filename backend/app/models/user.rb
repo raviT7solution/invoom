@@ -2,22 +2,29 @@
 
 class User < ApplicationRecord
   has_secure_password
-  has_secure_password :pin, validations: false
 
   enum :gender, [:male, :female, :other]
+  enum :employment_type, [:salary, :hourly]
 
-  has_many :user_restaurants, dependent: :destroy
+  belongs_to :restaurant
+
   has_many :user_roles, dependent: :destroy
 
-  has_many :restaurants, through: :user_restaurants
   has_many :roles, through: :user_roles
 
   validates :email, presence: true, uniqueness: true
+  validates :employment_type, presence: true
   validates :first_name, presence: true
+  validates :gender, presence: true
   validates :last_name, presence: true
+  validates :max_hour, presence: true
   validates :phone_number, presence: true
+  validates :pin, length: { is: 4 },
+                  numericality: { only_integer: true },
+                  presence: true,
+                  uniqueness: { scope: :restaurant_id }
+  validates :preferred_name, presence: true
   validates :start_date, presence: true
-  validates :username, presence: true, uniqueness: true
   validates :wage, presence: true
 
   def admin?

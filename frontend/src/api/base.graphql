@@ -51,15 +51,11 @@ query roles($restaurantId: ID!) {
 }
 
 mutation userCreate($input: UserCreateInput!) {
-  userCreate(input: $input) {
-    id
-  }
+  userCreate(input: $input)
 }
 
 mutation userUpdate($input: UserUpdateInput!) {
-  userUpdate(input: $input) {
-    id
-  }
+  userUpdate(input: $input)
 }
 
 mutation userDelete($id: ID!) {
@@ -73,18 +69,21 @@ query user($id: ID!) {
     address
     city
     email
+    employmentType
     endDate
     firstName
     fullName
     gender
     id
     lastName
+    maxHour
     phoneNumber
+    preferredName
+    province
+    roleIds
     startDate
-    username
     wage
     zipCode
-    roleIds
   }
 }
 

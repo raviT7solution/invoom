@@ -150,6 +150,7 @@ export const useRole = (id: string) => {
 export const useRoles = (variables: RolesQueryVariables) => {
   return useQuery({
     enabled: variables.restaurantId !== "",
+    initialData: [],
     queryKey: ["roles", variables],
     queryFn: async () => (await client.request(RolesDocument, variables)).roles,
   });

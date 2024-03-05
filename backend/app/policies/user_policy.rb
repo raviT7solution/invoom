@@ -11,7 +11,7 @@ class UserPolicy < ApplicationPolicy
 
   def scope
     if user!.admin?
-      User.joins(:restaurants).where(restaurants: { id: user!.restaurants.ids })
+      User.where(restaurant: user!.restaurants)
     else
       User.none
     end

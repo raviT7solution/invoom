@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_29_112329) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_29_105556) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -165,16 +165,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_112329) do
     t.index ["restaurant_id"], name: "index_roles_on_restaurant_id"
   end
 
-  create_table "user_restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.uuid "restaurant_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["restaurant_id"], name: "index_user_restaurants_on_restaurant_id"
-    t.index ["user_id", "restaurant_id"], name: "index_user_restaurants_on_user_id_and_restaurant_id", unique: true
-    t.index ["user_id"], name: "index_user_restaurants_on_user_id"
-  end
-
   create_table "user_roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.uuid "role_id", null: false
@@ -189,7 +179,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_112329) do
     t.date "end_date"
     t.date "start_date", null: false
     t.float "wage", null: false
-    t.integer "gender"
+    t.integer "gender", null: false
     t.string "address"
     t.string "city"
     t.string "email", null: false
@@ -197,13 +187,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_112329) do
     t.string "last_name", null: false
     t.string "password_digest"
     t.string "phone_number", null: false
-    t.string "pin_digest"
-    t.string "username", null: false
     t.string "zip_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "province"
+    t.string "preferred_name", null: false
+    t.integer "employment_type", null: false
+    t.float "max_hour", null: false
+    t.string "pin", null: false
+    t.uuid "restaurant_id", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["username"], name: "index_users_on_username", unique: true
+    t.index ["pin", "restaurant_id"], name: "index_users_on_pin_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_users_on_restaurant_id"
   end
 
   add_foreign_key "addons", "restaurants"
@@ -224,8 +219,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_112329) do
   add_foreign_key "menus", "restaurants"
   add_foreign_key "modifiers", "restaurants"
   add_foreign_key "roles", "restaurants"
-  add_foreign_key "user_restaurants", "restaurants"
-  add_foreign_key "user_restaurants", "users"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
+  add_foreign_key "users", "restaurants"
 end

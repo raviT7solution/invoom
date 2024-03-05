@@ -65,12 +65,12 @@ export const Roles = () => {
       </div>
 
       <div className="w-full h-full flex overflow-x-scroll">
-        {roles?.length === 0 ? (
+        {roles.length === 0 ? (
           <div className="h-full w-full flex justify-center items-center">
             <Empty />
           </div>
         ) : (
-          roles?.map((role) => (
+          roles.map((role) => (
             <Card
               actions={[
                 <EditOutlined

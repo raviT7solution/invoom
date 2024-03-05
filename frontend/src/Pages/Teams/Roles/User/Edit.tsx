@@ -1,4 +1,14 @@
-import { Button, Col, Divider, Form, Input, Row, Select } from "antd";
+import {
+  Button,
+  Col,
+  Divider,
+  Form,
+  Input,
+  InputNumber,
+  Row,
+  Select,
+  Tag,
+} from "antd";
 
 import {
   useRoles,
@@ -10,20 +20,27 @@ import { FormDrawer } from "../../../../components/FormDrawer";
 import { useRestaurantIdStore } from "../../../../stores/useRestaurantIdStore";
 
 type schema = {
-  firstName: string;
-  lastName: string;
-  username: string;
-  email: string;
-  phoneNumber: string;
-  gender?: string;
   address?: string;
   city?: string;
-  zipCode?: string;
+  email: string;
+  employmentType: string;
+  firstName: string;
+  gender: string;
+  lastName: string;
+  maxHour: number;
+  password: string;
+  phoneNumber: string;
+  pin: string;
+  preferredName: string;
+  province?: string;
+  roleIds: string[];
   startDate: string;
   wage: number;
-  password: string;
-  pin?: string;
-  roleIds: string[];
+  zipCode?: string;
+};
+
+const initialValues = {
+  maxHour: 0,
 };
 
 const genders = [
@@ -38,6 +55,17 @@ const genders = [
   {
     label: "Other",
     value: "other",
+  },
+];
+
+const employmentTypes = [
+  {
+    label: "Salary",
+    value: "salary",
+  },
+  {
+    label: "Hourly",
+    value: "hourly",
   },
 ];
 
@@ -59,13 +87,20 @@ export const UserEdit = ({
   const { mutateAsync: userCreate, isPending: isCreating } = useUserCreate();
   const { mutateAsync: userUpdate, isPending: isUpdating } = useUserUpdate();
 
+  const [form] = Form.useForm<schema>();
+  const wage = Form.useWatch("wage", form) || 0;
+  const employmentType = Form.useWatch("employmentType", form);
+  const maxHour = Form.useWatch("maxHour", form) || 0;
+
   const onClose = () => showEditUser("", false);
 
   const onFinish = async (values: schema) => {
-    const attributes = { ...values, restaurantIds: [restaurantId] };
+    const attributes = { ...values };
 
     isNew
-      ? await userCreate({ input: { attributes: attributes } })
+      ? await userCreate({
+          input: { restaurantId: restaurantId, attributes: attributes },
+        })
       : await userUpdate({ input: { attributes: attributes, id: userId } });
 
     onClose();
@@ -90,7 +125,8 @@ export const UserEdit = ({
       width={720}
     >
       <Form
-        initialValues={user}
+        form={form}
+        initialValues={isNew ? initialValues : user}
         layout="vertical"
         name="user-form"
         onFinish={onFinish}
@@ -129,16 +165,20 @@ export const UserEdit = ({
 
           <Col span={8}>
             <Form.Item
-              label="Username"
-              name="username"
+              label="Preferred Name"
+              name="preferredName"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="Username" />
+              <Input placeholder="Preferred Name" />
             </Form.Item>
           </Col>
 
           <Col span={8}>
-            <Form.Item label="Gender" name="gender">
+            <Form.Item
+              label="Gender"
+              name="gender"
+              rules={[{ required: true, message: "Required" }]}
+            >
               <Select options={genders} placeholder="Select" />
             </Form.Item>
           </Col>
@@ -172,6 +212,12 @@ export const UserEdit = ({
           </Col>
 
           <Col span={8}>
+            <Form.Item label="Province" name="province">
+              <Input placeholder="Province" />
+            </Form.Item>
+          </Col>
+
+          <Col span={8}>
             <Form.Item label="Postal Code" name="zipCode">
               <Input placeholder="Postal Code" />
             </Form.Item>
@@ -195,13 +241,48 @@ export const UserEdit = ({
 
           <Col span={8}>
             <Form.Item
-              getValueFromEvent={(e) => parseFloat(e.target.value)}
+              label="Employment Type"
+              name="employmentType"
+              rules={[{ required: true, message: "Required" }]}
+            >
+              <Select options={employmentTypes} placeholder="Select" />
+            </Form.Item>
+          </Col>
+
+          <Col span={8}>
+            <Form.Item
+              label="Weekly Hour Restriction"
+              name="maxHour"
+              rules={[{ required: true, message: "Required" }]}
+            >
+              <InputNumber
+                disabled={employmentType !== "hourly"}
+                placeholder="Weekly Hour Restriction"
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+          </Col>
+
+          <Col span={8}>
+            <Form.Item
               label="Wage"
               name="wage"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="Wage" type="number" />
+              <InputNumber placeholder="Wage" style={{ width: "100%" }} />
             </Form.Item>
+          </Col>
+
+          <Col span={8}>
+            {employmentType && (
+              <Tag>
+                {employmentType === "hourly"
+                  ? `Weekly Wage: ${wage * maxHour}/week`
+                  : employmentType === "salary"
+                  ? `Daily Wage: ${wage / 30}/day`
+                  : ""}
+              </Tag>
+            )}
           </Col>
         </Row>
 
@@ -221,7 +302,11 @@ export const UserEdit = ({
           </Col>
 
           <Col span={8}>
-            <Form.Item label="Pin" name="pin">
+            <Form.Item
+              label="Pin"
+              name="pin"
+              rules={[{ required: isNew, message: "Required" }]}
+            >
               <Input placeholder="Pin" />
             </Form.Item>
           </Col>
@@ -240,7 +325,7 @@ export const UserEdit = ({
             >
               <Select
                 mode="multiple"
-                options={roles?.map((r) => ({ label: r.name, value: r.id }))}
+                options={roles.map((r) => ({ label: r.name, value: r.id }))}
                 placeholder="Select"
               />
             </Form.Item>

@@ -8,6 +8,7 @@ class Restaurant < ApplicationRecord
   has_many :menus, dependent: :destroy
   has_many :modifiers, dependent: :destroy
   has_many :roles, dependent: :destroy
+  has_many :users, dependent: :destroy
 
   validates :name, presence: true
 end
