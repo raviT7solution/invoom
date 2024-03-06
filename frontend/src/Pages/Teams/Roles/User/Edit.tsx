@@ -60,7 +60,7 @@ const genders = [
 
 const employmentTypes = [
   {
-    label: "Salary",
+    label: "Salary Per Month",
     value: "salary",
   },
   {
@@ -157,7 +157,10 @@ export const UserEdit = ({
             <Form.Item
               label="Email"
               name="email"
-              rules={[{ required: true, message: "Required" }]}
+              rules={[
+                { required: true, message: "Required" },
+                { type: "email", message: "Please enter a valid email" },
+              ]}
             >
               <Input placeholder="Email" />
             </Form.Item>
@@ -273,9 +276,9 @@ export const UserEdit = ({
             </Form.Item>
           </Col>
 
-          <Col span={8}>
+          <Col className="!flex items-center" span={8}>
             {employmentType && (
-              <Tag>
+              <Tag className="w-full !text-center">
                 {employmentType === "hourly"
                   ? `Weekly Wage: ${wage * maxHour}/week`
                   : employmentType === "salary"
