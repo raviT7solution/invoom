@@ -85,15 +85,17 @@ export const Roles = () => {
                   <DeleteOutlined />
                 </Popconfirm>,
               ]}
-              bodyStyle={{
-                overflowY: "scroll",
-                height: 0,
-                flexGrow: 1,
-              }}
               bordered={false}
               className="text-center h-full !mr-4 shadow-md flex flex-col !bg-neutral-50"
               key={role.id}
               size="small"
+              styles={{
+                body: {
+                  overflowY: "scroll",
+                  height: 0,
+                  flexGrow: 1,
+                },
+              }}
               title={role.name}
             >
               <Space direction="vertical">

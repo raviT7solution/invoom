@@ -123,11 +123,11 @@ export const Navbar = ({
     <Layout className="h-screen">
       <Layout.Sider collapsible theme="light">
         <Select
-          bordered={false}
           className="w-full !h-12"
           onSelect={(v) => restaurantIdStore.create(v)}
           options={restaurantOptions}
           value={restaurantIdStore.restaurantId}
+          variant="borderless"
         />
 
         <Menu items={items} mode="vertical" selectedKeys={[]} />

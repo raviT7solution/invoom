@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  DatePicker,
   Divider,
   Form,
   Input,
@@ -9,6 +10,7 @@ import {
   Select,
   Tag,
 } from "antd";
+import { useEffect } from "react";
 
 import {
   useRoles,
@@ -16,6 +18,11 @@ import {
   useUserCreate,
   useUserUpdate,
 } from "../../../../api";
+import {
+  DATE_FORMAT,
+  datePickerGetValueFromEvent,
+  datePickerGetValueProps,
+} from "../../../../components/DatePicker";
 import { FormDrawer } from "../../../../components/FormDrawer";
 import { useRestaurantIdStore } from "../../../../stores/useRestaurantIdStore";
 
@@ -105,6 +112,8 @@ export const UserEdit = ({
 
     onClose();
   };
+
+  useEffect(() => form.resetFields(), [isNew, userId, form]);
 
   return (
     <FormDrawer
@@ -234,11 +243,13 @@ export const UserEdit = ({
         <Row gutter={8}>
           <Col span={8}>
             <Form.Item
+              getValueFromEvent={datePickerGetValueFromEvent}
+              getValueProps={datePickerGetValueProps}
               label="Start Date"
               name="startDate"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input type="date" />
+              <DatePicker format={DATE_FORMAT} style={{ width: "100%" }} />
             </Form.Item>
           </Col>
 

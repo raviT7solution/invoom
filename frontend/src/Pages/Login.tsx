@@ -16,8 +16,6 @@ type schema = {
 };
 
 export const Login = () => {
-  const [form] = Form.useForm<schema>();
-
   const { isPending, mutateAsync } = useAdminSessionCreate();
   const create = useAdminSessionStore((s) => s.create);
 
@@ -30,7 +28,7 @@ export const Login = () => {
   return (
     <div className="h-screen flex justify-center items-center bg-neutral-100">
       <Card className="drop-shadow-xl w-11/12 lg:w-1/4" title="Login">
-        <Form form={form} onFinish={onFinish}>
+        <Form onFinish={onFinish}>
           <Form.Item
             name="email"
             rules={[{ required: true, message: "Required" }]}

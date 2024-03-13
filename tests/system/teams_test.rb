@@ -40,7 +40,9 @@ class TeamsTest < ApplicationSystemTestCase
       fill_in "Province", with: "Ontario"
       fill_in "City", with: "North Henry"
       fill_in "Postal Code", with: "15721"
-      fill_in "Start Date", with: "2016-02-01"
+      within ".ant-form-item", text: "Start Date" do
+        fill_in_date with: "02-01-2016"
+      end
       fill_in "Wage", with: 10.5
       fill_in "Weekly Hour Restriction", with: 11
       fill_in "Password", with: "Password@123"
