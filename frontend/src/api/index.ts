@@ -19,6 +19,8 @@ import {
   CategoryDocument,
   CategoryUpdateDocument,
   CategoryUpdateMutationVariables,
+  CitiesDocument,
+  CountriesDocument,
   CreateCategoryDocument,
   CreateCategoryMutationVariables,
   CurrentAdminDocument,
@@ -50,6 +52,7 @@ import {
   ModifierUpdateDocument,
   ModifierUpdateMutationVariables,
   ModifiersDocument,
+  ProvincesDocument,
   RoleCreateDocument,
   RoleCreateMutationVariables,
   RoleDeleteDocument,
@@ -491,5 +494,38 @@ export const useModifierUpdate = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["modifiers"] });
     },
+  });
+};
+
+export const useCountries = () => {
+  return useQuery({
+    initialData: [],
+    queryKey: ["country"],
+    queryFn: async () => (await client.request(CountriesDocument)).countries,
+  });
+};
+
+export const useProvinces = (alpha2: string) => {
+  return useQuery({
+    initialData: [],
+    enabled: alpha2 !== "",
+    queryKey: ["provinces", alpha2],
+    queryFn: async () =>
+      (await client.request(ProvincesDocument, { alpha2: alpha2 })).provinces,
+  });
+};
+
+export const useCities = (alpha2: string, provinceCode: string) => {
+  return useQuery({
+    initialData: [],
+    enabled: alpha2 !== "" && provinceCode !== "",
+    queryKey: ["cities", alpha2, provinceCode],
+    queryFn: async () =>
+      (
+        await client.request(CitiesDocument, {
+          alpha2: alpha2,
+          provinceCode: provinceCode,
+        })
+      ).cities,
   });
 };

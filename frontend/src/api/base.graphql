@@ -68,6 +68,8 @@ query user($id: ID!) {
   user(id: $id) {
     address
     city
+    country
+    countryCode
     email
     employmentType
     endDate
@@ -289,4 +291,25 @@ mutation modifierUpdate($input: ModifierUpdateInput!) {
 
 mutation modifierDelete($id: ID!) {
   modifierDelete(input: { id: $id })
+}
+
+query countries {
+  countries {
+    alpha2
+    code
+    name
+  }
+}
+
+query provinces($alpha2: String!) {
+  provinces(alpha2: $alpha2) {
+    code
+    name
+  }
+}
+
+query cities($alpha2: String!, $provinceCode: String!) {
+  cities(alpha2: $alpha2, provinceCode: $provinceCode) {
+    name
+  }
 }

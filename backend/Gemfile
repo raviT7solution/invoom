@@ -63,5 +63,7 @@ group :test do
   gem "phantom", git: "https://github.com/unicorn-av/phantom.git", require: false
 end
 
+gem "city-state"
+gem "countries", require: "countries/global"
 gem "graphql"
 gem "jwt"

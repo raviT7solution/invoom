@@ -4,6 +4,8 @@ FactoryBot.define do
   factory :user do
     address { nil }
     city { nil }
+    country { "CA" }
+    country_code { "+1" }
     email { Faker::Internet.email }
     employment_type { "salary" }
     end_date { nil }
@@ -15,7 +17,7 @@ FactoryBot.define do
     phone_number { Faker::PhoneNumber.cell_phone_in_e164 }
     pin { "1234" }
     preferred_name { Faker::Internet.username }
-    province { "Ontario" }
+    province { "ON" }
     start_date { "01/01/2023" }
     wage { 1 }
     zip_code { Faker::Address.zip_code }

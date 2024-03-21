@@ -10,9 +10,12 @@ import {
   Select,
   Tag,
 } from "antd";
-import { useEffect } from "react";
+import { useMemo, useEffect } from "react";
 
 import {
+  useCities,
+  useCountries,
+  useProvinces,
   useRoles,
   useUser,
   useUserCreate,
@@ -24,11 +27,14 @@ import {
   datePickerGetValueProps,
 } from "../../../../components/DatePicker";
 import { FormDrawer } from "../../../../components/FormDrawer";
+import { selectLabelFilterSort } from "../../../../helpers";
 import { useRestaurantIdStore } from "../../../../stores/useRestaurantIdStore";
 
 type schema = {
   address?: string;
   city?: string;
+  country?: string;
+  countryCode: string;
   email: string;
   employmentType: string;
   firstName: string;
@@ -90,7 +96,8 @@ export const UserEdit = ({
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
   const { data: roles } = useRoles({ restaurantId: restaurantId });
-  const { data: user, isFetching } = useUser(userId);
+  const { data: user, isFetching: isUserFetching } = useUser(userId);
+
   const { mutateAsync: userCreate, isPending: isCreating } = useUserCreate();
   const { mutateAsync: userUpdate, isPending: isUpdating } = useUserUpdate();
 
@@ -98,6 +105,16 @@ export const UserEdit = ({
   const wage = Form.useWatch("wage", form) || 0;
   const employmentType = Form.useWatch("employmentType", form);
   const maxHour = Form.useWatch("maxHour", form) || 0;
+  const country = Form.useWatch("country", form) || "";
+  const province = Form.useWatch("province", form) || "";
+
+  const { data: countries, isFetching: isCountryFetching } = useCountries();
+  const { data: provinces, isFetching: isProvinceFetching } =
+    useProvinces(country);
+  const { data: cities, isFetching: isCityFetching } = useCities(
+    country,
+    province,
+  );
 
   const onClose = () => showEditUser("", false);
 
@@ -115,6 +132,15 @@ export const UserEdit = ({
 
   useEffect(() => form.resetFields(), [isNew, userId, form]);
 
+  const countyCodesOptions = useMemo(
+    () =>
+      [...new Set(countries.map((country) => country.code))].map((i) => ({
+        label: `+${i}`,
+        value: `+${i}`,
+      })),
+    [countries],
+  );
+
   return (
     <FormDrawer
       footer={
@@ -127,7 +153,7 @@ export const UserEdit = ({
           Submit
         </Button>
       }
-      isFetching={isFetching}
+      isFetching={isUserFetching}
       onClose={onClose}
       open={open}
       title={isNew ? "New User" : "Edit User"}
@@ -201,7 +227,22 @@ export const UserEdit = ({
               name="phoneNumber"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="Phone" />
+              <Input
+                addonBefore={
+                  <Form.Item label="Country Code" name="countryCode" noStyle>
+                    <Select
+                      filterOption
+                      filterSort={selectLabelFilterSort}
+                      optionFilterProp="label"
+                      options={countyCodesOptions}
+                      placeholder="Select"
+                      showSearch
+                      style={{ width: 80 }}
+                    />
+                  </Form.Item>
+                }
+                style={{ width: "100%" }}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -212,20 +253,60 @@ export const UserEdit = ({
 
         <Row gutter={8}>
           <Col span={8}>
-            <Form.Item label="Address Line" name="address">
-              <Input placeholder="Address Line" />
-            </Form.Item>
-          </Col>
-
-          <Col span={8}>
-            <Form.Item label="City" name="city">
-              <Input placeholder="City" />
+            <Form.Item label="Country" name="country">
+              <Select
+                disabled={isCountryFetching}
+                filterOption
+                onChange={() =>
+                  form.setFieldsValue({ province: undefined, city: undefined })
+                }
+                optionFilterProp="label"
+                options={countries.map((i) => ({
+                  label: i.name,
+                  value: i.alpha2,
+                }))}
+                placeholder="Select"
+                showSearch
+              />
             </Form.Item>
           </Col>
 
           <Col span={8}>
             <Form.Item label="Province" name="province">
-              <Input placeholder="Province" />
+              <Select
+                disabled={isProvinceFetching}
+                filterOption
+                onChange={() => form.setFieldsValue({ city: undefined })}
+                optionFilterProp="label"
+                options={provinces.map((i) => ({
+                  label: i.name,
+                  value: i.code,
+                }))}
+                placeholder="Select"
+                showSearch
+              />
+            </Form.Item>
+          </Col>
+
+          <Col span={8}>
+            <Form.Item label="City" name="city">
+              <Select
+                disabled={isCityFetching}
+                filterOption
+                optionFilterProp="label"
+                options={cities.map((i) => ({
+                  label: i.name,
+                  value: i.name,
+                }))}
+                placeholder="Select"
+                showSearch
+              />
+            </Form.Item>
+          </Col>
+
+          <Col span={8}>
+            <Form.Item label="Address Line" name="address">
+              <Input placeholder="Address Line" />
             </Form.Item>
           </Col>
 

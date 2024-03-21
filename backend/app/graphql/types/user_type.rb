@@ -3,6 +3,8 @@
 class Types::UserType < Types::BaseObject
   field :address, String, null: true
   field :city, String, null: true
+  field :country, String, null: true
+  field :country_code, String, null: false
   field :email, String, null: false
   field :employment_type, String, null: false
   field :end_date, String, null: true

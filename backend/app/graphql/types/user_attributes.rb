@@ -3,6 +3,8 @@
 class Types::UserAttributes < Types::BaseInputObject
   argument :address, String, required: false
   argument :city, String, required: false
+  argument :country, String, required: false
+  argument :country_code, String, required: false
   argument :email, String, required: false
   argument :employment_type, String, required: false
   argument :end_date, String, required: false

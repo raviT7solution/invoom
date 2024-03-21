@@ -13,6 +13,11 @@ class Types::QueryType < Types::BaseObject
   field :category, Types::CategoryType, null: false, authorize: "CategoryPolicy#show?" do
     argument :id, ID, required: true
   end
+  field :cities, [Types::CityType], null: false do
+    argument :alpha2, String, required: true
+    argument :province_code, String, required: true
+  end
+  field :countries, [Types::CountryType], null: false
   field :current_admin, Types::AdminType, null: false, authorize: "AdminPolicy#show?"
   field :floor_objects, [Types::FloorObjectType], null: false, authorize: "FloorObjectPolicy#index?" do
     argument :restaurant_id, ID, required: true
@@ -34,6 +39,9 @@ class Types::QueryType < Types::BaseObject
   end
   field :modifiers, [Types::ModifierType], null: false, authorize: "ModifierPolicy#index?" do
     argument :restaurant_id, ID, required: true
+  end
+  field :provinces, [Types::ProvinceType], null: false do
+    argument :alpha2, String, required: true
   end
   field :role, Types::RoleType, null: false, authorize: "RolePolicy#show?" do
     argument :id, ID, required: true
@@ -59,6 +67,21 @@ class Types::QueryType < Types::BaseObject
 
   def category(id:)
     CategoryPolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def cities(alpha2:, province_code:)
+    CS.cities(province_code, alpha2).map { |i| { name: i } }
+  end
+
+  def countries
+    Country.all.map do |i|
+      {
+        alpha2: i.alpha2,
+        code: i.country_code,
+        name: i.iso_short_name,
+        timezones: i.timezones.zones.map { |z| { identifier: z.identifier, offset: z.utc_offset } }
+      }
+    end
   end
 
   def current_admin
@@ -91,6 +114,12 @@ class Types::QueryType < Types::BaseObject
 
   def modifiers(restaurant_id:)
     ModifierPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  end
+
+  def provinces(alpha2:)
+    Country[alpha2].subdivision_names_with_codes.map do |i|
+      { name: i[0], code: i[1] }
+    end
   end
 
   def role(id:)
