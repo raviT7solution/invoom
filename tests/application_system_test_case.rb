@@ -14,13 +14,13 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   setup do
     Capybara.current_session
-    Phantom.wait_for(:frontend)
+    Phantom::Test.wait_for(:frontend)
   end
 
   def path_for(tag, path)
     case tag
     when :frontend
-      "#{Phantom.processes[:frontend][:url]}#{path}"
+      "#{Phantom::Test.processes[:frontend][:url]}#{path}"
     end
   end
 end

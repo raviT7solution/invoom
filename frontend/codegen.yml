@@ -5,6 +5,7 @@ generates:
   src/api/base.ts:
     config:
       disableDescriptions: true
+      enumsAsTypes: true
       skipTypename: true
     plugins:
       - add:

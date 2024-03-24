@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "phantom"
+require "phantom/test"
 
 Capybara.register_server :phantom do |app, port, host|
-  Phantom.start(
+  Phantom::Test.start(
     :frontend,
     "pnpm dev --port #{port + 1}",
     dir: "./frontend",

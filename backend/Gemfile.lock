@@ -1,9 +1,10 @@
 GIT
-  remote: https://github.com/unicorn-av/phantom.git
-  revision: 5abacf57d4e1d48b67061765e95f141a0efd3b86
+  remote: https://github.com/vivekmiyani/phantom.git
+  revision: 87946f67c31e60ff282b875791a3f8ce7b0366fe
   specs:
     phantom (0.0.1)
-      minitest (>= 5.1)
+      graphql
+      minitest
 
 GEM
   remote: https://rubygems.org/
