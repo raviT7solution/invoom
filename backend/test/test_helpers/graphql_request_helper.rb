@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GraphqlRequestHelper
-  def assert_query_error(message: nil)
+  def assert_query_error(message = nil)
     assert_response :success
     assert_not_empty response.parsed_body["errors"]
 

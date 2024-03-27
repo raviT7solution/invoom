@@ -2,6 +2,6 @@
 
 class AdminPolicy < ApplicationPolicy
   def show?
-    user!.admin?
+    web_admin?
   end
 end

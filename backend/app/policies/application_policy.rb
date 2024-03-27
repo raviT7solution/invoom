@@ -1,21 +1,18 @@
 # frozen_string_literal: true
 
 class ApplicationPolicy
-  attr_reader :user
+  attr_reader :session
 
-  def initialize(user)
-    @user = user
-  end
+  delegate \
+    :mobile_admin!,
+    :mobile_admin?,
+    :mobile_user!,
+    :mobile_user?,
+    :web_admin!,
+    :web_admin?,
+    to: :session
 
-  def scope
-    raise NotImplementedError
-  end
-
-  private
-
-  def user!
-    raise GraphQL::ExecutionError, "Unauthorized" unless user
-
-    user
+  def initialize(session)
+    @session = session
   end
 end

@@ -85,7 +85,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def current_admin
-    context[:current_user]
+    context[:current_user].web_admin!
   end
 
   def floor_objects(restaurant_id:)

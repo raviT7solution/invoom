@@ -2,30 +2,30 @@
 
 class ModifierPolicy < ApplicationPolicy
   def create?
-    user!.admin?
+    web_admin?
   end
 
   def delete?
-    user!.admin?
+    web_admin?
   end
 
   def index?
-    user!.admin?
+    web_admin?
   end
 
   def scope
-    if user!.admin?
-      Modifier.where(restaurant: user!.restaurants)
+    if web_admin?
+      Modifier.where(restaurant: web_admin!.restaurants)
     else
       Modifier.none
     end
   end
 
   def show?
-    user!.admin?
+    web_admin?
   end
 
   def update?
-    user!.admin?
+    web_admin?
   end
 end

@@ -20,7 +20,10 @@ export const Login = () => {
   const create = useAdminSessionStore((s) => s.create);
 
   const onFinish = async (values: schema) => {
-    create((await mutateAsync({ input: values })).adminSessionCreate.token);
+    create(
+      (await mutateAsync({ input: { ...values, subject: "web" } }))
+        .adminSessionCreate.token,
+    );
 
     Router.push("Dashboard");
   };

@@ -2,26 +2,26 @@
 
 class UserPolicy < ApplicationPolicy
   def create?
-    user!.admin?
+    web_admin?
   end
 
   def delete?
-    user!.admin?
+    web_admin?
   end
 
   def scope
-    if user!.admin?
-      User.where(restaurant: user!.restaurants)
+    if web_admin?
+      User.where(restaurant: web_admin!.restaurants)
     else
       User.none
     end
   end
 
   def show?
-    user!
+    web_admin?
   end
 
   def update?
-    user!.admin?
+    web_admin?
   end
 end

@@ -2,18 +2,18 @@
 
 class FloorObjectPolicy < ApplicationPolicy
   def index?
-    user!.admin?
+    web_admin?
   end
 
   def scope
-    if user!.admin?
-      FloorObject.where(restaurant: user!.restaurants)
+    if web_admin?
+      FloorObject.where(restaurant: web_admin!.restaurants)
     else
       FloorObject.none
     end
   end
 
   def update?
-    user!.admin?
+    web_admin?
   end
 end

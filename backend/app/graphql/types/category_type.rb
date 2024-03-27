@@ -7,6 +7,6 @@ class Types::CategoryType < Types::BaseObject
 
   field :menu_ids, [ID], null: false
 
-  field :items, [Types::ItemType], null: false, authorize_field: "CategoryPolicy"
+  field :items, [Types::ItemType], null: false, authorize: "ItemPolicy#index?"
   field :restaurant, Types::RestaurantType, null: false
 end

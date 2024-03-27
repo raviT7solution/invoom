@@ -62,6 +62,10 @@ export type Admin = {
   restaurants: Array<Restaurant>;
 };
 
+export type AdminSessionCreateSubjectEnum =
+  | 'mobile'
+  | 'web';
+
 export type Category = {
   id: Scalars['ID']['output'];
   items: Array<Item>;
@@ -529,6 +533,7 @@ export type SessionCreateInput = {
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+  subject: AdminSessionCreateSubjectEnum;
 };
 
 export type Timezone = {

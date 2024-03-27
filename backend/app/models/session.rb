@@ -1,30 +1,63 @@
 # frozen_string_literal: true
 
 class Session
-  attr_reader :user
+  attr_reader :header
 
-  def initialize(user)
-    @user = user
+  def initialize(header)
+    @header = header
   end
 
-  def token # rubocop:disable Metrics/AbcSize
-    return JWT.encode({ "admin_id" => user.id, exp: 1.day.after.to_i }, self.class.secret) if user.admin?
+  def mobile_admin!
+    @mobile_admin ||= begin
+      raise GraphQL::ExecutionError, "Unauthorized" unless mobile_admin?
 
-    JWT.encode({ "user_id" => user.id, exp: 1.day.after.to_i }, self.class.secret)
+      Admin.find(token["mobile_admin_id"])
+    end
   end
 
-  def self.find_by(token:)
-    o = JWT.decode(token, secret)[0]
+  def mobile_admin?
+    token.present? && token["mobile_admin_id"].present?
+  end
 
-    return Admin.find(o["admin_id"]) if o["admin_id"].present?
-    return User.find(o["user_id"]) if o["user_id"].present?
+  def mobile_user!
+    @mobile_user ||= begin
+      raise GraphQL::ExecutionError, "Unauthorized" unless mobile_user?
 
-    nil
-  rescue StandardError
-    raise ActiveRecord::RecordNotFound.new("", name)
+      User.find(token["mobile_user_id"])
+    end
+  end
+
+  def mobile_user?
+    token.present? && token["mobile_user_id"].present?
+  end
+
+  def web_admin!
+    @web_admin ||= begin
+      raise GraphQL::ExecutionError, "Unauthorized" unless web_admin?
+
+      Admin.find(token["web_admin_id"])
+    end
+  end
+
+  def web_admin?
+    token.present? && token["web_admin_id"].present?
   end
 
   def self.secret
     @secret ||= Rails.application.credentials.secret_key_base || SecureRandom.uuid
+  end
+
+  def self.token(record, key)
+    JWT.encode({ key => record.id, exp: 1.day.after.to_i }, secret)
+  end
+
+  private
+
+  def token
+    @token ||= begin
+      JWT.decode(header, self.class.secret)[0]
+    rescue JWT::DecodeError
+      # do nothing
+    end
   end
 end

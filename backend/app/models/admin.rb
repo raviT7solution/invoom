@@ -10,12 +10,4 @@ class Admin < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
-
-  def admin?
-    true
-  end
-
-  def session
-    Session.new(self)
-  end
 end

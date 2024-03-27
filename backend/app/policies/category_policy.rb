@@ -1,39 +1,31 @@
 # frozen_string_literal: true
 
 class CategoryPolicy < ApplicationPolicy
-  def authorized_fields
-    if user.admin?
-      [:items]
-    else
-      []
-    end
-  end
-
   def create?
-    user!.admin?
+    web_admin?
   end
 
   def delete?
-    user!.admin?
+    web_admin?
   end
 
   def index?
-    user!.admin?
+    web_admin?
   end
 
   def scope
-    if user!.admin?
-      Category.where(restaurant: user!.restaurants)
+    if web_admin?
+      Category.where(restaurant: web_admin!.restaurants)
     else
       Category.none
     end
   end
 
   def show?
-    user!.admin?
+    web_admin?
   end
 
   def update?
-    user!.admin?
+    web_admin?
   end
 end

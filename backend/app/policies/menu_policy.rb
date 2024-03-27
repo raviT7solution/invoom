@@ -2,30 +2,30 @@
 
 class MenuPolicy < ApplicationPolicy
   def create?
-    user!.admin?
+    web_admin?
   end
 
   def delete?
-    user!.admin?
+    web_admin?
   end
 
   def index?
-    user!.admin?
+    web_admin?
   end
 
   def scope
-    if user!.admin?
-      Menu.where(restaurant: user!.restaurants)
+    if web_admin?
+      Menu.where(restaurant: web_admin!.restaurants)
     else
       Menu.none
     end
   end
 
   def show?
-    user!.admin?
+    web_admin?
   end
 
   def update?
-    user!.admin?
+    web_admin?
   end
 end

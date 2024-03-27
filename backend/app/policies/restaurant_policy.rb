@@ -2,8 +2,8 @@
 
 class RestaurantPolicy < ApplicationPolicy
   def scope
-    if user!.admin?
-      user!.restaurants
+    if web_admin?
+      web_admin!.restaurants
     else
       Restaurant.none
     end

@@ -27,15 +27,7 @@ class User < ApplicationRecord
   validates :start_date, presence: true
   validates :wage, presence: true
 
-  def admin?
-    false
-  end
-
   def full_name
     "#{first_name} #{last_name}".strip
-  end
-
-  def session
-    Session.new(self)
   end
 end
