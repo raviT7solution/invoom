@@ -313,3 +313,33 @@ query cities($alpha2: String!, $provinceCode: String!) {
     name
   }
 }
+
+mutation inventoryCategoryCreate($input: InventoryCategoryCreateInput!) {
+  inventoryCategoryCreate(input: $input)
+}
+
+mutation inventoryCategoryUpdate($input: InventoryCategoryUpdateInput!) {
+  inventoryCategoryUpdate(input: $input)
+}
+
+mutation inventoryCategoryDelete($id: ID!) {
+  inventoryCategoryDelete(input: { id: $id })
+}
+
+query inventoryCategories($restaurantId: ID!) {
+  inventoryCategories(restaurantId: $restaurantId) {
+    id
+    name
+    visible
+    description
+  }
+}
+
+query inventoryCategory($id: ID!) {
+  inventoryCategory(id: $id) {
+    id
+    name
+    visible
+    description
+  }
+}

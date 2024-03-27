@@ -128,6 +128,37 @@ export type FloorObjectUpdateInput = {
   restaurantId: Scalars['ID']['input'];
 };
 
+export type InventoryCategory = {
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  restaurant: Restaurant;
+  visible: Scalars['Boolean']['output'];
+};
+
+export type InventoryCategoryAttributes = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  visible?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type InventoryCategoryCreateInput = {
+  attributes: InventoryCategoryAttributes;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  restaurantId: Scalars['ID']['input'];
+};
+
+export type InventoryCategoryDeleteInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+};
+
+export type InventoryCategoryUpdateInput = {
+  attributes: InventoryCategoryAttributes;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+};
+
 export type Item = {
   addonIds: Array<Scalars['ID']['output']>;
   categoryId: Scalars['ID']['output'];
@@ -251,6 +282,9 @@ export type Mutation = {
   categoryDelete: Scalars['Boolean']['output'];
   categoryUpdate: Scalars['Boolean']['output'];
   floorObjectUpdate: Scalars['Boolean']['output'];
+  inventoryCategoryCreate: Scalars['Boolean']['output'];
+  inventoryCategoryDelete: Scalars['Boolean']['output'];
+  inventoryCategoryUpdate: Scalars['Boolean']['output'];
   itemCreate: Scalars['Boolean']['output'];
   itemDelete: Scalars['Boolean']['output'];
   itemUpdate: Scalars['Boolean']['output'];
@@ -306,6 +340,21 @@ export type MutationCategoryUpdateArgs = {
 
 export type MutationFloorObjectUpdateArgs = {
   input: FloorObjectUpdateInput;
+};
+
+
+export type MutationInventoryCategoryCreateArgs = {
+  input: InventoryCategoryCreateInput;
+};
+
+
+export type MutationInventoryCategoryDeleteArgs = {
+  input: InventoryCategoryDeleteInput;
+};
+
+
+export type MutationInventoryCategoryUpdateArgs = {
+  input: InventoryCategoryUpdateInput;
 };
 
 
@@ -397,6 +446,8 @@ export type Query = {
   countries: Array<Country>;
   currentAdmin: Admin;
   floorObjects: Array<FloorObject>;
+  inventoryCategories: Array<InventoryCategory>;
+  inventoryCategory: InventoryCategory;
   item: Item;
   items: Array<Item>;
   menu: Menu;
@@ -438,6 +489,16 @@ export type QueryCitiesArgs = {
 
 export type QueryFloorObjectsArgs = {
   restaurantId: Scalars['ID']['input'];
+};
+
+
+export type QueryInventoryCategoriesArgs = {
+  restaurantId: Scalars['ID']['input'];
+};
+
+
+export type QueryInventoryCategoryArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -888,6 +949,41 @@ export type CitiesQueryVariables = Exact<{
 
 export type CitiesQuery = { cities: Array<{ name: string }> };
 
+export type InventoryCategoryCreateMutationVariables = Exact<{
+  input: InventoryCategoryCreateInput;
+}>;
+
+
+export type InventoryCategoryCreateMutation = { inventoryCategoryCreate: boolean };
+
+export type InventoryCategoryUpdateMutationVariables = Exact<{
+  input: InventoryCategoryUpdateInput;
+}>;
+
+
+export type InventoryCategoryUpdateMutation = { inventoryCategoryUpdate: boolean };
+
+export type InventoryCategoryDeleteMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type InventoryCategoryDeleteMutation = { inventoryCategoryDelete: boolean };
+
+export type InventoryCategoriesQueryVariables = Exact<{
+  restaurantId: Scalars['ID']['input'];
+}>;
+
+
+export type InventoryCategoriesQuery = { inventoryCategories: Array<{ id: string, name: string, visible: boolean, description: string }> };
+
+export type InventoryCategoryQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type InventoryCategoryQuery = { inventoryCategory: { id: string, name: string, visible: boolean, description: string } };
+
 
 export const AdminSessionCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"adminSessionCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SessionCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"adminSessionCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<AdminSessionCreateMutation, AdminSessionCreateMutationVariables>;
 export const CurrentAdminDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"currentAdmin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentAdmin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"restaurants"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<CurrentAdminQuery, CurrentAdminQueryVariables>;
@@ -930,3 +1026,8 @@ export const ModifierDeleteDocument = {"kind":"Document","definitions":[{"kind":
 export const CountriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"countries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"countries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alpha2"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CountriesQuery, CountriesQueryVariables>;
 export const ProvincesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"provinces"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"alpha2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"provinces"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"alpha2"},"value":{"kind":"Variable","name":{"kind":"Name","value":"alpha2"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<ProvincesQuery, ProvincesQueryVariables>;
 export const CitiesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"cities"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"alpha2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"provinceCode"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cities"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"alpha2"},"value":{"kind":"Variable","name":{"kind":"Name","value":"alpha2"}}},{"kind":"Argument","name":{"kind":"Name","value":"provinceCode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"provinceCode"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CitiesQuery, CitiesQueryVariables>;
+export const InventoryCategoryCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"inventoryCategoryCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"InventoryCategoryCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"inventoryCategoryCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<InventoryCategoryCreateMutation, InventoryCategoryCreateMutationVariables>;
+export const InventoryCategoryUpdateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"inventoryCategoryUpdate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"InventoryCategoryUpdateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"inventoryCategoryUpdate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}]}]}}]} as unknown as DocumentNode<InventoryCategoryUpdateMutation, InventoryCategoryUpdateMutationVariables>;
+export const InventoryCategoryDeleteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"inventoryCategoryDelete"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"inventoryCategoryDelete"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}]}]}}]} as unknown as DocumentNode<InventoryCategoryDeleteMutation, InventoryCategoryDeleteMutationVariables>;
+export const InventoryCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"inventoryCategories"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"restaurantId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"inventoryCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"restaurantId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"restaurantId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"visible"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<InventoryCategoriesQuery, InventoryCategoriesQueryVariables>;
+export const InventoryCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"inventoryCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"inventoryCategory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"visible"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<InventoryCategoryQuery, InventoryCategoryQueryVariables>;

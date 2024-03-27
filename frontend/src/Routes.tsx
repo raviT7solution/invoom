@@ -8,6 +8,7 @@ import { Item } from "./Pages/CuisineHub/Item";
 import { Menus } from "./Pages/CuisineHub/Menu";
 import { Modifiers } from "./Pages/CuisineHub/Modifiers";
 import { FloorPlan } from "./Pages/FloorPlan";
+import { InventoryCategories } from "./Pages/Inventory/Categories";
 import { Login } from "./Pages/Login";
 import { Roles } from "./Pages/Teams/Roles";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
@@ -32,6 +33,7 @@ const routes = {
   CuisineHubModifiers: "/cuisine-hub/modifiers",
   Dashboard: "/",
   FloorPlan: "/floor-plan",
+  InventoryCategories: "/inventory/categories",
   Login: "/login",
   Teams: "/teams",
 } as const;
@@ -83,6 +85,11 @@ export const Switch = () => {
     .with({ name: "CuisineHubModifiers" }, () => (
       <PrivateRoute>
         <Modifiers />
+      </PrivateRoute>
+    ))
+    .with({ name: "InventoryCategories" }, () => (
+      <PrivateRoute>
+        <InventoryCategories />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");

@@ -1,11 +1,13 @@
 import {
+  AuditOutlined,
   BookOutlined,
   CoffeeOutlined,
   ContainerOutlined,
   DashboardOutlined,
-  FormatPainterOutlined,
   FormOutlined,
+  FormatPainterOutlined,
   LogoutOutlined,
+  MenuUnfoldOutlined,
   PlusCircleOutlined,
   ReconciliationOutlined,
   TeamOutlined,
@@ -107,9 +109,21 @@ export const Navbar = ({
       key: "4",
     },
     {
+      label: "Inventory",
+      icon: <AuditOutlined />,
+      key: "5",
+      children: [
+        {
+          label: <Link to={Router.InventoryCategories()}>Category</Link>,
+          icon: <MenuUnfoldOutlined />,
+          key: "5.1",
+        },
+      ],
+    },
+    {
       label: "Logout",
       icon: <LogoutOutlined />,
-      key: "5",
+      key: "6",
       onClick: onLogout,
     },
   ];

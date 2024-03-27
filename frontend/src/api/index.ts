@@ -28,6 +28,14 @@ import {
   FloorObjectUpdateMutationVariables,
   FloorObjectsDocument,
   FloorObjectsQueryVariables,
+  InventoryCategoriesDocument,
+  InventoryCategoryCreateDocument,
+  InventoryCategoryCreateMutationVariables,
+  InventoryCategoryDeleteDocument,
+  InventoryCategoryDeleteMutationVariables,
+  InventoryCategoryDocument,
+  InventoryCategoryUpdateDocument,
+  InventoryCategoryUpdateMutationVariables,
   ItemCreateDocument,
   ItemCreateMutationVariables,
   ItemDeleteDocument,
@@ -527,5 +535,61 @@ export const useCities = (alpha2: string, provinceCode: string) => {
           provinceCode: provinceCode,
         })
       ).cities,
+  });
+};
+
+export const useInventoryCategoryCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: InventoryCategoryCreateMutationVariables) =>
+      client.request(InventoryCategoryCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["inventoryCategories"] });
+    },
+  });
+};
+
+export const useInventoryCategories = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryFn: async () =>
+      (await client.request(InventoryCategoriesDocument, { restaurantId }))
+        .inventoryCategories,
+    queryKey: ["inventoryCategories", restaurantId],
+  });
+};
+
+export const useInventoryCategory = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["inventoryCategory", id],
+    queryFn: async () =>
+      (await client.request(InventoryCategoryDocument, { id: id }))
+        .inventoryCategory,
+  });
+};
+
+export const useInventoryCategoryUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: InventoryCategoryUpdateMutationVariables) =>
+      client.request(InventoryCategoryUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["inventoryCategories"] });
+    },
+  });
+};
+export const useInventoryCategoryDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: InventoryCategoryDeleteMutationVariables) =>
+      client.request(InventoryCategoryDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["inventoryCategories"] });
+    },
   });
 };

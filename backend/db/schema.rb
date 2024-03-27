@@ -77,6 +77,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
     t.index ["restaurant_id"], name: "index_floor_objects_on_restaurant_id"
   end
 
+  create_table "inventory_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description", null: false
+    t.boolean "visible", default: true, null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "restaurant_id"], name: "index_inventory_categories_on_name_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_inventory_categories_on_restaurant_id"
+  end
+
   create_table "item_addons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "item_id", null: false
     t.uuid "addon_id", null: false
@@ -210,6 +221,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
   add_foreign_key "category_modifiers", "categories"
   add_foreign_key "category_modifiers", "modifiers"
   add_foreign_key "floor_objects", "restaurants"
+  add_foreign_key "inventory_categories", "restaurants"
   add_foreign_key "item_addons", "addons"
   add_foreign_key "item_addons", "items"
   add_foreign_key "item_modifiers", "items"

@@ -22,6 +22,13 @@ class Types::QueryType < Types::BaseObject
   field :floor_objects, [Types::FloorObjectType], null: false, authorize: "FloorObjectPolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
+  field :inventory_categories, [Types::InventoryCategoryType], null: false,
+                                                               authorize: "InventoryCategoryPolicy#index?" do
+    argument :restaurant_id, ID, required: true
+  end
+  field :inventory_category, Types::InventoryCategoryType, null: false, authorize: "InventoryCategoryPolicy#show?" do
+    argument :id, ID, required: true
+  end
   field :item, Types::ItemType, null: false, authorize: "ItemPolicy#show?" do
     argument :id, ID, required: true
   end
@@ -90,6 +97,14 @@ class Types::QueryType < Types::BaseObject
 
   def floor_objects(restaurant_id:)
     FloorObjectPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  end
+
+  def inventory_categories(restaurant_id:)
+    InventoryCategoryPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  end
+
+  def inventory_category(id:)
+    InventoryCategoryPolicy.new(context[:current_user]).scope.find(id)
   end
 
   def item(id:)
