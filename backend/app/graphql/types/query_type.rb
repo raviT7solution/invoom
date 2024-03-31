@@ -92,7 +92,12 @@ class Types::QueryType < Types::BaseObject
   end
 
   def current_admin
-    context[:current_user].web_admin!
+    current_user = context[:current_user]
+
+    return current_user.web_admin! if current_user.web_admin?
+    return current_user.mobile_admin! if current_user.mobile_admin?
+
+    raise GraphQL::ExecutionError, "Unauthorized"
   end
 
   def floor_objects(restaurant_id:)

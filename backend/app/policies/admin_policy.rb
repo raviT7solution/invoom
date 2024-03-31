@@ -2,6 +2,6 @@
 
 class AdminPolicy < ApplicationPolicy
   def show?
-    web_admin?
+    web_admin? || mobile_admin?
   end
 end

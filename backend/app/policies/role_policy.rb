@@ -10,11 +10,11 @@ class RolePolicy < ApplicationPolicy
   end
 
   def index?
-    web_admin?
+    web_admin? || mobile_admin?
   end
 
   def scope
-    if web_admin?
+    if web_admin? || mobile_admin?
       Role.where(restaurant: web_admin!.restaurants)
     else
       Role.none
