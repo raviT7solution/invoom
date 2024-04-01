@@ -14,8 +14,10 @@ class RolePolicy < ApplicationPolicy
   end
 
   def scope
-    if web_admin? || mobile_admin?
+    if web_admin?
       Role.where(restaurant: web_admin!.restaurants)
+    elsif mobile_admin?
+      Role.where(restaurant: mobile_admin!.restaurants)
     else
       Role.none
     end
