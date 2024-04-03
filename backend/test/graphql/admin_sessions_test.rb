@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class Admin::SessionsTest < ActionDispatch::IntegrationTest
+class AdminSessionsTest < ActionDispatch::IntegrationTest
   setup do
     @admin = create(:admin)
   end
@@ -102,7 +102,7 @@ class Admin::SessionsTest < ActionDispatch::IntegrationTest
 
   def create_string
     <<~GQL
-      mutation adminSessionCreate($input: SessionCreateInput!) {
+      mutation adminSessionCreate($input: AdminSessionCreateInput!) {
         adminSessionCreate(input: $input) {
           token
         }

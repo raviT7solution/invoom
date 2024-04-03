@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class Mutations::Admin::SessionCreate < Mutations::BaseMutation
+class Mutations::AdminSessionCreate < Mutations::BaseMutation
   argument :email, String, required: true
   argument :password, String, required: true
   argument :subject, enum("AdminSessionCreateSubjectEnum", [:mobile, :web]), required: true
 
-  type Types::Admin::SessionType, null: false
+  type Types::AdminSessionType, null: false
 
   def resolve(email:, password:, subject:)
     admin = Admin.find_by!(email: email)

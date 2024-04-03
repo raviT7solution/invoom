@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   ISO8601Date: { input: any; output: any; }
+  ISO8601DateTime: { input: any; output: any; }
   JSON: { input: any; output: any; }
 };
 
@@ -60,6 +61,17 @@ export type Admin = {
   id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
   restaurants: Array<Restaurant>;
+};
+
+export type AdminSession = {
+  token: Scalars['String']['output'];
+};
+
+export type AdminSessionCreateInput = {
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  subject: AdminSessionCreateSubjectEnum;
 };
 
 export type AdminSessionCreateSubjectEnum =
@@ -277,7 +289,7 @@ export type Mutation = {
   addonsCreate: Scalars['Boolean']['output'];
   addonsDelete: Scalars['Boolean']['output'];
   addonsUpdate: Scalars['Boolean']['output'];
-  adminSessionCreate: Session;
+  adminSessionCreate: AdminSession;
   categoryCreate: Scalars['Boolean']['output'];
   categoryDelete: Scalars['Boolean']['output'];
   categoryUpdate: Scalars['Boolean']['output'];
@@ -299,6 +311,7 @@ export type Mutation = {
   roleUpdate: Role;
   userCreate: Scalars['Boolean']['output'];
   userDelete: User;
+  userSessionCreate: UserSession;
   userUpdate: Scalars['Boolean']['output'];
 };
 
@@ -319,7 +332,7 @@ export type MutationAddonsUpdateArgs = {
 
 
 export type MutationAdminSessionCreateArgs = {
-  input: SessionCreateInput;
+  input: AdminSessionCreateInput;
 };
 
 
@@ -425,6 +438,11 @@ export type MutationUserCreateArgs = {
 
 export type MutationUserDeleteArgs = {
   input: UserDeleteInput;
+};
+
+
+export type MutationUserSessionCreateArgs = {
+  input: UserSessionCreateInput;
 };
 
 
@@ -586,17 +604,6 @@ export type RoleUpdateInput = {
   id: Scalars['ID']['input'];
 };
 
-export type Session = {
-  token: Scalars['String']['output'];
-};
-
-export type SessionCreateInput = {
-  clientMutationId?: InputMaybe<Scalars['String']['input']>;
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-  subject: AdminSessionCreateSubjectEnum;
-};
-
 export type Timezone = {
   identifier: Scalars['String']['output'];
   offset: Scalars['Int']['output'];
@@ -605,6 +612,7 @@ export type Timezone = {
 export type User = {
   address?: Maybe<Scalars['String']['output']>;
   city?: Maybe<Scalars['String']['output']>;
+  clockedInAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
   country?: Maybe<Scalars['String']['output']>;
   countryCode: Scalars['String']['output'];
   email: Scalars['String']['output'];
@@ -616,6 +624,7 @@ export type User = {
   id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
   maxHour: Scalars['Float']['output'];
+  overTime: Scalars['Boolean']['output'];
   phoneNumber: Scalars['String']['output'];
   preferredName: Scalars['String']['output'];
   province?: Maybe<Scalars['String']['output']>;
@@ -659,6 +668,37 @@ export type UserDeleteInput = {
   id: Scalars['ID']['input'];
 };
 
+export type UserSession = {
+  clockInStatus?: Maybe<UserSessionClockInStatus>;
+  token: Scalars['String']['output'];
+};
+
+export type UserSessionAttributes = {
+  clockType: UserSessionClockType;
+  loginType: UserSessionLoginType;
+  password?: InputMaybe<Scalars['String']['input']>;
+  pin?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type UserSessionClockInStatus =
+  | 'already_clocked_in'
+  | 'already_clocked_out';
+
+export type UserSessionClockType =
+  | 'clock_in'
+  | 'clock_out';
+
+export type UserSessionCreateInput = {
+  attributes: UserSessionAttributes;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  restaurantId: Scalars['ID']['input'];
+};
+
+export type UserSessionLoginType =
+  | 'password'
+  | 'pin';
+
 export type UserUpdateInput = {
   attributes: UserAttributes;
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
@@ -666,7 +706,7 @@ export type UserUpdateInput = {
 };
 
 export type AdminSessionCreateMutationVariables = Exact<{
-  input: SessionCreateInput;
+  input: AdminSessionCreateInput;
 }>;
 
 
@@ -985,7 +1025,7 @@ export type InventoryCategoryQueryVariables = Exact<{
 export type InventoryCategoryQuery = { inventoryCategory: { id: string, name: string, visible: boolean, description: string } };
 
 
-export const AdminSessionCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"adminSessionCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SessionCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"adminSessionCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<AdminSessionCreateMutation, AdminSessionCreateMutationVariables>;
+export const AdminSessionCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"adminSessionCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AdminSessionCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"adminSessionCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}}]}}]}}]} as unknown as DocumentNode<AdminSessionCreateMutation, AdminSessionCreateMutationVariables>;
 export const CurrentAdminDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"currentAdmin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentAdmin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"restaurants"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<CurrentAdminQuery, CurrentAdminQueryVariables>;
 export const RoleCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"roleCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RoleCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roleCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<RoleCreateMutation, RoleCreateMutationVariables>;
 export const RoleUpdateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"roleUpdate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RoleUpdateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roleUpdate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<RoleUpdateMutation, RoleUpdateMutationVariables>;

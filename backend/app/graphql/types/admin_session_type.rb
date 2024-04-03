@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class Types::Admin::SessionType < Types::BaseObject
+class Types::AdminSessionType < Types::BaseObject
   field :token, String, null: false
 end

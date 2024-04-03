@@ -4,6 +4,8 @@ class RestaurantPolicy < ApplicationPolicy
   def scope
     if web_admin?
       web_admin!.restaurants
+    elsif mobile_admin?
+      mobile_admin!.restaurants
     else
       Restaurant.none
     end

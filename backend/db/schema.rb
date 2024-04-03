@@ -176,6 +176,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
     t.index ["restaurant_id"], name: "index_roles_on_restaurant_id"
   end
 
+  create_table "time_sheets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.datetime "start_time", null: false
+    t.datetime "end_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_time_sheets_on_user_id"
+  end
+
   create_table "user_roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.uuid "role_id", null: false
@@ -233,6 +242,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
   add_foreign_key "menus", "restaurants"
   add_foreign_key "modifiers", "restaurants"
   add_foreign_key "roles", "restaurants"
+  add_foreign_key "time_sheets", "users"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
   add_foreign_key "users", "restaurants"

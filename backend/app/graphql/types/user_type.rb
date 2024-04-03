@@ -3,6 +3,7 @@
 class Types::UserType < Types::BaseObject
   field :address, String, null: true
   field :city, String, null: true
+  field :clocked_in_at, GraphQL::Types::ISO8601DateTime, null: true
   field :country, String, null: true
   field :country_code, String, null: false
   field :email, String, null: false
@@ -14,6 +15,7 @@ class Types::UserType < Types::BaseObject
   field :id, ID, null: false
   field :last_name, String, null: false
   field :max_hour, Float, null: false
+  field :over_time, Boolean, null: false
   field :phone_number, String, null: false
   field :preferred_name, String, null: false
   field :province, String, null: true
@@ -22,4 +24,12 @@ class Types::UserType < Types::BaseObject
   field :zip_code, String, null: true
 
   field :role_ids, [ID], null: false
+
+  def clocked_in_at
+    object.time_sheets.where(end_time: nil).first&.start_time
+  end
+
+  def over_time
+    Random.new.rand(2) == 1
+  end
 end

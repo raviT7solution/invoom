@@ -4,7 +4,7 @@ class Types::MutationType < Types::BaseObject
   field :addons_create, mutation: Mutations::AddonsCreate, null: false, authorize: "AddonPolicy#create?"
   field :addons_delete, mutation: Mutations::AddonsDelete, null: false, authorize: "AddonPolicy#delete?"
   field :addons_update, mutation: Mutations::AddonsUpdate, null: false, authorize: "AddonPolicy#update?"
-  field :admin_session_create, mutation: Mutations::Admin::SessionCreate, null: false
+  field :admin_session_create, mutation: Mutations::AdminSessionCreate, null: false
   field :category_create, mutation: Mutations::CategoryCreate, null: false, authorize: "CategoryPolicy#create?"
   field :category_delete, mutation: Mutations::CategoryDelete, null: false, authorize: "CategoryPolicy#delete?"
   field :category_update, mutation: Mutations::CategoryUpdate, null: false, authorize: "CategoryPolicy#update?"
@@ -30,5 +30,7 @@ class Types::MutationType < Types::BaseObject
   field :role_update, mutation: Mutations::RoleUpdate, null: false, authorize: "RolePolicy#delete?"
   field :user_create, mutation: Mutations::UserCreate, null: false, authorize: "UserPolicy#create?"
   field :user_delete, mutation: Mutations::UserDelete, null: false, authorize: "UserPolicy#delete?"
+  field :user_session_create, mutation: Mutations::UserSessionCreate, null: false,
+                              authorize: "UserSessionPolicy#create?"
   field :user_update, mutation: Mutations::UserUpdate, null: false, authorize: "UserPolicy#update?"
 end

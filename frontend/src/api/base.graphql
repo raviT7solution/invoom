@@ -1,4 +1,4 @@
-mutation adminSessionCreate($input: SessionCreateInput!) {
+mutation adminSessionCreate($input: AdminSessionCreateInput!) {
   adminSessionCreate(input: $input) {
     token
   }

@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   belongs_to :restaurant
 
+  has_many :time_sheets, dependent: :destroy
   has_many :user_roles, dependent: :destroy
 
   has_many :roles, through: :user_roles
@@ -29,5 +30,9 @@ class User < ApplicationRecord
 
   def full_name
     "#{first_name} #{last_name}".strip
+  end
+
+  def permission?(permission)
+    roles.map(&:permissions).flatten.include?(permission)
   end
 end

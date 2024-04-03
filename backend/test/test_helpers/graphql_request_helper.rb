@@ -13,7 +13,13 @@ module GraphqlRequestHelper
     assert_nil response.parsed_body["errors"]
   end
 
+  def authentic_query(record, key, query_string, variables: nil)
+    post graphql_path,
+         headers: { "Authorization" => "Bearer #{Session.token(record, "#{key}_id")}" },
+         params: { query: query_string, variables: variables&.to_json }
+  end
+
   def query(query_string, variables: nil)
-    post graphql_path, params: { query: query_string, variables: variables }
+    post graphql_path, params: { query: query_string, variables: variables&.to_json }
   end
 end
