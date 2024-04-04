@@ -35,4 +35,8 @@ class User < ApplicationRecord
   def permission?(permission)
     roles.map(&:permissions).flatten.include?(permission)
   end
+
+  def permissions
+    roles.flat_map(&:permissions).uniq
+  end
 end

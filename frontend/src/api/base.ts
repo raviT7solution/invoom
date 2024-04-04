@@ -670,6 +670,7 @@ export type UserDeleteInput = {
 
 export type UserSession = {
   clockInStatus?: Maybe<UserSessionClockInStatus>;
+  permissions: Array<Scalars['String']['output']>;
   token: Scalars['String']['output'];
 };
 
