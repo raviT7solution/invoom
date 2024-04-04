@@ -670,7 +670,7 @@ export type UserDeleteInput = {
 
 export type UserSession = {
   clockInStatus?: Maybe<UserSessionClockInStatus>;
-  permissions: Array<Scalars['String']['output']>;
+  permissions: Array<UserSessionPermissionsType>;
   token: Scalars['String']['output'];
 };
 
@@ -699,6 +699,11 @@ export type UserSessionCreateInput = {
 export type UserSessionLoginType =
   | 'password'
   | 'pin';
+
+export type UserSessionPermissionsType =
+  | 'clock_in_clock_out'
+  | 'counter'
+  | 'dashboard';
 
 export type UserUpdateInput = {
   attributes: UserAttributes;
