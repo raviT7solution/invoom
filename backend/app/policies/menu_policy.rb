@@ -10,12 +10,14 @@ class MenuPolicy < ApplicationPolicy
   end
 
   def index?
-    web_admin?
+    web_admin? || mobile_user?("orders")
   end
 
   def scope
     if web_admin?
       Menu.where(restaurant: web_admin!.restaurants)
+    elsif mobile_user?("orders")
+      Menu.where(restaurant: mobile_user!.restaurant_id)
     else
       Menu.none
     end

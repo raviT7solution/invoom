@@ -17,7 +17,7 @@ class TeamsTest < ApplicationSystemTestCase
 
     within ".ant-drawer" do
       fill_in "Name", with: "Chef"
-      fill_in_select with: "Dashboard"
+      fill_in_select with: "Clock In / Clock Out"
 
       click_on "Submit"
     end
@@ -112,14 +112,14 @@ class TeamsTest < ApplicationSystemTestCase
 
     within ".ant-drawer" do
       fill_in "Name", with: "Chef"
-      fill_in_select with: "Dashboard"
+      fill_in_select with: "Clock In / Clock Out"
 
       click_on "Submit"
     end
 
     wait_for_pending_requests
 
-    assert_attributes role.reload, name: "Chef", permissions: ["dashboard"]
+    assert_attributes role.reload, name: "Chef", permissions: ["clock_in_clock_out"]
   end
 
   test "update user" do

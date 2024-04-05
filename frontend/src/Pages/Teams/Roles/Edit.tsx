@@ -15,12 +15,12 @@ const permissions = [
     value: "clock_in_clock_out",
   },
   {
-    label: "Dashboard",
-    value: "dashboard",
+    label: "Floor Plan",
+    value: "floor_plan",
   },
   {
-    label: "Counter",
-    value: "counter",
+    label: "Orders",
+    value: "orders",
   },
 ];
 
