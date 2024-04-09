@@ -1,4 +1,5 @@
-VITE_BACKEND_BASE_URL=http://localhost:3000
+export VITE_BACKEND_BASE_URL=http://localhost:3000
+export SCHEMA_PATH=${VITE_BACKEND_BASE_URL}/graphql
 
 .PHONY: backend frontend
 
@@ -6,7 +7,7 @@ backend:
 	cd backend && bundle exec rails server;
 
 codegen:
-	cd frontend && SCHEMA_PATH=${VITE_BACKEND_BASE_URL}/graphql pnpm codegen;
+	cd frontend && pnpm codegen;
 
 console:
 	cd backend && rails console;
