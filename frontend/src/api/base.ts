@@ -702,8 +702,8 @@ export type UserSessionLoginType =
 
 export type UserSessionPermissionsType =
   | 'clock_in_clock_out'
-  | 'counter'
-  | 'dashboard';
+  | 'floor_plan'
+  | 'orders';
 
 export type UserUpdateInput = {
   attributes: UserAttributes;
