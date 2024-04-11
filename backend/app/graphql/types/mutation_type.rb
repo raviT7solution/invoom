@@ -5,6 +5,7 @@ class Types::MutationType < Types::BaseObject
   field :addons_delete, mutation: Mutations::AddonsDelete, null: false, authorize: "AddonPolicy#delete?"
   field :addons_update, mutation: Mutations::AddonsUpdate, null: false, authorize: "AddonPolicy#update?"
   field :admin_session_create, mutation: Mutations::AdminSessionCreate, null: false
+  field :booking_create, mutation: Mutations::BookingCreate, null: false, authorize: "BookingPolicy#create?"
   field :category_create, mutation: Mutations::CategoryCreate, null: false, authorize: "CategoryPolicy#create?"
   field :category_delete, mutation: Mutations::CategoryDelete, null: false, authorize: "CategoryPolicy#delete?"
   field :category_update, mutation: Mutations::CategoryUpdate, null: false, authorize: "CategoryPolicy#update?"
@@ -28,6 +29,8 @@ class Types::MutationType < Types::BaseObject
   field :role_create, mutation: Mutations::RoleCreate, null: false, authorize: "RolePolicy#create?"
   field :role_delete, mutation: Mutations::RoleDelete, null: false, authorize: "RolePolicy#update?"
   field :role_update, mutation: Mutations::RoleUpdate, null: false, authorize: "RolePolicy#delete?"
+  field :ticket_create, mutation: Mutations::TicketCreate, null: false, authorize: "TicketPolicy#create?"
+  field :ticket_items_update, mutation: Mutations::TicketItemsUpdate, null: false, authorize: "TicketItemPolicy#update?"
   field :user_create, mutation: Mutations::UserCreate, null: false, authorize: "UserPolicy#create?"
   field :user_delete, mutation: Mutations::UserDelete, null: false, authorize: "UserPolicy#delete?"
   field :user_session_create, mutation: Mutations::UserSessionCreate, null: false,

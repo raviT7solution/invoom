@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   belongs_to :restaurant
 
+  has_many :bookings, dependent: :restrict_with_error
   has_many :time_sheets, dependent: :destroy
   has_many :user_roles, dependent: :destroy
 

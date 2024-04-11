@@ -47,6 +47,28 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
     t.index ["email"], name: "index_admins_on_email", unique: true
   end
 
+  create_table "booking_tables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.uuid "booking_id", null: false
+    t.uuid "floor_object_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_booking_tables_on_booking_id"
+    t.index ["floor_object_id"], name: "index_booking_tables_on_floor_object_id"
+  end
+
+  create_table "bookings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "clocked_in_at", null: false
+    t.datetime "clocked_out_at"
+    t.integer "booking_type", null: false
+    t.uuid "restaurant_id", null: false
+    t.uuid "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_bookings_on_restaurant_id"
+    t.index ["user_id"], name: "index_bookings_on_user_id"
+  end
+
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.boolean "visible", default: true, null: false
@@ -176,6 +198,36 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
     t.index ["restaurant_id"], name: "index_roles_on_restaurant_id"
   end
 
+  create_table "ticket_item_addons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.float "price", null: false
+    t.uuid "ticket_item_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticket_item_id"], name: "index_ticket_item_addons_on_ticket_item_id"
+  end
+
+  create_table "ticket_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "display_name", null: false
+    t.float "price", null: false
+    t.integer "quantity", null: false
+    t.integer "status", null: false
+    t.string "modifiers", default: [], null: false, array: true
+    t.string "name", null: false
+    t.string "note"
+    t.uuid "ticket_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ticket_id"], name: "index_ticket_items_on_ticket_id"
+  end
+
+  create_table "tickets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "booking_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_tickets_on_booking_id"
+  end
+
   create_table "time_sheets", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.datetime "start_time", null: false
@@ -226,6 +278,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
   add_foreign_key "addons", "restaurants"
   add_foreign_key "admin_restaurants", "admins"
   add_foreign_key "admin_restaurants", "restaurants"
+  add_foreign_key "booking_tables", "bookings"
+  add_foreign_key "booking_tables", "floor_objects"
+  add_foreign_key "bookings", "restaurants"
+  add_foreign_key "bookings", "users"
   add_foreign_key "categories", "restaurants"
   add_foreign_key "category_modifiers", "categories"
   add_foreign_key "category_modifiers", "modifiers"
@@ -242,6 +298,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
   add_foreign_key "menus", "restaurants"
   add_foreign_key "modifiers", "restaurants"
   add_foreign_key "roles", "restaurants"
+  add_foreign_key "ticket_item_addons", "ticket_items"
+  add_foreign_key "ticket_items", "tickets"
+  add_foreign_key "tickets", "bookings"
   add_foreign_key "time_sheets", "users"
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"

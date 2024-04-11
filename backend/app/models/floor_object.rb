@@ -7,10 +7,13 @@ class FloorObject < ApplicationRecord
     speaker: 2,
     buffet: 3,
     space: 4,
-    object: 5
+    object: 5,
+    bar: 6
   }, prefix: :object_type
 
   belongs_to :restaurant
+
+  has_one :booking_table, dependent: :restrict_with_error
 
   validates :data, presence: true
   validates :name, presence: true

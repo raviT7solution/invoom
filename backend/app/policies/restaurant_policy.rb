@@ -6,6 +6,8 @@ class RestaurantPolicy < ApplicationPolicy
       web_admin!.restaurants
     elsif mobile_admin?
       mobile_admin!.restaurants
+    elsif mobile_user?("orders")
+      Restaurant.where(id: mobile_user!.restaurant_id)
     else
       Restaurant.none
     end

@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+class Booking < ApplicationRecord
+  enum :booking_type, {
+    dine_in: 0,
+    takeout: 1,
+    delivery: 2
+  }
+
+  belongs_to :restaurant
+  belongs_to :user
+
+  has_many :booking_tables, dependent: :destroy
+  has_many :tickets, dependent: :restrict_with_error
+
+  validates :booking_tables, length: { is: 0 }, unless: :dine_in?
+  validates :booking_tables, length: { minimum: 1 }, if: :dine_in?
+  validates :booking_type, presence: true
+  validates :clocked_in_at, presence: true
+end

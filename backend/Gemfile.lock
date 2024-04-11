@@ -120,6 +120,8 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     graphql (2.1.0)
+    graphql-pagination (2.2.0)
+      graphql (~> 2.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     io-console (0.6.0)
@@ -270,6 +272,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   graphql
+  graphql-pagination
   jwt
   pg (~> 1.1)
   phantom!

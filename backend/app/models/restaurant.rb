@@ -2,6 +2,7 @@
 
 class Restaurant < ApplicationRecord
   has_many :addons, dependent: :destroy
+  has_many :bookings, dependent: :destroy
   has_many :categories, dependent: :destroy
   has_many :floor_objects, dependent: :destroy
   has_many :inventory_categories, dependent: :destroy

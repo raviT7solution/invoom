@@ -7,6 +7,12 @@ class Types::QueryType < Types::BaseObject
   field :addons, [Types::AddonsType], null: false, authorize: "AddonPolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
+  field :booking, Types::BookingType, null: false, authorize: "BookingPolicy#show?" do
+    argument :id, ID, required: true
+  end
+  field :bookings, [Types::BookingType], null: false, authorize: "BookingPolicy#index?" do
+    argument :restaurant_id, ID, required: true
+  end
   field :categories, [Types::CategoryType], null: false, authorize: "CategoryPolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
@@ -56,6 +62,11 @@ class Types::QueryType < Types::BaseObject
   field :roles, [Types::RoleType], null: false, authorize: "RolePolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
+  field :tickets, Types::TicketType.collection_type, null: false, authorize: "TicketPolicy#index?" do
+    argument :limit, Integer, required: true
+    argument :offset, Integer, required: true
+    argument :restaurant_id, ID, required: true
+  end
   field :user, Types::UserType, null: false, authorize: "UserPolicy#show?" do
     argument :id, ID, required: true
   end
@@ -66,6 +77,14 @@ class Types::QueryType < Types::BaseObject
 
   def addons(restaurant_id:)
     AddonPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  end
+
+  def booking(id:)
+    BookingPolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def bookings(restaurant_id:)
+    BookingPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
   end
 
   def categories(restaurant_id:)
@@ -148,6 +167,12 @@ class Types::QueryType < Types::BaseObject
 
   def roles(restaurant_id:)
     RolePolicy.new(context[:current_user]).scope.joins(:restaurant).where(restaurant: { id: restaurant_id })
+  end
+
+  def tickets(restaurant_id:, offset:, limit:)
+    TicketPolicy.new(context[:current_user]).scope.joins(booking: :restaurant)
+                .where(restaurants: { id: restaurant_id })
+                .offset(offset).limit(limit)
   end
 
   def user(id:)

@@ -78,6 +78,44 @@ export type AdminSessionCreateSubjectEnum =
   | 'mobile'
   | 'web';
 
+export type Booking = {
+  bookingTables: Array<BookingTable>;
+  bookingType: BookingType;
+  clockedInAt: Scalars['ISO8601DateTime']['output'];
+  clockedOutAt?: Maybe<Scalars['ISO8601DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  tickets: Array<Ticket>;
+  userFullName: Scalars['String']['output'];
+};
+
+export type BookingAttributes = {
+  bookingType?: InputMaybe<BookingTypeAttribute>;
+  clockedInAt?: InputMaybe<Scalars['ISO8601DateTime']['input']>;
+  floorObjectIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
+export type BookingCreateInput = {
+  attributes: BookingAttributes;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  restaurantId: Scalars['ID']['input'];
+};
+
+export type BookingTable = {
+  booking: Booking;
+  floorObject?: Maybe<FloorObject>;
+  name: Scalars['String']['output'];
+};
+
+export type BookingType =
+  | 'delivery'
+  | 'dine_in'
+  | 'takeout';
+
+export type BookingTypeAttribute =
+  | 'delivery'
+  | 'dine_in'
+  | 'takeout';
+
 export type Category = {
   id: Scalars['ID']['output'];
   items: Array<Item>;
@@ -114,6 +152,13 @@ export type City = {
   name: Scalars['String']['output'];
 };
 
+export type CollectionMetadata = {
+  currentPage: Scalars['Int']['output'];
+  limitValue: Scalars['Int']['output'];
+  totalCount: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
+};
+
 export type Country = {
   alpha2: Scalars['String']['output'];
   code: Scalars['String']['output'];
@@ -122,6 +167,7 @@ export type Country = {
 };
 
 export type FloorObject = {
+  bookingTable?: Maybe<BookingTable>;
   data: Scalars['JSON']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -290,6 +336,7 @@ export type Mutation = {
   addonsDelete: Scalars['Boolean']['output'];
   addonsUpdate: Scalars['Boolean']['output'];
   adminSessionCreate: AdminSession;
+  bookingCreate: Scalars['ID']['output'];
   categoryCreate: Scalars['Boolean']['output'];
   categoryDelete: Scalars['Boolean']['output'];
   categoryUpdate: Scalars['Boolean']['output'];
@@ -309,6 +356,8 @@ export type Mutation = {
   roleCreate: Role;
   roleDelete: Role;
   roleUpdate: Role;
+  ticketCreate: Scalars['Boolean']['output'];
+  ticketItemsUpdate: Scalars['Boolean']['output'];
   userCreate: Scalars['Boolean']['output'];
   userDelete: User;
   userSessionCreate: UserSession;
@@ -333,6 +382,11 @@ export type MutationAddonsUpdateArgs = {
 
 export type MutationAdminSessionCreateArgs = {
   input: AdminSessionCreateInput;
+};
+
+
+export type MutationBookingCreateArgs = {
+  input: BookingCreateInput;
 };
 
 
@@ -431,6 +485,16 @@ export type MutationRoleUpdateArgs = {
 };
 
 
+export type MutationTicketCreateArgs = {
+  input: TicketCreateInput;
+};
+
+
+export type MutationTicketItemsUpdateArgs = {
+  input: TicketItemsUpdateInput;
+};
+
+
 export type MutationUserCreateArgs = {
   input: UserCreateInput;
 };
@@ -458,6 +522,8 @@ export type Province = {
 export type Query = {
   addon: Addons;
   addons: Array<Addons>;
+  booking: Booking;
+  bookings: Array<Booking>;
   categories: Array<Category>;
   category: Category;
   cities: Array<City>;
@@ -475,6 +541,7 @@ export type Query = {
   provinces: Array<Province>;
   role: Role;
   roles: Array<Role>;
+  tickets: TicketCollection;
   user: User;
 };
 
@@ -485,6 +552,16 @@ export type QueryAddonArgs = {
 
 
 export type QueryAddonsArgs = {
+  restaurantId: Scalars['ID']['input'];
+};
+
+
+export type QueryBookingArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryBookingsArgs = {
   restaurantId: Scalars['ID']['input'];
 };
 
@@ -565,6 +642,13 @@ export type QueryRolesArgs = {
 };
 
 
+export type QueryTicketsArgs = {
+  limit: Scalars['Int']['input'];
+  offset: Scalars['Int']['input'];
+  restaurantId: Scalars['ID']['input'];
+};
+
+
 export type QueryUserArgs = {
   id: Scalars['ID']['input'];
 };
@@ -602,6 +686,68 @@ export type RoleUpdateInput = {
   attributes: RoleAttributes;
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
+};
+
+export type Ticket = {
+  booking: Booking;
+  id: Scalars['ID']['output'];
+  ticketItems: Array<TicketItem>;
+};
+
+export type TicketCollection = {
+  collection: Array<Ticket>;
+  metadata: CollectionMetadata;
+};
+
+export type TicketCreateInput = {
+  attributes: Array<TicketItemAttributes>;
+  bookingId: Scalars['ID']['input'];
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TicketItem = {
+  displayName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  modifiers: Array<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  note?: Maybe<Scalars['String']['output']>;
+  price: Scalars['Float']['output'];
+  quantity: Scalars['Int']['output'];
+  status: TicketItemStatusType;
+  ticketItemAddons: Array<TicketItemAddon>;
+};
+
+export type TicketItemAddon = {
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  price: Scalars['Float']['output'];
+};
+
+export type TicketItemAttributes = {
+  addonIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  itemId?: InputMaybe<Scalars['ID']['input']>;
+  modifiers?: InputMaybe<Array<Scalars['String']['input']>>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  quantity?: InputMaybe<Scalars['Int']['input']>;
+  status?: InputMaybe<TicketItemStatusAttribute>;
+};
+
+export type TicketItemStatusAttribute =
+  | 'preparing'
+  | 'queued'
+  | 'ready'
+  | 'served';
+
+export type TicketItemStatusType =
+  | 'preparing'
+  | 'queued'
+  | 'ready'
+  | 'served';
+
+export type TicketItemsUpdateInput = {
+  attributes: Array<TicketItemAttributes>;
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Timezone = {

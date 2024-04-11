@@ -10,5 +10,8 @@ FactoryBot.define do
     price { 1.0 }
     take_out_price { 3.0 }
     visible { true }
+
+    category { nil }
+    restaurant { nil }
   end
 end

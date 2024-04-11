@@ -8,11 +8,15 @@ class FloorObjectPolicy < ApplicationPolicy
   def scope
     if web_admin?
       FloorObject.where(restaurant: web_admin!.restaurants)
-    elsif mobile_user?("floor_plan")
-      FloorObject.where(restaurant: mobile_user!.restaurant_id)
+    elsif mobile_user?("orders") || mobile_user?("floor_plan")
+      FloorObject.where(restaurant_id: mobile_user!.restaurant_id)
     else
       FloorObject.none
     end
+  end
+
+  def show?
+    mobile_user?("orders")
   end
 
   def update?
