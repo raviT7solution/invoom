@@ -1,1 +1,2 @@
 /.env
+/frontend/src/api/base.ts

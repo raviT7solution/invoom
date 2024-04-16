@@ -1,5 +1,4 @@
 export VITE_BACKEND_BASE_URL=http://localhost:3000
-export SCHEMA_PATH=${VITE_BACKEND_BASE_URL}/graphql
 
 .PHONY: backend frontend
 
@@ -7,6 +6,7 @@ backend:
 	cd backend && bundle exec rails server;
 
 codegen:
+	cd backend && bundle exec rails runner 'require "graphql/rake_task"; GraphQL::RakeTask.new(schema_name: "BackendSchema", idl_outfile: "../schema.graphql"); Rake::Task["graphql:schema:idl"].invoke'
 	cd frontend && pnpm codegen;
 
 console:

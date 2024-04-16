@@ -1,5 +1,5 @@
 overwrite: true
-schema: ${SCHEMA_PATH}
+schema: "../schema.graphql"
 documents: "src/api/base.graphql"
 generates:
   src/api/base.ts:
