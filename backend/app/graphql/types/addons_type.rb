@@ -7,6 +7,4 @@ class Types::AddonsType < Types::BaseObject
   field :price, Float, null: false
   field :takeout_price, Float, null: false
   field :visible, Boolean, null: false
-
-  field :restaurant, Types::RestaurantType, null: false
 end

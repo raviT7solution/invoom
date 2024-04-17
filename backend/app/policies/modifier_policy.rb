@@ -10,7 +10,7 @@ class ModifierPolicy < ApplicationPolicy
   end
 
   def index?
-    web_admin?
+    web_admin? || mobile_user?("orders")
   end
 
   def scope

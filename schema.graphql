@@ -3,7 +3,6 @@ type Addons {
   id: ID!
   name: String!
   price: Float!
-  restaurant: Restaurant!
   takeoutPrice: Float!
   visible: Boolean!
 }
@@ -135,7 +134,6 @@ type Category {
   items: [Item!]!
   menuIds: [ID!]!
   name: String!
-  restaurant: Restaurant!
   visible: Boolean!
 }
 
@@ -259,7 +257,6 @@ type InventoryCategory {
   description: String!
   id: ID!
   name: String!
-  restaurant: Restaurant!
   visible: Boolean!
 }
 
@@ -308,6 +305,7 @@ input InventoryCategoryUpdateInput {
 
 type Item {
   addonIds: [ID!]!
+  addons: [Addons!]!
   categoryId: ID!
   costOfProduction: Float!
   deliveryPrice: Float!
@@ -315,6 +313,7 @@ type Item {
   displayName: String!
   id: ID!
   modifierIds: [ID!]!
+  modifiers: [Modifier!]!
   name: String!
   price: Float!
   takeOutPrice: Float!
@@ -378,6 +377,7 @@ Represents untyped JSON
 scalar JSON
 
 type Menu {
+  categories: [Category!]!
   description: String!
   id: ID!
   name: String!
@@ -687,7 +687,7 @@ type Query {
   inventoryCategories(restaurantId: ID!): [InventoryCategory!]!
   inventoryCategory(id: ID!): InventoryCategory!
   item(id: ID!): Item!
-  items(restaurantId: ID!): [Item!]!
+  items(categoryId: ID, restaurantId: ID!): [Item!]!
   menu(id: ID!): Menu!
   menus(restaurantId: ID!): [Menu!]!
   modifier(id: ID!): Modifier!

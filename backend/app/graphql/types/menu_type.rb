@@ -5,4 +5,6 @@ class Types::MenuType < Types::BaseObject
   field :id, ID, null: false
   field :name, String, null: false
   field :visible, Boolean, null: false
+
+  field :categories, [Types::CategoryType], authorize: "CategoryPolicy#index?", null: false
 end

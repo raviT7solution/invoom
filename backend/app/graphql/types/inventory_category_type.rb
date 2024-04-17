@@ -5,6 +5,4 @@ class Types::InventoryCategoryType < Types::BaseObject
   field :id, ID, null: false
   field :name, String, null: false
   field :visible, Boolean, null: false
-
-  field :restaurant, Types::RestaurantType, null: false
 end
