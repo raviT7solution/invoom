@@ -10,6 +10,7 @@ import { Modifiers } from "./Pages/CuisineHub/Modifiers";
 import { FloorPlan } from "./Pages/FloorPlan";
 import { InventoryCategories } from "./Pages/Inventory/Categories";
 import { Login } from "./Pages/Login";
+import { Restaurants } from "./Pages/Settings/Restaurants";
 import { Roles } from "./Pages/Teams/Roles";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 
@@ -35,6 +36,7 @@ const routes = {
   FloorPlan: "/floor-plan",
   InventoryCategories: "/inventory/categories",
   Login: "/login",
+  SettingsRestaurants: "/settings/restaurants",
   Teams: "/teams",
 } as const;
 
@@ -80,6 +82,11 @@ export const Switch = () => {
     .with({ name: "CuisineHubAddons" }, () => (
       <PrivateRoute>
         <Addons />
+      </PrivateRoute>
+    ))
+    .with({ name: "SettingsRestaurants" }, () => (
+      <PrivateRoute>
+        <Restaurants />
       </PrivateRoute>
     ))
     .with({ name: "CuisineHubModifiers" }, () => (

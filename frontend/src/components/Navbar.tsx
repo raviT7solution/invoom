@@ -11,20 +11,24 @@ import {
   PlusCircleOutlined,
   ReconciliationOutlined,
   TeamOutlined,
+  UserAddOutlined,
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
 import {
+  Avatar,
   Breadcrumb,
   BreadcrumbProps,
+  Dropdown,
   Layout,
   Menu,
   MenuProps,
   Select,
+  Typography,
 } from "antd";
 import { ReactNode, useEffect } from "react";
 
-import { useCurrentAdmin } from "../api";
-import { classNames } from "../helpers";
+import { useCurrentAdmin, useRestaurants } from "../api";
+import { classNames, initials } from "../helpers";
 import { Router } from "../Routes";
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
 import { useRestaurantIdStore } from "../stores/useRestaurantIdStore";
@@ -39,19 +43,20 @@ export const Navbar = ({
   padding?: boolean;
 }) => {
   const { data: currentAdmin } = useCurrentAdmin();
+  const { data: restaurants } = useRestaurants("active");
   const destroy = useAdminSessionStore((s) => s.destroy);
   const restaurantIdStore = useRestaurantIdStore();
 
   useEffect(() => {
     if (
-      !currentAdmin ||
-      !currentAdmin.restaurants[0] ||
+      !restaurants.length ||
+      !restaurants[0] ||
       restaurantIdStore.restaurantId
     )
       return;
 
-    restaurantIdStore.create(currentAdmin.restaurants[0].id);
-  }, [restaurantIdStore, currentAdmin]);
+    restaurantIdStore.create(restaurants[0].id);
+  }, [restaurants, restaurantIdStore]);
 
   const onLogout = () => {
     destroy();
@@ -128,7 +133,15 @@ export const Navbar = ({
     },
   ];
 
-  const restaurantOptions = currentAdmin?.restaurants.map((r) => ({
+  const headerItems: MenuProps["items"] = [
+    {
+      label: <Link to={Router.SettingsRestaurants()}>My Restaurants</Link>,
+      icon: <UserAddOutlined />,
+      key: "1",
+    },
+  ];
+
+  const restaurantOptions = restaurants.map((r) => ({
     value: r.id,
     label: r.name,
   }));
@@ -137,7 +150,10 @@ export const Navbar = ({
     <Layout className="h-screen">
       <Layout.Sider collapsible theme="light">
         <Select
-          className="w-full !h-12"
+          className="w-full !h-16 border-4 rounded-lg border-neutral-100"
+          labelRender={({ label }) => (
+            <Typography.Text strong>{label}</Typography.Text>
+          )}
           onSelect={(v) => restaurantIdStore.create(v)}
           options={restaurantOptions}
           value={restaurantIdStore.restaurantId}
@@ -147,6 +163,16 @@ export const Navbar = ({
         <Menu items={items} mode="vertical" selectedKeys={[]} />
       </Layout.Sider>
       <Layout>
+        <Layout.Header className="!bg-white">
+          <div className="absolute cursor-pointer right-4">
+            <Dropdown menu={{ items: headerItems }} trigger={["click"]}>
+              <Avatar className="!bg-zinc-400">
+                {initials(currentAdmin?.fullName || "")}
+              </Avatar>
+            </Dropdown>
+          </div>
+        </Layout.Header>
+
         <Layout.Content className="mx-4 flex flex-col">
           <Breadcrumb className="!my-4" items={breadcrumbItems} />
 

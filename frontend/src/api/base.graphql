@@ -6,10 +6,16 @@ mutation adminSessionCreate($input: AdminSessionCreateInput!) {
 
 query currentAdmin {
   currentAdmin {
-    restaurants {
-      id
-      name
-    }
+    fullName
+  }
+}
+
+query restaurants($status: String!) {
+  restaurants(status: $status) {
+    city
+    id
+    name
+    province
   }
 }
 
@@ -209,6 +215,10 @@ mutation addonsDelete($id: ID!) {
   addonsDelete(input: { id: $id })
 }
 
+mutation restaurantCreate($input: RestaurantCreateInput!) {
+  restaurantCreate(input: $input)
+}
+
 mutation itemCreate($input: ItemCreateInput!) {
   itemCreate(input: $input)
 }
@@ -298,6 +308,10 @@ query countries {
     alpha2
     code
     name
+    timezones {
+      humanizeOffset
+      identifier
+    }
   }
 }
 

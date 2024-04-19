@@ -54,7 +54,7 @@ class TeamsTest < ApplicationSystemTestCase
       fill_in "Address Line", with: "837 Auer Divide"
       fill_in "Postal Code", with: "15721"
       within ".ant-form-item", text: "Start Date" do
-        fill_in_date with: "02-01-2016"
+        fill_in_ant_picker with: "02-01-2016"
       end
       fill_in "Wage", with: 10.5
       fill_in "Weekly Hour Restriction", with: 11

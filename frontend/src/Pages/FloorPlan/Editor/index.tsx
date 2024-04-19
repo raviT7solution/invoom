@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import MoveableHelper from "moveable-helper";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import InfiniteViewer from "react-infinite-viewer";
 import Moveable from "react-moveable";
 import Selecto from "react-selecto";
@@ -31,6 +31,10 @@ export const Editor = () => {
   const [helper] = useState(() => {
     return new MoveableHelper();
   });
+
+  useEffect(() => {
+    setTimeout(() => viewerRef.current?.scrollCenter(), 100);
+  }, []);
 
   if (!floorPlan) return;
 
@@ -78,7 +82,7 @@ export const Editor = () => {
       />
 
       <Button
-        className="!fixed top-3 right-3"
+        className="!fixed top-[75px] right-3"
         onClick={() => viewerRef.current!.scrollCenter()}
       >
         Scroll center

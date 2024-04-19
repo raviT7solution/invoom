@@ -61,6 +61,9 @@ import {
   ModifierUpdateMutationVariables,
   ModifiersDocument,
   ProvincesDocument,
+  RestaurantCreateDocument,
+  RestaurantCreateMutationVariables,
+  RestaurantsDocument,
   RoleCreateDocument,
   RoleCreateMutationVariables,
   RoleDeleteDocument,
@@ -111,6 +114,15 @@ export const useCurrentAdmin = () => {
     queryFn: async () =>
       (await client.request(CurrentAdminDocument)).currentAdmin,
     queryKey: ["currentAdmin"],
+  });
+};
+
+export const useRestaurants = (status: string) => {
+  return useQuery({
+    initialData: [],
+    queryKey: ["restaurants", status],
+    queryFn: async () =>
+      (await client.request(RestaurantsDocument, { status })).restaurants,
   });
 };
 
@@ -392,6 +404,18 @@ export const useAddonsDelete = () => {
       client.request(AddonsDeleteDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["addons"] });
+    },
+  });
+};
+
+export const useRestaurantCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: RestaurantCreateMutationVariables) =>
+      client.request(RestaurantCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["restaurants"] });
     },
   });
 };

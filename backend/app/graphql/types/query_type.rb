@@ -57,6 +57,9 @@ class Types::QueryType < Types::BaseObject
   field :provinces, [Types::ProvinceType], null: false do
     argument :alpha2, String, required: true
   end
+  field :restaurants, [Types::RestaurantType], null: false, authorize: "RestaurantPolicy#index?" do
+    argument :status, String, required: true
+  end
   field :role, Types::RoleType, null: false, authorize: "RolePolicy#show?" do
     argument :id, ID, required: true
   end
@@ -106,7 +109,9 @@ class Types::QueryType < Types::BaseObject
         alpha2: i.alpha2,
         code: i.country_code,
         name: i.iso_short_name,
-        timezones: i.timezones.zones.map { |z| { identifier: z.identifier, offset: z.utc_offset } }
+        timezones: i.timezones.zones.map do |z|
+                     { identifier: z.identifier, humanize_offset: z.strftime("%:z"), offset: z.utc_offset }
+                   end
       }
     end
   end
@@ -164,6 +169,10 @@ class Types::QueryType < Types::BaseObject
     Country[alpha2].subdivision_names_with_codes.map do |i|
       { name: i[0], code: i[1] }
     end
+  end
+
+  def restaurants(status:)
+    RestaurantPolicy.new(context[:current_session]).scope.where(status: status)
   end
 
   def role(id:)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module AntdHelpers
-  def fill_in_date(with:)
+  def fill_in_ant_picker(with:)
     node = fill_in with: with
     node.trigger(:focusout)
   end

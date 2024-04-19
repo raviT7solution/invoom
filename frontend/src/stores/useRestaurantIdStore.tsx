@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 type State = {
   restaurantId: string;
@@ -7,9 +8,13 @@ type State = {
   destroy: () => void;
 };
 
-export const useRestaurantIdStore = create<State>()((set) => ({
-  restaurantId: "",
-
-  create: (id) => set({ restaurantId: id }),
-  destroy: () => set({ restaurantId: "" }),
-}));
+export const useRestaurantIdStore = create<State>()(
+  persist(
+    (set) => ({
+      restaurantId: "",
+      create: (id) => set({ restaurantId: id }),
+      destroy: () => set({ restaurantId: "" }),
+    }),
+    { name: "restaurant-store" },
+  ),
+);

@@ -186,6 +186,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
     t.string "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "operational_since", null: false
+    t.string "postal_code", null: false
+    t.string "city", null: false
+    t.string "province", null: false
+    t.string "country", null: false
+    t.string "phone_number", null: false
+    t.string "email", null: false
+    t.time "business_start_time"
+    t.time "business_end_time"
+    t.time "break_start_time"
+    t.time "break_end_time"
+    t.string "restaurant_type", null: false
+    t.string "timezone", null: false
+    t.integer "status", null: false
   end
 
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
