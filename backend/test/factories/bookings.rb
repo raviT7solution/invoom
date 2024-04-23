@@ -5,6 +5,7 @@ FactoryBot.define do
     booking_type { Booking.booking_type.keys.sample }
     clocked_in_at { 2.days.ago.iso8601 }
     clocked_out_at { nil }
+    pax { nil }
 
     restaurant { nil }
     user { nil }

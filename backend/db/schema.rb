@@ -60,6 +60,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
   create_table "bookings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "clocked_in_at", null: false
     t.datetime "clocked_out_at"
+    t.integer "pax"
     t.integer "booking_type", null: false
     t.uuid "restaurant_id", null: false
     t.uuid "user_id", null: false

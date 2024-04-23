@@ -15,7 +15,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
         attributes: {
           bookingType: "dine_in",
           clockedInAt: DateTime.current.iso8601,
-          floorObjectIds: [table1.id, table2.id]
+          floorObjectIds: [table1.id, table2.id],
+          pax: 1
         },
         restaurantId: restaurant.id
       }
@@ -119,7 +120,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     unused_table = create(:floor_object, restaurant: restaurant)
 
     used_booking_table = build(:booking_table, floor_object: used_table)
-    create(:booking, restaurant: restaurant, user: other_user, booking_type: "dine_in",
+    create(:booking, restaurant: restaurant, user: other_user, booking_type: "dine_in", pax: 1,
                      booking_tables: [used_booking_table])
 
     authentic_query user, "mobile_user", booking_create_string, variables: {
@@ -137,12 +138,42 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_nil unused_table.reload.booking_table
   end
 
+  test "booking update" do
+    restaurant = create(:restaurant)
+    role = create(:role, restaurant: restaurant, permissions: ["orders"])
+    user = create(:user, restaurant: restaurant, roles: [role])
+    table = create(:floor_object, restaurant: restaurant)
+    booking_table = build(:booking_table, floor_object: table)
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 1,
+                               booking_tables: [booking_table])
+
+    authentic_query user, "mobile_user", booking_update_string, variables: {
+      input: {
+        attributes: {
+          pax: 3
+        },
+        id: booking.id
+      }
+    }
+
+    assert_query_success
+    assert_equal 3, booking.reload.pax
+  end
+
   private
 
   def booking_create_string
     <<~GQL
       mutation BookingCreate($input: BookingCreateInput!) {
         bookingCreate(input: $input)
+      }
+    GQL
+  end
+
+  def booking_update_string
+    <<~GQL
+      mutation BookingUpdate($input: BookingUpdateInput!) {
+        bookingUpdate(input: $input)
       }
     GQL
   end

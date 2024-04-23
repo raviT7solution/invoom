@@ -12,6 +12,7 @@ class Mutations::BookingCreate < Mutations::BaseMutation
     booking = Booking.new(
       booking_type: attributes[:booking_type],
       clocked_in_at: attributes[:clocked_in_at],
+      pax: attributes[:pax],
       restaurant: restaurant,
       user: context[:current_user].mobile_user!
     )

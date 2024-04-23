@@ -20,4 +20,8 @@ class BookingPolicy < ApplicationPolicy
   def show?
     mobile_user?("orders")
   end
+
+  def update?
+    mobile_user?("orders")
+  end
 end
