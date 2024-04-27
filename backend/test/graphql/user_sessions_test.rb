@@ -29,6 +29,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_equal @user, Session.new(token).mobile_user!
     assert_equal ["clock_in_clock_out"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
+    assert_equal @user.preferred_name, response.parsed_body["data"]["userSessionCreate"]["preferredName"]
     assert TimeSheet.last.start_time
     assert_not TimeSheet.last.end_time
   end
@@ -50,6 +51,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_equal @user, Session.new(token).mobile_user!
     assert_equal ["clock_in_clock_out"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
+    assert_equal @user.preferred_name, response.parsed_body["data"]["userSessionCreate"]["preferredName"]
     assert TimeSheet.last.start_time
     assert_not TimeSheet.last.end_time
   end
@@ -88,7 +90,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_query_success
     assert_equal \
-      ({ "clockInStatus" => "already_clocked_in", "token" => "", "permissions" => [] }),
+      ({ "clockInStatus" => "already_clocked_in", "preferredName" => "", "permissions" => [], "token" => "" }),
       response.parsed_body["data"]["userSessionCreate"]
     assert time_sheet.reload.start_time
     assert_not time_sheet.end_time
@@ -109,11 +111,11 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_query_success
     assert_equal \
-      ({ "clockInStatus" => "already_clocked_out", "token" => "", "permissions" => [] }),
+      ({ "clockInStatus" => "already_clocked_out", "permissions" => [], "preferredName" => "", "token" => "" }),
       response.parsed_body["data"]["userSessionCreate"]
   end
 
-  test "raises Unauthorized error" do
+  test "raises unauthorized error" do
     @role.update(permissions: [])
     create(:time_sheet, user: @user, start_time: 2.days.ago, end_time: 1.day.ago)
 
@@ -138,6 +140,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
         userSessionCreate(input: $input) {
           clockInStatus
           permissions
+          preferredName
           token
         }
       }

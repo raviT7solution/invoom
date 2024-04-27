@@ -985,6 +985,7 @@ input UserDeleteInput {
 type UserSession {
   clockInStatus: UserSessionClockInStatus
   permissions: [UserSessionPermissionsType!]!
+  preferredName: String!
   token: String!
 }
 
