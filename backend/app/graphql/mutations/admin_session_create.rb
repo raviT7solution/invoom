@@ -3,7 +3,7 @@
 class Mutations::AdminSessionCreate < Mutations::BaseMutation
   argument :email, String, required: true
   argument :password, String, required: true
-  argument :subject, enum("AdminSessionCreateSubjectEnum", [:mobile, :web]), required: true
+  argument :subject, enum("AdminSessionCreateSubjectEnum", [:mobile, :kds, :web]), required: true
 
   type Types::AdminSessionType, null: false
 

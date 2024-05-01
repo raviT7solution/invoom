@@ -9,16 +9,31 @@ import { Menus } from "./Pages/CuisineHub/Menu";
 import { Modifiers } from "./Pages/CuisineHub/Modifiers";
 import { FloorPlan } from "./Pages/FloorPlan";
 import { InventoryCategories } from "./Pages/Inventory/Categories";
+import { KDS } from "./Pages/KDS";
+import { KDSLogin } from "./Pages/KDS/Login";
 import { Login } from "./Pages/Login";
 import { Restaurants } from "./Pages/Settings/Restaurants";
 import { Roles } from "./Pages/Teams/Roles";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
+import { useKDSSessionStore } from "./stores/useKDSSessionStore";
 
 export const PrivateRoute = ({ children }: PropsWithChildren) => {
   const token = useAdminSessionStore((s) => s.token);
 
   if (!token) {
     Router.replace("Login");
+
+    return;
+  }
+
+  return children;
+};
+
+export const KDSPrivateRoute = ({ children }: PropsWithChildren) => {
+  const token = useKDSSessionStore((s) => s.token);
+
+  if (!token) {
+    Router.replace("KDSLogin");
 
     return;
   }
@@ -35,6 +50,8 @@ const routes = {
   Dashboard: "/",
   FloorPlan: "/floor-plan",
   InventoryCategories: "/inventory/categories",
+  KDS: "/kds",
+  KDSLogin: "/kds/login",
   Login: "/login",
   SettingsRestaurants: "/settings/restaurants",
   Teams: "/teams",
@@ -98,6 +115,12 @@ export const Switch = () => {
       <PrivateRoute>
         <InventoryCategories />
       </PrivateRoute>
+    ))
+    .with({ name: "KDSLogin" }, () => <KDSLogin />)
+    .with({ name: "KDS" }, () => (
+      <KDSPrivateRoute>
+        <KDS />
+      </KDSPrivateRoute>
     ))
     .otherwise(() => "Not found");
 };

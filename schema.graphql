@@ -79,6 +79,7 @@ input AdminSessionCreateInput {
 }
 
 enum AdminSessionCreateSubjectEnum {
+  kds
   mobile
   web
 }
