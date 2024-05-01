@@ -722,7 +722,7 @@ type Query {
   modifier(id: ID!): Modifier!
   modifiers(restaurantId: ID!): [Modifier!]!
   provinces(alpha2: String!): [Province!]!
-  restaurants(status: String!): [Restaurant!]!
+  restaurants(status: String): [Restaurant!]!
   role(id: ID!): Role!
   roles(restaurantId: ID!): [Role!]!
   tickets(limit: Int!, offset: Int!, restaurantId: ID!): TicketCollection!

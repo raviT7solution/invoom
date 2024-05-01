@@ -58,7 +58,7 @@ class Types::QueryType < Types::BaseObject
     argument :alpha2, String, required: true
   end
   field :restaurants, [Types::RestaurantType], null: false, authorize: "RestaurantPolicy#index?" do
-    argument :status, String, required: true
+    argument :status, String, required: false
   end
   field :role, Types::RoleType, null: false, authorize: "RolePolicy#show?" do
     argument :id, ID, required: true
@@ -171,8 +171,12 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
-  def restaurants(status:)
-    RestaurantPolicy.new(context[:current_session]).scope.where(status: status)
+  def restaurants(status: nil)
+    records = RestaurantPolicy.new(context[:current_session]).scope
+
+    records = records.where(status: status) if status.present?
+
+    records
   end
 
   def role(id:)
