@@ -35,13 +35,17 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       data: {
         id: "",
         name: "",
-        type: "table",
-        width: 65,
-        length: 65,
-        transform: "",
-        addons: {
-          chairQuantity: 8,
-          type: "oval",
+        objectType: "table",
+        data: {
+          width: 1,
+          length: 1,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: {
+            chairQuantity: 8,
+            type: "oval",
+          },
         },
       },
     },
@@ -52,13 +56,17 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       data: {
         id: "",
         name: "",
-        type: "table",
-        width: 65,
-        length: 65,
-        transform: "",
-        addons: {
-          chairQuantity: [1, 1, 1, 1],
-          type: "rectangular",
+        objectType: "table",
+        data: {
+          width: 1,
+          length: 1,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: {
+            type: "rectangular",
+            chairQuantity: [1, 1, 1, 1],
+          },
         },
       },
     },
@@ -69,10 +77,15 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       data: {
         id: "",
         name: "",
-        type: "stage",
-        width: 65 * 3,
-        length: 65 * 3,
-        transform: "",
+        objectType: "stage",
+        data: {
+          width: 3,
+          length: 3,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: null,
+        },
       },
     },
     {
@@ -82,10 +95,15 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       data: {
         id: "",
         name: "",
-        type: "speaker",
-        width: 58,
-        length: 117,
-        transform: "",
+        objectType: "speaker",
+        data: {
+          width: 1,
+          length: 2,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: null,
+        },
       },
     },
     {
@@ -95,10 +113,15 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       data: {
         id: "",
         name: "",
-        type: "buffet",
-        width: 65 * 4,
-        length: 65,
-        transform: "",
+        objectType: "buffet",
+        data: {
+          width: 4,
+          length: 1,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: null,
+        },
       },
     },
     {
@@ -108,10 +131,15 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       data: {
         id: "",
         name: "",
-        type: "bar",
-        width: 65 * 2,
-        length: 65,
-        transform: "",
+        objectType: "bar",
+        data: {
+          width: 2,
+          length: 1,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: null,
+        },
       },
     },
     {
@@ -121,10 +149,15 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       data: {
         id: "",
         name: "",
-        type: "space",
-        width: 65 * 2,
-        length: 65 * 2,
-        transform: "",
+        objectType: "space",
+        data: {
+          width: 2,
+          length: 2,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: null,
+        },
       },
     },
     {
@@ -134,10 +167,15 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       data: {
         id: "",
         name: "",
-        type: "object",
-        width: 65,
-        length: 65,
-        transform: "",
+        objectType: "object",
+        data: {
+          width: 1,
+          length: 1,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: null,
+        },
       },
     },
   ];

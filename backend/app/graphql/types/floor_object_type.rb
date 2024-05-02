@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class Types::FloorObjectType < Types::BaseObject
-  field :data, GraphQL::Types::JSON, null: false
+  field :data, Types::FloorObject::DataType, null: false
   field :id, ID, null: false
   field :name, String, null: false
-  field :object_type, String, null: false
+  field :object_type, enum("FloorObjectType", FloorObject.object_types.keys), null: false
 
   field :booking_table, Types::BookingTableType, null: true, authorize: "BookingTablePolicy#show?"
 end

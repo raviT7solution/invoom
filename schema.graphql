@@ -235,16 +235,46 @@ type Country {
 
 type FloorObject {
   bookingTable: BookingTable
-  data: JSON!
+  data: FloorObjectData!
   id: ID!
   name: String!
-  objectType: String!
+  objectType: FloorObjectType!
 }
 
 input FloorObjectAttributes {
   data: JSON
+  id: ID
   name: String
   objectType: String
+}
+
+type FloorObjectData {
+  addons: FloorObjectDataAddons
+  length: Float!
+  rotate: Float!
+  translateX: Float!
+  translateY: Float!
+  width: Float!
+}
+
+type FloorObjectDataAddons {
+  chairQuantity: JSON!
+  type: FloorObjectDataAddonsType!
+}
+
+enum FloorObjectDataAddonsType {
+  oval
+  rectangular
+}
+
+enum FloorObjectType {
+  bar
+  buffet
+  object
+  space
+  speaker
+  stage
+  table
 }
 
 """

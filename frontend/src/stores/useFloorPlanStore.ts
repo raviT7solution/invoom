@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { create } from "zustand";
 
+import { FloorObjectsQuery } from "../api/base";
+
 export type FloorPlan = {
   name: string;
   imageUrl: string;
@@ -8,26 +10,7 @@ export type FloorPlan = {
   height: number;
 };
 
-export type TableAddons =
-  | {
-      type: "oval";
-      chairQuantity: number;
-    }
-  | {
-      type: "rectangular";
-      chairQuantity: [number, number, number, number];
-    };
-
-export type Item = {
-  id: string;
-  name: string;
-  type: string;
-  width: number;
-  length: number;
-  transform: string;
-  color?: string;
-  addons?: TableAddons;
-};
+export type Item = FloorObjectsQuery["floorObjects"][number];
 
 type FloorPlanStore = {
   floorPlan: FloorPlan;
@@ -47,14 +30,23 @@ export const useFloorPlanStore = create<FloorPlanStore>()((set) => ({
 type ItemsStore = {
   items: Item[];
   updateItem: (item: Item) => void;
+  updateItemData: (id: string, data: Partial<Item["data"]>) => void;
   updateItems: (items: Item[]) => void;
   deleteItems: (ids: string[]) => void;
+};
+
+const updateItemData = (item: Item, data: Partial<Item["data"]>): Item => {
+  return { ...item, data: { ...item.data, ...data } };
 };
 
 export const useFloorPlanItemsStore = create<ItemsStore>()((set) => ({
   items: [],
   updateItem: (item) =>
     set((s) => ({ items: s.items.map((i) => (i.id === item.id ? item : i)) })),
+  updateItemData: (id, data) =>
+    set((s) => ({
+      items: s.items.map((i) => (i.id === id ? updateItemData(i, data) : i)),
+    })),
   updateItems: (items) => set({ items: items }),
   deleteItems: (ids) =>
     set((s) => ({

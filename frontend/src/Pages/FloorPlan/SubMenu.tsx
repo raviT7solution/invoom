@@ -27,11 +27,7 @@ export const SubMenu = () => {
   const save = async () => {
     await mutateAsync({
       input: {
-        attributes: items.map((i) => ({
-          name: i.name,
-          objectType: i.type,
-          data: i,
-        })),
+        attributes: items,
         restaurantId: restaurantId,
       },
     });

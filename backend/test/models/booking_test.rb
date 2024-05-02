@@ -8,7 +8,7 @@ class BookingTest < ActiveSupport::TestCase
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    table = create(:floor_object, restaurant: restaurant)
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
     booking_table = build(:booking_table, floor_object: table)
     booking = build(
       :booking,

@@ -8,11 +8,22 @@ import Selecto from "react-selecto";
 import { ItemComponent } from "./Item";
 
 import {
+  Item,
   useFloorPlanItemsStore,
   useFloorPlanStore,
   useSelectedItemIdsStore,
   useTargetsStore,
 } from "../../../stores/useFloorPlanStore";
+
+const getTransform = (transform: string) => {
+  const matrix = new DOMMatrixReadOnly(transform);
+
+  return {
+    rotate: Math.atan2(matrix.b, matrix.a) * (180 / Math.PI),
+    x: matrix.e,
+    y: matrix.f,
+  };
+};
 
 export const Editor = () => {
   const setSelectedItemIds = useSelectedItemIdsStore(
@@ -20,7 +31,7 @@ export const Editor = () => {
   );
   const floorPlan = useFloorPlanStore((s) => s.floorPlan);
   const items = useFloorPlanItemsStore((s) => s.items);
-  const updateItem = useFloorPlanItemsStore((s) => s.updateItem);
+  const updateItemData = useFloorPlanItemsStore((s) => s.updateItemData);
 
   const selectoRef = useRef<Selecto>(null);
   const moveableRef = useRef<Moveable>(null);
@@ -125,10 +136,12 @@ export const Editor = () => {
               e.target.style.transform = e.transform;
             }}
             onDragEnd={(e) => {
-              updateItem({
-                ...JSON.parse(e.target.getAttribute("data-item-data") || ""),
-                transform: e.target.style.transform,
-              });
+              const item = JSON.parse(
+                e.target.getAttribute("data-item-data") || "{}",
+              ) as Item;
+              const t = getTransform(e.target.style.transform);
+
+              updateItemData(item.id, { translateX: t.x, translateY: t.y });
             }}
             onDragGroup={(e) => {
               e.events.forEach((ev) => {
@@ -137,10 +150,12 @@ export const Editor = () => {
             }}
             onDragGroupEnd={(e) => {
               e.events.forEach((ev) => {
-                updateItem({
-                  ...JSON.parse(ev.target.getAttribute("data-item-data") || ""),
-                  transform: ev.target.style.transform,
-                });
+                const item = JSON.parse(
+                  ev.target.getAttribute("data-item-data") || "{}",
+                ) as Item;
+                const t = getTransform(e.target.style.transform);
+
+                updateItemData(item.id, { translateX: t.x, translateY: t.y });
               });
             }}
             onResize={(e) => {
@@ -152,9 +167,12 @@ export const Editor = () => {
               helper.onRotate(e);
             }}
             onRotateEnd={(e) => {
-              updateItem({
-                ...JSON.parse(e.target.getAttribute("data-item-data") || ""),
-                transform: e.target.style.transform,
+              const item = JSON.parse(
+                e.target.getAttribute("data-item-data") || "{}",
+              ) as Item;
+
+              updateItemData(item.id, {
+                rotate: getTransform(e.target.style.transform).rotate,
               });
             }}
             onRotateStart={helper.onRotateStart}

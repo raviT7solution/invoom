@@ -20,7 +20,7 @@ export const FloorPlan = () => {
   const updateItems = useFloorPlanItemsStore((s) => s.updateItems);
 
   useEffect(() => {
-    updateItems(data.map((i) => i.data));
+    updateItems(data);
     updateFloorPlan({
       name: "Venue 1",
       imageUrl: floorUrl,

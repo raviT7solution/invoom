@@ -9,11 +9,24 @@ class Mutations::FloorObjectUpdate < Mutations::BaseMutation
   def resolve(restaurant_id:, attributes:) # rubocop:disable Metrics/AbcSize
     restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
 
-    ActiveRecord::Base.transaction do
-      restaurant.floor_objects.destroy_all
+    ApplicationRecord.transaction do
+      attributes_map = attributes.index_by { |a| a[:id] }
 
-      attributes.each do |a|
-        floor_object = restaurant.floor_objects.new(**a)
+      existing_ids = restaurant.floor_objects.ids
+      to_be_updated = existing_ids & attributes.pluck(:id)
+      to_be_created = attributes.pluck(:id) - existing_ids
+      to_be_deleted = existing_ids - attributes.pluck(:id)
+
+      restaurant.floor_objects.where(id: to_be_deleted).each do |i|
+        raise_error i.errors.full_messages.to_sentence unless i.destroy
+      end
+
+      restaurant.floor_objects.where(id: to_be_updated).each do |i|
+        raise_error i.errors.full_messages.to_sentence unless i.update(**attributes_map[i.id])
+      end
+
+      to_be_created.each do |i|
+        floor_object = restaurant.floor_objects.new(**attributes_map[i])
 
         unless floor_object.save
           raise_error "#{floor_object.object_type} #{floor_object.errors.full_messages.to_sentence}".humanize

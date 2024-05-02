@@ -7,8 +7,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     restaurant = create(:restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table1 = create(:floor_object, restaurant: restaurant)
-    table2 = create(:floor_object, restaurant: restaurant)
+    table1 = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    table2 = create(:floor_object, :rectangular_table, restaurant: restaurant)
 
     authentic_query user, "mobile_user", booking_create_string, variables: {
       input: {
@@ -36,8 +36,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     restaurant = create(:restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table1 = create(:floor_object, restaurant: restaurant)
-    table2 = create(:floor_object, restaurant: restaurant)
+    table1 = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    table2 = create(:floor_object, :rectangular_table, restaurant: restaurant)
 
     authentic_query user, "mobile_user", booking_create_string, variables: {
       input: {
@@ -94,7 +94,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     restaurant = create(:restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    buffet = create(:floor_object, object_type: "buffet", restaurant: restaurant)
+    buffet = create(:floor_object, :speaker, object_type: "speaker", restaurant: restaurant)
 
     authentic_query user, "mobile_user", booking_create_string, variables: {
       input: {
@@ -116,8 +116,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     user = create(:user, restaurant: restaurant, roles: [role])
     other_user = create(:user, restaurant: restaurant, pin: "9999")
 
-    used_table = create(:floor_object, restaurant: restaurant)
-    unused_table = create(:floor_object, restaurant: restaurant)
+    used_table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    unused_table = create(:floor_object, :rectangular_table, restaurant: restaurant)
 
     used_booking_table = build(:booking_table, floor_object: used_table)
     create(:booking, restaurant: restaurant, user: other_user, booking_type: "dine_in", pax: 1,
@@ -142,7 +142,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     restaurant = create(:restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table = create(:floor_object, restaurant: restaurant)
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
     booking_table = build(:booking_table, floor_object: table)
     booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 1,
                                booking_tables: [booking_table])

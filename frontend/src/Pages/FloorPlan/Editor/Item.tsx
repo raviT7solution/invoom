@@ -20,12 +20,12 @@ export const ItemComponent = memo(({ item }: Props) => {
 
   let styles: CSSProperties = {};
 
-  switch (item.type) {
+  switch (item.objectType) {
     case "table":
       styles = {
         backgroundColor: "#596dff",
         border: "3px solid #3a49be",
-        borderRadius: item.addons?.type === "oval" ? "50%" : "5px",
+        borderRadius: item.data.addons?.type === "oval" ? "50%" : "5px",
         color: "#fff",
         zIndex: 4,
       };
@@ -86,7 +86,7 @@ export const ItemComponent = memo(({ item }: Props) => {
       break;
   }
 
-  const ItemIcon = items[item.type].icon;
+  const ItemIcon = items[item.objectType].icon;
 
   const renderOvalTableChairs = (
     w: number,
@@ -214,24 +214,27 @@ export const ItemComponent = memo(({ item }: Props) => {
       data-item-data={JSON.stringify(item)}
       data-item-id={item.id}
       style={{
-        height: item.length,
-        transform: item.transform,
-        width: item.width,
+        height: item.data.length * 65,
+        transform: `translate(${item.data.translateX}px, ${item.data.translateY}px) rotate(${item.data.rotate}deg)`,
+        width: item.data.width * 65,
         ...styles,
       }}
     >
       <div>
-        {item.type === "table" &&
-          item.addons?.type === "oval" &&
+        {item.objectType === "table" &&
+          item.data.addons?.type === "oval" &&
           renderOvalTableChairs(
-            item.width,
-            item.length,
-            item.addons.chairQuantity,
+            item.data.width * 65,
+            item.data.length * 65,
+            item.data.addons.chairQuantity,
           )}
 
-        {item.type === "table" &&
-          item.addons?.type === "rectangular" &&
-          renderRectangularTableChairs(item.length, item.addons.chairQuantity)}
+        {item.objectType === "table" &&
+          item.data.addons?.type === "rectangular" &&
+          renderRectangularTableChairs(
+            item.data.length * 65,
+            item.data.addons.chairQuantity,
+          )}
       </div>
 
       <div className="items-center flex font-semibold h-full justify-center absolute w-full">

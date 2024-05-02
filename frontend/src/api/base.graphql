@@ -97,10 +97,20 @@ query user($id: ID!) {
 
 query floorObjects($restaurantId: ID!) {
   floorObjects(restaurantId: $restaurantId) {
+    data {
+      addons {
+        chairQuantity
+        type
+      }
+      length
+      rotate
+      translateX
+      translateY
+      width
+    }
     id
     name
     objectType
-    data
   }
 }
 
