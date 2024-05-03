@@ -367,3 +367,16 @@ query inventoryCategory($id: ID!) {
     description
   }
 }
+
+query taxes($restaurantId: ID!) {
+  taxes(restaurantId: $restaurantId) {
+    category
+    displayName
+    gst
+    hst
+    id
+    pst
+    qst
+    rst
+  }
+}

@@ -8,8 +8,10 @@ import {
   FormatPainterOutlined,
   LogoutOutlined,
   MenuUnfoldOutlined,
+  PercentageOutlined,
   PlusCircleOutlined,
   ReconciliationOutlined,
+  SettingOutlined,
   TeamOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
@@ -126,9 +128,22 @@ export const Navbar = ({
       ],
     },
     {
+      label: "Settings",
+      icon: <SettingOutlined />,
+      key: "6",
+      children: [
+        {
+          label: <Link to={Router.SettingsTaxes()}>Tax</Link>,
+          icon: <PercentageOutlined />,
+          key: "6.1",
+        },
+      ],
+    },
+
+    {
       label: "Logout",
       icon: <LogoutOutlined />,
-      key: "6",
+      key: "7",
       onClick: onLogout,
     },
   ];

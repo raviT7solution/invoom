@@ -755,6 +755,7 @@ type Query {
   restaurants(status: String): [Restaurant!]!
   role(id: ID!): Role!
   roles(restaurantId: ID!): [Role!]!
+  taxes(restaurantId: ID!): [Tax!]!
   tickets(limit: Int!, offset: Int!, restaurantId: ID!): TicketCollection!
   user(id: ID!): User!
 }
@@ -845,6 +846,19 @@ input RoleUpdateInput {
   """
   clientMutationId: String
   id: ID!
+}
+
+type Tax {
+  category: String!
+  country: String!
+  displayName: String!
+  gst: Float!
+  hst: Float!
+  id: ID!
+  province: String!
+  pst: Float!
+  qst: Float!
+  rst: Float!
 }
 
 type Ticket {

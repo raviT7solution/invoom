@@ -66,6 +66,9 @@ class Types::QueryType < Types::BaseObject
   field :roles, [Types::RoleType], null: false, authorize: "RolePolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
+  field :taxes, [Types::TaxType], null: false, authorize: "TaxPolicy#index?" do
+    argument :restaurant_id, ID, required: true
+  end
   field :tickets, Types::TicketType.collection_type, null: false, authorize: "TicketPolicy#index?" do
     argument :limit, Integer, required: true
     argument :offset, Integer, required: true
@@ -185,6 +188,12 @@ class Types::QueryType < Types::BaseObject
 
   def roles(restaurant_id:)
     RolePolicy.new(context[:current_user]).scope.joins(:restaurant).where(restaurant: { id: restaurant_id })
+  end
+
+  def taxes(restaurant_id:)
+    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+
+    TaxPolicy.new(context[:current_user]).scope.where(province: restaurant.province, country: restaurant.country)
   end
 
   def tickets(restaurant_id:, offset:, limit:)

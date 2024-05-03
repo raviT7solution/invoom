@@ -73,6 +73,7 @@ import {
   RoleUpdateMutationVariables,
   RolesDocument,
   RolesQueryVariables,
+  TaxesDocument,
   UserCreateDocument,
   UserCreateMutationVariables,
   UserDeleteDocument,
@@ -615,5 +616,15 @@ export const useInventoryCategoryDelete = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["inventoryCategories"] });
     },
+  });
+};
+
+export const useSettingsTaxes = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryFn: async () =>
+      (await client.request(TaxesDocument, { restaurantId })).taxes,
+    queryKey: ["taxes", restaurantId],
   });
 };

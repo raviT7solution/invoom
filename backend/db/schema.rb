@@ -213,6 +213,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
     t.index ["restaurant_id"], name: "index_roles_on_restaurant_id"
   end
 
+  create_table "taxes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "display_name", null: false
+    t.string "province", null: false
+    t.string "country", null: false
+    t.integer "category", null: false
+    t.float "gst", null: false
+    t.float "hst", null: false
+    t.float "qst", null: false
+    t.float "rst", null: false
+    t.float "pst", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "ticket_item_addons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.float "price", null: false
