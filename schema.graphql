@@ -742,6 +742,7 @@ type Query {
   cities(alpha2: String!, provinceCode: String!): [City!]!
   countries: [Country!]!
   currentAdmin: Admin!
+  currentUser: User!
   floorObjects(restaurantId: ID!): [FloorObject!]!
   inventoryCategories(restaurantId: ID!): [InventoryCategory!]!
   inventoryCategory(id: ID!): InventoryCategory!
@@ -1030,7 +1031,6 @@ input UserDeleteInput {
 type UserSession {
   clockInStatus: UserSessionClockInStatus
   permissions: [UserSessionPermissionsType!]!
-  preferredName: String!
   token: String!
 }
 

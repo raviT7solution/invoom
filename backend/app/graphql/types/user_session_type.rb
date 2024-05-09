@@ -3,6 +3,5 @@
 class Types::UserSessionType < Types::BaseObject
   field :clock_in_status, enum("UserSessionClockInStatus", ["already_clocked_in", "already_clocked_out"]), null: true
   field :permissions, [enum("UserSessionPermissionsType", Role::PERMISSIONS)], null: false
-  field :preferred_name, String, null: false
   field :token, String, null: false
 end

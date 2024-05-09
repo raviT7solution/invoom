@@ -18,7 +18,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    web_admin?
+    web_admin? || session.mobile_user?
   end
 
   def update?

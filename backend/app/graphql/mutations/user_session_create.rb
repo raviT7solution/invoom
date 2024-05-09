@@ -49,14 +49,12 @@ class Mutations::UserSessionCreate < Mutations::BaseMutation
   def create_clock_in(user)
     raise_error "Unauthorized" unless user.permission?("clock_in_clock_out")
 
-    if user_already_clocked_in?(user)
-      return { clock_in_status: "already_clocked_in", permissions: [], preferred_name: "", token: "" }
-    end
+    return { clock_in_status: "already_clocked_in", permissions: [], token: "" } if user_already_clocked_in?(user)
 
     time_sheet = user.time_sheets.new(start_time: DateTime.current)
     raise_error time_sheet.errors.full_messages.to_sentence unless time_sheet.save
 
-    { token: Session.token(user, "mobile_user_id"), permissions: user.permissions, preferred_name: user.preferred_name }
+    { token: Session.token(user, "mobile_user_id"), permissions: user.permissions }
   end
 
   def update_clock_out(user)
@@ -64,11 +62,11 @@ class Mutations::UserSessionCreate < Mutations::BaseMutation
 
     time_sheet = user.time_sheets.find_by(end_time: nil)
 
-    return { clock_in_status: "already_clocked_out", permissions: [], preferred_name: "", token: "" } unless time_sheet
+    return { clock_in_status: "already_clocked_out", permissions: [], token: "" } unless time_sheet
 
     raise_error time_sheet.errors.full_messages.to_sentence unless time_sheet.update(end_time: DateTime.current)
 
-    { token: "", permissions: [], preferred_name: "" }
+    { token: "", permissions: [] }
   end
 
   def user_already_clocked_in?(user)

@@ -25,6 +25,7 @@ class Types::QueryType < Types::BaseObject
   end
   field :countries, [Types::CountryType], null: false
   field :current_admin, Types::AdminType, null: false, authorize: "AdminPolicy#show?"
+  field :current_user, Types::UserType, null: false, authorize: "UserPolicy#show?"
   field :floor_objects, [Types::FloorObjectType], null: false, authorize: "FloorObjectPolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
@@ -124,6 +125,14 @@ class Types::QueryType < Types::BaseObject
 
     return current_user.web_admin! if current_user.web_admin?
     return current_user.mobile_admin! if current_user.mobile_admin?
+
+    raise GraphQL::ExecutionError, "Unauthorized"
+  end
+
+  def current_user
+    current_user = context[:current_user]
+
+    return current_user.mobile_user! if current_user.mobile_user?
 
     raise GraphQL::ExecutionError, "Unauthorized"
   end

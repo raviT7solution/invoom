@@ -29,7 +29,6 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_equal @user, Session.new(token).mobile_user!
     assert_equal ["clock_in_clock_out"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
-    assert_equal @user.preferred_name, response.parsed_body["data"]["userSessionCreate"]["preferredName"]
     assert TimeSheet.last.start_time
     assert_not TimeSheet.last.end_time
   end
@@ -51,7 +50,6 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_equal @user, Session.new(token).mobile_user!
     assert_equal ["clock_in_clock_out"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
-    assert_equal @user.preferred_name, response.parsed_body["data"]["userSessionCreate"]["preferredName"]
     assert TimeSheet.last.start_time
     assert_not TimeSheet.last.end_time
   end
@@ -90,7 +88,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_query_success
     assert_equal \
-      ({ "clockInStatus" => "already_clocked_in", "preferredName" => "", "permissions" => [], "token" => "" }),
+      ({ "clockInStatus" => "already_clocked_in", "permissions" => [], "token" => "" }),
       response.parsed_body["data"]["userSessionCreate"]
     assert time_sheet.reload.start_time
     assert_not time_sheet.end_time
@@ -111,7 +109,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_query_success
     assert_equal \
-      ({ "clockInStatus" => "already_clocked_out", "permissions" => [], "preferredName" => "", "token" => "" }),
+      ({ "clockInStatus" => "already_clocked_out", "permissions" => [], "token" => "" }),
       response.parsed_body["data"]["userSessionCreate"]
   end
 
@@ -140,7 +138,6 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
         userSessionCreate(input: $input) {
           clockInStatus
           permissions
-          preferredName
           token
         }
       }
