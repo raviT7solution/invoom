@@ -130,6 +130,21 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     assert_query_error "Unauthorized"
   end
 
+  test "destroy session" do
+    create(:time_sheet, user: @user, start_time: 2.days.ago)
+
+    authentic_query @user, "mobile_user", destroy_string, variables: { input: {} }
+
+    assert_query_success
+    assert_nil @user.time_sheets.find_by(end_time: nil)
+
+    create(:time_sheet, user: @user, start_time: 2.days.ago, end_time: 1.day.ago)
+
+    authentic_query @user, "mobile_user", destroy_string, variables: { input: {} }
+
+    assert_query_error "TimeSheet not found"
+  end
+
   private
 
   def create_string
@@ -140,6 +155,14 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
           permissions
           token
         }
+      }
+    GQL
+  end
+
+  def destroy_string
+    <<~GQL
+      mutation userSessionDestroy($input: UserSessionDestroyInput!) {
+        userSessionDestroy(input: $input)
       }
     GQL
   end

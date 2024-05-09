@@ -4,4 +4,8 @@ class UserSessionPolicy < ApplicationPolicy
   def create?
     mobile_admin?
   end
+
+  def destroy?
+    mobile_user?("clock_in_clock_out")
+  end
 end

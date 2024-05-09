@@ -37,5 +37,7 @@ class Types::MutationType < Types::BaseObject
   field :user_delete, mutation: Mutations::UserDelete, null: false, authorize: "UserPolicy#delete?"
   field :user_session_create, mutation: Mutations::UserSessionCreate, null: false,
                               authorize: "UserSessionPolicy#create?"
+  field :user_session_destroy, mutation: Mutations::UserSessionDestroy, null: false,
+                               authorize: "UserSessionPolicy#destroy?"
   field :user_update, mutation: Mutations::UserUpdate, null: false, authorize: "UserPolicy#update?"
 end
