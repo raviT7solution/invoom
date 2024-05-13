@@ -1,9 +1,11 @@
 import {
   AuditOutlined,
   BookOutlined,
+  CarryOutOutlined,
   CoffeeOutlined,
   ContainerOutlined,
   DashboardOutlined,
+  FieldTimeOutlined,
   FormOutlined,
   FormatPainterOutlined,
   LogoutOutlined,
@@ -128,14 +130,26 @@ export const Navbar = ({
       ],
     },
     {
+      label: "Reports",
+      icon: <CarryOutOutlined />,
+      key: "6",
+      children: [
+        {
+          label: <Link to={Router.ReportsLabour()}>Labour Report</Link>,
+          icon: <FieldTimeOutlined />,
+          key: "6.1",
+        },
+      ],
+    },
+    {
       label: "Settings",
       icon: <SettingOutlined />,
-      key: "6",
+      key: "7",
       children: [
         {
           label: <Link to={Router.SettingsTaxes()}>Tax</Link>,
           icon: <PercentageOutlined />,
-          key: "6.1",
+          key: "7.1",
         },
       ],
     },
@@ -143,7 +157,7 @@ export const Navbar = ({
     {
       label: "Logout",
       icon: <LogoutOutlined />,
-      key: "7",
+      key: "8",
       onClick: onLogout,
     },
   ];

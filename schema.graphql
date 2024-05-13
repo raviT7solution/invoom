@@ -764,7 +764,9 @@ type Query {
   roles(restaurantId: ID!): [Role!]!
   taxes(restaurantId: ID!): [Tax!]!
   tickets(limit: Int!, offset: Int!, restaurantId: ID!): TicketCollection!
+  timeSheets(endDate: String, page: Int!, perPage: Int!, restaurantId: ID!, startDate: String, userIds: [String!]): TimeSheetCollection!
   user(id: ID!): User!
+  users(restaurantId: ID!): [User!]!
 }
 
 type Restaurant {
@@ -954,6 +956,28 @@ input TicketItemsUpdateInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+}
+
+type TimeSheet {
+  endTime: ISO8601DateTime
+  id: ID!
+  startTime: ISO8601DateTime!
+  user: User!
+}
+
+"""
+TimeSheetCollection type
+"""
+type TimeSheetCollection {
+  """
+  A collection of paginated TimeSheetCollection
+  """
+  collection: [TimeSheet!]!
+
+  """
+  Pagination Metadata for navigating the Pagination
+  """
+  metadata: CollectionMetadata!
 }
 
 type Timezone {

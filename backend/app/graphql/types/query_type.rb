@@ -75,8 +75,19 @@ class Types::QueryType < Types::BaseObject
     argument :offset, Integer, required: true
     argument :restaurant_id, ID, required: true
   end
+  field :time_sheets, Types::TimeSheetType.collection_type, null: false, authorize: "TimeSheetPolicy#index?" do
+    argument :end_date, String, required: false
+    argument :page, Integer, required: true
+    argument :per_page, Integer, required: true
+    argument :restaurant_id, ID, required: true
+    argument :start_date, String, required: false
+    argument :user_ids, [String], required: false
+  end
   field :user, Types::UserType, null: false, authorize: "UserPolicy#show?" do
     argument :id, ID, required: true
+  end
+  field :users, [Types::UserType], null: false, authorize: "UserPolicy#index?" do
+    argument :restaurant_id, ID, required: true
   end
 
   def addon(id:)
@@ -211,7 +222,26 @@ class Types::QueryType < Types::BaseObject
                 .offset(offset).limit(limit)
   end
 
+  def time_sheets(restaurant_id:, page:, per_page:, start_date: nil, end_date: nil, user_ids: nil) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
+    records = TimeSheetPolicy.new(context[:current_user]).scope
+    records = records.joins(:user).where(user: { restaurant_id: restaurant_id })
+
+    if user_ids.present?
+      records = records.where(user_id: UserPolicy.new(context[:current_user]).scope.where(id: user_ids))
+    end
+
+    if start_date.present? && end_date.present?
+      records = records.where(start_time: DateTime.parse(start_date)..DateTime.parse(end_date))
+    end
+
+    records.order(created_at: :desc).page(page).per(per_page)
+  end
+
   def user(id:)
     UserPolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def users(restaurant_id:)
+    UserPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
   end
 end

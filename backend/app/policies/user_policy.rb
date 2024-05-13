@@ -9,6 +9,10 @@ class UserPolicy < ApplicationPolicy
     web_admin?
   end
 
+  def index?
+    web_admin?
+  end
+
   def scope
     if web_admin?
       User.where(restaurant: web_admin!.restaurants)

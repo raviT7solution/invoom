@@ -16,6 +16,7 @@ query restaurants($status: String!) {
     id
     name
     province
+    timezone
   }
 }
 
@@ -365,6 +366,47 @@ query inventoryCategory($id: ID!) {
     name
     visible
     description
+  }
+}
+
+query timeSheets(
+  $endDate: String
+  $page: Int!
+  $perPage: Int!
+  $restaurantId: ID!
+  $startDate: String
+  $userIds: [String!]
+) {
+  timeSheets(
+    endDate: $endDate
+    page: $page
+    perPage: $perPage
+    restaurantId: $restaurantId
+    startDate: $startDate
+    userIds: $userIds
+  ) {
+    collection {
+      endTime
+      id
+      startTime
+      user {
+        firstName
+        lastName
+      }
+    }
+    metadata {
+      currentPage
+      limitValue
+      totalCount
+      totalPages
+    }
+  }
+}
+
+query users($restaurantId: ID!) {
+  users(restaurantId: $restaurantId) {
+    id
+    fullName
   }
 }
 

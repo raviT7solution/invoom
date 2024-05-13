@@ -12,6 +12,7 @@ import { InventoryCategories } from "./Pages/Inventory/Categories";
 import { KDS } from "./Pages/KDS";
 import { KDSLogin } from "./Pages/KDS/Login";
 import { Login } from "./Pages/Login";
+import { ReportsLabour } from "./Pages/Reports/Labour";
 import { Restaurants } from "./Pages/Settings/Restaurants";
 import { Taxes } from "./Pages/Settings/Taxes";
 import { Roles } from "./Pages/Teams/Roles";
@@ -54,6 +55,7 @@ const routes = {
   KDS: "/kds",
   KDSLogin: "/kds/login",
   Login: "/login",
+  ReportsLabour: "/reports/labour",
   SettingsRestaurants: "/settings/restaurants",
   SettingsTaxes: "/settings/taxes",
   Teams: "/teams",
@@ -116,6 +118,11 @@ export const Switch = () => {
     .with({ name: "InventoryCategories" }, () => (
       <PrivateRoute>
         <InventoryCategories />
+      </PrivateRoute>
+    ))
+    .with({ name: "ReportsLabour" }, () => (
+      <PrivateRoute>
+        <ReportsLabour />
       </PrivateRoute>
     ))
     .with({ name: "SettingsTaxes" }, () => (

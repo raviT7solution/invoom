@@ -74,6 +74,8 @@ import {
   RolesDocument,
   RolesQueryVariables,
   TaxesDocument,
+  TimeSheetsDocument,
+  TimeSheetsQueryVariables,
   UserCreateDocument,
   UserCreateMutationVariables,
   UserDeleteDocument,
@@ -81,6 +83,7 @@ import {
   UserDocument,
   UserUpdateDocument,
   UserUpdateMutationVariables,
+  UsersDocument,
 } from "./base";
 
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
@@ -102,6 +105,16 @@ const client = new GraphQLClient(
     },
   },
 );
+
+const collectionInitialData = {
+  collection: [],
+  metadata: {
+    currentPage: 1,
+    limitValue: 0,
+    totalCount: 0,
+    totalPages: 0,
+  },
+};
 
 export const useAdminSessionCreate = () => {
   return useMutation({
@@ -616,6 +629,25 @@ export const useInventoryCategoryDelete = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["inventoryCategories"] });
     },
+  });
+};
+
+export const useTimeSheets = (variables: TimeSheetsQueryVariables) => {
+  return useQuery({
+    initialData: collectionInitialData,
+    queryKey: ["timeSheets", variables],
+    queryFn: async () =>
+      (await client.request(TimeSheetsDocument, variables)).timeSheets,
+  });
+};
+
+export const useUsers = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryKey: ["users", restaurantId],
+    queryFn: async () =>
+      (await client.request(UsersDocument, { restaurantId })).users,
   });
 };
 
