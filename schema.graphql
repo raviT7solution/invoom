@@ -774,6 +774,7 @@ type Restaurant {
   city: String!
   id: ID!
   name: String!
+  postalCode: String!
   province: String!
   timezone: String!
 }
