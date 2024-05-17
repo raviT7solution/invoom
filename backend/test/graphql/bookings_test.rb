@@ -14,7 +14,6 @@ class BookingsTest < ActionDispatch::IntegrationTest
       input: {
         attributes: {
           bookingType: "dine_in",
-          clockedInAt: DateTime.current.iso8601,
           floorObjectIds: [table1.id, table2.id],
           pax: 1
         },
@@ -34,8 +33,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "create takeout" do
     restaurant = create(:restaurant)
-    role = create(:role, restaurant: restaurant, permissions: ["orders"])
+    role = create(:role, restaurant: restaurant, permissions: ["orders", "takeout"])
     user = create(:user, restaurant: restaurant, roles: [role])
+
+    customer = create(:customer, restaurant: restaurant)
     table1 = create(:floor_object, :rectangular_table, restaurant: restaurant)
     table2 = create(:floor_object, :rectangular_table, restaurant: restaurant)
 
@@ -43,7 +44,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
       input: {
         attributes: {
           bookingType: "takeout",
-          clockedInAt: DateTime.current.iso8601,
+          customerId: customer.id,
           floorObjectIds: [table1.id, table2.id]
         },
         restaurantId: restaurant.id
@@ -57,7 +58,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
       input: {
         attributes: {
           bookingType: "takeout",
-          clockedInAt: DateTime.current.iso8601
+          customerId: customer.id
         },
         restaurantId: restaurant.id
       }
@@ -79,7 +80,6 @@ class BookingsTest < ActionDispatch::IntegrationTest
       input: {
         attributes: {
           bookingType: "dine_in",
-          clockedInAt: DateTime.current.iso8601,
           floorObjectIds: []
         },
         restaurantId: restaurant.id
@@ -100,7 +100,6 @@ class BookingsTest < ActionDispatch::IntegrationTest
       input: {
         attributes: {
           bookingType: "dine_in",
-          clockedInAt: DateTime.current.iso8601,
           floorObjectIds: [buffet.id]
         },
         restaurantId: restaurant.id
@@ -127,7 +126,6 @@ class BookingsTest < ActionDispatch::IntegrationTest
       input: {
         attributes: {
           bookingType: "dine_in",
-          clockedInAt: Time.zone.now.strftime("%Y-%m-%dT%H:%M:%S"),
           floorObjectIds: [used_table.id, unused_table.id]
         },
         restaurantId: restaurant.id

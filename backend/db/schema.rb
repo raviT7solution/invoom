@@ -62,10 +62,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
     t.datetime "clocked_out_at"
     t.integer "pax"
     t.integer "booking_type", null: false
+    t.uuid "customer_id"
     t.uuid "restaurant_id", null: false
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_bookings_on_customer_id"
     t.index ["restaurant_id"], name: "index_bookings_on_restaurant_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
@@ -87,6 +89,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_category_modifiers_on_category_id"
     t.index ["modifier_id"], name: "index_category_modifiers_on_modifier_id"
+  end
+
+  create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "phone_number", null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_customers_on_restaurant_id"
   end
 
   create_table "floor_objects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -309,11 +320,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_07_175604) do
   add_foreign_key "admin_restaurants", "restaurants"
   add_foreign_key "booking_tables", "bookings"
   add_foreign_key "booking_tables", "floor_objects"
+  add_foreign_key "bookings", "customers"
   add_foreign_key "bookings", "restaurants"
   add_foreign_key "bookings", "users"
   add_foreign_key "categories", "restaurants"
   add_foreign_key "category_modifiers", "categories"
   add_foreign_key "category_modifiers", "modifiers"
+  add_foreign_key "customers", "restaurants"
   add_foreign_key "floor_objects", "restaurants"
   add_foreign_key "inventory_categories", "restaurants"
   add_foreign_key "item_addons", "addons"

@@ -14,7 +14,7 @@ class RestaurantPolicy < ApplicationPolicy
       web_admin!.restaurants
     elsif mobile_admin?
       mobile_admin!.restaurants.where(status: :active)
-    elsif mobile_user?("orders")
+    elsif mobile_user?("orders") || mobile_user?("takeout")
       Restaurant.where(id: mobile_user!.restaurant_id)
     else
       Restaurant.none

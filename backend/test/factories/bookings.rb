@@ -7,6 +7,7 @@ FactoryBot.define do
     clocked_out_at { nil }
     pax { nil }
 
+    customer { nil }
     restaurant { nil }
     user { nil }
   end

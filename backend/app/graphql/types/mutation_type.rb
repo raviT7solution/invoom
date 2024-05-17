@@ -10,6 +10,7 @@ class Types::MutationType < Types::BaseObject
   field :category_create, mutation: Mutations::CategoryCreate, null: false, authorize: "CategoryPolicy#create?"
   field :category_delete, mutation: Mutations::CategoryDelete, null: false, authorize: "CategoryPolicy#delete?"
   field :category_update, mutation: Mutations::CategoryUpdate, null: false, authorize: "CategoryPolicy#update?"
+  field :customer_create, mutation: Mutations::CustomerCreate, null: false, authorize: "CustomerPolicy#create?"
   field :floor_object_update, mutation: Mutations::FloorObjectUpdate, null: false,
                               authorize: "FloorObjectPolicy#update?"
   field :inventory_category_create, mutation: Mutations::InventoryCategoryCreate, null: false,

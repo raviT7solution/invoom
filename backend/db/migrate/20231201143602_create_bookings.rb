@@ -8,6 +8,7 @@ class CreateBookings < ActiveRecord::Migration[7.0]
       t.integer :pax, null: true
       t.integer :booking_type, null: false
 
+      t.references :customer, null: true, foreign_key: true, type: :uuid
       t.references :restaurant, null: false, foreign_key: true, type: :uuid
       t.references :user, null: false, foreign_key: true, type: :uuid
 

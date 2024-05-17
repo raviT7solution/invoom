@@ -9,9 +9,14 @@ class Mutations::BookingCreate < Mutations::BaseMutation
   def resolve(attributes:, restaurant_id:) # rubocop:disable Metrics/AbcSize
     restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
 
+    if attributes[:customer_id].present?
+      customer = CustomerPolicy.new(context[:current_user]).scope.find(attributes[:customer_id])
+    end
+
     booking = Booking.new(
       booking_type: attributes[:booking_type],
-      clocked_in_at: attributes[:clocked_in_at],
+      clocked_in_at: DateTime.current,
+      customer: customer,
       pax: attributes[:pax],
       restaurant: restaurant,
       user: context[:current_user].mobile_user!

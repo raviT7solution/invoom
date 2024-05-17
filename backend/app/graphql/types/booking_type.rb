@@ -8,6 +8,7 @@ class Types::BookingType < Types::BaseObject
   field :pax, Integer, null: true
 
   field :booking_tables, [Types::BookingTableType], null: false, authorize: "BookingTablePolicy#index?"
+  field :customer, Types::CustomerType, null: true, authorize: "CustomerPolicy#index?"
   field :tickets, [Types::TicketType], null: false, authorize: "TicketPolicy#index?"
   field :user_full_name, String, null: false
 

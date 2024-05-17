@@ -22,6 +22,10 @@ const permissions = [
     label: "Orders",
     value: "orders",
   },
+  {
+    label: "Takeout",
+    value: "takeout",
+  },
 ];
 
 export const Edit = ({

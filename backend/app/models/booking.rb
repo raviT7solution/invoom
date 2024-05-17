@@ -7,6 +7,7 @@ class Booking < ApplicationRecord
     delivery: 2
   }
 
+  belongs_to :customer, optional: true
   belongs_to :restaurant
   belongs_to :user
 
@@ -17,5 +18,7 @@ class Booking < ApplicationRecord
   validates :booking_tables, length: { minimum: 1 }, if: :dine_in?
   validates :booking_type, presence: true
   validates :clocked_in_at, presence: true
+  validates :customer_id, absence: true, if: :dine_in?
+  validates :customer_id, presence: true, unless: :dine_in?
   validates :pax, comparison: { greater_than: 0 }, if: :dine_in?
 end

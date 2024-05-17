@@ -4,7 +4,8 @@ class Role < ApplicationRecord
   PERMISSIONS = [
     "clock_in_clock_out",
     "floor_plan",
-    "orders"
+    "orders",
+    "takeout"
   ].freeze
 
   belongs_to :restaurant

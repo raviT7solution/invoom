@@ -5,6 +5,7 @@ class Restaurant < ApplicationRecord
   has_many :admin_restaurants, dependent: :restrict_with_error
   has_many :bookings, dependent: :destroy
   has_many :categories, dependent: :destroy
+  has_many :customers, dependent: :destroy
   has_many :floor_objects, dependent: :destroy
   has_many :inventory_categories, dependent: :destroy
   has_many :items, dependent: :destroy

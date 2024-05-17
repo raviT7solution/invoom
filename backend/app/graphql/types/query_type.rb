@@ -10,8 +10,14 @@ class Types::QueryType < Types::BaseObject
   field :booking, Types::BookingType, null: false, authorize: "BookingPolicy#show?" do
     argument :id, ID, required: true
   end
-  field :bookings, [Types::BookingType], null: false, authorize: "BookingPolicy#index?" do
+  field :bookings, Types::BookingType.collection_type, null: false, authorize: "BookingPolicy#index?" do
+    argument :booking_types, [String], required: true
+    argument :end_date, GraphQL::Types::ISO8601DateTime, required: false
+    argument :page, Integer, required: true
+    argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
+    argument :start_date, GraphQL::Types::ISO8601DateTime, required: false
+    argument :status, String, required: true
   end
   field :categories, [Types::CategoryType], null: false, authorize: "CategoryPolicy#index?" do
     argument :restaurant_id, ID, required: true
@@ -26,6 +32,12 @@ class Types::QueryType < Types::BaseObject
   field :countries, [Types::CountryType], null: false
   field :current_admin, Types::AdminType, null: false, authorize: "AdminPolicy#show?"
   field :current_user, Types::UserType, null: false, authorize: "UserPolicy#show?"
+  field :customers, Types::CustomerType.collection_type, null: false, authorize: "CustomerPolicy#index?" do
+    argument :page, Integer, required: true
+    argument :per_page, Integer, required: true
+    argument :query, String, required: true
+    argument :restaurant_id, ID, required: true
+  end
   field :floor_objects, [Types::FloorObjectType], null: false, authorize: "FloorObjectPolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
@@ -102,8 +114,18 @@ class Types::QueryType < Types::BaseObject
     BookingPolicy.new(context[:current_user]).scope.find(id)
   end
 
-  def bookings(restaurant_id:)
-    BookingPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  def bookings(restaurant_id:, booking_types:, status:, page:, per_page:, start_date: nil, end_date: nil) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
+    records = BookingPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+
+    if start_date.present? && end_date.present?
+      records = records.where(clocked_in_at: DateTime.parse(start_date)..DateTime.parse(end_date))
+    end
+
+    records = records.where(booking_type: booking_types) if booking_types.present?
+    records = records.where(clocked_out_at: nil) if status == "current"
+    records = records.where.not(clocked_out_at: nil) if status == "completed"
+
+    records.order(created_at: :desc).page(page).per(per_page)
   end
 
   def categories(restaurant_id:)
@@ -146,6 +168,14 @@ class Types::QueryType < Types::BaseObject
     return current_user.mobile_user! if current_user.mobile_user?
 
     raise GraphQL::ExecutionError, "Unauthorized"
+  end
+
+  def customers(restaurant_id:, query:, page:, per_page:)
+    records = CustomerPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+
+    records = records.where("name ILIKE :q OR phone_number ILIKE :q", q: "%#{query}%") if query.present?
+
+    records.order(created_at: :desc).page(page).per(per_page)
   end
 
   def floor_objects(restaurant_id:)
