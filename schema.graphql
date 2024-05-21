@@ -93,6 +93,7 @@ type Booking {
   id: ID!
   pax: Int
   tickets: [Ticket!]!
+  token: String
   userFullName: String!
 }
 

@@ -27,6 +27,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_equal booking.id, response.parsed_body["data"]["bookingCreate"]
     assert_attributes booking, \
                       booking_type: "dine_in"
+    assert_nil booking.token
     assert_equal [table1.id, table2.id].sort, booking.booking_tables.map(&:floor_object_id).sort
     assert_equal booking.clocked_in_at.to_date, Date.current
   end
@@ -68,7 +69,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
     booking = Booking.last!
 
     assert_attributes booking, \
-                      booking_type: "takeout"
+                      booking_type: "takeout",
+                      token: 1
   end
 
   test "dine-in booking must have a table" do
