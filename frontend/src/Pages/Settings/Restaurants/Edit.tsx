@@ -22,7 +22,8 @@ import {
   useRestaurantCreate,
 } from "../../../api";
 import { FormDrawer } from "../../../components/FormDrawer";
-import { classNames, useSteps } from "../../../helpers";
+import { classNames } from "../../../helpers";
+import { useSteps } from "../../../helpers/hooks";
 
 type schema = {
   address: string;

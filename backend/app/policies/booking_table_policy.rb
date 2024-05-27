@@ -2,7 +2,7 @@
 
 class BookingTablePolicy < ApplicationPolicy
   def index?
-    mobile_user?("orders")
+    mobile_user?("orders") || kds_admin?
   end
 
   def show?

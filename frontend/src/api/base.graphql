@@ -10,7 +10,7 @@ query currentAdmin {
   }
 }
 
-query restaurants($status: String!) {
+query restaurants($status: String) {
   restaurants(status: $status) {
     city
     id
@@ -423,4 +423,52 @@ query taxes($restaurantId: ID!) {
     qst
     rst
   }
+}
+
+query tickets(
+  $perPage: Int!
+  $page: Int!
+  $restaurantId: ID!
+  $status: [String!]!
+) {
+  tickets(
+    perPage: $perPage
+    page: $page
+    restaurantId: $restaurantId
+    status: $status
+  ) {
+    metadata {
+      totalCount
+    }
+    collection {
+      booking {
+        bookingTables {
+          name
+        }
+        bookingType
+        clockedInAt
+        customer {
+          name
+        }
+        id
+        userFullName
+      }
+      id
+      ticketItems {
+        displayName
+        id
+        modifiers
+        quantity
+        status
+        ticketItemAddons {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+mutation ticketItemsUpdate($input: TicketItemsUpdateInput!) {
+  ticketItemsUpdate(input: $input)
 }

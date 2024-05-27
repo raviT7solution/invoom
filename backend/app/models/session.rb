@@ -7,6 +7,18 @@ class Session
     @header = header
   end
 
+  def kds_admin!
+    @kds_admin ||= begin
+      raise GraphQL::ExecutionError, "Unauthorized" unless kds_admin?
+
+      Admin.find(token["kds_admin_id"])
+    end
+  end
+
+  def kds_admin?
+    token.present? && token["kds_admin_id"].present?
+  end
+
   def mobile_admin!
     @mobile_admin ||= begin
       raise GraphQL::ExecutionError, "Unauthorized" unless mobile_admin?

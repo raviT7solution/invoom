@@ -83,9 +83,10 @@ class Types::QueryType < Types::BaseObject
     argument :restaurant_id, ID, required: true
   end
   field :tickets, Types::TicketType.collection_type, null: false, authorize: "TicketPolicy#index?" do
-    argument :limit, Integer, required: true
-    argument :offset, Integer, required: true
+    argument :page, Integer, required: true
+    argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
+    argument :status, [String], required: false
   end
   field :time_sheets, Types::TimeSheetType.collection_type, null: false, authorize: "TimeSheetPolicy#index?" do
     argument :end_date, String, required: false
@@ -158,6 +159,7 @@ class Types::QueryType < Types::BaseObject
 
     return current_user.web_admin! if current_user.web_admin?
     return current_user.mobile_admin! if current_user.mobile_admin?
+    return current_user.kds_admin! if current_user.kds_admin?
 
     raise GraphQL::ExecutionError, "Unauthorized"
   end
@@ -246,10 +248,13 @@ class Types::QueryType < Types::BaseObject
     TaxPolicy.new(context[:current_user]).scope.where(province: restaurant.province, country: restaurant.country)
   end
 
-  def tickets(restaurant_id:, offset:, limit:)
-    TicketPolicy.new(context[:current_user]).scope.joins(booking: :restaurant)
-                .where(restaurants: { id: restaurant_id })
-                .offset(offset).limit(limit)
+  def tickets(restaurant_id:, page:, per_page:, status: [])
+    records = TicketPolicy.new(context[:current_user]).scope.joins(booking: :restaurant)
+                          .where(restaurants: { id: restaurant_id })
+
+    records = records.eager_load(:ticket_items).where(ticket_items: { status: status }) if status.present?
+
+    records.order(created_at: :desc).page(page).per(per_page)
   end
 
   def time_sheets(restaurant_id:, page:, per_page:, start_date: nil, end_date: nil, user_ids: nil) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize

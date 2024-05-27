@@ -6,12 +6,14 @@ class TicketPolicy < ApplicationPolicy
   end
 
   def index?
-    mobile_user?("orders")
+    mobile_user?("orders") || kds_admin?
   end
 
   def scope
     if mobile_user?("orders")
       Ticket.joins(booking: :restaurant).where(restaurants: { id: mobile_user!.restaurant_id })
+    elsif kds_admin?
+      Ticket.joins(booking: :restaurant).where(restaurants: { id: kds_admin!.restaurants })
     else
       Ticket.none
     end

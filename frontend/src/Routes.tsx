@@ -9,7 +9,7 @@ import { Menus } from "./Pages/CuisineHub/Menu";
 import { Modifiers } from "./Pages/CuisineHub/Modifiers";
 import { FloorPlan } from "./Pages/FloorPlan";
 import { InventoryCategories } from "./Pages/Inventory/Categories";
-import { KDS } from "./Pages/KDS";
+import { KDSHome } from "./Pages/KDS/Home";
 import { KDSLogin } from "./Pages/KDS/Login";
 import { Login } from "./Pages/Login";
 import { ReportsLabour } from "./Pages/Reports/Labour";
@@ -133,7 +133,7 @@ export const Switch = () => {
     .with({ name: "KDSLogin" }, () => <KDSLogin />)
     .with({ name: "KDS" }, () => (
       <KDSPrivateRoute>
-        <KDS />
+        <KDSHome />
       </KDSPrivateRoute>
     ))
     .otherwise(() => "Not found");

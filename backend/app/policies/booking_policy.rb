@@ -18,7 +18,7 @@ class BookingPolicy < ApplicationPolicy
   end
 
   def show?
-    mobile_user?("orders")
+    mobile_user?("orders") || kds_admin?
   end
 
   def update?

@@ -16,4 +16,8 @@ class CustomerPolicy < ApplicationPolicy
       Customer.none
     end
   end
+
+  def show?
+    mobile_user?("takeout") || kds_admin?
+  end
 end

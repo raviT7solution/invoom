@@ -6,16 +6,18 @@ class RestaurantPolicy < ApplicationPolicy
   end
 
   def index?
-    web_admin? || mobile_admin?
+    web_admin? || mobile_admin? || kds_admin?
   end
 
-  def scope
+  def scope # rubocop:disable Metrics/AbcSize
     if web_admin?
       web_admin!.restaurants
     elsif mobile_admin?
       mobile_admin!.restaurants.where(status: :active)
     elsif mobile_user?("orders") || mobile_user?("takeout")
       Restaurant.where(id: mobile_user!.restaurant_id)
+    elsif kds_admin?
+      kds_admin!.restaurants.where(status: :active)
     else
       Restaurant.none
     end

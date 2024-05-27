@@ -828,7 +828,7 @@ type Query {
   role(id: ID!): Role!
   roles(restaurantId: ID!): [Role!]!
   taxes(restaurantId: ID!): [Tax!]!
-  tickets(limit: Int!, offset: Int!, restaurantId: ID!): TicketCollection!
+  tickets(page: Int!, perPage: Int!, restaurantId: ID!, status: [String!]): TicketCollection!
   timeSheets(endDate: String, page: Int!, perPage: Int!, restaurantId: ID!, startDate: String, userIds: [String!]): TimeSheetCollection!
   user(id: ID!): User!
   users(restaurantId: ID!): [User!]!

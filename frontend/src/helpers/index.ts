@@ -1,5 +1,3 @@
-import { useCallback, useState } from "react";
-
 export const classNames = (...classes: string[]) => {
   return classes.filter(Boolean).join(" ");
 };
@@ -21,24 +19,3 @@ export const selectLabelFilterSort = (
 
 export const initials = (name: string) =>
   name.split(" ").map((i) => i.charAt(0).toUpperCase());
-
-export const useSteps = (length: number) => {
-  const [current, setCurrent] = useState(0);
-
-  const next = () => setCurrent((c) => c + 1);
-
-  const prev = () => setCurrent((c) => c - 1);
-
-  const reset = useCallback(() => setCurrent(0), []);
-
-  return {
-    current,
-    length,
-    next,
-    prev,
-    reset,
-    showNext: current < length - 1,
-    showPrev: current > 0,
-    showSubmit: current === length - 1,
-  };
-};

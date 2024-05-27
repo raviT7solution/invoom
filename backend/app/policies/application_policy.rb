@@ -4,6 +4,8 @@ class ApplicationPolicy
   attr_reader :session
 
   delegate \
+    :kds_admin!,
+    :kds_admin?,
     :mobile_admin!,
     :mobile_admin?,
     :mobile_user!,
