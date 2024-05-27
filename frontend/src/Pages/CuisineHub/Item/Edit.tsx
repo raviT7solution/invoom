@@ -7,6 +7,7 @@ import {
   useItemCreate,
   useItemUpdate,
   useModifiers,
+  useSettingsTaxes,
 } from "../../../api";
 import { FormDrawer } from "../../../components/FormDrawer";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
@@ -22,6 +23,7 @@ type schema = {
   name: string;
   price: number;
   takeOutPrice: number;
+  taxId: string;
   visible: boolean;
 };
 
@@ -52,6 +54,7 @@ export const Edit = ({
   const { data: addons } = useAddons(restaurantId);
   const { data: categories } = useCategories(restaurantId);
   const { data: modifiers } = useModifiers(restaurantId);
+  const { data: taxes } = useSettingsTaxes(restaurantId);
 
   const { mutateAsync: itemCreate, isPending: isCreating } = useItemCreate();
   const { mutateAsync: itemUpdate, isPending: isUpdating } = useItemUpdate();
@@ -119,6 +122,20 @@ export const Edit = ({
         >
           <Select
             options={categories.map((a) => ({ label: a.name, value: a.id }))}
+            placeholder="Select"
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Tax"
+          name="taxId"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <Select
+            options={taxes.map((r) => ({
+              label: r.displayName,
+              value: r.id,
+            }))}
             placeholder="Select"
           />
         </Form.Item>

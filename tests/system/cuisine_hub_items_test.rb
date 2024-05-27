@@ -5,11 +5,12 @@ require "application_system_test_case"
 class CuisineHubItemsTest < ApplicationSystemTestCase
   test "create" do
     admin = create(:admin)
-    restaurant = create(:restaurant)
+    restaurant = create(:restaurant, country: "CA", province: "ON")
     admin.restaurants = [restaurant]
 
     category = create(:category, name: "Sandwich", restaurant: restaurant)
     modifier = create(:modifier, name: "Jain", restaurant: restaurant)
+    tax = create(:tax, display_name: "GST 5%", country: "CA", province: "ON")
 
     sign_in(admin)
 
@@ -23,6 +24,9 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
       fill_in "Display Name", with: "Vadapav"
       within ".ant-form-item", text: "Category" do
         fill_in_select with: "Sandwich"
+      end
+      within ".ant-form-item", text: "Tax" do
+        fill_in_select with: "GST 5%"
       end
       within ".ant-form-item", text: "Modifiers" do
         fill_in_select with: "Jain"
@@ -47,6 +51,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
                       name: "Vadapav",
                       price: 11,
                       take_out_price: 12,
+                      tax_id: tax.id,
                       visible: true
   end
 
@@ -56,7 +61,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
     admin.restaurants = [restaurant]
 
     category = create(:category, restaurant: restaurant)
-    item = create(:item, category: category, restaurant: restaurant)
+    item = create(:item, category: category, restaurant: restaurant, tax: create(:tax))
 
     sign_in(admin)
 
@@ -78,13 +83,14 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
 
   test "update" do
     admin = create(:admin)
-    restaurant = create(:restaurant)
+    restaurant = create(:restaurant, country: "CA", province: "ON")
     admin.restaurants = [restaurant]
 
     category = create(:category, name: "Sandwich", restaurant: restaurant)
     modifier = create(:modifier, name: "Jain", restaurant: restaurant)
+    tax = create(:tax, display_name: "GST 5%", country: "CA", province: "ON")
 
-    item = create(:item, category: create(:category, restaurant: restaurant), restaurant: restaurant)
+    item = create(:item, category: create(:category, restaurant: restaurant), restaurant: restaurant, tax: tax)
 
     sign_in(admin)
 

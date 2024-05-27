@@ -13,5 +13,6 @@ FactoryBot.define do
 
     category { nil }
     restaurant { nil }
+    tax { nil }
   end
 end

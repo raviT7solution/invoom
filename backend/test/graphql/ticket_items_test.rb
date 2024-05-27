@@ -13,7 +13,7 @@ class TicketItemsTest < ActionDispatch::IntegrationTest
                                booking_tables: [build(:booking_table, floor_object: table)])
 
     category = create(:category, restaurant: restaurant)
-    item = create(:item, restaurant: restaurant, category: category)
+    item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
     ticket = create(:ticket, booking: booking)
     ticket_item = create(:ticket_item, ticket: ticket, name: item.name, price: item.price, quantity: 2,
                                        status: "queued")

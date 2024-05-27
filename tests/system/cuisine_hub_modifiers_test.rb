@@ -9,7 +9,7 @@ class CuisineHubModifiersTest < ApplicationSystemTestCase
     admin.restaurants = [restaurant]
 
     category = create(:category, name: "Category 1", restaurant: restaurant)
-    item = create(:item, name: "Item 1", category: category, restaurant: restaurant)
+    item = create(:item, name: "Item 1", category: category, restaurant: restaurant, tax: create(:tax))
 
     create(:menu_category, category: category, menu: create(:menu, restaurant: restaurant))
 
@@ -74,7 +74,7 @@ class CuisineHubModifiersTest < ApplicationSystemTestCase
     admin.restaurants = [restaurant]
 
     category = create(:category, name: "Category 1", restaurant: restaurant)
-    item = create(:item, name: "Item 1", category: category, restaurant: restaurant)
+    item = create(:item, name: "Item 1", category: category, restaurant: restaurant, tax: create(:tax))
 
     modifier = create(:modifier, restaurant: restaurant)
 

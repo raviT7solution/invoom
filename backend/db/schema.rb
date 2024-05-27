@@ -155,9 +155,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_06_131750) do
     t.uuid "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "tax_id", null: false
     t.index ["category_id"], name: "index_items_on_category_id"
     t.index ["name", "restaurant_id"], name: "index_items_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_items_on_restaurant_id"
+    t.index ["tax_id"], name: "index_items_on_tax_id"
   end
 
   create_table "menu_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -336,6 +338,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_06_131750) do
   add_foreign_key "item_modifiers", "modifiers"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "restaurants"
+  add_foreign_key "items", "taxes"
   add_foreign_key "menu_categories", "categories"
   add_foreign_key "menu_categories", "menus"
   add_foreign_key "menus", "restaurants"

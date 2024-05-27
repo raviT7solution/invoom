@@ -13,7 +13,7 @@ class TicketsTest < ActionDispatch::IntegrationTest
                                booking_tables: [build(:booking_table, floor_object: table)])
 
     category = create(:category, restaurant: restaurant)
-    item = create(:item, restaurant: restaurant, category: category, price: 5)
+    item = create(:item, restaurant: restaurant, category: category, price: 5, tax: create(:tax))
     addon = create(:addon, restaurant: restaurant, items: [item], price: 7)
 
     authentic_query user, "mobile_user", ticket_create_string, variables: {

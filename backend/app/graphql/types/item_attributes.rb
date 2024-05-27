@@ -13,4 +13,5 @@ class Types::ItemAttributes < Types::BaseInputObject
   argument :addon_ids, [ID], required: false
   argument :category_id, ID, required: false
   argument :modifier_ids, [ID], required: false
+  argument :tax_id, ID, required: false
 end

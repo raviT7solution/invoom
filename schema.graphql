@@ -420,6 +420,7 @@ type Item {
   name: String!
   price: Float!
   takeOutPrice: Float!
+  taxId: ID!
   visible: Boolean!
 }
 
@@ -434,6 +435,7 @@ input ItemAttributes {
   name: String
   price: Float
   takeOutPrice: Float
+  taxId: ID
   visible: Boolean
 }
 

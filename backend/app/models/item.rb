@@ -3,6 +3,7 @@
 class Item < ApplicationRecord
   belongs_to :category
   belongs_to :restaurant
+  belongs_to :tax
 
   has_many :item_addons, dependent: :destroy
   has_many :item_modifiers, dependent: :destroy

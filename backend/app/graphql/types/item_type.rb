@@ -14,6 +14,7 @@ class Types::ItemType < Types::BaseObject
   field :addon_ids, [ID], null: false
   field :category_id, ID, null: false
   field :modifier_ids, [ID], null: false
+  field :tax_id, ID, null: false
 
   field :addons, [Types::AddonsType], authorize: "AddonPolicy#index?", null: false
   field :modifiers, [Types::ModifierType], authorize: "ModifierPolicy#index?", null: false
