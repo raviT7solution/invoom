@@ -1,11 +1,10 @@
 import { DatePicker, Select, Table, TableColumnsType, Typography } from "antd";
-import { Dayjs } from "dayjs";
 import { useMemo, useState } from "react";
 
 import { useRestaurants, useTimeSheets, useUsers } from "../../../api";
 import { Navbar } from "../../../components/Navbar";
 import {
-  datePickerToString,
+  dateRangePickerToString,
   humanizeDuration,
   utcToRestaurantTimezone,
 } from "../../../helpers/dateTime";
@@ -14,8 +13,7 @@ import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 export const ReportsLabour = () => {
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [dateRange, setDateRange] = useState({ start: "", end: "" });
   const [userIds, setUserIds] = useState<string[]>([]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -28,11 +26,11 @@ export const ReportsLabour = () => {
     data: { collection, metadata },
     isFetching,
   } = useTimeSheets({
-    endDate: endDate,
+    endDate: dateRange.end,
     page: pagination.page,
     perPage: pagination.perPage,
     restaurantId: restaurantId,
-    startDate: startDate,
+    startDate: dateRange.start,
     userIds: userIds,
   });
 
@@ -76,11 +74,10 @@ export const ReportsLabour = () => {
     [metadata, restaurant?.timezone],
   );
 
-  const onDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
-    const [start, end] = dates ?? [null, null];
-
-    setStartDate(start ? datePickerToString(start, restaurant?.timezone) : "");
-    setEndDate(end ? datePickerToString(end, restaurant?.timezone) : "");
+  const onDateChange = (_: unknown, dates: [string, string]) => {
+    setDateRange(
+      dateRangePickerToString(dates[0], dates[1], restaurant?.timezone),
+    );
   };
 
   return (

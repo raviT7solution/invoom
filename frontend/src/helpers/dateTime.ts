@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 
@@ -27,6 +27,15 @@ export const humanizeDuration = (startTime: string, endTime: string) => {
   return durationString.trim();
 };
 
-export const datePickerToString = (dateTime: Dayjs, tz?: string) => {
-  return dateTime.tz(tz, true).toISOString();
+export const dateRangePickerToString = (
+  start: string,
+  end: string,
+  tz?: string,
+) => {
+  if (!start || !end) return { start: "", end: "" };
+
+  return {
+    start: dayjs.tz(start, tz).startOf("day").toISOString(),
+    end: dayjs.tz(end, tz).endOf("day").toISOString(),
+  };
 };
