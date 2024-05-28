@@ -90,6 +90,7 @@ type Booking {
   clockedInAt: ISO8601DateTime!
   clockedOutAt: ISO8601DateTime
   customer: Customer
+  estimatedDuration: String
   id: ID!
   pax: Int
   tickets: [Ticket!]!
@@ -100,6 +101,7 @@ type Booking {
 input BookingAttributes {
   bookingType: BookingTypeAttribute
   customerId: ID
+  estimatedDuration: String
   floorObjectIds: [ID!]
   pax: Int
 }

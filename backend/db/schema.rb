@@ -67,6 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_06_131750) do
     t.uuid "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "estimated_duration"
     t.integer "token"
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
     t.index ["restaurant_id"], name: "index_bookings_on_restaurant_id"

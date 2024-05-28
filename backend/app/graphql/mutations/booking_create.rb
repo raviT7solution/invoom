@@ -17,6 +17,7 @@ class Mutations::BookingCreate < Mutations::BaseMutation
       booking_type: attributes[:booking_type],
       clocked_in_at: DateTime.current,
       customer: customer,
+      estimated_duration: attributes[:estimated_duration],
       pax: attributes[:pax],
       restaurant: restaurant,
       user: context[:current_user].mobile_user!

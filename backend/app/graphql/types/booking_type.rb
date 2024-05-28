@@ -4,6 +4,7 @@ class Types::BookingType < Types::BaseObject
   field :booking_type, enum("BookingType", Booking.booking_types.keys), null: false
   field :clocked_in_at, GraphQL::Types::ISO8601DateTime, null: false
   field :clocked_out_at, GraphQL::Types::ISO8601DateTime, null: true
+  field :estimated_duration, String, null: true
   field :id, ID, null: false
   field :pax, Integer, null: true
   field :token, String, null: true

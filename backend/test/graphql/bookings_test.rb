@@ -46,6 +46,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
         attributes: {
           bookingType: "takeout",
           customerId: customer.id,
+          estimatedDuration: "00:15",
           floorObjectIds: [table1.id, table2.id]
         },
         restaurantId: restaurant.id
@@ -59,6 +60,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
       input: {
         attributes: {
           bookingType: "takeout",
+          estimatedDuration: "00:15",
           customerId: customer.id
         },
         restaurantId: restaurant.id
@@ -70,6 +72,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
     assert_attributes booking, \
                       booking_type: "takeout",
+                      estimated_duration: "00:15",
                       token: 1
   end
 
