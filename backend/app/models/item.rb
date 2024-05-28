@@ -17,5 +17,5 @@ class Item < ApplicationRecord
   validates :display_name, presence: true
   validates :name, presence: true, uniqueness: { scope: :restaurant_id }
   validates :price, presence: true
-  validates :take_out_price, presence: true
+  validates :takeout_price, presence: true
 end

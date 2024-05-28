@@ -50,7 +50,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
                       modifier_ids: [modifier.id],
                       name: "Vadapav",
                       price: 11,
-                      take_out_price: 12,
+                      takeout_price: 12,
                       tax_id: tax.id,
                       visible: true
   end

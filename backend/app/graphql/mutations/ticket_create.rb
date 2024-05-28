@@ -47,7 +47,7 @@ class Mutations::TicketCreate < Mutations::BaseMutation
 
   def item_price_by_type(item, booking_type)
     if booking_type == "takeout"
-      item.take_out_price
+      item.takeout_price
     elsif booking_type == "delivery"
       item.delivery_price
     else

@@ -169,7 +169,7 @@ query categories($restaurantId: ID!) {
       id
       name
       price
-      takeOutPrice
+      takeoutPrice
       visible
     }
   }
@@ -246,7 +246,7 @@ query items($restaurantId: ID!) {
     modifierIds
     name
     price
-    takeOutPrice
+    takeoutPrice
     taxId
     visible
   }
@@ -264,7 +264,7 @@ query item($id: ID!) {
     modifierIds
     name
     price
-    takeOutPrice
+    takeoutPrice
     taxId
     visible
   }

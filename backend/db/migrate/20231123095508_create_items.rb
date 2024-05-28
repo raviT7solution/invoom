@@ -8,7 +8,7 @@ class CreateItems < ActiveRecord::Migration[7.0]
       t.string :description, null: false
       t.float :price, null: false
       t.float :cost_of_production, null: false
-      t.float :take_out_price, null: false
+      t.float :takeout_price, null: false
       t.float :delivery_price, null: false
       t.boolean :visible, default: true, null: false
 

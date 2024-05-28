@@ -8,7 +8,7 @@ class Types::ItemType < Types::BaseObject
   field :id, ID, null: false
   field :name, String, null: false
   field :price, Float, null: false
-  field :take_out_price, Float, null: false
+  field :takeout_price, Float, null: false
   field :visible, Boolean, null: false
 
   field :addon_ids, [ID], null: false

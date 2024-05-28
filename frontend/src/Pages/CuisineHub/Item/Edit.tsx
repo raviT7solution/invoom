@@ -22,7 +22,7 @@ type schema = {
   modifierIds: string[];
   name: string;
   price: number;
-  takeOutPrice: number;
+  takeoutPrice: number;
   taxId: string;
   visible: boolean;
 };
@@ -34,7 +34,7 @@ const initialValues = {
   displayName: "",
   name: "",
   price: 0,
-  takeOutPrice: 0,
+  takeoutPrice: 0,
   visible: true,
 };
 
@@ -203,7 +203,7 @@ export const Edit = ({
 
         <Form.Item
           label="Takeout Price"
-          name="takeOutPrice"
+          name="takeoutPrice"
           rules={[{ required: true, message: "Required" }]}
         >
           <InputNumber

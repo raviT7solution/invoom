@@ -8,7 +8,7 @@ FactoryBot.define do
     display_name { Faker::Food.dish }
     name { Faker::Food.dish }
     price { 1.0 }
-    take_out_price { 3.0 }
+    takeout_price { 3.0 }
     visible { true }
 
     category { nil }

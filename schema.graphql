@@ -419,7 +419,7 @@ type Item {
   modifiers: [Modifier!]!
   name: String!
   price: Float!
-  takeOutPrice: Float!
+  takeoutPrice: Float!
   taxId: ID!
   visible: Boolean!
 }
@@ -434,7 +434,7 @@ input ItemAttributes {
   modifierIds: [ID!]
   name: String
   price: Float
-  takeOutPrice: Float
+  takeoutPrice: Float
   taxId: ID
   visible: Boolean
 }
