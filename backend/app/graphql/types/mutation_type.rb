@@ -28,6 +28,7 @@ class Types::MutationType < Types::BaseObject
   field :modifier_create, mutation: Mutations::ModifierCreate, null: false, authorize: "ModifierPolicy#create?"
   field :modifier_delete, mutation: Mutations::ModifierDelete, null: false, authorize: "ModifierPolicy#delete?"
   field :modifier_update, mutation: Mutations::ModifierUpdate, null: false, authorize: "ModifierPolicy#update?"
+  field :payment_create, mutation: Mutations::PaymentCreate, null: false, authorize: "PaymentPolicy#create?"
   field :restaurant_create, mutation: Mutations::RestaurantCreate, null: false, authorize: "RestaurantPolicy#create?"
   field :role_create, mutation: Mutations::RoleCreate, null: false, authorize: "RolePolicy#create?"
   field :role_delete, mutation: Mutations::RoleDelete, null: false, authorize: "RolePolicy#update?"

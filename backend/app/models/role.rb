@@ -5,6 +5,7 @@ class Role < ApplicationRecord
     "clock_in_clock_out",
     "floor_plan",
     "orders",
+    "payments",
     "takeout"
   ].freeze
 
