@@ -1,20 +1,38 @@
-import { Button, Collapse, Menu, Space, Typography, CollapseProps } from "antd";
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  LockOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import {
+  Button,
+  Collapse,
+  Menu,
+  Space,
+  Typography,
+  CollapseProps,
+  Select,
+  Modal,
+  Form,
+  Input,
+} from "antd";
+import { useState } from "react";
 
-import { useCurrentAdmin } from "../../../api/kds";
+import { BOOKING_TYPES } from "./helpers";
+
+import {
+  useCurrentAdmin,
+  useKDSSessionCreate,
+  useRestaurants,
+} from "../../../api/kds";
 import { Router } from "../../../Routes";
 import { useKDSConfigStore } from "../../../stores/useKDSConfigStore";
 import { useKDSSessionStore } from "../../../stores/useKDSSessionStore";
 
-const BOOKING_TYPES = [
-  "All",
-  "Dine",
-  "Delivery",
-  "Takeout",
-  "Take & Delivery",
-].map((tab, index) => ({
-  key: index + 1,
-  label: tab,
-}));
+type schema = {
+  email: string;
+  password: string;
+};
 
 const KITCHEN_PROFILES = ["Egg Section", "Kitchen Chaat"].map((tab, index) => ({
   key: index + 1,
@@ -23,9 +41,21 @@ const KITCHEN_PROFILES = ["Egg Section", "Kitchen Chaat"].map((tab, index) => ({
 
 const AccountSection = () => {
   const { data: currentAdmin } = useCurrentAdmin();
+  const { data: restaurants } = useRestaurants();
+  const { isPending, mutateAsync } = useKDSSessionCreate();
 
-  const destroy = useKDSSessionStore((s) => s.destroy);
-  const reset = useKDSConfigStore((s) => s.reset);
+  const [selectedRestaurantId, setSelectedRestaurantId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { configure, reset, restaurantId } = useKDSConfigStore();
+  const { create, destroy } = useKDSSessionStore((s) => s);
+
+  const onFinish = async (values: schema) => {
+    create((await mutateAsync({ input: { ...values, subject: "kds" } })).token);
+
+    configure("restaurantId", selectedRestaurantId);
+    setIsOpen(false);
+  };
 
   const onLogout = () => {
     destroy();
@@ -35,12 +65,74 @@ const AccountSection = () => {
   };
 
   return (
-    <Space direction="vertical">
-      <Typography.Title level={5}>{currentAdmin?.fullName}</Typography.Title>
-      <Button danger onClick={onLogout} type="primary">
-        Logout
-      </Button>
-    </Space>
+    <>
+      <Modal
+        destroyOnClose
+        footer={
+          <Button
+            form="login"
+            htmlType="submit"
+            loading={isPending}
+            type="primary"
+          >
+            Submit
+          </Button>
+        }
+        onCancel={() => setIsOpen(false)}
+        open={isOpen}
+        title="Admin Verification"
+      >
+        <Form
+          layout="vertical"
+          name="login"
+          onFinish={onFinish}
+          preserve={false}
+        >
+          <Form.Item
+            name="email"
+            rules={[{ required: true, message: "Required" }]}
+          >
+            <Input placeholder="Email" prefix={<UserOutlined />} />
+          </Form.Item>
+
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Required" }]}
+          >
+            <Input.Password
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
+              placeholder="Password"
+              prefix={<LockOutlined />}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Space className="w-full" direction="vertical">
+        <Typography.Title level={5}>{currentAdmin?.fullName}</Typography.Title>
+
+        <Typography.Text type="secondary">Restaurant</Typography.Text>
+
+        <Select
+          className="w-full"
+          onChange={(v) => {
+            setSelectedRestaurantId(v);
+            setIsOpen(true);
+          }}
+          options={restaurants.map((i) => ({
+            label: i.name,
+            value: i.id,
+          }))}
+          value={restaurantId}
+        />
+
+        <Button danger onClick={onLogout} type="primary">
+          Logout
+        </Button>
+      </Space>
+    </>
   );
 };
 
@@ -53,8 +145,18 @@ export const ConfigureMenu = () => {
       label: "Booking Type",
       children: (
         <Menu
-          items={BOOKING_TYPES}
-          onClick={(e) => configure("bookingTypes", e.keyPath)}
+          items={Object.entries(BOOKING_TYPES).map(([k, v]) => ({
+            key: k,
+            label: v,
+          }))}
+          multiple
+          onDeselect={(e) =>
+            configure(
+              "bookingTypes",
+              bookingTypes.filter((i) => i !== e.key),
+            )
+          }
+          onSelect={(e) => configure("bookingTypes", [...bookingTypes, e.key])}
           selectedKeys={bookingTypes}
         />
       ),

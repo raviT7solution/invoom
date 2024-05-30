@@ -94,7 +94,7 @@ export const Ticket = ({
   );
 
   return (
-    <div className="h-full w-full bg-white rounded-md overflow-hidden select-none border shadow-md">
+    <div className="h-full w-full flex flex-col bg-white rounded-md overflow-hidden select-none border shadow-md">
       <div
         className={classNames("p-1", color ?? "")}
         onClick={onTicketDoubleClick}
@@ -118,7 +118,7 @@ export const Ticket = ({
         </div>
       </div>
 
-      <div className="p-1">
+      <div className="p-1 overflow-y-scroll h-full">
         <Tree
           blockNode
           defaultExpandAll
@@ -141,7 +141,7 @@ export const Ticket = ({
                 })),
                 ...i.modifiers.map((j, idx) => ({
                   title: j,
-                  key: idx,
+                  key: `${i.id}-${idx}`,
                 })),
               ],
             }))}

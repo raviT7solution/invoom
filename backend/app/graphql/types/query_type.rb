@@ -83,6 +83,7 @@ class Types::QueryType < Types::BaseObject
     argument :restaurant_id, ID, required: true
   end
   field :tickets, Types::TicketType.collection_type, null: false, authorize: "TicketPolicy#index?" do
+    argument :booking_types, [String], required: false
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
@@ -248,10 +249,11 @@ class Types::QueryType < Types::BaseObject
     TaxPolicy.new(context[:current_user]).scope.where(province: restaurant.province, country: restaurant.country)
   end
 
-  def tickets(restaurant_id:, page:, per_page:, status: [])
+  def tickets(restaurant_id:, page:, per_page:, booking_types: [], status: [])
     records = TicketPolicy.new(context[:current_user]).scope.joins(booking: :restaurant)
                           .where(restaurants: { id: restaurant_id })
 
+    records = records.where(bookings: { booking_type: booking_types }) if booking_types.present?
     records = records.eager_load(:ticket_items).where(ticket_items: { status: status }) if status.present?
 
     records.order(created_at: :desc).page(page).per(per_page)

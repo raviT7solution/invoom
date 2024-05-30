@@ -426,12 +426,14 @@ query taxes($restaurantId: ID!) {
 }
 
 query tickets(
+  $bookingTypes: [String!]
   $perPage: Int!
   $page: Int!
   $restaurantId: ID!
-  $status: [String!]!
+  $status: [String!]
 ) {
   tickets(
+    bookingTypes: $bookingTypes
     perPage: $perPage
     page: $page
     restaurantId: $restaurantId
