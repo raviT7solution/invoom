@@ -8,7 +8,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     @restaurant = create(:restaurant)
     @admin.restaurants = [@restaurant]
 
-    @role = create(:role, permissions: ["clock_in_clock_out"], restaurant: @restaurant)
+    @role = create(:role, permissions: ["clock_in_clock_out", "floor_plan"], restaurant: @restaurant)
     @user = create(:user, roles: [@role], restaurant: @restaurant)
   end
 
@@ -28,7 +28,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     token = response.parsed_body["data"]["userSessionCreate"]["token"]
 
     assert_equal @user, Session.new(token).mobile_user!
-    assert_equal ["clock_in_clock_out"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
+    assert_equal ["clock_in_clock_out", "floor_plan"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
     assert TimeSheet.last.start_time
     assert_not TimeSheet.last.end_time
   end
@@ -49,7 +49,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     token = response.parsed_body["data"]["userSessionCreate"]["token"]
 
     assert_equal @user, Session.new(token).mobile_user!
-    assert_equal ["clock_in_clock_out"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
+    assert_equal ["clock_in_clock_out", "floor_plan"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
     assert TimeSheet.last.start_time
     assert_not TimeSheet.last.end_time
   end
@@ -87,9 +87,11 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     }
 
     assert_query_success
-    assert_equal \
-      ({ "clockInStatus" => "already_clocked_in", "permissions" => [], "token" => "" }),
-      response.parsed_body["data"]["userSessionCreate"]
+
+    assert_equal "already_clocked_in", response.parsed_body["data"]["userSessionCreate"]["clockInStatus"]
+    assert_equal @user.permissions, response.parsed_body["data"]["userSessionCreate"]["permissions"]
+    assert_equal @user, Session.new(response.parsed_body["data"]["userSessionCreate"]["token"]).mobile_user!
+
     assert time_sheet.reload.start_time
     assert_not time_sheet.end_time
   end
