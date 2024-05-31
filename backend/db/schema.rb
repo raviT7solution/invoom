@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_06_131750) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -163,6 +163,23 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_06_131750) do
     t.index ["tax_id"], name: "index_items_on_tax_id"
   end
 
+  create_table "kitchen_profile_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "kitchen_profile_id", null: false
+    t.uuid "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_kitchen_profile_categories_on_category_id"
+    t.index ["kitchen_profile_id"], name: "index_kitchen_profile_categories_on_kitchen_profile_id"
+  end
+
+  create_table "kitchen_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_kitchen_profiles_on_restaurant_id"
+  end
+
   create_table "menu_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "menu_id", null: false
     t.uuid "category_id", null: false
@@ -262,6 +279,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_06_131750) do
     t.uuid "ticket_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "item_id", null: false
+    t.index ["item_id"], name: "index_ticket_items_on_item_id"
     t.index ["ticket_id"], name: "index_ticket_items_on_ticket_id"
   end
 
@@ -340,12 +359,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_06_131750) do
   add_foreign_key "items", "categories"
   add_foreign_key "items", "restaurants"
   add_foreign_key "items", "taxes"
+  add_foreign_key "kitchen_profile_categories", "categories"
+  add_foreign_key "kitchen_profile_categories", "kitchen_profiles"
+  add_foreign_key "kitchen_profiles", "restaurants"
   add_foreign_key "menu_categories", "categories"
   add_foreign_key "menu_categories", "menus"
   add_foreign_key "menus", "restaurants"
   add_foreign_key "modifiers", "restaurants"
   add_foreign_key "roles", "restaurants"
   add_foreign_key "ticket_item_addons", "ticket_items"
+  add_foreign_key "ticket_items", "items"
   add_foreign_key "ticket_items", "tickets"
   add_foreign_key "tickets", "bookings"
   add_foreign_key "time_sheets", "users"

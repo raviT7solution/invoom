@@ -6,6 +6,7 @@ import {
   AdminSessionCreateDocument,
   AdminSessionCreateMutationVariables,
   CurrentAdminDocument,
+  KitchenProfilesDocument,
   RestaurantsDocument,
   TicketItemsUpdateDocument,
   TicketItemsUpdateMutationVariables,
@@ -90,5 +91,19 @@ export const useTicketItemsUpdate = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tickets"] });
     },
+  });
+};
+
+export const useKitchenProfiles = (restaurant_id: string) => {
+  return useQuery({
+    enabled: restaurant_id !== "",
+    initialData: [],
+    queryKey: ["kitchen_profiles", restaurant_id],
+    queryFn: async () =>
+      (
+        await client.request(KitchenProfilesDocument, {
+          restaurantId: restaurant_id,
+        })
+      ).kitchenProfiles,
   });
 };

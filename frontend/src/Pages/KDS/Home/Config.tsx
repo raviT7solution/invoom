@@ -23,6 +23,7 @@ import { BOOKING_TYPES } from "./helpers";
 import {
   useCurrentAdmin,
   useKDSSessionCreate,
+  useKitchenProfiles,
   useRestaurants,
 } from "../../../api/kds";
 import { Router } from "../../../Routes";
@@ -33,11 +34,6 @@ type schema = {
   email: string;
   password: string;
 };
-
-const KITCHEN_PROFILES = ["Egg Section", "Kitchen Chaat"].map((tab, index) => ({
-  key: index + 1,
-  label: tab,
-}));
 
 const AccountSection = () => {
   const { data: currentAdmin } = useCurrentAdmin();
@@ -137,7 +133,10 @@ const AccountSection = () => {
 };
 
 export const ConfigureMenu = () => {
-  const { configure, bookingTypes, kitchenProfile } = useKDSConfigStore();
+  const { configure, bookingTypes, kitchenProfile, restaurantId } =
+    useKDSConfigStore();
+
+  const { data: kitchenProfiles } = useKitchenProfiles(restaurantId);
 
   const items: CollapseProps["items"] = [
     {
@@ -166,7 +165,7 @@ export const ConfigureMenu = () => {
       label: "Kitchen Profile",
       children: (
         <Menu
-          items={KITCHEN_PROFILES}
+          items={kitchenProfiles.map((i) => ({ key: i.id, label: i.name }))}
           onClick={(e) => configure("kitchenProfile", e.key)}
           selectedKeys={[kitchenProfile]}
         />

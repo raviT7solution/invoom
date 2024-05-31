@@ -7,6 +7,7 @@ class Item < ApplicationRecord
 
   has_many :item_addons, dependent: :destroy
   has_many :item_modifiers, dependent: :destroy
+  has_many :ticket_items, dependent: :restrict_with_error
 
   has_many :addons, through: :item_addons
   has_many :modifiers, through: :item_modifiers

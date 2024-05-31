@@ -16,6 +16,7 @@ class Mutations::TicketCreate < Mutations::BaseMutation
 
       ticket_item = ticket.ticket_items.new(
         display_name: item.display_name,
+        item: item,
         modifiers: item_attributes[:modifiers],
         name: item.name,
         note: item_attributes[:note],

@@ -427,15 +427,17 @@ query taxes($restaurantId: ID!) {
 
 query tickets(
   $bookingTypes: [String!]
-  $perPage: Int!
+  $kitchenProfileId: ID
   $page: Int!
+  $perPage: Int!
   $restaurantId: ID!
   $status: [String!]
 ) {
   tickets(
     bookingTypes: $bookingTypes
-    perPage: $perPage
+    kitchenProfileId: $kitchenProfileId
     page: $page
+    perPage: $perPage
     restaurantId: $restaurantId
     status: $status
   ) {
@@ -473,4 +475,11 @@ query tickets(
 
 mutation ticketItemsUpdate($input: TicketItemsUpdateInput!) {
   ticketItemsUpdate(input: $input)
+}
+
+query kitchenProfiles($restaurantId: ID!) {
+  kitchenProfiles(restaurantId: $restaurantId) {
+    id
+    name
+  }
 }

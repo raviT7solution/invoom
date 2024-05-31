@@ -10,6 +10,7 @@ FactoryBot.define do
     quantity { 2 }
     status { TicketItem.status.keys.sample }
 
+    item { nil }
     ticket { nil }
   end
 end

@@ -55,6 +55,9 @@ class Types::QueryType < Types::BaseObject
     argument :category_id, ID, required: false
     argument :restaurant_id, ID, required: true
   end
+  field :kitchen_profiles, [Types::KitchenProfileType], null: false, authorize: "KitchenProfilePolicy#index?" do
+    argument :restaurant_id, ID, required: true
+  end
   field :menu, Types::MenuType, null: false, authorize: "MenuPolicy#show?" do
     argument :id, ID, required: true
   end
@@ -84,6 +87,7 @@ class Types::QueryType < Types::BaseObject
   end
   field :tickets, Types::TicketType.collection_type, null: false, authorize: "TicketPolicy#index?" do
     argument :booking_types, [String], required: false
+    argument :kitchen_profile_id, ID, required: false
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
@@ -205,6 +209,10 @@ class Types::QueryType < Types::BaseObject
     records
   end
 
+  def kitchen_profiles(restaurant_id:)
+    KitchenProfilePolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  end
+
   def menu(id:)
     MenuPolicy.new(context[:current_user]).scope.find(id)
   end
@@ -249,11 +257,17 @@ class Types::QueryType < Types::BaseObject
     TaxPolicy.new(context[:current_user]).scope.where(province: restaurant.province, country: restaurant.country)
   end
 
-  def tickets(restaurant_id:, page:, per_page:, booking_types: [], status: [])
+  def tickets(restaurant_id:, page:, per_page:, kitchen_profile_id: nil, booking_types: [], status: []) # rubocop:disable Metrics/AbcSize, Metrics/ParameterLists
     records = TicketPolicy.new(context[:current_user]).scope.joins(booking: :restaurant)
                           .where(restaurants: { id: restaurant_id })
 
     records = records.where(bookings: { booking_type: booking_types }) if booking_types.present?
+
+    if kitchen_profile_id.present?
+      profile = KitchenProfilePolicy.new(context[:current_user]).scope.find(kitchen_profile_id)
+      records = records.joins(ticket_items: :item).where(items: { category_id: profile.categories })
+    end
+
     records = records.eager_load(:ticket_items).where(ticket_items: { status: status }) if status.present?
 
     records.order(created_at: :desc).page(page).per(per_page)

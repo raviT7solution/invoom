@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class TicketItem < ApplicationRecord
+  belongs_to :item
   belongs_to :ticket
 
   has_many :ticket_item_addons, dependent: :restrict_with_error

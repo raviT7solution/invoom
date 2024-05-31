@@ -483,6 +483,11 @@ Represents untyped JSON
 """
 scalar JSON
 
+type KitchenProfile {
+  id: ID!
+  name: String!
+}
+
 type Menu {
   categories: [Category!]!
   description: String!
@@ -848,6 +853,7 @@ type Query {
   inventoryCategory(id: ID!): InventoryCategory!
   item(id: ID!): Item!
   items(categoryId: ID, restaurantId: ID!): [Item!]!
+  kitchenProfiles(restaurantId: ID!): [KitchenProfile!]!
   menu(id: ID!): Menu!
   menus(restaurantId: ID!): [Menu!]!
   modifier(id: ID!): Modifier!
@@ -857,7 +863,7 @@ type Query {
   role(id: ID!): Role!
   roles(restaurantId: ID!): [Role!]!
   taxes(restaurantId: ID!): [Tax!]!
-  tickets(bookingTypes: [String!], page: Int!, perPage: Int!, restaurantId: ID!, status: [String!]): TicketCollection!
+  tickets(bookingTypes: [String!], kitchenProfileId: ID, page: Int!, perPage: Int!, restaurantId: ID!, status: [String!]): TicketCollection!
   timeSheets(endDate: String, page: Int!, perPage: Int!, restaurantId: ID!, startDate: String, userIds: [String!]): TimeSheetCollection!
   user(id: ID!): User!
   users(restaurantId: ID!): [User!]!
