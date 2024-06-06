@@ -483,3 +483,53 @@ query kitchenProfiles($restaurantId: ID!) {
     name
   }
 }
+
+mutation itemCodeGenerate($input: ItemCodeGenerateInput!) {
+  itemCodeGenerate(input: $input)
+}
+
+mutation productCreate($input: ProductCreateInput!) {
+  productCreate(input: $input)
+}
+
+mutation productDelete($id: ID!) {
+  productDelete(input: { id: $id })
+}
+
+mutation productUpdate($input: ProductUpdateInput!) {
+  productUpdate(input: $input)
+}
+
+query products($restaurantId: ID!) {
+  products(restaurantId: $restaurantId) {
+    description
+    id
+    inventoryCategoryId
+    itemCode
+    name
+    price
+    reorderPoint
+    stockLimit
+    taxId
+    uom
+    visible
+    weight
+  }
+}
+
+query product($id: ID!) {
+  product(id: $id) {
+    description
+    id
+    inventoryCategoryId
+    itemCode
+    name
+    price
+    reorderPoint
+    stockLimit
+    taxId
+    uom
+    visible
+    weight
+  }
+}

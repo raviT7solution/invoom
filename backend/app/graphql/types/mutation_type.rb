@@ -19,6 +19,7 @@ class Types::MutationType < Types::BaseObject
                                     authorize: "InventoryCategoryPolicy#delete?"
   field :inventory_category_update, mutation: Mutations::InventoryCategoryUpdate, null: false,
                                     authorize: "InventoryCategoryPolicy#update?"
+  field :item_code_generate, mutation: Mutations::ItemCodeGenerate, null: false, authorize: "ProductPolicy#create?"
   field :item_create, mutation: Mutations::ItemCreate, null: false, authorize: "ItemPolicy#create?"
   field :item_delete, mutation: Mutations::ItemDelete, null: false, authorize: "ItemPolicy#delete?"
   field :item_update, mutation: Mutations::ItemUpdate, null: false, authorize: "ItemPolicy#update?"
@@ -29,6 +30,9 @@ class Types::MutationType < Types::BaseObject
   field :modifier_delete, mutation: Mutations::ModifierDelete, null: false, authorize: "ModifierPolicy#delete?"
   field :modifier_update, mutation: Mutations::ModifierUpdate, null: false, authorize: "ModifierPolicy#update?"
   field :payment_create, mutation: Mutations::PaymentCreate, null: false, authorize: "PaymentPolicy#create?"
+  field :product_create, mutation: Mutations::ProductCreate, null: false, authorize: "ProductPolicy#create?"
+  field :product_delete, mutation: Mutations::ProductDelete, null: false, authorize: "ProductPolicy#delete?"
+  field :product_update, mutation: Mutations::ProductUpdate, null: false, authorize: "ProductPolicy#update?"
   field :restaurant_create, mutation: Mutations::RestaurantCreate, null: false, authorize: "RestaurantPolicy#create?"
   field :role_create, mutation: Mutations::RoleCreate, null: false, authorize: "RolePolicy#create?"
   field :role_delete, mutation: Mutations::RoleDelete, null: false, authorize: "RolePolicy#update?"

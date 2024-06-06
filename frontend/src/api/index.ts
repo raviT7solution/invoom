@@ -36,6 +36,8 @@ import {
   InventoryCategoryDocument,
   InventoryCategoryUpdateDocument,
   InventoryCategoryUpdateMutationVariables,
+  ItemCodeGenerateDocument,
+  ItemCodeGenerateMutationVariables,
   ItemCreateDocument,
   ItemCreateMutationVariables,
   ItemDeleteDocument,
@@ -60,6 +62,14 @@ import {
   ModifierUpdateDocument,
   ModifierUpdateMutationVariables,
   ModifiersDocument,
+  ProductCreateDocument,
+  ProductCreateMutationVariables,
+  ProductDeleteDocument,
+  ProductDeleteMutationVariables,
+  ProductDocument,
+  ProductUpdateDocument,
+  ProductUpdateMutationVariables,
+  ProductsDocument,
   ProvincesDocument,
   RestaurantCreateDocument,
   RestaurantCreateMutationVariables,
@@ -179,7 +189,7 @@ export const useRoleDelete = () => {
 export const useRole = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["role", id],
+    queryKey: ["roles", id],
     queryFn: async () => (await client.request(RoleDocument, { id: id })).role,
   });
 };
@@ -232,7 +242,7 @@ export const useUserDelete = () => {
 export const useUser = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["user", id],
+    queryKey: ["users", id],
     queryFn: async () => (await client.request(UserDocument, { id })).user,
   });
 };
@@ -241,7 +251,7 @@ export const useFloorObjects = (variables: FloorObjectsQueryVariables) => {
   return useQuery({
     enabled: variables.restaurantId !== "",
     initialData: [],
-    queryKey: ["floor_objects", variables],
+    queryKey: ["floorObjects", variables],
     queryFn: async () =>
       (await client.request(FloorObjectsDocument, variables)).floorObjects,
   });
@@ -254,7 +264,7 @@ export const useFloorObjectUpdate = () => {
     mutationFn: (variables: FloorObjectUpdateMutationVariables) =>
       client.request(FloorObjectUpdateDocument, variables),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["floor_objects"] });
+      queryClient.invalidateQueries({ queryKey: ["floorObjects"] });
     },
   });
 };
@@ -273,7 +283,7 @@ export const useMenu = (id: string) => {
   return useQuery({
     enabled: id !== "",
     queryFn: async () => (await client.request(MenuDocument, { id })).menu,
-    queryKey: ["menu", id],
+    queryKey: ["menus", id],
   });
 };
 
@@ -338,7 +348,7 @@ export const useCategories = (restaurantId: string) => {
 export const useCategory = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["category", id],
+    queryKey: ["categories", id],
     queryFn: async () =>
       (await client.request(CategoryDocument, { id: id })).category,
   });
@@ -381,7 +391,7 @@ export const useAddons = (restaurantId: string) => {
 export const useAddon = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["addon", id],
+    queryKey: ["addons", id],
     queryFn: async () =>
       (await client.request(AddonDocument, { id: id })).addon,
   });
@@ -450,7 +460,7 @@ export const useItemCreate = () => {
 export const useItem = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["item", id],
+    queryKey: ["items", id],
     queryFn: async () => (await client.request(ItemDocument, { id: id })).item,
   });
 };
@@ -514,7 +524,7 @@ export const useModifierDelete = () => {
 export const useModifier = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["modifier", id],
+    queryKey: ["modifiers", id],
     queryFn: async () =>
       (await client.request(ModifierDocument, { id: id })).modifier,
   });
@@ -547,7 +557,7 @@ export const useModifierUpdate = () => {
 export const useCountries = () => {
   return useQuery({
     initialData: [],
-    queryKey: ["country"],
+    queryKey: ["countries"],
     queryFn: async () => (await client.request(CountriesDocument)).countries,
   });
 };
@@ -603,7 +613,7 @@ export const useInventoryCategories = (restaurantId: string) => {
 export const useInventoryCategory = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["inventoryCategory", id],
+    queryKey: ["inventoryCategories", id],
     queryFn: async () =>
       (await client.request(InventoryCategoryDocument, { id: id }))
         .inventoryCategory,
@@ -659,5 +669,67 @@ export const useSettingsTaxes = (restaurantId: string) => {
     queryFn: async () =>
       (await client.request(TaxesDocument, { restaurantId })).taxes,
     queryKey: ["taxes", restaurantId],
+  });
+};
+
+export const useProductCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ProductCreateMutationVariables) =>
+      client.request(ProductCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+  });
+};
+
+export const useProducts = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryFn: async () =>
+      (await client.request(ProductsDocument, { restaurantId })).products,
+    queryKey: ["products", restaurantId],
+  });
+};
+
+export const useProduct = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["products", id],
+    queryFn: async () =>
+      (await client.request(ProductDocument, { id: id })).product,
+  });
+};
+
+export const useProductDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ProductDeleteMutationVariables) =>
+      client.request(ProductDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+  });
+};
+
+export const useProductUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ProductUpdateMutationVariables) =>
+      client.request(ProductUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+  });
+};
+
+export const useItemCodeGenerate = () => {
+  return useMutation({
+    mutationFn: (variables: ItemCodeGenerateMutationVariables) =>
+      client.request(ItemCodeGenerateDocument, variables),
   });
 };

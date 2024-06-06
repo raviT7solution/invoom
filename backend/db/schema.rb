@@ -214,6 +214,27 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
     t.index ["restaurant_id"], name: "index_modifiers_on_restaurant_id"
   end
 
+  create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "visible", default: true, null: false
+    t.float "price", null: false
+    t.float "reorder_point", null: false
+    t.float "stock_limit", null: false
+    t.float "weight", null: false
+    t.string "description", null: false
+    t.string "item_code", null: false
+    t.string "name", null: false
+    t.string "uom", null: false
+    t.uuid "inventory_category_id", null: false
+    t.uuid "restaurant_id", null: false
+    t.uuid "tax_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inventory_category_id"], name: "index_products_on_inventory_category_id"
+    t.index ["item_code", "restaurant_id"], name: "index_products_on_item_code_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_products_on_restaurant_id"
+    t.index ["tax_id"], name: "index_products_on_tax_id"
+  end
+
   create_table "restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -366,6 +387,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
   add_foreign_key "menu_categories", "menus"
   add_foreign_key "menus", "restaurants"
   add_foreign_key "modifiers", "restaurants"
+  add_foreign_key "products", "inventory_categories"
+  add_foreign_key "products", "restaurants"
+  add_foreign_key "products", "taxes"
   add_foreign_key "roles", "restaurants"
   add_foreign_key "ticket_item_addons", "ticket_items"
   add_foreign_key "ticket_items", "items"

@@ -70,6 +70,12 @@ class Types::QueryType < Types::BaseObject
   field :modifiers, [Types::ModifierType], null: false, authorize: "ModifierPolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
+  field :product, Types::ProductType, null: false, authorize: "ProductPolicy#show?" do
+    argument :id, ID, required: true
+  end
+  field :products, [Types::ProductType], null: false, authorize: "ProductPolicy#index?" do
+    argument :restaurant_id, ID, required: true
+  end
   field :provinces, [Types::ProvinceType], null: false do
     argument :alpha2, String, required: true
   end
@@ -227,6 +233,14 @@ class Types::QueryType < Types::BaseObject
 
   def modifiers(restaurant_id:)
     ModifierPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  end
+
+  def product(id:)
+    ProductPolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def products(restaurant_id:)
+    ProductPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
   end
 
   def provinces(alpha2:)

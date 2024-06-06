@@ -9,6 +9,7 @@ import { Menus } from "./Pages/CuisineHub/Menu";
 import { Modifiers } from "./Pages/CuisineHub/Modifiers";
 import { FloorPlan } from "./Pages/FloorPlan";
 import { InventoryCategories } from "./Pages/Inventory/Categories";
+import { InventoryProducts } from "./Pages/Inventory/Products";
 import { KDSHome } from "./Pages/KDS/Home";
 import { KDSLogin } from "./Pages/KDS/Login";
 import { Login } from "./Pages/Login";
@@ -52,6 +53,7 @@ const routes = {
   Dashboard: "/",
   FloorPlan: "/floor-plan",
   InventoryCategories: "/inventory/categories",
+  InventoryProducts: "/inventory/products",
   KDS: "/kds",
   KDSLogin: "/kds/login",
   Login: "/login",
@@ -118,6 +120,11 @@ export const Switch = () => {
     .with({ name: "InventoryCategories" }, () => (
       <PrivateRoute>
         <InventoryCategories />
+      </PrivateRoute>
+    ))
+    .with({ name: "InventoryProducts" }, () => (
+      <PrivateRoute>
+        <InventoryProducts />
       </PrivateRoute>
     ))
     .with({ name: "ReportsLabour" }, () => (

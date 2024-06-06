@@ -127,6 +127,11 @@ export const Navbar = ({
           icon: <MenuUnfoldOutlined />,
           key: "5.1",
         },
+        {
+          label: <Link to={Router.InventoryProducts()}>Products</Link>,
+          icon: <BookOutlined />,
+          key: "5.2",
+        },
       ],
     },
     {
