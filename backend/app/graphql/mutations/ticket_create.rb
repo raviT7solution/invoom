@@ -13,15 +13,21 @@ class Mutations::TicketCreate < Mutations::BaseMutation
 
     attributes.each do |item_attributes|
       item = ItemPolicy.new(context[:current_user]).scope.find(item_attributes[:item_id])
+      tax = TaxPolicy.new(context[:current_user]).scope.find(item_attributes[:tax_id])
 
       ticket_item = ticket.ticket_items.new(
         display_name: item.display_name,
+        gst: tax.gst,
+        hst: tax.hst,
         item: item,
         modifiers: item_attributes[:modifiers],
         name: item.name,
         note: item_attributes[:note],
         price: item_price_by_type(item, booking.booking_type),
-        quantity: item_attributes[:quantity]
+        pst: tax.pst,
+        qst: tax.qst,
+        quantity: item_attributes[:quantity],
+        rst: tax.rst
       )
 
       item.addons.find(item_attributes[:addon_ids]).each do |addon|

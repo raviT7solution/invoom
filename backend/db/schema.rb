@@ -300,6 +300,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
     t.uuid "ticket_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "gst", null: false
+    t.float "hst", null: false
+    t.float "pst", null: false
+    t.float "qst", null: false
+    t.float "rst", null: false
     t.uuid "item_id", null: false
     t.index ["item_id"], name: "index_ticket_items_on_item_id"
     t.index ["ticket_id"], name: "index_ticket_items_on_ticket_id"

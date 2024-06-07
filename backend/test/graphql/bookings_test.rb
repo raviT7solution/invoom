@@ -3,6 +3,35 @@
 require "test_helper"
 
 class BookingsTest < ActionDispatch::IntegrationTest
+  test "bookings" do
+    restaurant = create(:restaurant)
+    role = create(:role, restaurant: restaurant, permissions: ["orders"])
+    user = create(:user, restaurant: restaurant, roles: [role])
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    booking_table = build(:booking_table, floor_object: table)
+    booking = create(:booking,
+                     booking_tables: [booking_table],
+                     booking_type: "dine_in",
+                     clocked_in_at: "2024-04-02T11:20:00",
+                     pax: 1,
+                     restaurant: restaurant,
+                     user: user)
+
+    authentic_query user, "mobile_user", bookings, variables: {
+      bookingTypes: ["dine_in"],
+      endDate: "2024-04-03T11:20:00",
+      page: 1,
+      perPage: 100,
+      restaurantId: restaurant.id,
+      startDate: "2024-04-01T11:20:00",
+      status: "current"
+    }
+
+    assert_query_success
+    assert_equal \
+      ({ "id" => booking.id }), response.parsed_body["data"]["bookings"]["collection"][0]
+  end
+
   test "create dine_in" do
     restaurant = create(:restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
@@ -164,6 +193,34 @@ class BookingsTest < ActionDispatch::IntegrationTest
   end
 
   private
+
+  def bookings
+    <<~GQL
+      query bookings(
+        $bookingTypes: [String!]!
+        $endDate: ISO8601DateTime
+        $page: Int!
+        $perPage: Int!
+        $restaurantId: ID!
+        $startDate: ISO8601DateTime
+        $status: String!
+      ) {
+        bookings(
+          bookingTypes: $bookingTypes
+          endDate: $endDate
+          page: $page
+          perPage: $perPage
+          restaurantId: $restaurantId
+          startDate: $startDate
+          status: $status
+        ) {
+          collection {
+            id
+          }
+        }
+      }
+    GQL
+  end
 
   def booking_create_string
     <<~GQL

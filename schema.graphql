@@ -1110,12 +1110,17 @@ input TicketCreateInput {
 
 type TicketItem {
   displayName: String!
+  gst: Float!
+  hst: Float!
   id: ID!
   modifiers: [String!]!
   name: String!
   note: String
   price: Float!
+  pst: Float!
+  qst: Float!
   quantity: Int!
+  rst: Float!
   status: TicketItemStatusType!
   ticketItemAddons: [TicketItemAddon!]!
 }
@@ -1134,6 +1139,7 @@ input TicketItemAttributes {
   note: String
   quantity: Int
   status: TicketItemStatusAttribute
+  taxId: ID
 }
 
 enum TicketItemStatusAttribute {

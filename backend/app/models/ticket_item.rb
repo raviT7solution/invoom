@@ -9,8 +9,13 @@ class TicketItem < ApplicationRecord
   enum :status, [:queued, :preparing, :ready, :served], default: :queued
 
   validates :display_name, presence: true
+  validates :gst, presence: true
+  validates :hst, presence: true
   validates :name, presence: true
   validates :price, presence: true
+  validates :pst, presence: true
+  validates :qst, presence: true
   validates :quantity, presence: true
+  validates :rst, presence: true
   validates :status, presence: true
 end

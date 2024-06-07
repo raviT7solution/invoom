@@ -129,9 +129,7 @@ class Types::QueryType < Types::BaseObject
   def bookings(restaurant_id:, booking_types:, status:, page:, per_page:, start_date: nil, end_date: nil) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
     records = BookingPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
 
-    if start_date.present? && end_date.present?
-      records = records.where(clocked_in_at: DateTime.parse(start_date)..DateTime.parse(end_date))
-    end
+    records = records.where(clocked_in_at: start_date..end_date) if start_date.present? && end_date.present?
 
     records = records.where(booking_type: booking_types) if booking_types.present?
     records = records.where(clocked_out_at: nil) if status == "current"

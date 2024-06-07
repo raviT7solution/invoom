@@ -7,6 +7,7 @@ class Types::TicketItemAttributes < Types::BaseInputObject
 
   argument :id, ID, required: false # Required for update
   argument :modifiers, [String], required: false
+  argument :tax_id, ID, required: false
 
   argument :addon_ids, [ID], required: false
   argument :item_id, ID, required: false
