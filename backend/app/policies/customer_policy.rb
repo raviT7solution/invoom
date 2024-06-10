@@ -18,6 +18,6 @@ class CustomerPolicy < ApplicationPolicy
   end
 
   def show?
-    mobile_user?("takeout") || kds_admin?
+    kds_admin? || mobile_user?("takeout") || mobile_user?("reservations")
   end
 end

@@ -27,14 +27,14 @@ class CustomersTest < ActionDispatch::IntegrationTest
     restaurant = create(:restaurant)
     role = create(:role, permissions: ["takeout"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
-    customer = create(:customer, name: "Elvis", restaurant: restaurant)
+    customer = create(:customer, email: "elvis@example.com", name: "Elvis", restaurant: restaurant)
     create(:customer, name: "Erika", restaurant: restaurant)
 
     authentic_query user, "mobile_user", index_string,
                     variables: { restaurantId: restaurant.id, query: "El", page: 1, perPage: 10 }
 
     assert_query_success
-    assert_equal [{ "name" => "Elvis", "phoneNumber" => customer.phone_number }],
+    assert_equal [{ "email" => "elvis@example.com", "name" => "Elvis", "phoneNumber" => customer.phone_number }],
                  response.parsed_body["data"]["customers"]["collection"]
   end
 
@@ -55,6 +55,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
           restaurantId: $restaurantId
         ) {
           collection {
+            email
             name
             phoneNumber
           }

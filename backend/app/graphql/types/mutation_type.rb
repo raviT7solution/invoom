@@ -33,6 +33,8 @@ class Types::MutationType < Types::BaseObject
   field :product_create, mutation: Mutations::ProductCreate, null: false, authorize: "ProductPolicy#create?"
   field :product_delete, mutation: Mutations::ProductDelete, null: false, authorize: "ProductPolicy#delete?"
   field :product_update, mutation: Mutations::ProductUpdate, null: false, authorize: "ProductPolicy#update?"
+  field :reservation_create, mutation: Mutations::ReservationCreate, null: false, authorize: "ReservationPolicy#create?"
+  field :reservation_update, mutation: Mutations::ReservationUpdate, null: false, authorize: "ReservationPolicy#update?"
   field :restaurant_create, mutation: Mutations::RestaurantCreate, null: false, authorize: "RestaurantPolicy#create?"
   field :role_create, mutation: Mutations::RoleCreate, null: false, authorize: "RolePolicy#create?"
   field :role_delete, mutation: Mutations::RoleDelete, null: false, authorize: "RolePolicy#update?"

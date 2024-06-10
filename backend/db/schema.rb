@@ -95,10 +95,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
 
   create_table "customers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
+    t.string "email"
     t.string "phone_number", null: false
     t.uuid "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email", "restaurant_id"], name: "index_customers_on_email_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_customers_on_restaurant_id"
   end
 
@@ -233,6 +235,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
     t.index ["item_code", "restaurant_id"], name: "index_products_on_item_code_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_products_on_restaurant_id"
     t.index ["tax_id"], name: "index_products_on_tax_id"
+  end
+
+  create_table "reservations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "status", null: false
+    t.integer "pax", null: false
+    t.datetime "reservation_at", null: false
+    t.uuid "customer_id", null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_reservations_on_customer_id"
+    t.index ["restaurant_id"], name: "index_reservations_on_restaurant_id"
   end
 
   create_table "restaurants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -395,6 +409,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
   add_foreign_key "products", "inventory_categories"
   add_foreign_key "products", "restaurants"
   add_foreign_key "products", "taxes"
+  add_foreign_key "reservations", "customers"
+  add_foreign_key "reservations", "restaurants"
   add_foreign_key "roles", "restaurants"
   add_foreign_key "ticket_item_addons", "ticket_items"
   add_foreign_key "ticket_items", "items"

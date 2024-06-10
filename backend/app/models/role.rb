@@ -6,6 +6,7 @@ class Role < ApplicationRecord
     "floor_plan",
     "orders",
     "payments",
+    "reservations",
     "takeout"
   ].freeze
 

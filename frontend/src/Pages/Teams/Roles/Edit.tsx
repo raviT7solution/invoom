@@ -27,6 +27,10 @@ const permissions = [
     value: "payments",
   },
   {
+    label: "Reservations",
+    value: "reservations",
+  },
+  {
     label: "Takeout",
     value: "takeout",
   },

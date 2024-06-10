@@ -4,7 +4,9 @@ class Customer < ApplicationRecord
   belongs_to :restaurant
 
   has_many :bookings, dependent: :restrict_with_error
+  has_many :reservations, dependent: :restrict_with_error
 
+  validates :email, uniqueness: { scope: :restaurant_id }, allow_nil: true
   validates :name, presence: true
   validates :phone_number, presence: true
 end
