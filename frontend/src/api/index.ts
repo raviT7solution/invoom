@@ -19,6 +19,8 @@ import {
   CategoryDocument,
   CategoryUpdateDocument,
   CategoryUpdateMutationVariables,
+  ChangePasswordDocument,
+  ChangePasswordMutationVariables,
   CitiesDocument,
   CountriesDocument,
   CreateCategoryDocument,
@@ -731,5 +733,12 @@ export const useItemCodeGenerate = () => {
   return useMutation({
     mutationFn: (variables: ItemCodeGenerateMutationVariables) =>
       client.request(ItemCodeGenerateDocument, variables),
+  });
+};
+
+export const useChangePassword = () => {
+  return useMutation({
+    mutationFn: (variables: ChangePasswordMutationVariables) =>
+      client.request(ChangePasswordDocument, variables),
   });
 };

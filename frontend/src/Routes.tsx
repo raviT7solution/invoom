@@ -14,6 +14,7 @@ import { KDSHome } from "./Pages/KDS/Home";
 import { KDSLogin } from "./Pages/KDS/Login";
 import { Login } from "./Pages/Login";
 import { ReportsLabour } from "./Pages/Reports/Labour";
+import { ChangePassword } from "./Pages/Settings/ChangePassword";
 import { Restaurants } from "./Pages/Settings/Restaurants";
 import { Taxes } from "./Pages/Settings/Taxes";
 import { Roles } from "./Pages/Teams/Roles";
@@ -46,6 +47,7 @@ export const KDSPrivateRoute = ({ children }: PropsWithChildren) => {
 
 const routes = {
   CuisineHubAddons: "/cuisine-hub/addons",
+  ChangePassword: "/setting/change-password",
   CuisineHubCategories: "/cuisine-hub/categories",
   CuisineHubItems: "/cuisine-hub/items",
   CuisineHubMenus: "/cuisine-hub/menus",
@@ -142,6 +144,11 @@ export const Switch = () => {
       <KDSPrivateRoute>
         <KDSHome />
       </KDSPrivateRoute>
+    ))
+    .with({ name: "ChangePassword" }, () => (
+      <PrivateRoute>
+        <ChangePassword />
+      </PrivateRoute>
     ))
     .otherwise(() => "Not found");
 };

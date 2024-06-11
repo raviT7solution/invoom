@@ -533,3 +533,7 @@ query product($id: ID!) {
     weight
   }
 }
+
+mutation changePassword($input: ChangePasswordInput!) {
+  changePassword(input: $input)
+}

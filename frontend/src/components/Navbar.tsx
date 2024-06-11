@@ -8,6 +8,7 @@ import {
   FieldTimeOutlined,
   FormOutlined,
   FormatPainterOutlined,
+  KeyOutlined,
   LogoutOutlined,
   MenuUnfoldOutlined,
   PercentageOutlined,
@@ -172,6 +173,11 @@ export const Navbar = ({
       label: <Link to={Router.SettingsRestaurants()}>My Restaurants</Link>,
       icon: <UserAddOutlined />,
       key: "1",
+    },
+    {
+      label: <Link to={Router.ChangePassword()}>Change Password</Link>,
+      icon: <KeyOutlined />,
+      key: "2",
     },
   ];
 
