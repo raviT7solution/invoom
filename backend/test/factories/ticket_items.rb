@@ -6,14 +6,14 @@ FactoryBot.define do
     gst { Faker::Number.decimal(l_digits: 2) }
     hst { Faker::Number.decimal(l_digits: 2) }
     modifiers { [Faker::Food.ingredient] }
-    name { Faker::Food.name }
+    name { Faker::Food.dish }
     note { Faker::Food.description }
     price { 2.0 }
     pst { Faker::Number.decimal(l_digits: 2) }
     qst { Faker::Number.decimal(l_digits: 2) }
     quantity { 2 }
     rst { Faker::Number.decimal(l_digits: 2) }
-    status { TicketItem.status.keys.sample }
+    status { TicketItem.statuses.keys.sample }
 
     item { nil }
     ticket { nil }

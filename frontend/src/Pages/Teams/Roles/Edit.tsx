@@ -15,6 +15,10 @@ const permissions = [
     value: "clock_in_clock_out",
   },
   {
+    label: "Delete Order Item",
+    value: "delete_ticket_item",
+  },
+  {
     label: "Floor Plan",
     value: "floor_plan",
   },

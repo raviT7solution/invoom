@@ -371,6 +371,10 @@ query inventoryCategory($id: ID!) {
   }
 }
 
+mutation restaurantUpdate($input: RestaurantUpdateInput!) {
+  restaurantUpdate(input: $input)
+}
+
 query timeSheets(
   $endDate: String
   $page: Int!

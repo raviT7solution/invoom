@@ -22,4 +22,8 @@ class RestaurantPolicy < ApplicationPolicy
       Restaurant.none
     end
   end
+
+  def update?
+    web_admin?
+  end
 end

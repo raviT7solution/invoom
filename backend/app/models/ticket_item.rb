@@ -4,7 +4,7 @@ class TicketItem < ApplicationRecord
   belongs_to :item
   belongs_to :ticket
 
-  has_many :ticket_item_addons, dependent: :restrict_with_error
+  has_many :ticket_item_addons, dependent: :destroy
 
   enum :status, [:queued, :preparing, :ready, :served], default: :queued
 

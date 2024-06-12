@@ -14,6 +14,7 @@ FactoryBot.define do
     name { Faker::Restaurant.name }
     operational_since { "2000" }
     phone_number { Faker::PhoneNumber.cell_phone_in_e164 }
+    pin { nil }
     postal_code { Faker::Address.zip_code }
     province { Faker::Address.state_abbr }
     restaurant_type { Faker::Restaurant.type }

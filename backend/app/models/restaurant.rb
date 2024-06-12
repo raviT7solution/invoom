@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Restaurant < ApplicationRecord
+  has_secure_password :pin, validations: false
+
   has_many :addons, dependent: :destroy
   has_many :admin_restaurants, dependent: :restrict_with_error
   has_many :bookings, dependent: :destroy

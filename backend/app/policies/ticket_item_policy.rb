@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class TicketItemPolicy < ApplicationPolicy
+  def delete?
+    mobile_user?("delete_ticket_item")
+  end
+
   def index?
     mobile_user?("orders") || kds_admin?
   end

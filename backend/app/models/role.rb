@@ -3,6 +3,7 @@
 class Role < ApplicationRecord
   PERMISSIONS = [
     "clock_in_clock_out",
+    "delete_ticket_item",
     "floor_plan",
     "orders",
     "payments",

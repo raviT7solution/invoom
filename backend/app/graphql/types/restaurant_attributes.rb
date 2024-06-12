@@ -12,6 +12,7 @@ class Types::RestaurantAttributes < Types::BaseInputObject
   argument :name, String, required: false
   argument :operational_since, String, required: false
   argument :phone_number, String, required: false
+  argument :pin, String, required: false
   argument :postal_code, String, required: false
   argument :province, String, required: false
   argument :restaurant_type, String, required: false

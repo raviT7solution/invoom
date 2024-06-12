@@ -15,6 +15,7 @@ import { KDSLogin } from "./Pages/KDS/Login";
 import { Login } from "./Pages/Login";
 import { ReportsLabour } from "./Pages/Reports/Labour";
 import { ChangePassword } from "./Pages/Settings/ChangePassword";
+import { OperationPin } from "./Pages/Settings/OperationPin";
 import { Restaurants } from "./Pages/Settings/Restaurants";
 import { Taxes } from "./Pages/Settings/Taxes";
 import { Roles } from "./Pages/Teams/Roles";
@@ -46,8 +47,8 @@ export const KDSPrivateRoute = ({ children }: PropsWithChildren) => {
 };
 
 const routes = {
+  ChangePassword: "/settings/change-password",
   CuisineHubAddons: "/cuisine-hub/addons",
-  ChangePassword: "/setting/change-password",
   CuisineHubCategories: "/cuisine-hub/categories",
   CuisineHubItems: "/cuisine-hub/items",
   CuisineHubMenus: "/cuisine-hub/menus",
@@ -60,6 +61,7 @@ const routes = {
   KDSLogin: "/kds/login",
   Login: "/login",
   ReportsLabour: "/reports/labour",
+  SettingsOperationPin: "/settings/operation-pin",
   SettingsRestaurants: "/settings/restaurants",
   SettingsTaxes: "/settings/taxes",
   Teams: "/teams",
@@ -122,6 +124,11 @@ export const Switch = () => {
     .with({ name: "InventoryCategories" }, () => (
       <PrivateRoute>
         <InventoryCategories />
+      </PrivateRoute>
+    ))
+    .with({ name: "SettingsOperationPin" }, () => (
+      <PrivateRoute>
+        <OperationPin />
       </PrivateRoute>
     ))
     .with({ name: "InventoryProducts" }, () => (

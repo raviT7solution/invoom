@@ -75,6 +75,8 @@ import {
   ProvincesDocument,
   RestaurantCreateDocument,
   RestaurantCreateMutationVariables,
+  RestaurantUpdateDocument,
+  RestaurantUpdateMutationVariables,
   RestaurantsDocument,
   RoleCreateDocument,
   RoleCreateMutationVariables,
@@ -642,6 +644,13 @@ export const useInventoryCategoryDelete = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["inventoryCategories"] });
     },
+  });
+};
+
+export const useRestaurantUpdate = () => {
+  return useMutation({
+    mutationFn: (variables: RestaurantUpdateMutationVariables) =>
+      client.request(RestaurantUpdateDocument, variables),
   });
 };
 
