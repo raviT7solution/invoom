@@ -94,15 +94,15 @@ export const useTicketItemsUpdate = () => {
   });
 };
 
-export const useKitchenProfiles = (restaurant_id: string) => {
+export const useKitchenProfiles = (restaurantId: string) => {
   return useQuery({
-    enabled: restaurant_id !== "",
+    enabled: restaurantId !== "",
     initialData: [],
-    queryKey: ["kitchen_profiles", restaurant_id],
+    queryKey: ["kitchenProfiles", restaurantId],
     queryFn: async () =>
       (
         await client.request(KitchenProfilesDocument, {
-          restaurantId: restaurant_id,
+          restaurantId: restaurantId,
         })
       ).kitchenProfiles,
   });

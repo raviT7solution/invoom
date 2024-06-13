@@ -133,7 +133,7 @@ const AccountSection = () => {
 };
 
 export const ConfigureMenu = () => {
-  const { configure, bookingTypes, kitchenProfile, restaurantId } =
+  const { configure, bookingTypes, kitchenProfileId, restaurantId } =
     useKDSConfigStore();
 
   const { data: kitchenProfiles } = useKitchenProfiles(restaurantId);
@@ -166,8 +166,8 @@ export const ConfigureMenu = () => {
       children: (
         <Menu
           items={kitchenProfiles.map((i) => ({ key: i.id, label: i.name }))}
-          onClick={(e) => configure("kitchenProfile", e.key)}
-          selectedKeys={[kitchenProfile]}
+          onClick={(e) => configure("kitchenProfileId", e.key)}
+          selectedKeys={[kitchenProfileId]}
         />
       ),
     },

@@ -20,7 +20,7 @@ const dimensionY = 2;
 const perPage = dimensionX * dimensionY;
 
 export const KDSHome = () => {
-  const { restaurantId, bookingTypes, kitchenProfile } = useKDSConfigStore();
+  const { restaurantId, bookingTypes, kitchenProfileId } = useKDSConfigStore();
 
   const [page, setPage] = useState(1);
   const [tab, setTab] = useState("1");
@@ -34,7 +34,7 @@ export const KDSHome = () => {
   const { mutateAsync: updateTicketItem } = useTicketItemsUpdate();
   const { data: tickets } = useTickets({
     bookingTypes: bookingTypes,
-    kitchenProfileId: kitchenProfile,
+    kitchenProfileId: kitchenProfileId,
     page,
     perPage,
     restaurantId: restaurantId,

@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 
 type State = {
   bookingTypes: string[];
-  kitchenProfile: string;
+  kitchenProfileId: string;
   restaurantId: string;
   configure: <T extends keyof State>(k: T, v: State[T]) => void;
   reset: () => void;
@@ -11,7 +11,7 @@ type State = {
 
 const initial = {
   bookingTypes: [],
-  kitchenProfile: "",
+  kitchenProfileId: "",
   restaurantId: "",
 };
 
