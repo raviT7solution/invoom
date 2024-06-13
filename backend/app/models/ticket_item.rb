@@ -18,4 +18,12 @@ class TicketItem < ApplicationRecord
   validates :quantity, presence: true
   validates :rst, presence: true
   validates :status, presence: true
+
+  after_commit :broadcast
+
+  private
+
+  def broadcast
+    item.category.kitchen_profiles.each { |i| TicketItemsChannel.broadcast_to i, {} }
+  end
 end

@@ -8,6 +8,7 @@ class Category < ApplicationRecord
   has_many :kitchen_profile_categories, dependent: :restrict_with_error
   has_many :menu_categories, dependent: :destroy
 
+  has_many :kitchen_profiles, through: :kitchen_profile_categories
   has_many :menus, through: :menu_categories
   has_many :modifiers, through: :category_modifiers
 

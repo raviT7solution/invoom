@@ -300,7 +300,8 @@ class Types::QueryType < Types::BaseObject
 
     records = records.eager_load(:ticket_items).where(ticket_items: { status: status }) if status.present?
 
-    records.order(created_at: :desc).page(page).per(per_page)
+    order_direction = status.include?("served") ? :desc : :asc
+    records.order(created_at: order_direction).page(page).per(per_page)
   end
 
   def time_sheets(restaurant_id:, page:, per_page:, start_date: nil, end_date: nil, user_ids: nil) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize

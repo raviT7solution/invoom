@@ -4,10 +4,14 @@ import {
   LockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Form, Input, List, Modal } from "antd";
+import { Button, Card, Form, Input, Modal, Select } from "antd";
 import { useState } from "react";
 
-import { useKDSSessionCreate, useRestaurants } from "../../api/kds";
+import {
+  useKDSSessionCreate,
+  useKitchenProfiles,
+  useRestaurants,
+} from "../../api/kds";
 import { Router } from "../../Routes";
 import { useKDSConfigStore } from "../../stores/useKDSConfigStore";
 import { useKDSSessionStore } from "../../stores/useKDSSessionStore";
@@ -17,13 +21,72 @@ type schema = {
   password: string;
 };
 
+type configSchema = {
+  restaurantId: string;
+  kitchenProfileId: string;
+};
+
+const ConfigForm = () => {
+  const [form] = Form.useForm<configSchema>();
+
+  const restaurantId = Form.useWatch("restaurantId", form) || "";
+
+  const { data: restaurants } = useRestaurants();
+  const { data: kitchenProfiles } = useKitchenProfiles(restaurantId);
+
+  const configure = useKDSConfigStore((s) => s.configure);
+
+  const onFinish = (values: configSchema) => {
+    configure("restaurantId", values.restaurantId);
+    configure("kitchenProfileId", values.kitchenProfileId);
+
+    Router.push("KDS");
+  };
+
+  return (
+    <Form
+      form={form}
+      layout="vertical"
+      name="config-form"
+      onFinish={onFinish}
+      preserve={false}
+    >
+      <Form.Item
+        label="Restaurant"
+        name="restaurantId"
+        rules={[{ required: true, message: "Required" }]}
+      >
+        <Select
+          options={restaurants.map((i) => ({
+            label: i.name,
+            value: i.id,
+          }))}
+          placeholder="Restaurant"
+        />
+      </Form.Item>
+
+      <Form.Item
+        label="Kitchen Profile"
+        name="kitchenProfileId"
+        rules={[{ required: true, message: "Required" }]}
+      >
+        <Select
+          options={kitchenProfiles.map((i) => ({
+            label: i.name,
+            value: i.id,
+          }))}
+          placeholder="Kitchen Profile"
+        />
+      </Form.Item>
+    </Form>
+  );
+};
+
 export const KDSLogin = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { create } = useKDSSessionStore((s) => s);
-  const { configure } = useKDSConfigStore((s) => s);
+  const create = useKDSSessionStore((s) => s.create);
 
-  const { data: restaurants } = useRestaurants();
   const { isPending, mutateAsync } = useKDSSessionCreate();
 
   const onFinish = async (values: schema) => {
@@ -35,34 +98,13 @@ export const KDSLogin = () => {
   return (
     <>
       <Modal
-        footer={null}
+        destroyOnClose
+        okButtonProps={{ form: "config-form", htmlType: "submit" }}
         onCancel={() => setIsOpen(false)}
         open={isOpen}
-        title="Select a Restaurant"
+        title="Configure"
       >
-        <List
-          dataSource={restaurants}
-          itemLayout="horizontal"
-          renderItem={(r) => (
-            <List.Item>
-              <List.Item.Meta
-                description={`${r.city} ${r.province}`}
-                title={
-                  <a
-                    className="font-bold"
-                    onClick={() => {
-                      configure("restaurantId", r.id);
-
-                      Router.push("KDS");
-                    }}
-                  >
-                    {r.name}
-                  </a>
-                }
-              />
-            </List.Item>
-          )}
-        />
+        <ConfigForm />
       </Modal>
 
       <div className="h-screen flex justify-center items-center bg-neutral-100">

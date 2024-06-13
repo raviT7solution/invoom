@@ -29,9 +29,7 @@ const Duration = ({
 }) => {
   useRerender(1000);
 
-  const duration = durationToString(
-    Date.now() - Date.parse(data.booking.clockedInAt),
-  );
+  const duration = durationToString(Date.now() - Date.parse(data.createdAt));
 
   return duration;
 };

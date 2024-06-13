@@ -11,6 +11,9 @@ dependencies:
   '@ant-design/icons':
     specifier: ^5.3.1
     version: 5.3.1(react-dom@18.2.0)(react@18.2.0)
+  '@rails/actioncable':
+    specifier: 7.0.7-2
+    version: 7.0.7-2
   '@react-icons/all-files':
     specifier: ^4.1.0
     version: 4.1.0(react@18.2.0)
@@ -70,6 +73,9 @@ devDependencies:
   '@tanstack/eslint-plugin-query':
     specifier: ^5.6.0
     version: 5.8.4(eslint@8.48.0)(typescript@5.2.2)
+  '@types/rails__actioncable':
+    specifier: ^6.1.10
+    version: 6.1.10
   '@types/react':
     specifier: ^18.2.15
     version: 18.2.21
@@ -1830,6 +1836,10 @@ packages:
       tslib: 2.6.2
     dev: true
 
+  /@rails/actioncable@7.0.7-2:
+    resolution: {integrity: sha512-7irihOFG//9Z4kBuiwH+VqSfiCdOLcuhC0/y7QcxOC9R08QE5Hq7N+ex2o3SkqiszbmMh7tlj88V+y+Kt/TPmA==}
+    dev: false
+
   /@rc-component/color-picker@1.5.3(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-+tGGH3nLmYXTalVe0L8hSZNs73VTP5ueSHwUlDC77KKRaN7G4DS4wcpG5DTDzdcV/Yas+rzA6UGgIyzd8fS4cw==}
     peerDependencies:
@@ -2021,6 +2031,10 @@ packages:
 
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
+
+  /@types/rails__actioncable@6.1.10:
+    resolution: {integrity: sha512-Dr6A/+OTsoTgvnj2ynysjuMvmk2XDI4J71ljPANcODZjMafKeSau2/IJ+B4IuJ6x9bsG/DQpBxNxH6RqmyFzpw==}
+    dev: true
 
   /@types/react-dom@18.2.7:
     resolution: {integrity: sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==}

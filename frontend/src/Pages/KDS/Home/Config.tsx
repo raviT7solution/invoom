@@ -44,7 +44,7 @@ const AccountSection = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { configure, reset, restaurantId } = useKDSConfigStore();
-  const { create, destroy } = useKDSSessionStore((s) => s);
+  const { create, destroy } = useKDSSessionStore();
 
   const onFinish = async (values: schema) => {
     create((await mutateAsync({ input: { ...values, subject: "kds" } })).token);

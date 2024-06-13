@@ -1,14 +1,17 @@
 import { MenuOutlined } from "@ant-design/icons";
 import { Button, Drawer, Layout, Menu, Pagination } from "antd";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import { ConfigureMenu } from "./Config";
 import { ITEM_STATUSES, TABS } from "./helpers";
 import { Ticket } from "./Ticket";
 
 import { TicketsQuery } from "../../../api/base";
+import { consumer } from "../../../api/cable";
 import { useTicketItemsUpdate, useTickets } from "../../../api/kds";
+import { useDebounceFn } from "../../../helpers/hooks";
 import { useKDSConfigStore } from "../../../stores/useKDSConfigStore";
+import { useKDSSessionStore } from "../../../stores/useKDSSessionStore";
 
 const menuItems = TABS.map((i) => ({
   label: i.label,
@@ -20,6 +23,7 @@ const dimensionY = 2;
 const perPage = dimensionX * dimensionY;
 
 export const KDSHome = () => {
+  const token = useKDSSessionStore((s) => s.token);
   const { restaurantId, bookingTypes, kitchenProfileId } = useKDSConfigStore();
 
   const [page, setPage] = useState(1);
@@ -32,7 +36,7 @@ export const KDSHome = () => {
   );
 
   const { mutateAsync: updateTicketItem } = useTicketItemsUpdate();
-  const { data: tickets } = useTickets({
+  const { data: tickets, refetch: refetchTickets } = useTickets({
     bookingTypes: bookingTypes,
     kitchenProfileId: kitchenProfileId,
     page,
@@ -40,6 +44,25 @@ export const KDSHome = () => {
     restaurantId: restaurantId,
     status: statuses,
   });
+
+  const debouncedRefetch = useDebounceFn(refetchTickets, 100);
+
+  useEffect(() => {
+    const channel = consumer.subscriptions.create(
+      {
+        channel: "TicketItemsChannel",
+        Authorization: token,
+        kitchen_profile_id: kitchenProfileId,
+      },
+      {
+        received: () => debouncedRefetch(),
+      },
+    );
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [debouncedRefetch, kitchenProfileId, token]);
 
   const updateTicketItemsStatusUpdate = (
     ticket: TicketsQuery["tickets"]["collection"][number],

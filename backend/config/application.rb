@@ -34,4 +34,5 @@ class Backend::Application < Rails::Application
   config.generators do |g|
     g.orm :active_record, primary_key_type: :uuid
   end
+  config.action_cable.allowed_request_origins = [%r{https://*}] if Rails.env.production?
 end

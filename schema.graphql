@@ -1201,6 +1201,7 @@ type Tax {
 
 type Ticket {
   booking: Booking!
+  createdAt: ISO8601DateTime!
   id: ID!
   ticketItems: [TicketItem!]!
 }

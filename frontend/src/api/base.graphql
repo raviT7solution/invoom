@@ -454,13 +454,13 @@ query tickets(
           name
         }
         bookingType
-        clockedInAt
         customer {
           name
         }
         id
         userFullName
       }
+      createdAt
       id
       ticketItems {
         displayName

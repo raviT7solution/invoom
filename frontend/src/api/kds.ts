@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { notification } from "antd";
 import { GraphQLClient } from "graphql-request";
 
@@ -83,14 +83,9 @@ export const useTickets = (variables: TicketsQueryVariables) => {
 };
 
 export const useTicketItemsUpdate = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: (variables: TicketItemsUpdateMutationVariables) =>
       client.request(TicketItemsUpdateDocument, variables),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tickets"] });
-    },
   });
 };
 
