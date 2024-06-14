@@ -13,7 +13,7 @@ class Mutations::TicketCreate < Mutations::BaseMutation
 
     attributes.each do |item_attributes|
       item = ItemPolicy.new(context[:current_user]).scope.find(item_attributes[:item_id])
-      tax = TaxPolicy.new(context[:current_user]).scope.find(item_attributes[:tax_id])
+      tax = item.tax
 
       ticket_item = ticket.ticket_items.new(
         display_name: item.display_name,

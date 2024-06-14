@@ -18,4 +18,5 @@ class Types::ItemType < Types::BaseObject
 
   field :addons, [Types::AddonsType], authorize: "AddonPolicy#index?", null: false
   field :modifiers, [Types::ModifierType], authorize: "ModifierPolicy#index?", null: false
+  field :tax, Types::TaxType, authorize: "TaxPolicy#show?", null: false
 end

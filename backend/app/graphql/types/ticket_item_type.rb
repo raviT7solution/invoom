@@ -5,6 +5,7 @@ class Types::TicketItemType < Types::BaseObject
   field :gst, Float, null: false
   field :hst, Float, null: false
   field :id, ID, null: false
+  field :item_id, ID, null: false
   field :modifiers, [String], null: false
   field :name, String, null: false
   field :note, String, null: true

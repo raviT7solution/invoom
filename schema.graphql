@@ -436,6 +436,7 @@ type Item {
   name: String!
   price: Float!
   takeoutPrice: Float!
+  tax: Tax!
   taxId: ID!
   visible: Boolean!
 }
@@ -1239,6 +1240,7 @@ type TicketItem {
   gst: Float!
   hst: Float!
   id: ID!
+  itemId: ID!
   modifiers: [String!]!
   name: String!
   note: String
@@ -1265,7 +1267,6 @@ input TicketItemAttributes {
   note: String
   quantity: Int
   status: TicketItemStatusAttribute
-  taxId: ID
 }
 
 """
