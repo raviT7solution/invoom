@@ -147,7 +147,41 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     assert_query_error "TimeSheet not found"
   end
 
+  test "expired token" do
+    exp = 2.days.ago.to_i
+
+    post \
+      graphql_path,
+      headers: {
+        "Authorization" => "Bearer #{JWT.encode({ 'mobile_user_id' => @user.id, exp: exp }, Session.secret)}"
+      },
+      params: { query: current_user_string }
+
+    assert_query_error "Session not found"
+  end
+
+  test "invalid token with different secrets" do
+    post \
+      graphql_path,
+      headers: { "Authorization" => "Bearer #{JWT.encode({ 'mobile_user_id' => @user.id }, SecureRandom.uuid)}" },
+      params: { query: current_user_string }
+
+    assert_query_error "Session not found"
+  end
+
   private
+
+  def current_user_string
+    <<~GQL
+      query currentUser {
+        currentUser {
+          gender
+          id
+          preferredName
+        }
+      }
+    GQL
+  end
 
   def create_string
     <<~GQL

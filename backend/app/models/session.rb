@@ -16,7 +16,7 @@ class Session
   end
 
   def kds_admin?
-    token.present? && token["kds_admin_id"].present?
+    token["kds_admin_id"].present?
   end
 
   def mobile_admin!
@@ -28,7 +28,7 @@ class Session
   end
 
   def mobile_admin?
-    token.present? && token["mobile_admin_id"].present?
+    token["mobile_admin_id"].present?
   end
 
   def mobile_user!
@@ -40,7 +40,7 @@ class Session
   end
 
   def mobile_user?
-    token.present? && token["mobile_user_id"].present?
+    token["mobile_user_id"].present?
   end
 
   def web_admin!
@@ -52,15 +52,15 @@ class Session
   end
 
   def web_admin?
-    token.present? && token["web_admin_id"].present?
+    token["web_admin_id"].present?
   end
 
   def self.secret
     @secret ||= Rails.application.credentials.secret_key_base || SecureRandom.uuid
   end
 
-  def self.token(record, key)
-    JWT.encode({ key => record.id, exp: 1.day.after.to_i }, secret)
+  def self.token(record, key, options = {})
+    JWT.encode({ key => record.id, **options }, secret)
   end
 
   private
@@ -69,7 +69,7 @@ class Session
     @token ||= begin
       JWT.decode(header, self.class.secret)[0]
     rescue JWT::DecodeError
-      # do nothing
+      raise ActiveRecord::RecordNotFound.new("", self.class.name)
     end
   end
 end

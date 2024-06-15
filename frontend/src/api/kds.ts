@@ -14,6 +14,7 @@ import {
   TicketsQueryVariables,
 } from "./base";
 
+import { Router } from "../Routes";
 import { useKDSSessionStore } from "../stores/useKDSSessionStore";
 
 const client = new GraphQLClient(
@@ -25,6 +26,17 @@ const client = new GraphQLClient(
         : "",
     }),
     responseMiddleware: (r) => {
+      if (
+        "response" in r &&
+        r.response.errors?.map((i) => i.message).join("") ===
+          "Session not found"
+      ) {
+        useKDSSessionStore.getState().destroy();
+        Router.push("KDSLogin");
+
+        return;
+      }
+
       if ("response" in r && r.response.errors) {
         notification.error({
           message: r.response.errors.map((e) => e.message).join(", "),

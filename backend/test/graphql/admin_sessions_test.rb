@@ -61,7 +61,7 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
       headers: { "Authorization" => "Bearer #{JWT.encode({ 'web_admin_id' => admin.id, exp: exp }, Session.secret)}" },
       params: { query: roles_index_string, variables: { restaurantId: restaurant.id } }
 
-    assert_query_error "Unauthorized"
+    assert_query_error "Session not found"
   end
 
   test "invalid token with different secrets" do
@@ -75,7 +75,7 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
       headers: { "Authorization" => "Bearer #{JWT.encode({ 'web_admin_id' => admin.id }, SecureRandom.uuid)}" },
       params: { query: roles_index_string, variables: { restaurantId: restaurant.id } }
 
-    assert_query_error "Unauthorized"
+    assert_query_error "Session not found"
   end
 
   test "no token passed for authorized query" do
@@ -84,10 +84,27 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
 
     query roles_index_string, variables: { restaurantId: restaurant.id }
 
-    assert_query_error "Unauthorized"
+    assert_query_error "Session not found"
+  end
+
+  test "public query" do
+    query countries_query
+
+    assert_query_success
   end
 
   private
+
+  def countries_query
+    <<~GQL
+      query countries {
+        countries {
+          code
+          name
+        }
+      }
+    GQL
+  end
 
   def roles_index_string
     <<~GQL

@@ -100,6 +100,7 @@ import {
   UsersDocument,
 } from "./base";
 
+import { Router } from "../Routes";
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
 
 const client = new GraphQLClient(
@@ -111,6 +112,17 @@ const client = new GraphQLClient(
         : "",
     }),
     responseMiddleware: (r) => {
+      if (
+        "response" in r &&
+        r.response.errors?.map((i) => i.message).join("") ===
+          "Session not found"
+      ) {
+        useAdminSessionStore.getState().destroy();
+        Router.push("Login");
+
+        return;
+      }
+
       if ("response" in r && r.response.errors) {
         notification.error({
           message: r.response.errors.map((e) => e.message).join(", "),
