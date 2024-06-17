@@ -9,6 +9,7 @@ import {
   FormOutlined,
   FormatPainterOutlined,
   InfoOutlined,
+  InsertRowAboveOutlined,
   KeyOutlined,
   LogoutOutlined,
   MenuUnfoldOutlined,
@@ -163,9 +164,15 @@ export const Navbar = ({
           icon: <InfoOutlined />,
           key: "7.2",
         },
+        {
+          label: (
+            <Link to={Router.SettingsKitchenProfiles()}>Kitchen Profiles</Link>
+          ),
+          icon: <InsertRowAboveOutlined />,
+          key: "7.3",
+        },
       ],
     },
-
     {
       label: "Logout",
       icon: <LogoutOutlined />,

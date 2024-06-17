@@ -55,6 +55,9 @@ class Types::QueryType < Types::BaseObject
     argument :category_id, ID, required: false
     argument :restaurant_id, ID, required: true
   end
+  field :kitchen_profile, Types::KitchenProfileType, null: false, authorize: "KitchenProfilePolicy#show?" do
+    argument :id, ID, required: true
+  end
   field :kitchen_profiles, [Types::KitchenProfileType], null: false, authorize: "KitchenProfilePolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
@@ -219,6 +222,10 @@ class Types::QueryType < Types::BaseObject
     records = records.where(category_id: category_id) if category_id.present?
 
     records
+  end
+
+  def kitchen_profile(id:)
+    KitchenProfilePolicy.new(context[:current_user]).scope.find(id)
   end
 
   def kitchen_profiles(restaurant_id:)

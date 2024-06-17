@@ -481,13 +481,6 @@ mutation ticketItemsUpdate($input: TicketItemsUpdateInput!) {
   ticketItemsUpdate(input: $input)
 }
 
-query kitchenProfiles($restaurantId: ID!) {
-  kitchenProfiles(restaurantId: $restaurantId) {
-    id
-    name
-  }
-}
-
 mutation itemCodeGenerate($input: ItemCodeGenerateInput!) {
   itemCodeGenerate(input: $input)
 }
@@ -540,4 +533,34 @@ query product($id: ID!) {
 
 mutation changePassword($input: ChangePasswordInput!) {
   changePassword(input: $input)
+}
+
+query kitchenProfiles($restaurantId: ID!) {
+  kitchenProfiles(restaurantId: $restaurantId) {
+    id
+    name
+  }
+}
+
+query kitchenProfile($id: ID!) {
+  kitchenProfile(id: $id) {
+    categoryIds
+    columns
+    id
+    name
+    notify
+    rows
+  }
+}
+
+mutation kitchenProfileCreate($input: KitchenProfileCreateInput!) {
+  kitchenProfileCreate(input: $input)
+}
+
+mutation kitchenProfileUpdate($input: KitchenProfileUpdateInput!) {
+  kitchenProfileUpdate(input: $input)
+}
+
+mutation kitchenProfileDelete($id: ID!) {
+  kitchenProfileDelete(input: { id: $id })
 }

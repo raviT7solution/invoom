@@ -48,6 +48,14 @@ import {
   ItemUpdateDocument,
   ItemUpdateMutationVariables,
   ItemsDocument,
+  KitchenProfileCreateDocument,
+  KitchenProfileCreateMutationVariables,
+  KitchenProfileDeleteDocument,
+  KitchenProfileDeleteMutationVariables,
+  KitchenProfileDocument,
+  KitchenProfileUpdateDocument,
+  KitchenProfileUpdateMutationVariables,
+  KitchenProfilesDocument,
   MenuCreateDocument,
   MenuCreateMutationVariables,
   MenuDeleteDocument,
@@ -761,5 +769,64 @@ export const useChangePassword = () => {
   return useMutation({
     mutationFn: (variables: ChangePasswordMutationVariables) =>
       client.request(ChangePasswordDocument, variables),
+  });
+};
+
+export const useKitchenProfile = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["kitchenProfiles", id],
+    queryFn: async () =>
+      (await client.request(KitchenProfileDocument, { id: id })).kitchenProfile,
+  });
+};
+
+export const useKitchenProfiles = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryKey: ["kitchenProfiles", restaurantId],
+    queryFn: async () =>
+      (
+        await client.request(KitchenProfilesDocument, {
+          restaurantId: restaurantId,
+        })
+      ).kitchenProfiles,
+  });
+};
+
+export const useKitchenProfileCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: KitchenProfileCreateMutationVariables) =>
+      client.request(KitchenProfileCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["kitchenProfiles"] });
+    },
+  });
+};
+
+export const useKitchenProfileUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: KitchenProfileUpdateMutationVariables) =>
+      client.request(KitchenProfileUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["kitchenProfiles"] });
+    },
+  });
+};
+
+export const useKitchenProfileDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: KitchenProfileDeleteMutationVariables) =>
+      client.request(KitchenProfileDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["kitchenProfiles"] });
+    },
   });
 };

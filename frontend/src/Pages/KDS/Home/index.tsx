@@ -8,7 +8,11 @@ import { Ticket } from "./Ticket";
 
 import { TicketsQuery } from "../../../api/base";
 import { consumer } from "../../../api/cable";
-import { useTicketItemsUpdate, useTickets } from "../../../api/kds";
+import {
+  useKitchenProfile,
+  useTicketItemsUpdate,
+  useTickets,
+} from "../../../api/kds";
 import { useDebounceFn } from "../../../helpers/hooks";
 import { useKDSConfigStore } from "../../../stores/useKDSConfigStore";
 import { useKDSSessionStore } from "../../../stores/useKDSSessionStore";
@@ -18,9 +22,15 @@ const menuItems = TABS.map((i) => ({
   key: i.key,
 }));
 
-const dimensionX = 3;
-const dimensionY = 2;
-const perPage = dimensionX * dimensionY;
+const notify = () => {
+  const alert = new Audio(
+    "https://commondatastorage.googleapis.com/codeskulptor-assets/week7-brrring.m4a",
+  );
+
+  alert.pause();
+  alert.currentTime = 0;
+  alert.play();
+};
 
 export const KDSHome = () => {
   const token = useKDSSessionStore((s) => s.token);
@@ -36,6 +46,11 @@ export const KDSHome = () => {
   );
 
   const { mutateAsync: updateTicketItem } = useTicketItemsUpdate();
+  const { data: kitchenProfile } = useKitchenProfile(kitchenProfileId);
+  const perPage = useMemo(
+    () => (kitchenProfile ? kitchenProfile.columns * kitchenProfile.rows : 1),
+    [kitchenProfile],
+  );
   const { data: tickets, refetch: refetchTickets } = useTickets({
     bookingTypes: bookingTypes,
     kitchenProfileId: kitchenProfileId,
@@ -45,6 +60,7 @@ export const KDSHome = () => {
     status: statuses,
   });
 
+  const debouncedNotify = useDebounceFn(notify, 500);
   const debouncedRefetch = useDebounceFn(refetchTickets, 100);
 
   useEffect(() => {
@@ -55,14 +71,26 @@ export const KDSHome = () => {
         kitchen_profile_id: kitchenProfileId,
       },
       {
-        received: () => debouncedRefetch(),
+        received: (data: { event?: "ticket_create" }) => {
+          if (data.event === "ticket_create" && kitchenProfile?.notify) {
+            debouncedNotify();
+          }
+
+          debouncedRefetch();
+        },
       },
     );
 
     return () => {
       channel.unsubscribe();
     };
-  }, [debouncedRefetch, kitchenProfileId, token]);
+  }, [
+    debouncedNotify,
+    debouncedRefetch,
+    kitchenProfile?.notify,
+    kitchenProfileId,
+    token,
+  ]);
 
   const updateTicketItemsStatusUpdate = (
     ticket: TicketsQuery["tickets"]["collection"][number],
@@ -118,37 +146,39 @@ export const KDSHome = () => {
         </Layout.Header>
 
         <Layout.Content>
-          <div
-            className="flex flex-wrap"
-            style={{ height: `${100 / dimensionY}%` }}
-          >
-            {tickets.collection.map((ticket) => (
-              <div
-                className="h-full p-1.5"
-                key={ticket.id}
-                style={{ width: `${100 / dimensionX}%` }}
-              >
-                <Ticket
-                  data={ticket}
-                  showColor={tab === "1"}
-                  updateStatus={(direction, ticketItemId) => {
-                    updateTicketItemsStatusUpdate(
-                      ticket,
-                      direction,
-                      ticketItemId,
-                    );
-                  }}
-                />
-              </div>
-            ))}
-          </div>
+          {kitchenProfile && (
+            <div
+              className="flex flex-wrap"
+              style={{ height: `${100 / kitchenProfile.rows}%` }}
+            >
+              {tickets.collection.map((ticket) => (
+                <div
+                  className="h-full p-1.5"
+                  key={ticket.id}
+                  style={{ width: `${100 / kitchenProfile.columns}%` }}
+                >
+                  <Ticket
+                    data={ticket}
+                    showColor={tab === "1"}
+                    updateStatus={(direction, ticketItemId) => {
+                      updateTicketItemsStatusUpdate(
+                        ticket,
+                        direction,
+                        ticketItemId,
+                      );
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </Layout.Content>
 
         <Layout.Footer className="text-center !py-2">
           <Pagination
             current={page}
-            defaultPageSize={perPage}
             onChange={setPage}
+            pageSize={perPage}
             showSizeChanger={false}
             total={tickets.metadata.totalCount}
           />

@@ -7,5 +7,8 @@ class KitchenProfile < ApplicationRecord
 
   has_many :categories, through: :kitchen_profile_categories
 
+  validates :columns, presence: true
   validates :name, presence: true
+  validates :notify, inclusion: [true, false]
+  validates :rows, presence: true
 end

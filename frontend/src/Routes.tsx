@@ -15,6 +15,7 @@ import { KDSLogin } from "./Pages/KDS/Login";
 import { Login } from "./Pages/Login";
 import { ReportsLabour } from "./Pages/Reports/Labour";
 import { ChangePassword } from "./Pages/Settings/ChangePassword";
+import { KitchenProfiles } from "./Pages/Settings/KitchenProfiles";
 import { OperationPin } from "./Pages/Settings/OperationPin";
 import { Restaurants } from "./Pages/Settings/Restaurants";
 import { Taxes } from "./Pages/Settings/Taxes";
@@ -61,6 +62,7 @@ const routes = {
   KDSLogin: "/kds/login",
   Login: "/login",
   ReportsLabour: "/reports/labour",
+  SettingsKitchenProfiles: "/settings/kitchen-profiles",
   SettingsOperationPin: "/settings/operation-pin",
   SettingsRestaurants: "/settings/restaurants",
   SettingsTaxes: "/settings/taxes",
@@ -155,6 +157,11 @@ export const Switch = () => {
     .with({ name: "ChangePassword" }, () => (
       <PrivateRoute>
         <ChangePassword />
+      </PrivateRoute>
+    ))
+    .with({ name: "SettingsKitchenProfiles" }, () => (
+      <PrivateRoute>
+        <KitchenProfiles />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");

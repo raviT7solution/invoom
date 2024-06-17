@@ -175,6 +175,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
   end
 
   create_table "kitchen_profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "notify", default: true, null: false
+    t.integer "columns", null: false
+    t.integer "rows", null: false
     t.string "name", null: false
     t.uuid "restaurant_id", null: false
     t.datetime "created_at", null: false

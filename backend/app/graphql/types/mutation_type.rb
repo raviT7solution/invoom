@@ -24,6 +24,12 @@ class Types::MutationType < Types::BaseObject
   field :item_create, mutation: Mutations::ItemCreate, null: false, authorize: "ItemPolicy#create?"
   field :item_delete, mutation: Mutations::ItemDelete, null: false, authorize: "ItemPolicy#delete?"
   field :item_update, mutation: Mutations::ItemUpdate, null: false, authorize: "ItemPolicy#update?"
+  field :kitchen_profile_create, mutation: Mutations::KitchenProfileCreate, null: false,
+                                 authorize: "KitchenProfilePolicy#create?"
+  field :kitchen_profile_delete, mutation: Mutations::KitchenProfileDelete, null: false,
+                                 authorize: "KitchenProfilePolicy#delete?"
+  field :kitchen_profile_update, mutation: Mutations::KitchenProfileUpdate, null: false,
+                                 authorize: "KitchenProfilePolicy#update?"
   field :menu_create, mutation: Mutations::MenuCreate, null: false, authorize: "MenuPolicy#create?"
   field :menu_delete, mutation: Mutations::MenuDelete, null: false, authorize: "MenuPolicy#delete?"
   field :menu_update, mutation: Mutations::MenuUpdate, null: false, authorize: "MenuPolicy#update?"

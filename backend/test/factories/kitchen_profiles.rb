@@ -2,7 +2,10 @@
 
 FactoryBot.define do
   factory :kitchen_profile do
+    columns { 3 }
     name { Faker::Food.ingredient }
+    notify { true }
+    rows { 3 }
 
     restaurant { nil }
   end
