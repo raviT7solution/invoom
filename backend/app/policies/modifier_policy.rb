@@ -10,12 +10,14 @@ class ModifierPolicy < ApplicationPolicy
   end
 
   def index?
-    web_admin? || mobile_user?("orders")
+    web_admin?
   end
 
   def scope
     if web_admin?
       Modifier.where(restaurant: web_admin!.restaurants)
+    elsif mobile_user?("orders")
+      Modifier.where(restaurant_id: mobile_user!.restaurant_id, visible: true)
     else
       Modifier.none
     end

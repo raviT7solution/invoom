@@ -16,7 +16,7 @@ class Types::ItemType < Types::BaseObject
   field :modifier_ids, [ID], null: false
   field :tax_id, ID, null: false
 
-  field :addons, [Types::AddonsType], authorize: "AddonPolicy#index?", null: false
-  field :modifiers, [Types::ModifierType], authorize: "ModifierPolicy#index?", null: false
+  field :addons, [Types::AddonsType], scope: "AddonPolicy", preload: :addons, null: false
+  field :modifiers, [Types::ModifierType], scope: "ModifierPolicy", preload: :modifiers, null: false
   field :tax, Types::TaxType, authorize: "TaxPolicy#show?", null: false
 end

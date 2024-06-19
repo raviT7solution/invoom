@@ -1,10 +1,10 @@
 GIT
   remote: https://github.com/vivekmiyani/phantom.git
-  revision: 999fa1179373928f8418661e6702b8fc175351b5
+  revision: 33314c1583c3f41275666b2e7d7c53521ce21bb9
   specs:
     phantom (0.0.1)
+      batch-loader
       graphql
-      minitest
 
 GEM
   remote: https://rubygems.org/
@@ -78,6 +78,7 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     base64 (0.1.1)
+    batch-loader (2.0.5)
     bcrypt (3.1.19)
     bootsnap (1.16.0)
       msgpack (~> 1.2)

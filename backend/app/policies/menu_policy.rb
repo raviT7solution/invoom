@@ -17,7 +17,7 @@ class MenuPolicy < ApplicationPolicy
     if web_admin?
       Menu.where(restaurant: web_admin!.restaurants)
     elsif mobile_user?("orders")
-      Menu.where(restaurant: mobile_user!.restaurant_id)
+      Menu.where(restaurant: mobile_user!.restaurant_id, visible: true)
     else
       Menu.none
     end

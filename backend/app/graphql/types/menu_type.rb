@@ -6,5 +6,5 @@ class Types::MenuType < Types::BaseObject
   field :name, String, null: false
   field :visible, Boolean, null: false
 
-  field :categories, [Types::CategoryType], authorize: "CategoryPolicy#index?", null: false
+  field :categories, [Types::CategoryType], scope: "CategoryPolicy", preload: :categories, null: false
 end

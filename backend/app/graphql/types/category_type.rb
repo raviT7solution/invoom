@@ -7,5 +7,5 @@ class Types::CategoryType < Types::BaseObject
 
   field :menu_ids, [ID], null: false
 
-  field :items, [Types::ItemType], null: false, authorize: "ItemPolicy#index?"
+  field :items, [Types::ItemType], scope: "ItemPolicy", preload: :items, null: false
 end

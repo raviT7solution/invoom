@@ -5,5 +5,5 @@ class Types::BaseObject < GraphQL::Schema::Object
   connection_type_class(Types::BaseConnection)
   field_class Types::BaseField
 
-  field_class.include(Phantom::Graphql::Authorization)
+  field_class.include(Phantom::Graphql::FieldExtensions)
 end

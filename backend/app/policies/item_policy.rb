@@ -17,7 +17,7 @@ class ItemPolicy < ApplicationPolicy
     if web_admin?
       Item.where(restaurant: web_admin!.restaurants)
     elsif mobile_user?("orders")
-      Item.where(restaurant_id: mobile_user!.restaurant_id)
+      Item.where(restaurant_id: mobile_user!.restaurant_id, visible: true)
     else
       Item.none
     end
