@@ -17,9 +17,8 @@ import { Discounts } from "./Pages/Promotions/Discounts";
 import { ReportsLabour } from "./Pages/Reports/Labour";
 import { ChangePassword } from "./Pages/Settings/ChangePassword";
 import { KitchenProfiles } from "./Pages/Settings/KitchenProfiles";
-import { OperationPin } from "./Pages/Settings/OperationPin";
 import { Restaurants } from "./Pages/Settings/Restaurants";
-import { Taxes } from "./Pages/Settings/Taxes";
+import { RestaurantSettings } from "./Pages/Settings/RestaurantSettings";
 import { Roles } from "./Pages/Teams/Roles";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 import { useKDSSessionStore } from "./stores/useKDSSessionStore";
@@ -64,10 +63,9 @@ const routes = {
   Login: "/login",
   PromotionsDiscounts: "/promotions/discounts",
   ReportsLabour: "/reports/labour",
+  RestaurantSettings: "/settings/restaurant-settings",
   SettingsKitchenProfiles: "/settings/kitchen-profiles",
-  SettingsOperationPin: "/settings/operation-pin",
   SettingsRestaurants: "/settings/restaurants",
-  SettingsTaxes: "/settings/taxes",
   Teams: "/teams",
 } as const;
 
@@ -135,9 +133,9 @@ export const Switch = () => {
         <InventoryCategories />
       </PrivateRoute>
     ))
-    .with({ name: "SettingsOperationPin" }, () => (
+    .with({ name: "RestaurantSettings" }, () => (
       <PrivateRoute>
-        <OperationPin />
+        <RestaurantSettings />
       </PrivateRoute>
     ))
     .with({ name: "InventoryProducts" }, () => (
@@ -148,11 +146,6 @@ export const Switch = () => {
     .with({ name: "ReportsLabour" }, () => (
       <PrivateRoute>
         <ReportsLabour />
-      </PrivateRoute>
-    ))
-    .with({ name: "SettingsTaxes" }, () => (
-      <PrivateRoute>
-        <Taxes />
       </PrivateRoute>
     ))
     .with({ name: "KDSLogin" }, () => <KDSLogin />)

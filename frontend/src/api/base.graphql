@@ -608,3 +608,35 @@ mutation discountUpdate($input: DiscountUpdateInput!) {
 mutation discountDelete($id: ID!) {
   discountDelete(input: { id: $id })
 }
+
+mutation printerConfigurationCreate($input: PrinterConfigurationCreateInput!) {
+  printerConfigurationCreate(input: $input)
+}
+
+mutation printerConfigurationUpdate($input: PrinterConfigurationUpdateInput!) {
+  printerConfigurationUpdate(input: $input)
+}
+
+mutation printerConfigurationDelete($id: ID!) {
+  printerConfigurationDelete(input: { id: $id })
+}
+
+query printerConfiguration($id: ID!) {
+  printerConfiguration(id: $id) {
+    id
+    ipAddress
+    name
+    port
+    visible
+  }
+}
+
+query printerConfigurations($restaurantId: ID!) {
+  printerConfigurations(restaurantId: $restaurantId) {
+    id
+    ipAddress
+    name
+    port
+    visible
+  }
+}

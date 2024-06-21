@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_23_123854) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_13_104833) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -271,6 +271,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_23_123854) do
     t.index ["restaurant_id"], name: "index_modifiers_on_restaurant_id"
   end
 
+  create_table "printer_configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "ip_address", null: false
+    t.string "name", null: false
+    t.string "port", null: false
+    t.boolean "visible", default: true, null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "restaurant_id"], name: "index_printer_configurations_on_name_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_printer_configurations_on_restaurant_id"
+  end
+
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "visible", default: true, null: false
     t.float "price", null: false
@@ -468,6 +480,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_23_123854) do
   add_foreign_key "menu_categories", "menus"
   add_foreign_key "menus", "restaurants"
   add_foreign_key "modifiers", "restaurants"
+  add_foreign_key "printer_configurations", "restaurants"
   add_foreign_key "products", "inventory_categories"
   add_foreign_key "products", "restaurants"
   add_foreign_key "products", "taxes"

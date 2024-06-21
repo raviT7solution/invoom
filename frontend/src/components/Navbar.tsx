@@ -8,7 +8,6 @@ import {
   FieldTimeOutlined,
   FormOutlined,
   FormatPainterOutlined,
-  InfoOutlined,
   InsertRowAboveOutlined,
   KeyOutlined,
   LogoutOutlined,
@@ -168,21 +167,18 @@ export const Navbar = ({
       key: "8",
       children: [
         {
-          label: <Link to={Router.SettingsTaxes()}>Tax</Link>,
+          label: (
+            <Link to={Router.RestaurantSettings()}>Restaurant Settings</Link>
+          ),
           icon: <PercentageOutlined />,
           key: "8.1",
-        },
-        {
-          label: <Link to={Router.SettingsOperationPin()}>Operation Pin</Link>,
-          icon: <InfoOutlined />,
-          key: "8.2",
         },
         {
           label: (
             <Link to={Router.SettingsKitchenProfiles()}>Kitchen Profiles</Link>
           ),
           icon: <InsertRowAboveOutlined />,
-          key: "8.3",
+          key: "8.2",
         },
       ],
     },

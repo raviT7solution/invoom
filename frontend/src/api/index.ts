@@ -80,6 +80,14 @@ import {
   ModifierUpdateDocument,
   ModifierUpdateMutationVariables,
   ModifiersDocument,
+  PrinterConfigurationCreateDocument,
+  PrinterConfigurationCreateMutationVariables,
+  PrinterConfigurationDeleteDocument,
+  PrinterConfigurationDeleteMutationVariables,
+  PrinterConfigurationDocument,
+  PrinterConfigurationUpdateDocument,
+  PrinterConfigurationUpdateMutationVariables,
+  PrinterConfigurationsDocument,
   ProductCreateDocument,
   ProductCreateMutationVariables,
   ProductDeleteDocument,
@@ -890,6 +898,63 @@ export const useDiscountDelete = () => {
       client.request(DiscountDeleteDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["discounts"] });
+    },
+  });
+};
+
+export const usePrinterConfigurationCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: PrinterConfigurationCreateMutationVariables) =>
+      client.request(PrinterConfigurationCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["printerConfigurations"] });
+    },
+  });
+};
+
+export const usePrinterConfigurations = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryFn: async () =>
+      (await client.request(PrinterConfigurationsDocument, { restaurantId }))
+        .printerConfigurations,
+    queryKey: ["printerConfigurations", restaurantId],
+  });
+};
+
+export const usePrinterConfiguration = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["printerConfigurations", id],
+    queryFn: async () =>
+      (await client.request(PrinterConfigurationDocument, { id: id }))
+        .printerConfiguration,
+  });
+};
+
+export const usePrinterConfigurationUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: PrinterConfigurationUpdateMutationVariables) =>
+      client.request(PrinterConfigurationUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["printerConfigurations"] });
+    },
+  });
+};
+
+export const usePrinterConfigurationDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: PrinterConfigurationDeleteMutationVariables) =>
+      client.request(PrinterConfigurationDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["printerConfigurations"] });
     },
   });
 };

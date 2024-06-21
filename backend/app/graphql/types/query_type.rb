@@ -82,6 +82,12 @@ class Types::QueryType < Types::BaseObject
   field :modifiers, [Types::ModifierType], null: false, authorize: "ModifierPolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
+  field :printer_configuration, Types::PrinterConfigurationType, null: false do
+    argument :id, ID, required: true
+  end
+  field :printer_configurations, [Types::PrinterConfigurationType], null: false do
+    argument :restaurant_id, ID, required: true
+  end
   field :product, Types::ProductType, null: false, authorize: "ProductPolicy#show?" do
     argument :id, ID, required: true
   end
@@ -279,6 +285,14 @@ class Types::QueryType < Types::BaseObject
 
   def modifiers(restaurant_id:)
     ModifierPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  end
+
+  def printer_configuration(id:)
+    PrinterConfigurationPolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def printer_configurations(restaurant_id:)
+    PrinterConfigurationPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
   end
 
   def product(id:)

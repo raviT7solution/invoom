@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Row } from "antd";
 
-import { useRestaurantUpdate } from "../../../api";
-import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
+import { useRestaurantUpdate } from "../../../../api";
+import { useRestaurantIdStore } from "../../../../stores/useRestaurantIdStore";
 
 type schema = {
   pin: string;
@@ -10,7 +10,7 @@ type schema = {
 
 const initialValues = { pin: "", confirmPin: "" };
 
-export const Edit = () => {
+export const OperationPin = () => {
   const [form] = Form.useForm<schema>();
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
