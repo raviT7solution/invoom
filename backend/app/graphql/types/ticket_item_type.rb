@@ -16,5 +16,6 @@ class Types::TicketItemType < Types::BaseObject
   field :rst, Float, null: false
   field :status, enum("TicketItemStatusType", TicketItem.statuses.keys), null: false
 
+  field :applied_discount, Types::AppliedDiscountType, scope: "AppliedDiscountPolicy", preload: :applied_discount, null: true # rubocop:disable Layout/LineLength
   field :ticket_item_addons, [Types::TicketItemAddonType], null: false, authorize: "TicketItemAddonPolicy#index?"
 end

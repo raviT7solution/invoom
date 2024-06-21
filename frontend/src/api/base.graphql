@@ -564,3 +564,47 @@ mutation kitchenProfileUpdate($input: KitchenProfileUpdateInput!) {
 mutation kitchenProfileDelete($id: ID!) {
   kitchenProfileDelete(input: { id: $id })
 }
+
+query discounts($restaurantId: ID!) {
+  discounts(restaurantId: $restaurantId) {
+    discountType
+    id
+    name
+    value
+    visible
+  }
+}
+
+query discount($id: ID!) {
+  discount(id: $id) {
+    autoApply
+    blackOutDates
+    capping
+    categoryIds
+    channels
+    clubbed
+    discountOn
+    discountType
+    endDateTime
+    id
+    itemIds
+    name
+    repeat
+    startDateTime
+    threshold
+    value
+    visible
+  }
+}
+
+mutation discountCreate($input: DiscountCreateInput!) {
+  discountCreate(input: $input)
+}
+
+mutation discountUpdate($input: DiscountUpdateInput!) {
+  discountUpdate(input: $input)
+}
+
+mutation discountDelete($id: ID!) {
+  discountDelete(input: { id: $id })
+}

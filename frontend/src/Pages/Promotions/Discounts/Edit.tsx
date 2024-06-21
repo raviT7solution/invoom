@@ -1,0 +1,350 @@
+import {
+  Button,
+  Checkbox,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Radio,
+  Select,
+} from "antd";
+import { useEffect } from "react";
+
+import {
+  useCategories,
+  useDiscount,
+  useDiscountCreate,
+  useDiscountUpdate,
+  useItems,
+} from "../../../api";
+import {
+  DiscountChannelEnum,
+  DiscountOnEnum,
+  DiscountRepeatEnum,
+  DiscountTypeEnum,
+} from "../../../api/base";
+import {
+  DATE_FORMAT,
+  DATE_TIME_FORMAT,
+  datePickerGetValueFromEvent,
+  datePickerGetValueProps,
+  multiDatePickerGetValueFromEvent,
+  multiDatePickerGetValueProps,
+} from "../../../components/DatePicker";
+import { FormDrawer } from "../../../components/FormDrawer";
+import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
+
+type schema = {
+  autoApply: boolean;
+  blackOutDates: string[];
+  capping: number;
+  categoryIds: string[];
+  channels: DiscountChannelEnum[];
+  clubbed: boolean;
+  discountOn: DiscountOnEnum;
+  discountType: DiscountTypeEnum;
+  endDateTime: string | null;
+  itemIds: string[];
+  name: string;
+  repeat: DiscountRepeatEnum[];
+  startDateTime: string | null;
+  threshold: number;
+  value: number;
+  visible: boolean;
+};
+
+const initialValues = {
+  autoApply: false,
+  blackOutDates: [],
+  capping: 0,
+  clubbed: false,
+  discountOn: "bill_wise",
+  discountValue: 0,
+  threshold: 0,
+  visible: true,
+};
+
+const discountTypes = [
+  {
+    label: "Percentage",
+    value: "percentage",
+  },
+  {
+    label: "Flat Rate",
+    value: "flat",
+  },
+  {
+    label: "BOGO",
+    value: "bogo",
+  },
+  {
+    label: "Combo",
+    value: "combo",
+  },
+  {
+    label: "Comp-off",
+    value: "compoff",
+  },
+  {
+    label: "Coupons",
+    value: "coupons",
+  },
+];
+
+const channels = [
+  {
+    label: "Dine-In",
+    value: "dine_in",
+  },
+  {
+    label: "TakeOut",
+    value: "takeout",
+  },
+  {
+    label: "Delivery",
+    value: "delivery",
+  },
+  {
+    label: "All",
+    value: "all",
+  },
+];
+
+export const Edit = ({
+  discountId,
+  open,
+  showEditDiscount,
+}: {
+  discountId: string;
+  open: boolean;
+  showEditDiscount: (id: string, open: boolean) => void;
+}) => {
+  const isNew = discountId === "";
+  const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
+
+  const { mutateAsync: discountCreate } = useDiscountCreate();
+  const { mutateAsync: discountUpdate } = useDiscountUpdate();
+
+  const { data: discount, isFetching } = useDiscount(discountId);
+  const { data: categories } = useCategories(restaurantId);
+  const { data: items } = useItems(restaurantId);
+
+  const [form] = Form.useForm<schema>();
+  const autoApply = Form.useWatch("autoApply", form);
+  const discountOn = Form.useWatch("discountOn", form);
+  const itemWise = discountOn === "item_wise";
+
+  const onClose = () => showEditDiscount("", false);
+
+  useEffect(() => form.resetFields(), [discount, form, isNew]);
+
+  const onFinish = async (values: schema) => {
+    isNew
+      ? await discountCreate({
+          input: { attributes: values, restaurantId: restaurantId },
+        })
+      : await discountUpdate({
+          input: { attributes: values, id: discountId },
+        });
+
+    onClose();
+  };
+
+  return (
+    <FormDrawer
+      footer={[
+        <Button
+          form="discount-form"
+          htmlType="submit"
+          key="submit"
+          type="primary"
+        >
+          Submit
+        </Button>,
+      ]}
+      isFetching={isFetching}
+      onClose={onClose}
+      open={open}
+      title={isNew ? "New Discount" : "Edit Discount"}
+    >
+      <Form
+        form={form}
+        initialValues={isNew ? initialValues : discount}
+        layout="vertical"
+        name="discount-form"
+        onFinish={onFinish}
+        preserve={false}
+      >
+        <Form.Item
+          label="Discount Name"
+          name="name"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <Input placeholder="Name" />
+        </Form.Item>
+
+        <Form.Item
+          label="Discount Type"
+          name="discountType"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <Select options={discountTypes} placeholder="Select" />
+        </Form.Item>
+
+        <Form.Item
+          label="Channel"
+          name="channels"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <Select mode="multiple" options={channels} placeholder="Select" />
+        </Form.Item>
+
+        <Form.Item
+          label="Discount Value"
+          name="value"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <InputNumber min={0} placeholder="Value" style={{ width: "100%" }} />
+        </Form.Item>
+
+        <Form.Item label="Threshold" name="threshold">
+          <InputNumber
+            min={0}
+            placeholder="Threshold"
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item label="Capping" name="capping">
+          <InputNumber
+            min={0}
+            placeholder="Capping"
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Discount On"
+          name="discountOn"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <Radio.Group
+            onChange={() =>
+              form.setFieldsValue({ categoryIds: [], itemIds: [] })
+            }
+          >
+            <Radio value="bill_wise">Bill Wise</Radio>
+            <Radio value="item_wise">Item Wise</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item hidden={!itemWise} label="Categories" name="categoryIds">
+          <Select
+            mode="multiple"
+            options={categories.map((i) => ({
+              label: i.name,
+              value: i.id,
+            }))}
+            placeholder="Select"
+          />
+        </Form.Item>
+
+        <Form.Item hidden={!itemWise} label="Items" name="itemIds">
+          <Select
+            mode="multiple"
+            options={items.map((i) => ({
+              label: i.name,
+              value: i.id,
+            }))}
+            placeholder="Select"
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Auto Apply"
+          name="autoApply"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <Radio.Group
+            onChange={() =>
+              form.setFieldsValue({ startDateTime: null, endDateTime: null })
+            }
+          >
+            <Radio value={true}>Yes</Radio>
+            <Radio value={false}>No</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
+          getValueFromEvent={datePickerGetValueFromEvent}
+          getValueProps={datePickerGetValueProps}
+          hidden={!autoApply}
+          label="Start Date & Time"
+          name="startDateTime"
+          rules={[{ required: autoApply, message: "Required" }]}
+        >
+          <DatePicker
+            format={DATE_TIME_FORMAT}
+            showTime
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          getValueFromEvent={datePickerGetValueFromEvent}
+          getValueProps={datePickerGetValueProps}
+          hidden={!autoApply}
+          label="End Date & Time"
+          name="endDateTime"
+          rules={[{ required: autoApply, message: "Required" }]}
+        >
+          <DatePicker
+            format={DATE_TIME_FORMAT}
+            showTime
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Clubbed"
+          name="clubbed"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <Radio.Group>
+            <Radio value={true}>Yes</Radio>
+            <Radio value={false}>No</Radio>
+          </Radio.Group>
+        </Form.Item>
+
+        <Form.Item
+          label="Repeat"
+          name="repeat"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <Checkbox.Group>
+            <Checkbox value="Sun">Sun</Checkbox>
+            <Checkbox value="Mon">Mon</Checkbox>
+            <Checkbox value="Tue">Tue</Checkbox>
+            <Checkbox value="Wed">Wed</Checkbox>
+            <Checkbox value="Thu">Thu</Checkbox>
+            <Checkbox value="Fri">Fri</Checkbox>
+            <Checkbox value="Sat">Sat</Checkbox>
+          </Checkbox.Group>
+        </Form.Item>
+
+        <Form.Item
+          getValueFromEvent={multiDatePickerGetValueFromEvent}
+          getValueProps={multiDatePickerGetValueProps}
+          label="Blackout Dates"
+          name="blackOutDates"
+        >
+          <DatePicker format={DATE_FORMAT} multiple />
+        </Form.Item>
+
+        <Form.Item name="visible" valuePropName="checked">
+          <Checkbox>Visible</Checkbox>
+        </Form.Item>
+      </Form>
+    </FormDrawer>
+  );
+};

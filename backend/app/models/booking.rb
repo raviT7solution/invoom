@@ -14,6 +14,8 @@ class Booking < ApplicationRecord
   has_many :booking_tables, dependent: :destroy
   has_many :tickets, dependent: :restrict_with_error
 
+  has_one :applied_discount, as: :discountable, dependent: :destroy
+
   validates :booking_tables, length: { is: 0 }, unless: :dine_in?
   validates :booking_tables, length: { minimum: 1 }, if: :dine_in?
   validates :booking_type, presence: true

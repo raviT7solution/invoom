@@ -11,6 +11,10 @@ type schema = {
 
 const permissions = [
   {
+    label: "Apply Discount",
+    value: "apply_discount",
+  },
+  {
     label: "Clock In / Clock Out",
     value: "clock_in_clock_out",
   },

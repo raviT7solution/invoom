@@ -26,6 +26,14 @@ import {
   CreateCategoryDocument,
   CreateCategoryMutationVariables,
   CurrentAdminDocument,
+  DiscountCreateDocument,
+  DiscountCreateMutationVariables,
+  DiscountDeleteDocument,
+  DiscountDeleteMutationVariables,
+  DiscountDocument,
+  DiscountUpdateDocument,
+  DiscountUpdateMutationVariables,
+  DiscountsDocument,
   FloorObjectUpdateDocument,
   FloorObjectUpdateMutationVariables,
   FloorObjectsDocument,
@@ -827,6 +835,61 @@ export const useKitchenProfileDelete = () => {
       client.request(KitchenProfileDeleteDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["kitchenProfiles"] });
+    },
+  });
+};
+
+export const useDiscounts = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryKey: ["discounts", restaurantId],
+    queryFn: async () =>
+      (await client.request(DiscountsDocument, { restaurantId })).discounts,
+  });
+};
+
+export const useDiscount = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["discount", id],
+    queryFn: async () =>
+      (await client.request(DiscountDocument, { id: id })).discount,
+  });
+};
+
+export const useDiscountCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: DiscountCreateMutationVariables) =>
+      client.request(DiscountCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["discounts"] });
+    },
+  });
+};
+
+export const useDiscountUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: DiscountUpdateMutationVariables) =>
+      client.request(DiscountUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["discounts"] });
+    },
+  });
+};
+
+export const useDiscountDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: DiscountDeleteMutationVariables) =>
+      client.request(DiscountDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["discounts"] });
     },
   });
 };

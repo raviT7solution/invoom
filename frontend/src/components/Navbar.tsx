@@ -16,6 +16,7 @@ import {
   PercentageOutlined,
   PlusCircleOutlined,
   ReconciliationOutlined,
+  RiseOutlined,
   SettingOutlined,
   TeamOutlined,
   UserAddOutlined,
@@ -121,62 +122,74 @@ export const Navbar = ({
       key: "4",
     },
     {
+      label: "Promotions",
+      icon: <RiseOutlined />,
+      key: "5",
+      children: [
+        {
+          label: <Link to={Router.PromotionsDiscounts()}>Discounts</Link>,
+          icon: <PercentageOutlined />,
+          key: "5.1",
+        },
+      ],
+    },
+    {
       label: "Inventory",
       icon: <AuditOutlined />,
-      key: "5",
+      key: "6",
       children: [
         {
           label: <Link to={Router.InventoryCategories()}>Category</Link>,
           icon: <MenuUnfoldOutlined />,
-          key: "5.1",
+          key: "6.1",
         },
         {
           label: <Link to={Router.InventoryProducts()}>Products</Link>,
           icon: <BookOutlined />,
-          key: "5.2",
+          key: "6.2",
         },
       ],
     },
     {
       label: "Reports",
       icon: <CarryOutOutlined />,
-      key: "6",
+      key: "7",
       children: [
         {
           label: <Link to={Router.ReportsLabour()}>Labour Report</Link>,
           icon: <FieldTimeOutlined />,
-          key: "6.1",
+          key: "7.1",
         },
       ],
     },
     {
       label: "Settings",
       icon: <SettingOutlined />,
-      key: "7",
+      key: "8",
       children: [
         {
           label: <Link to={Router.SettingsTaxes()}>Tax</Link>,
           icon: <PercentageOutlined />,
-          key: "7.1",
+          key: "8.1",
         },
         {
           label: <Link to={Router.SettingsOperationPin()}>Operation Pin</Link>,
           icon: <InfoOutlined />,
-          key: "7.2",
+          key: "8.2",
         },
         {
           label: (
             <Link to={Router.SettingsKitchenProfiles()}>Kitchen Profiles</Link>
           ),
           icon: <InsertRowAboveOutlined />,
-          key: "7.3",
+          key: "8.3",
         },
       ],
     },
     {
       label: "Logout",
       icon: <LogoutOutlined />,
-      key: "8",
+      key: "9",
       onClick: onLogout,
     },
   ];

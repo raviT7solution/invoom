@@ -13,6 +13,7 @@ import { InventoryProducts } from "./Pages/Inventory/Products";
 import { KDSHome } from "./Pages/KDS/Home";
 import { KDSLogin } from "./Pages/KDS/Login";
 import { Login } from "./Pages/Login";
+import { Discounts } from "./Pages/Promotions/Discounts";
 import { ReportsLabour } from "./Pages/Reports/Labour";
 import { ChangePassword } from "./Pages/Settings/ChangePassword";
 import { KitchenProfiles } from "./Pages/Settings/KitchenProfiles";
@@ -61,6 +62,7 @@ const routes = {
   KDS: "/kds",
   KDSLogin: "/kds/login",
   Login: "/login",
+  PromotionsDiscounts: "/promotions/discounts",
   ReportsLabour: "/reports/labour",
   SettingsKitchenProfiles: "/settings/kitchen-profiles",
   SettingsOperationPin: "/settings/operation-pin",
@@ -121,6 +123,11 @@ export const Switch = () => {
     .with({ name: "CuisineHubModifiers" }, () => (
       <PrivateRoute>
         <Modifiers />
+      </PrivateRoute>
+    ))
+    .with({ name: "PromotionsDiscounts" }, () => (
+      <PrivateRoute>
+        <Discounts />
       </PrivateRoute>
     ))
     .with({ name: "InventoryCategories" }, () => (

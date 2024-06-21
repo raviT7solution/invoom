@@ -6,6 +6,8 @@ class TicketItem < ApplicationRecord
 
   has_many :ticket_item_addons, dependent: :destroy
 
+  has_one :applied_discount, as: :discountable, dependent: :destroy
+
   enum :status, [:queued, :preparing, :ready, :served], default: :queued
 
   validates :display_name, presence: true

@@ -5,6 +5,10 @@ class Types::MutationType < Types::BaseObject
   field :addons_delete, mutation: Mutations::AddonsDelete, null: false, authorize: "AddonPolicy#delete?"
   field :addons_update, mutation: Mutations::AddonsUpdate, null: false, authorize: "AddonPolicy#update?"
   field :admin_session_create, mutation: Mutations::AdminSessionCreate, null: false
+  field :applied_discount_create, mutation: Mutations::AppliedDiscountCreate, null: false,
+                                  authorize: "AppliedDiscountPolicy#create?"
+  field :applied_discount_delete, mutation: Mutations::AppliedDiscountDelete, null: false,
+                                  authorize: "AppliedDiscountPolicy#delete?"
   field :booking_create, mutation: Mutations::BookingCreate, null: false, authorize: "BookingPolicy#create?"
   field :booking_update, mutation: Mutations::BookingUpdate, null: false, authorize: "BookingPolicy#update?"
   field :category_create, mutation: Mutations::CategoryCreate, null: false, authorize: "CategoryPolicy#create?"
@@ -12,6 +16,9 @@ class Types::MutationType < Types::BaseObject
   field :category_update, mutation: Mutations::CategoryUpdate, null: false, authorize: "CategoryPolicy#update?"
   field :change_password, mutation: Mutations::Admin::ChangePassword, null: false
   field :customer_create, mutation: Mutations::CustomerCreate, null: false, authorize: "CustomerPolicy#create?"
+  field :discount_create, mutation: Mutations::DiscountCreate, null: false, authorize: "DiscountPolicy#create?"
+  field :discount_delete, mutation: Mutations::DiscountDelete, null: false, authorize: "DiscountPolicy#delete?"
+  field :discount_update, mutation: Mutations::DiscountUpdate, null: false, authorize: "DiscountPolicy#update?"
   field :floor_object_update, mutation: Mutations::FloorObjectUpdate, null: false,
                               authorize: "FloorObjectPolicy#update?"
   field :inventory_category_create, mutation: Mutations::InventoryCategoryCreate, null: false,

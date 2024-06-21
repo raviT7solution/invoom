@@ -38,6 +38,15 @@ class Types::QueryType < Types::BaseObject
     argument :query, String, required: true
     argument :restaurant_id, ID, required: true
   end
+  field :discount, Types::DiscountType, null: false do
+    argument :id, ID, required: true
+  end
+  field :discounts, [Types::DiscountType], null: false do
+    argument :channel, Types::Discount::ChannelEnum, required: false
+    argument :discount_on, Types::Discount::DiscountOnEnum, required: false
+    argument :item_id, ID, required: false
+    argument :restaurant_id, ID, required: true
+  end
   field :floor_objects, [Types::FloorObjectType], null: false, authorize: "FloorObjectPolicy#index?" do
     argument :restaurant_id, ID, required: true
   end
@@ -198,6 +207,30 @@ class Types::QueryType < Types::BaseObject
     records = records.where("name ILIKE :q OR phone_number ILIKE :q", q: "%#{query}%") if query.present?
 
     records.order(created_at: :desc).page(page).per(per_page)
+  end
+
+  def discount(id:)
+    DiscountPolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def discounts(restaurant_id:, discount_on: nil, channel: nil, item_id: nil) # rubocop:disable Metrics/AbcSize
+    restaurant = Restaurant.find(restaurant_id)
+
+    records = Time.use_zone(restaurant.timezone) do
+      DiscountPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    end
+
+    records = records.where(discount_on: discount_on) if discount_on.present?
+    records = records.where("channels && ARRAY[?]::varchar[]", ["all", channel]) if channel.present?
+
+    if item_id.present?
+      category_discounts = records.joins(category_discounts: { category: :items }).where(items: { id: item_id })
+      item_discounts = records.joins(:item_discounts).where(item_discounts: { item_id: item_id })
+
+      records = records.where(id: category_discounts.ids + item_discounts.ids)
+    end
+
+    records
   end
 
   def floor_objects(restaurant_id:)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_23_123854) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -45,6 +45,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admins_on_email", unique: true
+  end
+
+  create_table "applied_discounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "discount_type", null: false
+    t.float "value", null: false
+    t.string "discountable_type", null: false
+    t.uuid "discountable_id", null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discountable_type", "discountable_id"], name: "index_applied_discounts_on_discountable", unique: true
+    t.index ["restaurant_id"], name: "index_applied_discounts_on_restaurant_id"
   end
 
   create_table "booking_tables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -84,6 +97,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
     t.index ["restaurant_id"], name: "index_categories_on_restaurant_id"
   end
 
+  create_table "category_discounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "category_id", null: false
+    t.uuid "discount_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_category_discounts_on_category_id"
+    t.index ["discount_id"], name: "index_category_discounts_on_discount_id"
+  end
+
   create_table "category_modifiers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "category_id", null: false
     t.uuid "modifier_id", null: false
@@ -102,6 +124,27 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
     t.datetime "updated_at", null: false
     t.index ["email", "restaurant_id"], name: "index_customers_on_email_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_customers_on_restaurant_id"
+  end
+
+  create_table "discounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.boolean "auto_apply", default: false, null: false
+    t.boolean "clubbed", default: false, null: false
+    t.boolean "visible", default: true, null: false
+    t.date "black_out_dates", null: false, array: true
+    t.datetime "end_date_time"
+    t.datetime "start_date_time"
+    t.float "capping", null: false
+    t.float "threshold", null: false
+    t.float "value", null: false
+    t.integer "discount_on", null: false
+    t.integer "discount_type", null: false
+    t.string "channels", null: false, array: true
+    t.string "name", null: false
+    t.string "repeat", null: false, array: true
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_discounts_on_restaurant_id"
   end
 
   create_table "floor_objects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -134,6 +177,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
     t.index ["addon_id"], name: "index_item_addons_on_addon_id"
     t.index ["item_id", "addon_id"], name: "index_item_addons_on_item_id_and_addon_id", unique: true
     t.index ["item_id"], name: "index_item_addons_on_item_id"
+  end
+
+  create_table "item_discounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "item_id", null: false
+    t.uuid "discount_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discount_id"], name: "index_item_discounts_on_discount_id"
+    t.index ["item_id"], name: "index_item_discounts_on_item_id"
   end
 
   create_table "item_modifiers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -385,19 +437,25 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_17_140437) do
   add_foreign_key "addons", "restaurants"
   add_foreign_key "admin_restaurants", "admins"
   add_foreign_key "admin_restaurants", "restaurants"
+  add_foreign_key "applied_discounts", "restaurants"
   add_foreign_key "booking_tables", "bookings"
   add_foreign_key "booking_tables", "floor_objects"
   add_foreign_key "bookings", "customers"
   add_foreign_key "bookings", "restaurants"
   add_foreign_key "bookings", "users"
   add_foreign_key "categories", "restaurants"
+  add_foreign_key "category_discounts", "categories"
+  add_foreign_key "category_discounts", "discounts"
   add_foreign_key "category_modifiers", "categories"
   add_foreign_key "category_modifiers", "modifiers"
   add_foreign_key "customers", "restaurants"
+  add_foreign_key "discounts", "restaurants"
   add_foreign_key "floor_objects", "restaurants"
   add_foreign_key "inventory_categories", "restaurants"
   add_foreign_key "item_addons", "addons"
   add_foreign_key "item_addons", "items"
+  add_foreign_key "item_discounts", "discounts"
+  add_foreign_key "item_discounts", "items"
   add_foreign_key "item_modifiers", "items"
   add_foreign_key "item_modifiers", "modifiers"
   add_foreign_key "items", "categories"
