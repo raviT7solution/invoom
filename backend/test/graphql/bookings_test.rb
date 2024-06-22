@@ -192,6 +192,36 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_equal 3, booking.reload.pax
   end
 
+  test "booking close" do
+    restaurant = create(:restaurant)
+    role = create(:role, restaurant: restaurant, permissions: ["orders"])
+    user = create(:user, restaurant: restaurant, roles: [role])
+
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
+                               booking_tables: [build(:booking_table, floor_object: table)])
+
+    ticket = create(:ticket, booking: booking)
+    category = create(:category, restaurant: restaurant)
+    item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
+
+    create(:ticket_item, ticket: ticket, item: item, status: :cancelled)
+    ticket_item = create(:ticket_item, ticket: ticket, item: item, status: :queued)
+
+    authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
+
+    assert_query_error "Item(s) still present in kitchen"
+    assert_nil booking.reload.clocked_out_at
+
+    ticket_item.update!(status: :cancelled)
+
+    authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
+
+    assert_query_success
+    assert_not booking.booking_tables.where.not(floor_object_id: nil).exists?
+    assert_not_nil booking.reload.clocked_out_at
+  end
+
   private
 
   def bookings
@@ -234,6 +264,14 @@ class BookingsTest < ActionDispatch::IntegrationTest
     <<~GQL
       mutation BookingUpdate($input: BookingUpdateInput!) {
         bookingUpdate(input: $input)
+      }
+    GQL
+  end
+
+  def booking_close
+    <<~GQL
+      mutation bookingClose($id: ID!) {
+        bookingClose(input: { id: $id })
       }
     GQL
   end

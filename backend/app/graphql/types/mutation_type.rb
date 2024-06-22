@@ -9,6 +9,7 @@ class Types::MutationType < Types::BaseObject
                                   authorize: "AppliedDiscountPolicy#create?"
   field :applied_discount_delete, mutation: Mutations::AppliedDiscountDelete, null: false,
                                   authorize: "AppliedDiscountPolicy#delete?"
+  field :booking_close, mutation: Mutations::BookingClose, null: false, authorize: "BookingPolicy#close?"
   field :booking_create, mutation: Mutations::BookingCreate, null: false, authorize: "BookingPolicy#create?"
   field :booking_update, mutation: Mutations::BookingUpdate, null: false, authorize: "BookingPolicy#update?"
   field :category_create, mutation: Mutations::CategoryCreate, null: false, authorize: "CategoryPolicy#create?"
