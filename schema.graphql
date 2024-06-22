@@ -1598,6 +1598,7 @@ input TicketItemDeleteInput {
 }
 
 enum TicketItemStatusAttribute {
+  cancelled
   preparing
   queued
   ready
@@ -1605,6 +1606,7 @@ enum TicketItemStatusAttribute {
 }
 
 enum TicketItemStatusType {
+  cancelled
   preparing
   queued
   ready
