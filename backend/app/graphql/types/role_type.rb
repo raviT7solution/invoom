@@ -5,5 +5,5 @@ class Types::RoleType < Types::BaseObject
   field :name, String, null: false
   field :permissions, [String], null: false
 
-  field :users, [Types::UserType], null: false
+  field :users, [Types::UserType], scope: "UserPolicy", preload: :users, null: false
 end

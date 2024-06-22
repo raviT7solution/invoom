@@ -6,5 +6,5 @@ class Types::ReservationType < Types::BaseObject
   field :reservation_at, GraphQL::Types::ISO8601DateTime, null: false
   field :status, enum("ReservationStatusType", Reservation.statuses.keys), null: false
 
-  field :customer, Types::CustomerType, null: false, authorize: "CustomerPolicy#show?"
+  field :customer, Types::CustomerType, scope: "CustomerPolicy", preload: :customer, null: false
 end

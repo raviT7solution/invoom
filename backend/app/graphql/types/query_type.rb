@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 class Types::QueryType < Types::BaseObject
-  field :addon, Types::AddonsType, null: false, authorize: "AddonPolicy#show?" do
+  field :addon, Types::AddonsType, null: false do
     argument :id, ID, required: true
   end
-  field :addons, [Types::AddonsType], null: false, authorize: "AddonPolicy#index?" do
+  field :addons, [Types::AddonsType], null: false do
     argument :restaurant_id, ID, required: true
   end
-  field :booking, Types::BookingType, null: false, authorize: "BookingPolicy#show?" do
+  field :booking, Types::BookingType, null: false do
     argument :id, ID, required: true
   end
-  field :bookings, Types::BookingType.collection_type, null: false, authorize: "BookingPolicy#index?" do
+  field :bookings, Types::BookingType.collection_type, null: false do
     argument :booking_types, [String], required: true
     argument :end_date, GraphQL::Types::ISO8601DateTime, required: false
     argument :page, Integer, required: true
@@ -19,10 +19,10 @@ class Types::QueryType < Types::BaseObject
     argument :start_date, GraphQL::Types::ISO8601DateTime, required: false
     argument :status, String, required: true
   end
-  field :categories, [Types::CategoryType], null: false, authorize: "CategoryPolicy#index?" do
+  field :categories, [Types::CategoryType], null: false do
     argument :restaurant_id, ID, required: true
   end
-  field :category, Types::CategoryType, null: false, authorize: "CategoryPolicy#show?" do
+  field :category, Types::CategoryType, null: false do
     argument :id, ID, required: true
   end
   field :cities, [Types::CityType], null: false do
@@ -30,9 +30,9 @@ class Types::QueryType < Types::BaseObject
     argument :province_code, String, required: true
   end
   field :countries, [Types::CountryType], null: false
-  field :current_admin, Types::AdminType, null: false, authorize: "AdminPolicy#show?"
-  field :current_user, Types::UserType, null: false, authorize: "UserPolicy#show?"
-  field :customers, Types::CustomerType.collection_type, null: false, authorize: "CustomerPolicy#index?" do
+  field :current_admin, Types::AdminType, null: false
+  field :current_user, Types::UserType, null: false
+  field :customers, Types::CustomerType.collection_type, null: false do
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
     argument :query, String, required: true
@@ -47,39 +47,38 @@ class Types::QueryType < Types::BaseObject
     argument :item_id, ID, required: false
     argument :restaurant_id, ID, required: true
   end
-  field :floor_objects, [Types::FloorObjectType], null: false, authorize: "FloorObjectPolicy#index?" do
+  field :floor_objects, [Types::FloorObjectType], null: false do
     argument :restaurant_id, ID, required: true
   end
-  field :inventory_categories, [Types::InventoryCategoryType], null: false,
-                                                               authorize: "InventoryCategoryPolicy#index?" do
+  field :inventory_categories, [Types::InventoryCategoryType], null: false do
     argument :restaurant_id, ID, required: true
   end
-  field :inventory_category, Types::InventoryCategoryType, null: false, authorize: "InventoryCategoryPolicy#show?" do
+  field :inventory_category, Types::InventoryCategoryType, null: false do
     argument :id, ID, required: true
   end
-  field :item, Types::ItemType, null: false, authorize: "ItemPolicy#show?" do
+  field :item, Types::ItemType, null: false do
     argument :id, ID, required: true
   end
-  field :items, [Types::ItemType], null: false, authorize: "ItemPolicy#index?" do
+  field :items, [Types::ItemType], null: false do
     argument :category_id, ID, required: false
     argument :restaurant_id, ID, required: true
   end
-  field :kitchen_profile, Types::KitchenProfileType, null: false, authorize: "KitchenProfilePolicy#show?" do
+  field :kitchen_profile, Types::KitchenProfileType, null: false do
     argument :id, ID, required: true
   end
-  field :kitchen_profiles, [Types::KitchenProfileType], null: false, authorize: "KitchenProfilePolicy#index?" do
+  field :kitchen_profiles, [Types::KitchenProfileType], null: false do
     argument :restaurant_id, ID, required: true
   end
-  field :menu, Types::MenuType, null: false, authorize: "MenuPolicy#show?" do
+  field :menu, Types::MenuType, null: false do
     argument :id, ID, required: true
   end
-  field :menus, [Types::MenuType], null: false, authorize: "MenuPolicy#index?" do
+  field :menus, [Types::MenuType], null: false do
     argument :restaurant_id, ID, required: true
   end
-  field :modifier, Types::ModifierType, null: false, authorize: "ModifierPolicy#show?" do
+  field :modifier, Types::ModifierType, null: false do
     argument :id, ID, required: true
   end
-  field :modifiers, [Types::ModifierType], null: false, authorize: "ModifierPolicy#index?" do
+  field :modifiers, [Types::ModifierType], null: false do
     argument :restaurant_id, ID, required: true
   end
   field :printer_configuration, Types::PrinterConfigurationType, null: false do
@@ -88,16 +87,16 @@ class Types::QueryType < Types::BaseObject
   field :printer_configurations, [Types::PrinterConfigurationType], null: false do
     argument :restaurant_id, ID, required: true
   end
-  field :product, Types::ProductType, null: false, authorize: "ProductPolicy#show?" do
+  field :product, Types::ProductType, null: false do
     argument :id, ID, required: true
   end
-  field :products, [Types::ProductType], null: false, authorize: "ProductPolicy#index?" do
+  field :products, [Types::ProductType], null: false do
     argument :restaurant_id, ID, required: true
   end
   field :provinces, [Types::ProvinceType], null: false do
     argument :alpha2, String, required: true
   end
-  field :reservations, Types::ReservationType.collection_type, null: false, authorize: "ReservationPolicy#index?" do
+  field :reservations, Types::ReservationType.collection_type, null: false do
     argument :end_time, GraphQL::Types::ISO8601DateTime, required: false
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
@@ -105,19 +104,19 @@ class Types::QueryType < Types::BaseObject
     argument :start_time, GraphQL::Types::ISO8601DateTime, required: false
     argument :status, String, required: false
   end
-  field :restaurants, [Types::RestaurantType], null: false, authorize: "RestaurantPolicy#index?" do
+  field :restaurants, [Types::RestaurantType], null: false do
     argument :status, String, required: false
   end
-  field :role, Types::RoleType, null: false, authorize: "RolePolicy#show?" do
+  field :role, Types::RoleType, null: false do
     argument :id, ID, required: true
   end
-  field :roles, [Types::RoleType], null: false, authorize: "RolePolicy#index?" do
+  field :roles, [Types::RoleType], null: false do
     argument :restaurant_id, ID, required: true
   end
-  field :taxes, [Types::TaxType], null: false, authorize: "TaxPolicy#index?" do
+  field :taxes, [Types::TaxType], null: false do
     argument :restaurant_id, ID, required: true
   end
-  field :tickets, Types::TicketType.collection_type, null: false, authorize: "TicketPolicy#index?" do
+  field :tickets, Types::TicketType.collection_type, null: false do
     argument :booking_types, [String], required: false
     argument :kitchen_profile_id, ID, required: false
     argument :page, Integer, required: true
@@ -125,7 +124,7 @@ class Types::QueryType < Types::BaseObject
     argument :restaurant_id, ID, required: true
     argument :status, [String], required: false
   end
-  field :time_sheets, Types::TimeSheetType.collection_type, null: false, authorize: "TimeSheetPolicy#index?" do
+  field :time_sheets, Types::TimeSheetType.collection_type, null: false do
     argument :end_date, String, required: false
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
@@ -133,10 +132,10 @@ class Types::QueryType < Types::BaseObject
     argument :start_date, String, required: false
     argument :user_ids, [String], required: false
   end
-  field :user, Types::UserType, null: false, authorize: "UserPolicy#show?" do
+  field :user, Types::UserType, null: false do
     argument :id, ID, required: true
   end
-  field :users, [Types::UserType], null: false, authorize: "UserPolicy#index?" do
+  field :users, [Types::UserType], null: false do
     argument :restaurant_id, ID, required: true
   end
 

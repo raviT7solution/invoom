@@ -11,12 +11,12 @@ class Types::ItemType < Types::BaseObject
   field :takeout_price, Float, null: false
   field :visible, Boolean, null: false
 
-  field :addon_ids, [ID], null: false
+  field :addon_ids, [ID], scope: "AddonPolicy", preload: :addons, null: false
   field :category_id, ID, null: false
-  field :modifier_ids, [ID], null: false
+  field :modifier_ids, [ID], scope: "ModifierPolicy", preload: :modifiers, null: false
   field :tax_id, ID, null: false
 
   field :addons, [Types::AddonsType], scope: "AddonPolicy", preload: :addons, null: false
   field :modifiers, [Types::ModifierType], scope: "ModifierPolicy", preload: :modifiers, null: false
-  field :tax, Types::TaxType, authorize: "TaxPolicy#show?", null: false
+  field :tax, Types::TaxType, scope: "TaxPolicy", preload: :tax, null: false
 end

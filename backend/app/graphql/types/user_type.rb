@@ -3,7 +3,6 @@
 class Types::UserType < Types::BaseObject
   field :address, String, null: true
   field :city, String, null: true
-  field :clocked_in_at, GraphQL::Types::ISO8601DateTime, null: true
   field :country, String, null: true
   field :country_code, String, null: false
   field :email, String, null: false
@@ -23,10 +22,11 @@ class Types::UserType < Types::BaseObject
   field :wage, Float, null: false
   field :zip_code, String, null: true
 
-  field :role_ids, [ID], null: false
+  field :clocked_in_at, GraphQL::Types::ISO8601DateTime, preload: :last_time_sheet, null: true
+  field :role_ids, [ID], scope: "RolePolicy", preload: :roles, null: false
 
   def clocked_in_at
-    object.time_sheets.where(end_time: nil).first&.start_time
+    object.last_time_sheet&.start_time
   end
 
   def over_time

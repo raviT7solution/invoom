@@ -5,20 +5,14 @@ class BookingPolicy < ApplicationPolicy
     mobile_user?("orders")
   end
 
-  def index?
-    mobile_user?("orders")
-  end
-
   def scope
     if mobile_user?("orders")
       Booking.where(restaurant: mobile_user!.restaurant)
+    elsif kds_admin?
+      Booking.where(restaurant: kds_admin!.restaurants)
     else
       Booking.none
     end
-  end
-
-  def show?
-    mobile_user?("orders") || kds_admin?
   end
 
   def update?

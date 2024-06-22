@@ -5,10 +5,6 @@ class RestaurantPolicy < ApplicationPolicy
     web_admin?
   end
 
-  def index?
-    web_admin? || mobile_admin? || kds_admin?
-  end
-
   def scope # rubocop:disable Metrics/AbcSize
     if web_admin?
       web_admin!.restaurants

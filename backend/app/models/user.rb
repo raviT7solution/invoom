@@ -14,6 +14,8 @@ class User < ApplicationRecord
 
   has_many :roles, through: :user_roles
 
+  has_one :last_time_sheet, -> { where(end_time: nil) }, class_name: "TimeSheet", dependent: :destroy # rubocop:disable Rails/InverseOf
+
   validates :email, presence: true, uniqueness: true
   validates :employment_type, presence: true
   validates :first_name, presence: true

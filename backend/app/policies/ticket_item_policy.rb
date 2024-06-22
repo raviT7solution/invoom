@@ -5,15 +5,11 @@ class TicketItemPolicy < ApplicationPolicy
     mobile_user?("delete_ticket_item")
   end
 
-  def index?
-    mobile_user?("orders") || kds_admin?
-  end
-
   def scope
     if mobile_user?("orders")
-      TicketItem.joins(ticket: { booking: :restaurant }).where(restaurants: { id: mobile_user!.restaurant_id })
+      TicketItem.joins(ticket: :booking).where(bookings: { restaurant_id: mobile_user!.restaurant_id })
     elsif kds_admin?
-      TicketItem.joins(ticket: { booking: :restaurant }).where(restaurants: { id: kds_admin!.restaurants })
+      TicketItem.joins(ticket: :booking).where(bookings: { restaurant_id: kds_admin!.restaurants })
     else
       TicketItem.none
     end

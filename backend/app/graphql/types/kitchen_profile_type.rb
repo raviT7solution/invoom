@@ -7,5 +7,5 @@ class Types::KitchenProfileType < Types::BaseObject
   field :notify, Boolean, null: false
   field :rows, Integer, null: false
 
-  field :category_ids, [ID], null: false
+  field :category_ids, [ID], scope: "CategoryPolicy", preload: :categories, null: false
 end

@@ -6,5 +6,5 @@ class Types::FloorObjectType < Types::BaseObject
   field :name, String, null: false
   field :object_type, enum("FloorObjectType", FloorObject.object_types.keys), null: false
 
-  field :booking_table, Types::BookingTableType, null: true, authorize: "BookingTablePolicy#show?"
+  field :booking_table, Types::BookingTableType, scope: "BookingTablePolicy", preload: :booking_table, null: true
 end

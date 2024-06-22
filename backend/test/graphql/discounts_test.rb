@@ -3,7 +3,7 @@
 require "test_helper"
 
 class DiscountsTest < ActionDispatch::IntegrationTest
-  test "discounts_by_args" do
+  test "discounts" do
     restaurant = create(:restaurant, timezone: "America/Toronto")
     role = create(:role, permissions: ["apply_discount"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])

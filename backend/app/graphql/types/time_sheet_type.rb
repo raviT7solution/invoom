@@ -5,5 +5,5 @@ class Types::TimeSheetType < Types::BaseObject
   field :id, ID, null: false
   field :start_time, GraphQL::Types::ISO8601DateTime, null: false
 
-  field :user, Types::UserType, null: false, authorize: "UserPolicy#show?"
+  field :user, Types::UserType, scope: "UserPolicy", preload: :user, null: false
 end

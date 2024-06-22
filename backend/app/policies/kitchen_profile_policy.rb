@@ -9,10 +9,6 @@ class KitchenProfilePolicy < ApplicationPolicy
     web_admin?
   end
 
-  def index?
-    kds_admin? || web_admin?
-  end
-
   def scope
     if kds_admin?
       KitchenProfile.where(restaurant: kds_admin!.restaurants)
@@ -21,10 +17,6 @@ class KitchenProfilePolicy < ApplicationPolicy
     else
       KitchenProfile.none
     end
-  end
-
-  def show?
-    kds_admin? || web_admin?
   end
 
   def update?

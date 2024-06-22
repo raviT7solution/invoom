@@ -5,19 +5,13 @@ class CustomerPolicy < ApplicationPolicy
     mobile_user?("takeout")
   end
 
-  def index?
-    mobile_user?("takeout")
-  end
-
   def scope
-    if mobile_user?("takeout")
-      Customer.where(restaurant: mobile_user!.restaurant)
+    if kds_admin?
+      Customer.where(restaurant: kds_admin!.restaurants)
+    elsif mobile_user?("takeout") || mobile_user?("reservations")
+      Customer.where(restaurant_id: mobile_user!.restaurant_id)
     else
       Customer.none
     end
-  end
-
-  def show?
-    kds_admin? || mobile_user?("takeout") || mobile_user?("reservations")
   end
 end

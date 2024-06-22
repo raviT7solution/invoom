@@ -10,11 +10,11 @@ class Types::BookingType < Types::BaseObject
   field :token, String, null: true
 
   field :applied_discount, Types::AppliedDiscountType, scope: "AppliedDiscountPolicy", preload: :applied_discount, null: true # rubocop:disable Layout/LineLength
-  field :booking_tables, [Types::BookingTableType], null: false, authorize: "BookingTablePolicy#index?"
-  field :customer, Types::CustomerType, null: true, authorize: "CustomerPolicy#show?"
-  field :tickets, [Types::TicketType], null: false, authorize: "TicketPolicy#index?"
+  field :booking_tables, [Types::BookingTableType], scope: "BookingTablePolicy", preload: :booking_tables, null: false
+  field :customer, Types::CustomerType, scope: "CustomerPolicy", preload: :customer, null: true
+  field :tickets, [Types::TicketType], scope: "TicketPolicy", preload: :tickets, null: false
 
-  field :user_full_name, String, null: false
+  field :user_full_name, String, preload: :user, null: false
 
   def user_full_name
     object.user.full_name

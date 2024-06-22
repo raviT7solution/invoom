@@ -9,10 +9,6 @@ class CategoryPolicy < ApplicationPolicy
     web_admin?
   end
 
-  def index?
-    web_admin?
-  end
-
   def scope
     if web_admin?
       Category.where(restaurant: web_admin!.restaurants)
@@ -21,10 +17,6 @@ class CategoryPolicy < ApplicationPolicy
     else
       Category.none
     end
-  end
-
-  def show?
-    web_admin?
   end
 
   def update?

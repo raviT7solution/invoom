@@ -5,10 +5,6 @@ class TicketPolicy < ApplicationPolicy
     mobile_user?("orders")
   end
 
-  def index?
-    mobile_user?("orders") || kds_admin?
-  end
-
   def scope
     if mobile_user?("orders")
       Ticket.joins(booking: :restaurant).where(restaurants: { id: mobile_user!.restaurant_id })

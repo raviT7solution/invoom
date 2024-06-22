@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
 class TicketItemAddonPolicy < ApplicationPolicy
-  def index?
-    mobile_user?("orders") || kds_admin?
+  def scope
+    if mobile_user?("orders")
+      TicketItemAddon.joins(ticket_item: { ticket: :booking })
+                     .where(bookings: { restaurant_id: mobile_user!.restaurant_id })
+    elsif kds_admin?
+      TicketItemAddon.joins(ticket_item: { ticket: :booking }).where(bookings: { restaurant: kds_admin!.restaurants })
+    else
+      TicketItemAddon.none
+    end
   end
 end

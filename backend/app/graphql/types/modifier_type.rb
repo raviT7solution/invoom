@@ -8,6 +8,6 @@ class Types::ModifierType < Types::BaseObject
   field :values, [String], null: false
   field :visible, Boolean, null: false
 
-  field :category_ids, [ID], null: false
-  field :item_ids, [ID], null: false
+  field :category_ids, [ID], scope: "CategoryPolicy", preload: :categories, null: false
+  field :item_ids, [ID], scope: "ItemPolicy", preload: :items, null: false
 end

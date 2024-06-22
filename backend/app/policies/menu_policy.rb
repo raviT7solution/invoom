@@ -9,10 +9,6 @@ class MenuPolicy < ApplicationPolicy
     web_admin?
   end
 
-  def index?
-    web_admin? || mobile_user?("orders")
-  end
-
   def scope
     if web_admin?
       Menu.where(restaurant: web_admin!.restaurants)
@@ -21,10 +17,6 @@ class MenuPolicy < ApplicationPolicy
     else
       Menu.none
     end
-  end
-
-  def show?
-    web_admin?
   end
 
   def update?

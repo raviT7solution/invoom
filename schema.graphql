@@ -54,11 +54,8 @@ input AddonsUpdateInput {
 
 type Admin {
   email: String!
-  firstName: String!
   fullName: String!
   id: ID!
-  lastName: String!
-  restaurants: [Restaurant!]!
 }
 
 type AdminSession {
