@@ -11,6 +11,9 @@ import { BiStreetView } from "@react-icons/all-files/bi/BiStreetView";
 import { BiWalk } from "@react-icons/all-files/bi/BiWalk";
 import { BsSpeaker } from "@react-icons/all-files/bs/BsSpeaker";
 import { FaCocktail } from "@react-icons/all-files/fa/FaCocktail";
+import { GiCookingPot } from "@react-icons/all-files/gi/GiCookingPot";
+import { ImExit } from "@react-icons/all-files/im/ImExit";
+import { MdKitchen } from "@react-icons/all-files/md/MdKitchen";
 import { SiAirtable } from "@react-icons/all-files/si/SiAirtable";
 
 export const items: Record<string, { icon: IconType }> = {
@@ -32,8 +35,17 @@ export const items: Record<string, { icon: IconType }> = {
   space: {
     icon: BiWalk,
   },
-  object: {
+  custom: {
     icon: BiRectangle,
+  },
+  kitchen: {
+    icon: GiCookingPot,
+  },
+  pantry: {
+    icon: MdKitchen,
+  },
+  entrance: {
+    icon: ImExit,
   },
 };
 

@@ -496,7 +496,10 @@ enum FloorObjectDataAddonsType {
 enum FloorObjectType {
   bar
   buffet
-  object
+  custom
+  entrance
+  kitchen
+  pantry
   space
   speaker
   stage

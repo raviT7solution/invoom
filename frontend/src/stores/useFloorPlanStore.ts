@@ -3,29 +3,7 @@ import { create } from "zustand";
 
 import { FloorObjectsQuery } from "../api/base";
 
-export type FloorPlan = {
-  name: string;
-  imageUrl: string;
-  width: number;
-  height: number;
-};
-
 export type Item = FloorObjectsQuery["floorObjects"][number];
-
-type FloorPlanStore = {
-  floorPlan: FloorPlan;
-  update: (floorPlan: FloorPlan) => void;
-};
-
-export const useFloorPlanStore = create<FloorPlanStore>()((set) => ({
-  floorPlan: {
-    name: "",
-    imageUrl: "",
-    width: 0,
-    height: 0,
-  },
-  update: (floorPlan) => set({ floorPlan: floorPlan }),
-}));
 
 type ItemsStore = {
   items: Item[];

@@ -9,8 +9,11 @@ class FloorObject < ApplicationRecord
     speaker: 2,
     buffet: 3,
     space: 4,
-    object: 5,
-    bar: 6
+    custom: 5,
+    bar: 6,
+    kitchen: 7,
+    pantry: 8,
+    entrance: 9
   }, prefix: :object_type
 
   belongs_to :restaurant

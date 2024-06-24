@@ -10,7 +10,6 @@ import { ItemComponent } from "./Item";
 import {
   Item,
   useFloorPlanItemsStore,
-  useFloorPlanStore,
   useSelectedItemIdsStore,
   useTargetsStore,
 } from "../../../stores/useFloorPlanStore";
@@ -29,7 +28,6 @@ export const Editor = () => {
   const setSelectedItemIds = useSelectedItemIdsStore(
     (s) => s.setSelectedItemIds,
   );
-  const floorPlan = useFloorPlanStore((s) => s.floorPlan);
   const items = useFloorPlanItemsStore((s) => s.items);
   const updateItemData = useFloorPlanItemsStore((s) => s.updateItemData);
 
@@ -46,8 +44,6 @@ export const Editor = () => {
   useEffect(() => {
     setTimeout(() => viewerRef.current?.scrollCenter(), 100);
   }, []);
-
-  if (!floorPlan) return;
 
   return (
     <div className="nested-scroll-h-full" id="container">
@@ -99,15 +95,13 @@ export const Editor = () => {
         Scroll center
       </Button>
 
-      <InfiniteViewer className="nested-scroll-h-full" ref={viewerRef}>
-        <div
-          className="bg-cover"
-          style={{
-            backgroundImage: `url(${floorPlan.imageUrl})`,
-            width: `calc(${floorPlan.width}px / 1)`,
-            height: `calc(${floorPlan.height}px / 1)`,
-          }}
-        >
+      <InfiniteViewer
+        className="nested-scroll-h-full"
+        rangeX={[0, Infinity]}
+        rangeY={[0, Infinity]}
+        ref={viewerRef}
+      >
+        <div>
           <Moveable
             draggable={true}
             edgeDraggable={true}
@@ -133,6 +127,8 @@ export const Editor = () => {
               selectoRef.current!.clickTarget(e.inputEvent, e.inputTarget);
             }}
             onDrag={(e) => {
+              if (e.translate[0] < 0 || e.translate[1] < 0) return;
+
               e.target.style.transform = e.transform;
             }}
             onDragEnd={(e) => {
@@ -144,6 +140,11 @@ export const Editor = () => {
               updateItemData(item.id, { translateX: t.x, translateY: t.y });
             }}
             onDragGroup={(e) => {
+              const hasOutSideView = e.events.some(
+                (ev) => ev.translate[0] < 0 || ev.translate[1] < 0,
+              );
+              if (hasOutSideView) return;
+
               e.events.forEach((ev) => {
                 ev.target.style.transform = ev.transform;
               });
@@ -153,7 +154,7 @@ export const Editor = () => {
                 const item = JSON.parse(
                   ev.target.getAttribute("data-item-data") || "{}",
                 ) as Item;
-                const t = getTransform(e.target.style.transform);
+                const t = getTransform(ev.target.style.transform);
 
                 updateItemData(item.id, { translateX: t.x, translateY: t.y });
               });

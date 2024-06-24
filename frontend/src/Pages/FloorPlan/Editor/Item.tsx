@@ -1,4 +1,3 @@
-import { BiChair } from "@react-icons/all-files/bi/BiChair";
 import { Typography } from "antd";
 import { CSSProperties, memo } from "react";
 
@@ -75,7 +74,34 @@ export const ItemComponent = memo(({ item }: Props) => {
         zIndex: 0,
       };
       break;
-    case "object":
+    case "custom":
+      styles = {
+        backgroundColor: "#dfdfdf",
+        border: "3px solid #b9b9b9",
+        borderRadius: "5px",
+        color: "#000",
+        zIndex: 2,
+      };
+      break;
+    case "kitchen":
+      styles = {
+        backgroundColor: "#dfdfdf",
+        border: "3px solid #b9b9b9",
+        borderRadius: "5px",
+        color: "#000",
+        zIndex: 2,
+      };
+      break;
+    case "pantry":
+      styles = {
+        backgroundColor: "#ffc723",
+        border: "3px solid #b9b9b9",
+        borderRadius: "5px",
+        color: "#000",
+        zIndex: 2,
+      };
+      break;
+    case "entrance":
       styles = {
         backgroundColor: "#dfdfdf",
         border: "3px solid #b9b9b9",
@@ -103,13 +129,13 @@ export const ItemComponent = memo(({ item }: Props) => {
     const height = h / 2;
     let angle = 0;
     const step = (2 * Math.PI) / chairs.length;
-    const radius = width + 20;
+    const radius = width + 14;
 
     angle = (-90 * Math.PI) / 180;
 
     return chairs.map((c, index) => {
-      const x = Math.round(width + radius * Math.cos(angle)) - 35 / 2 + 2;
-      const y = Math.round(height + radius * Math.sin(angle)) - 35 / 2 - 4;
+      const x = Math.round(width + radius * Math.cos(angle)) - 35 / 2 + 1;
+      const y = Math.round(height + radius * Math.sin(angle)) - 9 / 2 - 3;
 
       const rotationBase = -0;
       const rotation = rotationBase + (360 / chairs.length) * index;
@@ -118,21 +144,16 @@ export const ItemComponent = memo(({ item }: Props) => {
 
       return (
         <div
-          className="bg-neutral-300 rounded-sm z-10 absolute"
+          className="bg-neutral-600 rounded-sm z-10 absolute"
           key={c}
           style={{
             right: `${x}px`,
             top: `${y}px`,
             transform: `rotate(${rotation}deg)`,
+            height: "9px",
+            width: "27px",
           }}
-        >
-          <BiChair
-            style={{
-              height: "35px",
-              width: "27px",
-            }}
-          />
-        </div>
+        />
       );
     });
   };
@@ -153,13 +174,13 @@ export const ItemComponent = memo(({ item }: Props) => {
         case "top":
           styles = {
             justifyContent: "space-around",
-            top: "-40px",
+            top: "-14px",
           };
           break;
         case "right":
           styles = {
             justifyContent: "space-around",
-            right: "-44px",
+            right: "-16px",
             transform: "rotate(90deg)",
             width: h,
           };
@@ -168,13 +189,13 @@ export const ItemComponent = memo(({ item }: Props) => {
           styles = {
             justifyContent: "space-around",
             transform: "rotate(180deg)",
-            bottom: "-40px",
+            bottom: "-14px",
           };
           break;
         case "left":
           styles = {
             justifyContent: "space-around",
-            left: "-44px",
+            left: "-16px",
             transform: "rotate(-90deg)",
             width: h,
           };
@@ -192,12 +213,11 @@ export const ItemComponent = memo(({ item }: Props) => {
           style={styles}
         >
           {chairs.map(() => (
-            <div key={randomId()}>
-              <BiChair
-                className="bg-neutral-300 rounded-sm z-10 relative"
-                style={{ height: "35px", width: "27px" }}
-              />
-            </div>
+            <div
+              className="bg-neutral-600 rounded-sm z-10 relative"
+              key={randomId()}
+              style={{ height: "9px", width: "27px" }}
+            />
           ))}
         </div>
       );

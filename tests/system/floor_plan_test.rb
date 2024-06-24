@@ -36,8 +36,8 @@ class FloorPlanTest < ApplicationSystemTestCase
     assert_attributes floor_object, name: "Table 1", object_type: "table"
     assert_instance_of Integer, data["width"]
     assert_instance_of Integer, data["length"]
-    assert_instance_of Float, data["translateX"]
-    assert_instance_of Float, data["translateY"]
+    assert_in_delta 97.5, data["translateX"]
+    assert_equal 100, data["translateY"]
     assert_equal 0, data["rotate"]
     assert_equal 8, data["addons"]["chairQuantity"]
     assert_equal "oval", data["addons"]["type"]

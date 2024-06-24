@@ -9,3 +9,7 @@
 .nested-scroll-overflow-y-scroll {
   @apply overflow-y-scroll;
 }
+
+.infinite-viewer-scroll-area {
+  background-image: url("/src/assets/grid.svg");
+}

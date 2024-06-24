@@ -4,6 +4,9 @@ import { BiStreetView } from "@react-icons/all-files/bi/BiStreetView";
 import { BiWalk } from "@react-icons/all-files/bi/BiWalk";
 import { BsSpeaker } from "@react-icons/all-files/bs/BsSpeaker";
 import { FaCocktail } from "@react-icons/all-files/fa/FaCocktail";
+import { GiCookingPot } from "@react-icons/all-files/gi/GiCookingPot";
+import { ImExit } from "@react-icons/all-files/im/ImExit";
+import { MdKitchen } from "@react-icons/all-files/md/MdKitchen";
 import { SiAirtable } from "@react-icons/all-files/si/SiAirtable";
 import { List, Modal } from "antd";
 import { ReactNode } from "react";
@@ -76,11 +79,65 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       icon: <BiStreetView className="text-2xl" />,
       data: {
         id: "",
-        name: "",
+        name: "Stage",
         objectType: "stage",
         data: {
           width: 3,
           length: 3,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: null,
+        },
+      },
+    },
+    {
+      name: "kitchen",
+      title: "Kitchen",
+      icon: <GiCookingPot className="text-2xl" />,
+      data: {
+        id: "",
+        name: "Kitchen",
+        objectType: "kitchen",
+        data: {
+          width: 3,
+          length: 3,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: null,
+        },
+      },
+    },
+    {
+      name: "pantry",
+      title: "Pantry",
+      icon: <MdKitchen className="text-2xl" />,
+      data: {
+        id: "",
+        name: "Pantry",
+        objectType: "pantry",
+        data: {
+          width: 3,
+          length: 3,
+          rotate: 0,
+          translateX: 0,
+          translateY: 0,
+          addons: null,
+        },
+      },
+    },
+    {
+      name: "entrance",
+      title: "Entrance",
+      icon: <ImExit className="text-2xl" />,
+      data: {
+        id: "",
+        name: "Entrance",
+        objectType: "entrance",
+        data: {
+          width: 3,
+          length: 1,
           rotate: 0,
           translateX: 0,
           translateY: 0,
@@ -94,7 +151,7 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       icon: <BsSpeaker className="text-2xl" />,
       data: {
         id: "",
-        name: "",
+        name: "Speaker",
         objectType: "speaker",
         data: {
           width: 1,
@@ -112,7 +169,7 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       icon: <BiRestaurant className="text-2xl" />,
       data: {
         id: "",
-        name: "",
+        name: "Buffet",
         objectType: "buffet",
         data: {
           width: 4,
@@ -130,7 +187,7 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       icon: <FaCocktail className="text-2xl" />,
       data: {
         id: "",
-        name: "",
+        name: "Bar",
         objectType: "bar",
         data: {
           width: 2,
@@ -148,7 +205,7 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       icon: <BiWalk className="text-2xl" />,
       data: {
         id: "",
-        name: "",
+        name: "Space",
         objectType: "space",
         data: {
           width: 2,
@@ -161,13 +218,13 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
       },
     },
     {
-      name: "object",
-      title: "Object",
+      name: "custom",
+      title: "Custom",
       icon: <BiRectangle className="text-2xl" />,
       data: {
         id: "",
-        name: "",
-        objectType: "object",
+        name: "Custom",
+        objectType: "custom",
         data: {
           width: 1,
           length: 1,

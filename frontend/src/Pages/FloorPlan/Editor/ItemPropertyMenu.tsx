@@ -97,7 +97,7 @@ export const ItemPropertyMenu = () => {
           </div>
 
           <Space className="w-full" direction="vertical">
-            Name
+            {selectedItems[0].objectType === "table" ? "Number" : "Name"}
             <Input
               onBlur={handleChangeName}
               onChange={(e) => setName(e.target.value)}
@@ -106,35 +106,54 @@ export const ItemPropertyMenu = () => {
             />
           </Space>
 
-          <Space.Compact>
-            <Space direction="vertical">
-              Width
-              <InputNumber
-                max={9999999}
-                min={0.1}
-                onChange={(v) => {
-                  if (v) handleChangeProperty("width", v);
-                }}
-                step={0.1}
-                style={{ width: "100%" }}
-                value={selectedItems[0].data.width}
-              />
-            </Space>
+          {selectedItems[0].data.addons?.type === "oval" ? (
+            <Space.Compact>
+              <Space direction="vertical">
+                Size
+                <InputNumber
+                  max={9999999}
+                  min={1}
+                  onChange={(v) => {
+                    if (v) handleChangeProperty("width", v);
+                    if (v) handleChangeProperty("length", v);
+                  }}
+                  step={0.1}
+                  style={{ width: "100%" }}
+                  value={selectedItems[0].data.width}
+                />
+              </Space>
+            </Space.Compact>
+          ) : (
+            <Space.Compact>
+              <Space direction="vertical">
+                Width
+                <InputNumber
+                  max={9999999}
+                  min={1}
+                  onChange={(v) => {
+                    if (v) handleChangeProperty("width", v);
+                  }}
+                  step={0.1}
+                  style={{ width: "100%" }}
+                  value={selectedItems[0].data.width}
+                />
+              </Space>
 
-            <Space direction="vertical">
-              Length
-              <InputNumber
-                max={9999999}
-                min={0.1}
-                onChange={(v) => {
-                  if (v) handleChangeProperty("length", v);
-                }}
-                step={0.1}
-                style={{ width: "100%" }}
-                value={selectedItems[0].data.length}
-              />
-            </Space>
-          </Space.Compact>
+              <Space direction="vertical">
+                Length
+                <InputNumber
+                  max={9999999}
+                  min={1}
+                  onChange={(v) => {
+                    if (v) handleChangeProperty("length", v);
+                  }}
+                  step={0.1}
+                  style={{ width: "100%" }}
+                  value={selectedItems[0].data.length}
+                />
+              </Space>
+            </Space.Compact>
+          )}
         </>
       )}
 
