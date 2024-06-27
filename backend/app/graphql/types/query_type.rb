@@ -79,6 +79,7 @@ class Types::QueryType < Types::BaseObject
     argument :id, ID, required: true
   end
   field :modifiers, [Types::ModifierType], null: false do
+    argument :item_id, ID, required: false
     argument :restaurant_id, ID, required: true
   end
   field :printer_configuration, Types::PrinterConfigurationType, null: false do
@@ -282,8 +283,21 @@ class Types::QueryType < Types::BaseObject
     ModifierPolicy.new(context[:current_user]).scope.find(id)
   end
 
-  def modifiers(restaurant_id:)
-    ModifierPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  def modifiers(restaurant_id:, item_id: nil) # rubocop:disable Metrics/AbcSize
+    records = ModifierPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+
+    if item_id.present?
+      item = ItemPolicy.new(context[:current_user]).scope.find(item_id)
+
+      category_modifiers = records.joins(:category_modifiers)
+                                  .where(category_modifiers: { category_id: item.category_id })
+      item_modifiers = records.joins(:item_modifiers).where(item_modifiers: { item_id: item_id })
+      global_modifiers = records.where(global_modifier: true)
+
+      records = records.where(id: category_modifiers.ids + item_modifiers.ids + global_modifiers.ids)
+    end
+
+    records
   end
 
   def printer_configuration(id:)

@@ -1336,7 +1336,7 @@ type Query {
   menu(id: ID!): Menu!
   menus(restaurantId: ID!): [Menu!]!
   modifier(id: ID!): Modifier!
-  modifiers(restaurantId: ID!): [Modifier!]!
+  modifiers(itemId: ID, restaurantId: ID!): [Modifier!]!
   printerConfiguration(id: ID!): PrinterConfiguration!
   printerConfigurations(restaurantId: ID!): [PrinterConfiguration!]!
   product(id: ID!): Product!
