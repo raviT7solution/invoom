@@ -108,7 +108,9 @@ export const Ticket = ({
         </div>
 
         <div className="flex justify-between items-center">
-          {["#1234", data.booking.customer?.name].filter(Boolean).join(" | ")}
+          {[`#${data.booking.number}`, data.booking.customer?.name]
+            .filter(Boolean)
+            .join(" | ")}
           <div>
             <Tag>{data.booking.userFullName}</Tag>
             <Tag className="font-bold" icon={<ClockCircleOutlined />}>

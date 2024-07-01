@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_13_104833) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_27_144129) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -82,7 +82,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_13_104833) do
     t.datetime "updated_at", null: false
     t.string "estimated_duration"
     t.integer "token"
+    t.bigserial "number", null: false
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
+    t.index ["number"], name: "index_bookings_on_number", unique: true
     t.index ["restaurant_id"], name: "index_bookings_on_restaurant_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
