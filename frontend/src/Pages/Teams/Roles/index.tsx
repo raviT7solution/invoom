@@ -16,19 +16,22 @@ import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 export const Roles = () => {
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const [selectedUserId, setSelectedUserId] = useState("");
   const [selectedRoleId, setSelectedRoleId] = useState("");
-  const [isUserEditOpen, setIsUserEditOpen] = useState(false);
   const [isRoleEditOpen, setIsRoleEditOpen] = useState(false);
+  const [userModal, setUserModal] = useState({
+    destroyed: false,
+    id: "",
+    open: false,
+  });
 
   const { data: roles } = useRoles({ restaurantId: restaurantId });
   const { mutateAsync: deleteRole } = useRoleDelete();
   const { mutateAsync: deleteUser } = useUserDelete();
 
-  const showEditUser = (id: string, open: boolean) => {
-    setSelectedUserId(id);
-    setIsUserEditOpen(open);
+  const showEditUser = (destroyed: boolean, id: string, open: boolean) => {
+    setUserModal({ destroyed, id, open });
   };
+
   const showEditRole = (id: string, open: boolean) => {
     setSelectedRoleId(id);
     setIsRoleEditOpen(open);
@@ -36,11 +39,14 @@ export const Roles = () => {
 
   return (
     <Navbar breadcrumbItems={[{ title: "Teams" }]}>
-      <UserEdit
-        open={isUserEditOpen}
-        showEditUser={showEditUser}
-        userId={selectedUserId}
-      />
+      {!userModal.destroyed && (
+        <UserEdit
+          id={userModal.id}
+          open={userModal.open}
+          showEdit={showEditUser}
+        />
+      )}
+
       <Edit
         open={isRoleEditOpen}
         roleId={selectedRoleId}
@@ -57,7 +63,7 @@ export const Roles = () => {
         </Button>
         <Button
           icon={<UserAddOutlined />}
-          onClick={() => showEditUser("", true)}
+          onClick={() => showEditUser(false, "", true)}
           type="primary"
         >
           Add User
@@ -105,7 +111,7 @@ export const Roles = () => {
                       actions={[
                         <EditOutlined
                           key="edit-role"
-                          onClick={() => showEditUser(user.id, true)}
+                          onClick={() => showEditUser(false, user.id, true)}
                         />,
                         <Popconfirm
                           key="delete-role"

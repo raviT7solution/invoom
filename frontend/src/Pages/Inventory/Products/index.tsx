@@ -15,12 +15,10 @@ export const InventoryProducts = () => {
   const { data: products } = useProducts(restaurantId);
   const { mutateAsync: productDelete } = useProductDelete();
 
-  const [selectedProductId, setSelectedProductId] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modal, setModal] = useState({ destroyed: false, id: "", open: false });
 
-  const showEditProduct = (id: string, open: boolean) => {
-    setSelectedProductId(id);
-    setIsModalOpen(open);
+  const showEdit = (destroyed: boolean, id: string, open: boolean) => {
+    setModal({ destroyed, id, open });
   };
 
   return (
@@ -28,18 +26,16 @@ export const InventoryProducts = () => {
       <div className="flex gap-4 mb-4 justify-end">
         <Button
           icon={<PlusOutlined />}
-          onClick={() => showEditProduct("", true)}
+          onClick={() => showEdit(false, "", true)}
           type="primary"
         >
           Add Product
         </Button>
       </div>
 
-      <Edit
-        open={isModalOpen}
-        productId={selectedProductId}
-        showEditProduct={showEditProduct}
-      />
+      {!modal.destroyed && (
+        <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
+      )}
 
       <div>
         {products.length === 0 ? (
@@ -53,7 +49,7 @@ export const InventoryProducts = () => {
                 actions={[
                   <EditOutlined
                     key="edit"
-                    onClick={() => showEditProduct(product.id, true)}
+                    onClick={() => showEdit(false, product.id, true)}
                   />,
                   <Popconfirm
                     key="delete"

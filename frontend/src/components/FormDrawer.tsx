@@ -2,6 +2,7 @@ import { Drawer, Spin } from "antd";
 import { ReactNode } from "react";
 
 type Props = {
+  afterClose?: () => void;
   children: ReactNode;
   footer: ReactNode;
   isFetching: boolean;
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export const FormDrawer = ({
+  afterClose,
   children,
   footer,
   isFetching,
@@ -22,6 +24,9 @@ export const FormDrawer = ({
 }: Props) => {
   return (
     <Drawer
+      afterOpenChange={(open) => {
+        if (!open) afterClose?.();
+      }}
       destroyOnClose
       footer={<div className="flex justify-end">{footer}</div>}
       onClose={onClose}

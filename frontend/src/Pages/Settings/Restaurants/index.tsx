@@ -29,22 +29,22 @@ export const Restaurants = () => {
 
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modal, setModal] = useState({ destroyed: false, open: false });
 
-  const showEditRestaurant = (open: boolean) => {
-    setIsModalOpen(open);
+  const showEdit = (destroyed: boolean, open: boolean) => {
+    setModal({ destroyed, open });
   };
 
   return (
     <Navbar
       breadcrumbItems={[{ title: "Settings" }, { title: "My Restaurants" }]}
     >
-      <Edit open={isModalOpen} showEditRestaurant={showEditRestaurant} />
+      {!modal.destroyed && <Edit open={modal.open} showEdit={showEdit} />}
 
       <div className="flex gap-4 mb-4 justify-end">
         <Button
           icon={<PlusOutlined />}
-          onClick={() => showEditRestaurant(true)}
+          onClick={() => showEdit(false, true)}
           type="primary"
         >
           Add Restaurant

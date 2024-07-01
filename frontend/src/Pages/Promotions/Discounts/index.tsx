@@ -15,12 +15,10 @@ export const Discounts = () => {
   const { data: discounts } = useDiscounts(restaurantId);
   const { mutateAsync: deleteDiscount } = useDiscountDelete();
 
-  const [selectedDiscountId, setSelectedDiscountId] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modal, setModal] = useState({ destroyed: false, id: "", open: false });
 
-  const showEditDiscount = (id: string, open: boolean) => {
-    setSelectedDiscountId(id);
-    setIsModalOpen(open);
+  const showEdit = (destroyed: boolean, id: string, open: boolean) => {
+    setModal({ destroyed, id, open });
   };
 
   return (
@@ -28,18 +26,16 @@ export const Discounts = () => {
       <div className="flex gap-4 mb-4 justify-end">
         <Button
           icon={<PlusOutlined />}
-          onClick={() => showEditDiscount("", true)}
+          onClick={() => showEdit(false, "", true)}
           type="primary"
         >
           Add Discount
         </Button>
       </div>
 
-      <Edit
-        discountId={selectedDiscountId}
-        open={isModalOpen}
-        showEditDiscount={showEditDiscount}
-      />
+      {!modal.destroyed && (
+        <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
+      )}
 
       <div>
         {discounts.length === 0 ? (
@@ -53,7 +49,7 @@ export const Discounts = () => {
                 actions={[
                   <EditOutlined
                     key="edit"
-                    onClick={() => showEditDiscount(i.id, true)}
+                    onClick={() => showEdit(false, i.id, true)}
                   />,
                   <Popconfirm
                     key="delete"

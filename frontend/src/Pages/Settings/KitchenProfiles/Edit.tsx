@@ -1,5 +1,4 @@
 import { Button, Checkbox, Divider, Form, Input, Select, Slider } from "antd";
-import { useEffect } from "react";
 
 import {
   useCategories,
@@ -23,15 +22,15 @@ const initialValues = {
 };
 
 export const Edit = ({
-  kitchenProfileId,
+  id,
   open,
-  showEditKitchenProfile,
+  showEdit,
 }: {
-  kitchenProfileId: string;
+  id: string;
   open: boolean;
-  showEditKitchenProfile: (id: string, open: boolean) => void;
+  showEdit: (destroyed: boolean, id: string, open: boolean) => void;
 }) => {
-  const isNew = kitchenProfileId === "";
+  const isNew = id === "";
 
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
@@ -41,8 +40,7 @@ export const Edit = ({
 
   const { data: categories, isFetching: isCategoriesFetching } =
     useCategories(restaurantId);
-  const { data: kitchenProfile, isFetching } =
-    useKitchenProfile(kitchenProfileId);
+  const { data: kitchenProfile, isFetching } = useKitchenProfile(id);
   const { mutateAsync: kitchenProfileCreate, isPending: isCreating } =
     useKitchenProfileCreate();
   const { mutateAsync: kitchenProfileUpdate, isPending: isUpdating } =
@@ -54,18 +52,18 @@ export const Edit = ({
           input: { restaurantId: restaurantId, attributes: values },
         })
       : await kitchenProfileUpdate({
-          input: { attributes: values, id: kitchenProfileId },
+          input: { attributes: values, id: id },
         });
 
     onClose();
   };
 
-  const onClose = () => showEditKitchenProfile("", false);
-
-  useEffect(() => form.resetFields(), [isNew, kitchenProfileId, form]);
+  const onClose = () => showEdit(false, "", false);
+  const afterClose = () => showEdit(true, "", false);
 
   return (
     <FormDrawer
+      afterClose={afterClose}
       footer={
         <Button
           form="kitchen-profile-form"

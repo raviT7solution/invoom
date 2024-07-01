@@ -10,7 +10,7 @@ import {
   Select,
   Tag,
 } from "antd";
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
 
 import {
   useCities,
@@ -83,20 +83,20 @@ const employmentTypes = [
 ];
 
 export const UserEdit = ({
+  id,
   open,
-  showEditUser,
-  userId,
+  showEdit,
 }: {
+  id: string;
   open: boolean;
-  showEditUser: (id: string, open: boolean) => void;
-  userId: string;
+  showEdit: (destroyed: boolean, id: string, open: boolean) => void;
 }) => {
-  const isNew = userId === "";
+  const isNew = id === "";
 
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
   const { data: roles } = useRoles({ restaurantId: restaurantId });
-  const { data: user, isFetching: isUserFetching } = useUser(userId);
+  const { data: user, isFetching: isUserFetching } = useUser(id);
 
   const { mutateAsync: userCreate, isPending: isCreating } = useUserCreate();
   const { mutateAsync: userUpdate, isPending: isUpdating } = useUserUpdate();
@@ -116,7 +116,8 @@ export const UserEdit = ({
     province,
   );
 
-  const onClose = () => showEditUser("", false);
+  const onClose = () => showEdit(false, "", false);
+  const afterClose = () => showEdit(true, "", false);
 
   const onFinish = async (values: schema) => {
     const attributes = { ...values };
@@ -125,12 +126,10 @@ export const UserEdit = ({
       ? await userCreate({
           input: { restaurantId: restaurantId, attributes: attributes },
         })
-      : await userUpdate({ input: { attributes: attributes, id: userId } });
+      : await userUpdate({ input: { attributes: attributes, id: id } });
 
     onClose();
   };
-
-  useEffect(() => form.resetFields(), [isNew, userId, form]);
 
   const countyCodesOptions = useMemo(
     () =>
@@ -143,6 +142,7 @@ export const UserEdit = ({
 
   return (
     <FormDrawer
+      afterClose={afterClose}
       footer={
         <Button
           form="user-form"

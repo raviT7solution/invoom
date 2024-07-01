@@ -121,10 +121,10 @@ const since = Array.from(
 
 export const Edit = ({
   open,
-  showEditRestaurant,
+  showEdit,
 }: {
   open: boolean;
-  showEditRestaurant: (open: boolean) => void;
+  showEdit: (destroyed: boolean, open: boolean) => void;
 }) => {
   const [form] = Form.useForm<schema>();
   const country = Form.useWatch("country", form) || "";
@@ -158,7 +158,8 @@ export const Edit = ({
     });
   };
 
-  const onClose = () => showEditRestaurant(false);
+  const onClose = () => showEdit(false, false);
+  const afterClose = () => showEdit(true, false);
 
   const onFinish = async (values: schema) => {
     await restaurantCreate({ input: { attributes: values } });
@@ -171,13 +172,11 @@ export const Edit = ({
     onClose();
   };
 
-  useEffect(() => {
-    form.resetFields();
-    reset();
-  }, [open, reset, form]);
+  useEffect(() => reset(), [open, reset]);
 
   return (
     <FormDrawer
+      afterClose={afterClose}
       footer={
         <>
           {showSubmit && (

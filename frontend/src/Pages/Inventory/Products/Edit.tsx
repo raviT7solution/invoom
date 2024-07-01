@@ -9,7 +9,6 @@ import {
   Row,
   Select,
 } from "antd";
-import { useEffect } from "react";
 
 import {
   useInventoryCategories,
@@ -120,15 +119,15 @@ const UOM = [
 ];
 
 export const Edit = ({
+  id,
   open,
-  productId,
-  showEditProduct,
+  showEdit,
 }: {
+  id: string;
   open: boolean;
-  productId: string;
-  showEditProduct: (id: string, open: boolean) => void;
+  showEdit: (destroyed: boolean, id: string, open: boolean) => void;
 }) => {
-  const isNew = productId === "";
+  const isNew = id === "";
 
   const [form] = Form.useForm<schema>();
 
@@ -136,7 +135,7 @@ export const Edit = ({
 
   const { data: categories } = useInventoryCategories(restaurantId);
   const { data: taxes } = useSettingsTaxes(restaurantId);
-  const { data: product, isFetching } = useProduct(productId);
+  const { data: product, isFetching } = useProduct(id);
 
   const { mutateAsync: itemCodeGenerate } = useItemCodeGenerate();
   const { mutateAsync: productCreate, isPending: isCreating } =
@@ -154,7 +153,8 @@ export const Edit = ({
     form.setFieldsValue({ itemCode });
   };
 
-  const onClose = () => showEditProduct("", false);
+  const onClose = () => showEdit(false, "", false);
+  const afterClose = () => showEdit(true, "", false);
 
   const onSave = async (values: schema) => {
     isNew
@@ -162,16 +162,15 @@ export const Edit = ({
           input: { restaurantId: restaurantId, attributes: values },
         })
       : await productUpdate({
-          input: { attributes: values, id: productId },
+          input: { attributes: values, id: id },
         });
 
     onClose();
   };
 
-  useEffect(() => form.resetFields(), [isNew, productId, form]);
-
   return (
     <FormDrawer
+      afterClose={afterClose}
       footer={
         <Button
           form="product-form"

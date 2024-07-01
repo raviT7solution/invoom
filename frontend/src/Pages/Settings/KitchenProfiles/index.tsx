@@ -11,31 +11,27 @@ import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 export const KitchenProfiles = () => {
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const [selectedKitchenProfileId, setSelectedKitchenProfileId] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modal, setModal] = useState({ destroyed: false, id: "", open: false });
 
   const { data, isFetching } = useKitchenProfiles(restaurantId);
   const { mutateAsync } = useKitchenProfileDelete();
 
-  const showEditKitchenProfile = (id: string, open: boolean) => {
-    setSelectedKitchenProfileId(id);
-    setIsModalOpen(open);
+  const showEdit = (destroyed: boolean, id: string, open: boolean) => {
+    setModal({ destroyed, id, open });
   };
 
   return (
     <Navbar
       breadcrumbItems={[{ title: "Settings" }, { title: "Kitchen Profiles" }]}
     >
-      <Edit
-        kitchenProfileId={selectedKitchenProfileId}
-        open={isModalOpen}
-        showEditKitchenProfile={showEditKitchenProfile}
-      />
+      {!modal.destroyed && (
+        <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
+      )}
 
       <div className="flex gap-4 mb-4 justify-end">
         <Button
           icon={<PlusOutlined />}
-          onClick={() => showEditKitchenProfile("", true)}
+          onClick={() => showEdit(false, "", true)}
           type="primary"
         >
           Add Kitchen Profile
@@ -52,7 +48,7 @@ export const KitchenProfiles = () => {
             actions={[
               <EditOutlined
                 key="edit"
-                onClick={() => showEditKitchenProfile(i.id, true)}
+                onClick={() => showEdit(false, i.id, true)}
               />,
               <Popconfirm
                 key="delete"

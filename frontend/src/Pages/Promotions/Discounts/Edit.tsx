@@ -8,7 +8,6 @@ import {
   Radio,
   Select,
 } from "antd";
-import { useEffect } from "react";
 
 import {
   useCategories,
@@ -26,8 +25,8 @@ import {
 import {
   DATE_FORMAT,
   DATE_TIME_FORMAT,
-  datePickerGetValueFromEvent,
-  datePickerGetValueProps,
+  dateTimePickerGetValueFromEvent,
+  dateTimePickerGetValueProps,
   multiDatePickerGetValueFromEvent,
   multiDatePickerGetValueProps,
 } from "../../../components/DatePicker";
@@ -111,21 +110,23 @@ const channels = [
 ];
 
 export const Edit = ({
-  discountId,
+  id,
   open,
-  showEditDiscount,
+  showEdit,
 }: {
-  discountId: string;
+  id: string;
   open: boolean;
-  showEditDiscount: (id: string, open: boolean) => void;
+  showEdit: (destroyed: boolean, id: string, open: boolean) => void;
 }) => {
-  const isNew = discountId === "";
+  const isNew = id === "";
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const { mutateAsync: discountCreate } = useDiscountCreate();
-  const { mutateAsync: discountUpdate } = useDiscountUpdate();
+  const { mutateAsync: discountCreate, isPending: isCreating } =
+    useDiscountCreate();
+  const { mutateAsync: discountUpdate, isPending: isUpdating } =
+    useDiscountUpdate();
 
-  const { data: discount, isFetching } = useDiscount(discountId);
+  const { data: discount, isFetching } = useDiscount(id);
   const { data: categories } = useCategories(restaurantId);
   const { data: items } = useItems(restaurantId);
 
@@ -134,9 +135,8 @@ export const Edit = ({
   const discountOn = Form.useWatch("discountOn", form);
   const itemWise = discountOn === "item_wise";
 
-  const onClose = () => showEditDiscount("", false);
-
-  useEffect(() => form.resetFields(), [discount, form, isNew]);
+  const onClose = () => showEdit(false, "", false);
+  const afterClose = () => showEdit(true, "", false);
 
   const onFinish = async (values: schema) => {
     isNew
@@ -144,7 +144,7 @@ export const Edit = ({
           input: { attributes: values, restaurantId: restaurantId },
         })
       : await discountUpdate({
-          input: { attributes: values, id: discountId },
+          input: { attributes: values, id: id },
         });
 
     onClose();
@@ -152,11 +152,13 @@ export const Edit = ({
 
   return (
     <FormDrawer
+      afterClose={afterClose}
       footer={[
         <Button
           form="discount-form"
           htmlType="submit"
           key="submit"
+          loading={isCreating || isUpdating}
           type="primary"
         >
           Submit
@@ -276,8 +278,8 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          getValueFromEvent={datePickerGetValueFromEvent}
-          getValueProps={datePickerGetValueProps}
+          getValueFromEvent={dateTimePickerGetValueFromEvent}
+          getValueProps={dateTimePickerGetValueProps}
           hidden={!autoApply}
           label="Start Date & Time"
           name="startDateTime"
@@ -291,8 +293,8 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          getValueFromEvent={datePickerGetValueFromEvent}
-          getValueProps={datePickerGetValueProps}
+          getValueFromEvent={dateTimePickerGetValueFromEvent}
+          getValueProps={dateTimePickerGetValueProps}
           hidden={!autoApply}
           label="End Date & Time"
           name="endDateTime"
