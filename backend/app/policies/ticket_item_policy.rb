@@ -6,7 +6,7 @@ class TicketItemPolicy < ApplicationPolicy
   end
 
   def scope
-    if mobile_user?("orders")
+    if mobile_user?("orders") || mobile_user?("takeout")
       TicketItem.joins(ticket: :booking).where(bookings: { restaurant_id: mobile_user!.restaurant_id })
     elsif kds_admin?
       TicketItem.joins(ticket: :booking).where(bookings: { restaurant_id: kds_admin!.restaurants })
@@ -16,6 +16,6 @@ class TicketItemPolicy < ApplicationPolicy
   end
 
   def update?
-    mobile_user?("orders") || kds_admin?
+    mobile_user?("orders") || mobile_user?("takeout") || kds_admin?
   end
 end

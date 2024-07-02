@@ -12,7 +12,7 @@ class ModifierPolicy < ApplicationPolicy
   def scope
     if web_admin?
       Modifier.where(restaurant: web_admin!.restaurants)
-    elsif mobile_user?("orders")
+    elsif mobile_user?("orders") || mobile_user?("takeout")
       Modifier.where(restaurant_id: mobile_user!.restaurant_id, visible: true)
     else
       Modifier.none

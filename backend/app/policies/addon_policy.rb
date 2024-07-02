@@ -12,7 +12,7 @@ class AddonPolicy < ApplicationPolicy
   def scope
     if web_admin?
       Addon.where(restaurant: web_admin!.restaurants)
-    elsif mobile_user?("orders")
+    elsif mobile_user?("orders") || mobile_user?("takeout")
       Addon.where(restaurant_id: mobile_user!.restaurant_id, visible: true)
     else
       Addon.none
