@@ -6,6 +6,7 @@ FactoryBot.define do
     delivery_price { 4.0 }
     description { Faker::Food.description }
     display_name { Faker::Food.dish }
+    eq_price { false }
     name { Faker::Food.dish }
     price { 1.0 }
     takeout_price { 3.0 }

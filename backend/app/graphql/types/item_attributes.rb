@@ -5,6 +5,7 @@ class Types::ItemAttributes < Types::BaseInputObject
   argument :delivery_price, Float, required: false
   argument :description, String, required: false
   argument :display_name, String, required: false
+  argument :eq_price, Boolean, required: false
   argument :name, String, required: false
   argument :price, Float, required: false
   argument :takeout_price, Float, required: false

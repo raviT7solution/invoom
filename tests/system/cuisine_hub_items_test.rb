@@ -47,6 +47,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
                       delivery_price: 13,
                       description: "",
                       display_name: "Vadapav",
+                      eq_price: false,
                       modifier_ids: [modifier.id],
                       name: "Vadapav",
                       price: 11,
@@ -123,6 +124,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
     assert_attributes item,
                       category_id: category.id,
                       description: "-",
+                      eq_price: false,
                       modifier_ids: [modifier.id],
                       name: "Vadapav",
                       visible: false

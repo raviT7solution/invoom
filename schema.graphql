@@ -588,6 +588,7 @@ type Item {
   deliveryPrice: Float!
   description: String!
   displayName: String!
+  eqPrice: Boolean!
   id: ID!
   modifierIds: [ID!]!
   modifiers: [Modifier!]!
@@ -606,6 +607,7 @@ input ItemAttributes {
   deliveryPrice: Float
   description: String
   displayName: String
+  eqPrice: Boolean
   modifierIds: [ID!]
   name: String
   price: Float

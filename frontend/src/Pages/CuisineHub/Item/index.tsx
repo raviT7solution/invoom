@@ -25,14 +25,12 @@ export const Item = () => {
 
   const { data: categories } = useCategories(restaurantId);
 
-  const [selectedItemId, setSelectedItemId] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modal, setModal] = useState({ destroyed: false, id: "", open: false });
 
   const activeKeys = useMemo(() => categories.map((c) => c.id), [categories]);
 
-  const showEditItem = (id: string, open: boolean) => {
-    setSelectedItemId(id);
-    setIsModalOpen(open);
+  const showEdit = (destroyed: boolean, id: string, open: boolean) => {
+    setModal({ destroyed, id, open });
   };
 
   const items: CollapseProps["items"] = categories.map((category) => ({
@@ -49,7 +47,7 @@ export const Item = () => {
                 actions={[
                   <EditOutlined
                     key="edit-item"
-                    onClick={() => showEditItem(item.id, true)}
+                    onClick={() => showEdit(false, item.id, true)}
                   />,
                   <Popconfirm
                     key="delete-item"
@@ -93,18 +91,16 @@ export const Item = () => {
       <div className="flex gap-4 mb-4 justify-end">
         <Button
           icon={<PlusOutlined />}
-          onClick={() => showEditItem("", true)}
+          onClick={() => showEdit(false, "", true)}
           type="primary"
         >
           Add Item
         </Button>
       </div>
 
-      <Edit
-        itemId={selectedItemId}
-        open={isModalOpen}
-        showEditItem={showEditItem}
-      />
+      {!modal.destroyed && (
+        <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
+      )}
 
       <div className="nested-scroll-overflow-y-scroll">
         {items.length === 0 ? (

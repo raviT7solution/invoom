@@ -18,6 +18,7 @@ class Item < ApplicationRecord
   validates :delivery_price, presence: true
   validates :description, presence: true, if: proc { description.nil? }
   validates :display_name, presence: true
+  validates :eq_price, inclusion: [true, false]
   validates :name, presence: true, uniqueness: { scope: :restaurant_id }
   validates :price, presence: true
   validates :takeout_price, presence: true

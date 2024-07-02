@@ -242,6 +242,7 @@ query items($restaurantId: ID!) {
     deliveryPrice
     description
     displayName
+    eqPrice
     id
     modifierIds
     name
@@ -260,6 +261,7 @@ query item($id: ID!) {
     deliveryPrice
     description
     displayName
+    eqPrice
     id
     modifierIds
     name

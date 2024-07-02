@@ -213,6 +213,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_27_144129) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "tax_id", null: false
+    t.boolean "eq_price", default: false, null: false
     t.index ["category_id"], name: "index_items_on_category_id"
     t.index ["name", "restaurant_id"], name: "index_items_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_items_on_restaurant_id"

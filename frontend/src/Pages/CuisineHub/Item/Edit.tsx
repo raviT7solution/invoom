@@ -19,6 +19,7 @@ type schema = {
   deliveryPrice: number;
   description: string;
   displayName: string;
+  eqPrice: boolean;
   modifierIds: string[];
   name: string;
   price: number;
@@ -39,18 +40,18 @@ const initialValues = {
 };
 
 export const Edit = ({
-  itemId,
+  id,
   open,
-  showEditItem,
+  showEdit,
 }: {
-  itemId: string;
+  id: string;
   open: boolean;
-  showEditItem: (id: string, open: boolean) => void;
+  showEdit: (destroyed: boolean, id: string, open: boolean) => void;
 }) => {
-  const isNew = itemId === "";
+  const isNew = id === "";
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const { data: item, isFetching } = useItem(itemId);
+  const { data: item, isFetching } = useItem(id);
   const { data: addons } = useAddons(restaurantId);
   const { data: categories } = useCategories(restaurantId);
   const { data: modifiers } = useModifiers(restaurantId);
@@ -59,7 +60,11 @@ export const Edit = ({
   const { mutateAsync: itemCreate, isPending: isCreating } = useItemCreate();
   const { mutateAsync: itemUpdate, isPending: isUpdating } = useItemUpdate();
 
-  const onClose = () => showEditItem("", false);
+  const [form] = Form.useForm<schema>();
+  const eqPrice = !!Form.useWatch("eqPrice", form);
+
+  const onClose = () => showEdit(false, "", false);
+  const afterClose = () => showEdit(true, "", false);
 
   const onSave = async (values: schema) => {
     const attributes = { ...values };
@@ -69,7 +74,7 @@ export const Edit = ({
           input: { restaurantId: restaurantId, attributes: attributes },
         })
       : await itemUpdate({
-          input: { attributes: attributes, id: itemId },
+          input: { attributes: attributes, id: id },
         });
 
     onClose();
@@ -77,6 +82,7 @@ export const Edit = ({
 
   return (
     <FormDrawer
+      afterClose={afterClose}
       footer={
         <Button
           form="item-form"
@@ -93,6 +99,7 @@ export const Edit = ({
       title={isNew ? "New Item" : "Edit Item"}
     >
       <Form
+        form={form}
         initialValues={isNew ? initialValues : item}
         layout="vertical"
         name="item-form"
@@ -195,10 +202,31 @@ export const Edit = ({
         >
           <InputNumber
             min={0}
+            onChange={(e) => {
+              if (eqPrice)
+                form.setFieldsValue({
+                  deliveryPrice: e ?? 0,
+                  takeoutPrice: e ?? 0,
+                });
+            }}
             placeholder="Price"
             prefix="$"
             style={{ width: "100%" }}
           />
+        </Form.Item>
+
+        <Form.Item name="eqPrice" valuePropName="checked">
+          <Checkbox
+            onChange={(e) => {
+              if (e)
+                form.setFieldsValue({
+                  deliveryPrice: form.getFieldValue("price"),
+                  takeoutPrice: form.getFieldValue("price"),
+                });
+            }}
+          >
+            = Price
+          </Checkbox>
         </Form.Item>
 
         <Form.Item
@@ -207,6 +235,7 @@ export const Edit = ({
           rules={[{ required: true, message: "Required" }]}
         >
           <InputNumber
+            disabled={eqPrice}
             min={0}
             placeholder="TakeOut Price"
             prefix="$"
@@ -220,6 +249,7 @@ export const Edit = ({
           rules={[{ required: true, message: "Required" }]}
         >
           <InputNumber
+            disabled={eqPrice}
             min={0}
             placeholder="Delivery Price"
             prefix="$"
