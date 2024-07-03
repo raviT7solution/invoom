@@ -171,6 +171,34 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_27_144129) do
     t.index ["restaurant_id"], name: "index_inventory_categories_on_restaurant_id"
   end
 
+  create_table "invoice_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.float "quantity", null: false
+    t.float "consume_bill", null: false
+    t.float "price", null: false
+    t.float "ticket_item_price", null: false
+    t.float "discounted_price", null: false
+    t.float "item_discount", null: false
+    t.uuid "ticket_item_id", null: false
+    t.uuid "invoice_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
+    t.index ["ticket_item_id"], name: "index_invoice_items_on_ticket_item_id"
+  end
+
+  create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigserial "number", null: false
+    t.float "total", null: false
+    t.integer "payment_mode"
+    t.integer "status", null: false
+    t.integer "invoice_type", null: false
+    t.uuid "booking_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_invoices_on_booking_id"
+    t.index ["number"], name: "index_invoices_on_number", unique: true
+  end
+
   create_table "item_addons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "item_id", null: false
     t.uuid "addon_id", null: false
@@ -467,6 +495,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_27_144129) do
   add_foreign_key "discounts", "restaurants"
   add_foreign_key "floor_objects", "restaurants"
   add_foreign_key "inventory_categories", "restaurants"
+  add_foreign_key "invoice_items", "invoices"
+  add_foreign_key "invoice_items", "ticket_items"
+  add_foreign_key "invoices", "bookings"
   add_foreign_key "item_addons", "addons"
   add_foreign_key "item_addons", "items"
   add_foreign_key "item_discounts", "discounts"

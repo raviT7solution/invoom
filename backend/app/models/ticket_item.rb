@@ -4,6 +4,7 @@ class TicketItem < ApplicationRecord
   belongs_to :item
   belongs_to :ticket
 
+  has_many :invoice_items, dependent: :restrict_with_error
   has_many :ticket_item_addons, dependent: :destroy
 
   has_one :applied_discount, as: :discountable, dependent: :destroy

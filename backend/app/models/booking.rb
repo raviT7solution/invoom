@@ -12,6 +12,7 @@ class Booking < ApplicationRecord
   belongs_to :user
 
   has_many :booking_tables, dependent: :destroy
+  has_many :invoices, dependent: :destroy
   has_many :tickets, dependent: :restrict_with_error
 
   has_one :applied_discount, as: :discountable, dependent: :destroy

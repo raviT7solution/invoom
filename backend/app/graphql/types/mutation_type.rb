@@ -28,6 +28,7 @@ class Types::MutationType < Types::BaseObject
                                     authorize: "InventoryCategoryPolicy#delete?"
   field :inventory_category_update, mutation: Mutations::InventoryCategoryUpdate, null: false,
                                     authorize: "InventoryCategoryPolicy#update?"
+  field :invoices_create, mutation: Mutations::InvoicesCreate, null: false, authorize: "InvoicePolicy#create?"
   field :item_code_generate, mutation: Mutations::ItemCodeGenerate, null: false, authorize: "ProductPolicy#create?"
   field :item_create, mutation: Mutations::ItemCreate, null: false, authorize: "ItemPolicy#create?"
   field :item_delete, mutation: Mutations::ItemDelete, null: false, authorize: "ItemPolicy#delete?"
