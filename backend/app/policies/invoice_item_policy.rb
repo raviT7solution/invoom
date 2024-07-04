@@ -3,7 +3,7 @@
 class InvoiceItemPolicy < ApplicationPolicy
   def scope
     if mobile_user?("orders") || mobile_user?("takeout")
-      InvoiceItem.joins(:invoice).where(invoices: { restaurant_id: mobile_user!.restaurant_id })
+      InvoiceItem.joins(invoice: :booking).where(bookings: { restaurant_id: mobile_user!.restaurant_id })
     else
       InvoiceItem.none
     end
