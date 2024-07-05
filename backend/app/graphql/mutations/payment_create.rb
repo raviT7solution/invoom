@@ -2,18 +2,17 @@
 
 class Mutations::PaymentCreate < Mutations::BaseMutation
   argument :attributes, Types::PaymentAttributes, required: true
-  argument :booking_id, ID, required: true
+  argument :invoice_id, ID, required: true
 
   type Boolean, null: false
 
-  def resolve(booking_id:, attributes:) # rubocop:disable Metrics/AbcSize
-    booking = BookingPolicy.new(context[:current_user]).scope.find(booking_id)
+  def resolve(attributes:, invoice_id:) # rubocop:disable Metrics/AbcSize
+    invoice = InvoicePolicy.new(context[:current_user]).scope.find(invoice_id)
 
-    if attributes[:mode] == "cash"
-      ApplicationRecord.transaction do
-        booking.booking_tables.update!(floor_object_id: nil)
-        booking.update!(clocked_out_at: DateTime.current)
-      end
+    if attributes[:mode] == "cash" || attributes[:mode] == "card"
+      invoice.update!(payment_mode: attributes[:mode], status: "paid")
+    elsif attributes[:mode] == "void"
+      invoice.update!(payment_mode: "void", void_type: attributes[:void_type])
     else
       raise_error "Invalid payment mode"
     end

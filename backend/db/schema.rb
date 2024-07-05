@@ -195,6 +195,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_27_144129) do
     t.uuid "booking_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "void_type"
     t.index ["booking_id"], name: "index_invoices_on_booking_id"
     t.index ["number"], name: "index_invoices_on_number", unique: true
   end
