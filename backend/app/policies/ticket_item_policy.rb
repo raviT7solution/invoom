@@ -7,9 +7,11 @@ class TicketItemPolicy < ApplicationPolicy
 
   def scope
     if mobile_user?("orders") || mobile_user?("takeout")
-      TicketItem.joins(ticket: :booking).where(bookings: { restaurant_id: mobile_user!.restaurant_id })
+      TicketItem.where.not(status: :cancelled).joins(ticket: :booking)
+                .where(bookings: { restaurant_id: mobile_user!.restaurant_id })
     elsif kds_admin?
-      TicketItem.joins(ticket: :booking).where(bookings: { restaurant_id: kds_admin!.restaurants })
+      TicketItem.where.not(status: :cancelled).joins(ticket: :booking)
+                .where(bookings: { restaurant_id: kds_admin!.restaurants })
     else
       TicketItem.none
     end
