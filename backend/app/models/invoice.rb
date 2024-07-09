@@ -15,4 +15,8 @@ class Invoice < ApplicationRecord
   validates :total, presence: true
   validates :void_type, absence: true, if: -> { cash? || card? }
   validates :void_type, presence: true, if: :void?
+
+  def completed?
+    paid? || void?
+  end
 end

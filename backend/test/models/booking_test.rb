@@ -55,4 +55,47 @@ class BookingTest < ActiveSupport::TestCase
 
     assert_not booking.valid?
   end
+
+  test "validate_clocked_out_at" do
+    restaurant = create(:restaurant)
+    role = create(:role, restaurant: restaurant, permissions: ["orders"])
+    user = create(:user, restaurant: restaurant, roles: [role])
+
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
+                               booking_tables: [build(:booking_table, floor_object: table)])
+
+    category = create(:category, restaurant: restaurant)
+    item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
+
+    ticket = create(:ticket, booking: booking)
+    create(:ticket_item, ticket: ticket, item: item, status: :cancelled)
+    ticket_item = create(:ticket_item, ticket: ticket, item: item, status: :queued)
+
+    booking.update(clocked_out_at: 1.minute.ago)
+
+    assert_equal "Item(s) still present in kitchen", booking.errors.full_messages.to_sentence
+    assert_nil booking.reload.clocked_out_at
+
+    ticket_item.update(status: :served)
+
+    booking.update(clocked_out_at: 1.minute.ago)
+
+    assert_equal "Unprocessed invoice(s)", booking.errors.full_messages.to_sentence
+    assert_nil booking.reload.clocked_out_at
+
+    invoice = create(:invoice, booking: booking)
+
+    booking.update(clocked_out_at: 1.minute.ago)
+
+    assert_equal "Unprocessed invoice(s)", booking.errors.full_messages.to_sentence
+    assert_nil booking.reload.clocked_out_at
+
+    invoice.update(status: "paid")
+
+    booking.update(clocked_out_at: 1.minute.ago)
+
+    assert booking.valid?
+    assert_not_nil booking.reload.clocked_out_at
+  end
 end

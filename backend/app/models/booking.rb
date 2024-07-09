@@ -26,6 +26,8 @@ class Booking < ApplicationRecord
   validates :customer_id, presence: true, unless: :dine_in?
   validates :pax, comparison: { greater_than: 0 }, if: :dine_in?
 
+  validate :validate_clocked_out_at, if: ->(i) { i.clocked_out_at.present? }
+
   before_create :set_token, if: :takeout?
 
   private
@@ -36,5 +38,16 @@ class Booking < ApplicationRecord
 
       self.token = t + 1
     end
+  end
+
+  def validate_clocked_out_at # rubocop:disable Metrics/AbcSize
+    if tickets.joins(:ticket_items).where.not(ticket_items: { status: [:cancelled, :served] }).exists?
+      errors.add(:base, "Item(s) still present in kitchen")
+    end
+
+    served_ticket_exists = tickets.joins(:ticket_items).exists?(ticket_items: { status: :served })
+    invoices_blank_or_incomplete = invoices.blank? || !invoices.all?(&:completed?)
+
+    errors.add(:base, "Unprocessed invoice(s)") if served_ticket_exists && invoices_blank_or_incomplete
   end
 end

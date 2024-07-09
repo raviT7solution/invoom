@@ -8,15 +8,15 @@ class Mutations::BookingClose < Mutations::BaseMutation
   def resolve(id:)
     booking = BookingPolicy.new(context[:current_user]).scope.find(id)
 
-    if booking.tickets.joins(:ticket_items).where.not(ticket_items: { status: :cancelled }).exists?
-      raise_error "Item(s) still present in kitchen"
-    end
-
     ApplicationRecord.transaction do
       booking.booking_tables.update!(floor_object_id: nil)
       booking.update!(clocked_out_at: DateTime.current)
     end
 
     true
+  rescue ActiveRecord::ActiveRecordError => e
+    raise_error e.record.errors.full_messages.to_sentence
+
+    false
   end
 end
