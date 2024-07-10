@@ -470,6 +470,7 @@ query tickets(
         displayName
         id
         modifiers
+        note
         quantity
         status
         ticketItemAddons {

@@ -137,6 +137,7 @@ export const Ticket = ({
               ),
               key: i.id,
               children: [
+                ...(i.note ? [{ title: i.note, key: `${i.id}-note` }] : []),
                 ...i.ticketItemAddons.map((j) => ({
                   title: j.name,
                   key: j.id,
