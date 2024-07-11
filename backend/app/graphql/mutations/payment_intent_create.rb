@@ -6,7 +6,8 @@ class Mutations::PaymentIntentCreate < Mutations::BaseMutation
   field :client_secret, String, null: false
 
   def resolve(amount:)
-    api_key = context[:current_user].mobile_user!.restaurant.payment_secret_key
+    restaurant = context[:current_user].mobile_user!.restaurant
+    api_key = restaurant.payment_secret_key
 
     intent = Stripe::PaymentIntent.create(
       {
