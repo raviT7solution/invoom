@@ -13,6 +13,8 @@ FactoryBot.define do
     country { Faker::Address.country_code }
     name { Faker::Restaurant.name }
     operational_since { "2000" }
+    payment_publishable_key { nil }
+    payment_secret_key { nil }
     phone_number { Faker::PhoneNumber.cell_phone_in_e164 }
     pin { nil }
     postal_code { Faker::Address.zip_code }

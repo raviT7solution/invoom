@@ -1,4 +1,5 @@
 import {
+  DollarOutlined,
   InfoCircleFilled,
   PercentageOutlined,
   PrinterOutlined,
@@ -6,6 +7,7 @@ import {
 import { Tabs, Tooltip } from "antd";
 
 import { OperationPin } from "./OperationPin";
+import { PaymentConfiguration } from "./PaymentConfigurations";
 import { PrinterConfigurations } from "./PrinterConfigurations";
 import { Taxes } from "./Taxes";
 
@@ -52,6 +54,16 @@ export const RestaurantSettings = () => {
             ),
             key: "3",
             children: <PrinterConfigurations />,
+          },
+          {
+            label: (
+              <span className="flex gap-2">
+                Payment Gateway Configurations
+                <DollarOutlined />
+              </span>
+            ),
+            key: "4",
+            children: <PaymentConfiguration />,
           },
         ]}
       />

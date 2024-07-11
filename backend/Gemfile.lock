@@ -255,6 +255,7 @@ GEM
     ruby-progressbar (1.13.0)
     rubyzip (2.3.2)
     stringio (3.0.8)
+    stripe (7.1.0)
     thor (1.2.2)
     timeout (0.4.0)
     tzinfo (2.0.6)
@@ -301,6 +302,7 @@ DEPENDENCIES
   rubocop-minitest
   rubocop-ordered_methods
   rubocop-rails
+  stripe
   tzinfo-data
 
 RUBY VERSION

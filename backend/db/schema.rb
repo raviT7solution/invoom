@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_27_144129) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_03_122333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -368,6 +368,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_27_144129) do
     t.string "restaurant_type", null: false
     t.string "timezone", null: false
     t.integer "status", null: false
+    t.string "payment_publishable_key"
+    t.string "payment_secret_key"
   end
 
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
