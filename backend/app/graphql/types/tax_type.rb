@@ -3,6 +3,7 @@
 class Types::TaxType < Types::BaseObject
   field :category, String, null: false
   field :country, String, null: false
+  field :cst, Float, null: false
   field :display_name, String, null: false
   field :gst, Float, null: false
   field :hst, Float, null: false

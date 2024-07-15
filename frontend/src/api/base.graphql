@@ -421,6 +421,7 @@ query users($restaurantId: ID!) {
 query taxes($restaurantId: ID!) {
   taxes(restaurantId: $restaurantId) {
     category
+    cst
     displayName
     gst
     hst

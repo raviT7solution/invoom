@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Types::TicketItemType < Types::BaseObject
+  field :cst, Float, null: false
   field :display_name, String, null: false
   field :gst, Float, null: false
   field :hst, Float, null: false

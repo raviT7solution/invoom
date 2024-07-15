@@ -35,6 +35,7 @@ class TicketsTest < ActionDispatch::IntegrationTest
     assert response.parsed_body["data"]["ticketCreate"]
     assert_attributes Ticket.last, booking: booking
     assert_attributes Ticket.last.ticket_items.first!,
+                      cst: item.tax.cst,
                       gst: item.tax.gst,
                       hst: item.tax.hst,
                       name: item.name,

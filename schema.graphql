@@ -1701,6 +1701,7 @@ input RoleUpdateInput {
 type Tax {
   category: String!
   country: String!
+  cst: Float!
   displayName: String!
   gst: Float!
   hst: Float!
@@ -1748,6 +1749,7 @@ input TicketCreateInput {
 
 type TicketItem {
   appliedDiscount: AppliedDiscount
+  cst: Float!
   displayName: String!
   gst: Float!
   hst: Float!

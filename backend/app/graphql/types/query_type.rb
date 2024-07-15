@@ -350,8 +350,11 @@ class Types::QueryType < Types::BaseObject
 
   def taxes(restaurant_id:)
     restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+    records = TaxPolicy.new(context[:current_user]).scope
+    records = records.where(province: restaurant.province, country: restaurant.country)
 
-    TaxPolicy.new(context[:current_user]).scope.where(province: restaurant.province, country: restaurant.country)
+    postal_code_records = records.where(postal_code: restaurant.postal_code)
+    postal_code_records.exists? ? postal_code_records : records
   end
 
   def tickets(restaurant_id:, page:, per_page:, kitchen_profile_id: nil, booking_types: [], status: []) # rubocop:disable Metrics/AbcSize, Metrics/ParameterLists

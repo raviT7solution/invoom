@@ -394,6 +394,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_03_122333) do
     t.float "pst", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "cst", null: false
+    t.string "postal_code"
   end
 
   create_table "ticket_item_addons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -422,6 +424,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_03_122333) do
     t.float "qst", null: false
     t.float "rst", null: false
     t.uuid "item_id", null: false
+    t.float "cst", null: false
     t.index ["item_id"], name: "index_ticket_items_on_item_id"
     t.index ["ticket_id"], name: "index_ticket_items_on_ticket_id"
   end

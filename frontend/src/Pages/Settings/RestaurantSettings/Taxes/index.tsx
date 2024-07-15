@@ -21,6 +21,7 @@ export const Taxes = () => {
               <Card.Meta
                 className="h-20"
                 description={`
+                ${tax.cst !== 0 ? `\n Sales: ${tax.cst}%` : ""}
                 ${tax.gst !== 0 ? `\n GST: ${tax.gst}%` : ""}
                 ${tax.hst !== 0 ? `\n HST: ${tax.hst}%` : ""}
                 ${tax.pst !== 0 ? `\n PST: ${tax.pst}%` : ""}

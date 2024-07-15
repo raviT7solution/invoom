@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :ticket_item do
+    cst { Faker::Number.decimal(l_digits: 2) }
     display_name { Faker::Food.name }
     gst { Faker::Number.decimal(l_digits: 2) }
     hst { Faker::Number.decimal(l_digits: 2) }

@@ -16,6 +16,7 @@ class Mutations::TicketCreate < Mutations::BaseMutation
       tax = item.tax
 
       ticket_item = ticket.ticket_items.new(
+        cst: tax.cst,
         display_name: item.display_name,
         gst: tax.gst,
         hst: tax.hst,
