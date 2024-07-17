@@ -126,11 +126,11 @@ class Types::QueryType < Types::BaseObject
     argument :status, [String], required: false
   end
   field :time_sheets, Types::TimeSheetType.collection_type, null: false do
-    argument :end_date, String, required: false
+    argument :end_date, GraphQL::Types::ISO8601DateTime, required: false
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
-    argument :start_date, String, required: false
+    argument :start_date, GraphQL::Types::ISO8601DateTime, required: false
     argument :user_ids, [String], required: false
   end
   field :user, Types::UserType, null: false do
@@ -382,9 +382,7 @@ class Types::QueryType < Types::BaseObject
       records = records.where(user_id: UserPolicy.new(context[:current_user]).scope.where(id: user_ids))
     end
 
-    if start_date.present? && end_date.present?
-      records = records.where(start_time: DateTime.parse(start_date)..DateTime.parse(end_date))
-    end
+    records = records.where(start_time: start_date..end_date) if start_date.present? && end_date.present?
 
     records.order(created_at: :desc).page(page).per(per_page)
   end

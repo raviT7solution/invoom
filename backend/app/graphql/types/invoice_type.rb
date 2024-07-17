@@ -6,6 +6,7 @@ class Types::InvoiceType < Types::BaseObject
   field :number, Integer, null: false
   field :payment_mode, Types::Invoice::PaymentModeEnum, null: true
   field :status, Types::Invoice::StatusEnum, null: false
+  field :tip, Float, null: false
   field :total, Float, null: false
 
   field :invoice_items, [Types::InvoiceItemType], scope: "InvoiceItemPolicy", preload: :invoice_items, null: false

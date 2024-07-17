@@ -13,7 +13,10 @@ import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 export const ReportsLabour = () => {
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const [dateRange, setDateRange] = useState({ start: "", end: "" });
+  const [dateRange, setDateRange] = useState<{
+    start: string | null;
+    end: string | null;
+  }>({ start: null, end: null });
   const [userIds, setUserIds] = useState<string[]>([]);
   const [pagination, setPagination] = useState({
     page: 1,

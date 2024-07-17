@@ -12,7 +12,13 @@ class Mutations::InvoicesCreate < Mutations::BaseMutation
     invoices = InvoicePolicy.new(context[:current_user]).scope.where(booking_id: booking_id)
 
     ApplicationRecord.transaction do
-      invoices.destroy_all if invoices.present?
+      if invoices.present?
+        if invoices.exists?(status: "paid")
+          raise_error "You can't generate invoices for this booking because it already has a paid invoice"
+        else
+          invoices.destroy_all
+        end
+      end
 
       attributes.each do |invoice_attributes|
         inv_discount_type = booking.applied_discount.discount_type if booking.applied_discount.present?

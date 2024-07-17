@@ -21,7 +21,8 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     authentic_query user, "mobile_user", payment_create_string, variables: {
       input: {
         attributes: {
-          mode: "cash"
+          mode: "cash",
+          tip: 10
         },
         invoiceId: invoice.id
       }
@@ -31,7 +32,8 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     assert_attributes invoice.reload,
                       payment_mode: "cash",
-                      status: "paid"
+                      status: "paid",
+                      tip: 10
   end
 
   test "invoice void payment create" do

@@ -588,6 +588,7 @@ type Invoice {
   number: Int!
   paymentMode: InvoicePaymentModeEnum
   status: InvoiceStatusEnum!
+  tip: Float!
   total: Float!
 }
 
@@ -1281,6 +1282,7 @@ type Mutation {
 
 input PaymentAttributes {
   mode: InvoicePaymentModeEnum
+  tip: Float
   voidType: InvoiceVoidTypeEnum
 }
 
@@ -1522,7 +1524,7 @@ type Query {
   roles(restaurantId: ID!): [Role!]!
   taxes(restaurantId: ID!): [Tax!]!
   tickets(bookingTypes: [String!], kitchenProfileId: ID, page: Int!, perPage: Int!, restaurantId: ID!, status: [String!]): TicketCollection!
-  timeSheets(endDate: String, page: Int!, perPage: Int!, restaurantId: ID!, startDate: String, userIds: [String!]): TimeSheetCollection!
+  timeSheets(endDate: ISO8601DateTime, page: Int!, perPage: Int!, restaurantId: ID!, startDate: ISO8601DateTime, userIds: [String!]): TimeSheetCollection!
   user(id: ID!): User!
   users(restaurantId: ID!): [User!]!
 }

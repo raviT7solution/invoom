@@ -32,7 +32,7 @@ export const dateRangePickerToString = (
   end: string,
   tz?: string,
 ) => {
-  if (!start || !end) return { start: "", end: "" };
+  if (!start || !end) return { start: null, end: null };
 
   return {
     start: dayjs.tz(start, tz).startOf("day").toISOString(),

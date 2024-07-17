@@ -10,7 +10,7 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
     invoice = InvoicePolicy.new(context[:current_user]).scope.find(invoice_id)
 
     if attributes[:mode] == "cash" || attributes[:mode] == "card"
-      invoice.update!(payment_mode: attributes[:mode], status: "paid")
+      invoice.update!(payment_mode: attributes[:mode], status: "paid", tip: attributes[:tip] || 0)
     elsif attributes[:mode] == "void"
       invoice.update!(payment_mode: "void", void_type: attributes[:void_type])
     else
