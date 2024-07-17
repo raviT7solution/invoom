@@ -43,10 +43,6 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
       within ".ant-form-item", text: "Clubbed" do
         find(".ant-radio-wrapper", text: "Yes").click
       end
-      within ".ant-form-item", text: "Repeat" do
-        find(".ant-checkbox-wrapper", text: "Sun").click
-        find(".ant-checkbox-wrapper", text: "Sat").click
-      end
       within ".ant-form-item", text: "Visible" do
         find(".ant-checkbox-wrapper", text: "Visible").click
       end
@@ -68,7 +64,7 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
                       discount_type: "percentage",
                       item_ids: [item.id],
                       name: "First",
-                      repeat: ["Sun", "Sat"],
+                      repeat: [],
                       threshold: 1,
                       value: 10,
                       visible: false
@@ -142,7 +138,13 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
         find(".ant-radio-wrapper", text: "Bill Wise").click
       end
       within ".ant-form-item", text: "Auto Apply" do
-        find(".ant-radio-wrapper", text: "No").click
+        find(".ant-radio-wrapper", text: "Yes").click
+      end
+      within ".ant-form-item", text: "Start Date & Time" do
+        fill_in_ant_picker with: "02-01-2016 00:00:00"
+      end
+      within ".ant-form-item", text: "End Date & Time" do
+        fill_in_ant_picker with: "02-01-2016 00:00:00"
       end
       within ".ant-form-item", text: "Clubbed" do
         find(".ant-radio-wrapper", text: "Yes").click
@@ -164,7 +166,7 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
     discount.reload
 
     assert_attributes discount, \
-                      auto_apply: false,
+                      auto_apply: true,
                       black_out_dates: [],
                       capping: 2,
                       category_ids: [],
@@ -179,7 +181,7 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
                       value: 10,
                       visible: true
 
-    assert_nil discount.end_date_time
-    assert_nil discount.start_date_time
+    assert_equal "2016-02-01T00:00:00Z", discount.end_date_time.iso8601
+    assert_equal "2016-02-01T00:00:00Z", discount.start_date_time.iso8601
   end
 end

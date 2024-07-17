@@ -11,15 +11,20 @@ class DiscountsTest < ActionDispatch::IntegrationTest
     category = create(:category, restaurant: restaurant)
     item = create(:item, category: category, restaurant: restaurant, tax: create(:tax))
 
-    discount = create(:discount, restaurant: restaurant,
-                                 channels: ["takeout"],
-                                 discount_on: "item_wise",
-                                 category_ids: [category.id],
-                                 auto_apply: false,
-                                 clubbed: false,
-                                 repeat: ["Sun", "Tue", "Wed"],
-                                 black_out_dates: ["2024-04-01", "2024-04-05"],
-                                 visible: true)
+    discount = create(
+      :discount,
+      auto_apply: true,
+      black_out_dates: ["2024-04-01", "2024-04-05"],
+      category_ids: [category.id],
+      channels: ["takeout"],
+      clubbed: false,
+      discount_on: "item_wise",
+      end_date_time: 1.day.ago,
+      repeat: ["Sun", "Tue", "Wed"],
+      restaurant: restaurant,
+      start_date_time: 1.day.ago,
+      visible: true
+    )
 
     # Blackout
     travel_to "2024-04-01T05:00:00Z" do

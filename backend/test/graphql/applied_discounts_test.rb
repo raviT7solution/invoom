@@ -8,7 +8,7 @@ class AppliedDiscountsTest < ActionDispatch::IntegrationTest
     role = create(:role, permissions: ["orders", "apply_discount"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    discount = create(:discount, restaurant: restaurant, repeat: [Date.current.strftime("%a")])
+    discount = create(:discount, restaurant: restaurant)
 
     customer = create(:customer, restaurant: restaurant)
     booking = create(:booking, restaurant: restaurant, user: user, booking_type: "takeout", customer: customer)

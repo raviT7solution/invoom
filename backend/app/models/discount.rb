@@ -27,7 +27,8 @@ class Discount < ApplicationRecord
   validates :end_date_time, presence: true, if: :auto_apply?
   validates :item_ids, absence: true, if: :bill_wise?
   validates :name, presence: true
-  validates :repeat, presence: true, if: proc { repeat.nil? }
+  validates :repeat, length: { is: 0 }, unless: :auto_apply?
+  validates :repeat, length: { minimum: 1 }, if: :auto_apply?
   validates :start_date_time, absence: true, unless: :auto_apply?
   validates :start_date_time, presence: true, if: :auto_apply?
   validates :threshold, presence: true

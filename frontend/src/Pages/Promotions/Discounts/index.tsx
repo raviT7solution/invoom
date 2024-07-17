@@ -2,7 +2,7 @@ import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Empty, Popconfirm, Space, Typography } from "antd";
 import { useState } from "react";
 
-import { Edit } from "./Edit";
+import { discountTypes, Edit } from "./Edit";
 
 import { useDiscountDelete, useDiscounts } from "../../../api";
 import { Navbar } from "../../../components/Navbar";
@@ -75,8 +75,8 @@ export const Discounts = () => {
                       }}
                       type="secondary"
                     >
-                      <li>Type: {i.discountType}</li>
-                      <li>Value: $ {i.value}</li>
+                      <li>Type: {discountTypes[i.discountType]}</li>
+                      <li>Value: {i.value}</li>
                     </Typography.Paragraph>
                   }
                   title={i.name}

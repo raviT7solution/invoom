@@ -59,36 +59,26 @@ const initialValues = {
   clubbed: false,
   discountOn: "bill_wise",
   discountValue: 0,
+  repeat: [],
   threshold: 0,
   visible: true,
 };
 
-const discountTypes = [
-  {
-    label: "Percentage",
-    value: "percentage",
-  },
-  {
-    label: "Flat Rate",
-    value: "flat",
-  },
-  {
-    label: "BOGO",
-    value: "bogo",
-  },
-  {
-    label: "Combo",
-    value: "combo",
-  },
-  {
-    label: "Comp-off",
-    value: "compoff",
-  },
-  {
-    label: "Coupons",
-    value: "coupons",
-  },
-];
+export const discountTypes: Record<DiscountTypeEnum, string> = {
+  percentage: "Percentage",
+  flat: "Flat Rate",
+  bogo: "BOGO",
+  combo: "Combo",
+  compoff: "Comp-off",
+  coupons: "Coupons",
+};
+
+const discountTypesOptions = Object.entries(discountTypes).map(
+  ([value, label]) => ({
+    label,
+    value,
+  }),
+);
 
 const channels = [
   {
@@ -190,7 +180,7 @@ export const Edit = ({
           name="discountType"
           rules={[{ required: true, message: "Required" }]}
         >
-          <Select options={discountTypes} placeholder="Select" />
+          <Select options={discountTypesOptions} placeholder="Select" />
         </Form.Item>
 
         <Form.Item
@@ -234,10 +224,11 @@ export const Edit = ({
             onChange={() =>
               form.setFieldsValue({ categoryIds: [], itemIds: [] })
             }
-          >
-            <Radio value="bill_wise">Bill Wise</Radio>
-            <Radio value="item_wise">Item Wise</Radio>
-          </Radio.Group>
+            options={[
+              { label: "Bill Wise", value: "bill_wise" },
+              { label: "Item Wise", value: "item_wise" },
+            ]}
+          />
         </Form.Item>
 
         <Form.Item hidden={!itemWise} label="Categories" name="categoryIds">
@@ -269,12 +260,17 @@ export const Edit = ({
         >
           <Radio.Group
             onChange={() =>
-              form.setFieldsValue({ startDateTime: null, endDateTime: null })
+              form.setFieldsValue({
+                endDateTime: null,
+                repeat: [],
+                startDateTime: null,
+              })
             }
-          >
-            <Radio value={true}>Yes</Radio>
-            <Radio value={false}>No</Radio>
-          </Radio.Group>
+            options={[
+              { label: "Yes", value: true },
+              { label: "No", value: false },
+            ]}
+          />
         </Form.Item>
 
         <Form.Item
@@ -312,16 +308,19 @@ export const Edit = ({
           name="clubbed"
           rules={[{ required: true, message: "Required" }]}
         >
-          <Radio.Group>
-            <Radio value={true}>Yes</Radio>
-            <Radio value={false}>No</Radio>
-          </Radio.Group>
+          <Radio.Group
+            options={[
+              { label: "Yes", value: true },
+              { label: "No", value: false },
+            ]}
+          />
         </Form.Item>
 
         <Form.Item
+          hidden={!autoApply}
           label="Repeat"
           name="repeat"
-          rules={[{ required: true, message: "Required" }]}
+          rules={[{ required: autoApply, message: "Required" }]}
         >
           <Checkbox.Group>
             <Checkbox value="Sun">Sun</Checkbox>

@@ -11,7 +11,7 @@ FactoryBot.define do
     discount_type { "percentage" }
     end_date_time { nil }
     name { Faker::Commerce.promotion_code }
-    repeat { ["Thu"] }
+    repeat { [] }
     start_date_time { nil }
     threshold { 2.0 }
     value { 10 }
