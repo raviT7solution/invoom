@@ -4,6 +4,7 @@ import {
   LockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Button,
   Collapse,
@@ -46,6 +47,8 @@ const AccountSection = () => {
   const { configure, reset, restaurantId } = useKDSConfigStore();
   const { create, destroy } = useKDSSessionStore();
 
+  const queryClient = useQueryClient();
+
   const onFinish = async (values: schema) => {
     create((await mutateAsync({ input: { ...values, subject: "kds" } })).token);
 
@@ -54,6 +57,7 @@ const AccountSection = () => {
   };
 
   const onLogout = () => {
+    queryClient.clear();
     destroy();
     reset();
 

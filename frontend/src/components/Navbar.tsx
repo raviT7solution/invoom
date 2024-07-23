@@ -21,6 +21,7 @@ import {
   UserAddOutlined,
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Avatar,
   Breadcrumb,
@@ -54,6 +55,8 @@ export const Navbar = ({
   const destroy = useAdminSessionStore((s) => s.destroy);
   const restaurantIdStore = useRestaurantIdStore();
 
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     if (
       !restaurants.length ||
@@ -66,6 +69,8 @@ export const Navbar = ({
   }, [restaurants, restaurantIdStore]);
 
   const onLogout = () => {
+    queryClient.clear();
+    restaurantIdStore.destroy();
     destroy();
 
     Router.push("Login");
