@@ -36,6 +36,7 @@ import {
 import { ReactNode, useEffect } from "react";
 
 import { useCurrentAdmin, useRestaurants } from "../api";
+import Logo from "../assets/logo.png";
 import { classNames, initials } from "../helpers";
 import { Router } from "../Routes";
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
@@ -230,7 +231,9 @@ export const Navbar = ({
         <Menu items={items} mode="vertical" selectedKeys={[]} />
       </Layout.Sider>
       <Layout>
-        <Layout.Header className="!bg-white">
+        <Layout.Header className="!bg-white flex items-center">
+          <img className="h-14 absolute left-1/2 -translate-x-1/2" src={Logo} />
+
           <div className="absolute cursor-pointer right-4">
             <Dropdown menu={{ items: headerItems }} trigger={["click"]}>
               <Avatar className="!bg-zinc-400">

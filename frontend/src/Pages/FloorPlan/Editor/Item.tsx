@@ -112,7 +112,7 @@ export const ItemComponent = memo(({ item }: Props) => {
       break;
   }
 
-  const ItemIcon = items[item.objectType].icon;
+  const ItemIcon = items[item.data.addons?.type || item.objectType].icon;
 
   const renderOvalTableChairs = (
     w: number,

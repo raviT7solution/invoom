@@ -42,7 +42,8 @@ export const ItemPropertyMenu = () => {
   if (!selectedItemIds || !selectedItems.length) return;
 
   const itemTitle = selectedItems[0].name || selectedItems[0].objectType;
-  const item = items[selectedItems[0].objectType];
+  const item =
+    items[selectedItems[0].data.addons?.type || selectedItems[0].objectType];
 
   const handleChangeName = () => {
     updateItem({ ...selectedItems[0], name });
@@ -240,7 +241,7 @@ export const ItemPropertyMenu = () => {
         cancelText="No"
         okText="Yes"
         onConfirm={handleDeleteObject}
-        title={`Are you sure to delete ${selectedItems
+        title={`Are you sure you'd like to delete ${selectedItems
           .map((i) => i.name)
           .join(", ")}?`}
       >

@@ -8,8 +8,6 @@ class LoginTest < ApplicationSystemTestCase
 
     visit path_for(:frontend, "/")
 
-    assert_selector ".ant-card-head-title", text: "Login"
-
     fill_in "Email", with: admin.email
     fill_in "Password", with: admin.password
 
@@ -23,8 +21,6 @@ class LoginTest < ApplicationSystemTestCase
 
     visit path_for(:frontend, "/")
 
-    assert_selector ".ant-card-head-title", text: "Login"
-
     fill_in "Email", with: user.email
     fill_in "Password", with: user.password
 
@@ -37,8 +33,6 @@ class LoginTest < ApplicationSystemTestCase
     admin = create(:admin)
 
     visit path_for(:frontend, "/")
-
-    assert_selector ".ant-card-head-title", text: "Login"
 
     fill_in "Email", with: admin.email
     fill_in "Password", with: "wrong"

@@ -7,6 +7,7 @@ import {
 import { Button, Card, Checkbox, Form, Input } from "antd";
 
 import { useAdminSessionCreate } from "../api";
+import Logo from "../assets/logo.png";
 import { Router } from "../Routes";
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
 
@@ -30,7 +31,10 @@ export const Login = () => {
 
   return (
     <div className="h-screen flex justify-center items-center bg-neutral-100">
-      <Card className="drop-shadow-xl w-11/12 lg:w-1/4" title="Login">
+      <Card
+        className="drop-shadow-xl w-11/12 lg:w-1/4"
+        title={<img className="h-14 m-auto" src={Logo} />}
+      >
         <Form onFinish={onFinish}>
           <Form.Item
             name="email"

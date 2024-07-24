@@ -10,6 +10,7 @@ import { BiRestaurant } from "@react-icons/all-files/bi/BiRestaurant";
 import { BiStreetView } from "@react-icons/all-files/bi/BiStreetView";
 import { BiWalk } from "@react-icons/all-files/bi/BiWalk";
 import { BsSpeaker } from "@react-icons/all-files/bs/BsSpeaker";
+import { FaCircle } from "@react-icons/all-files/fa/FaCircle";
 import { FaCocktail } from "@react-icons/all-files/fa/FaCocktail";
 import { GiCookingPot } from "@react-icons/all-files/gi/GiCookingPot";
 import { ImExit } from "@react-icons/all-files/im/ImExit";
@@ -17,7 +18,10 @@ import { MdKitchen } from "@react-icons/all-files/md/MdKitchen";
 import { SiAirtable } from "@react-icons/all-files/si/SiAirtable";
 
 export const items: Record<string, { icon: IconType }> = {
-  table: {
+  oval: {
+    icon: FaCircle,
+  },
+  rectangular: {
     icon: SiAirtable,
   },
   stage: {

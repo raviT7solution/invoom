@@ -3,6 +3,7 @@ import { BiRestaurant } from "@react-icons/all-files/bi/BiRestaurant";
 import { BiStreetView } from "@react-icons/all-files/bi/BiStreetView";
 import { BiWalk } from "@react-icons/all-files/bi/BiWalk";
 import { BsSpeaker } from "@react-icons/all-files/bs/BsSpeaker";
+import { FaCircle } from "@react-icons/all-files/fa/FaCircle";
 import { FaCocktail } from "@react-icons/all-files/fa/FaCocktail";
 import { GiCookingPot } from "@react-icons/all-files/gi/GiCookingPot";
 import { ImExit } from "@react-icons/all-files/im/ImExit";
@@ -34,7 +35,7 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
     {
       name: "oval_table",
       title: "Oval table",
-      icon: <SiAirtable className="text-2xl" />,
+      icon: <FaCircle className="text-2xl" />,
       data: {
         id: "",
         name: "",
