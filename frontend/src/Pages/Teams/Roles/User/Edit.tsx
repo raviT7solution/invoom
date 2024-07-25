@@ -420,6 +420,7 @@ export const UserEdit = ({
             >
               <Select
                 mode="multiple"
+                optionFilterProp="label"
                 options={roles.map((r) => ({ label: r.name, value: r.id }))}
                 placeholder="Select"
               />

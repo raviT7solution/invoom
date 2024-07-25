@@ -141,6 +141,7 @@ export const Edit = ({
         >
           <Select
             mode="multiple"
+            optionFilterProp="label"
             options={categories.map((r) => ({
               label: r.name,
               value: r.id,
@@ -156,6 +157,7 @@ export const Edit = ({
         >
           <Select
             mode="multiple"
+            optionFilterProp="label"
             options={items?.map((r) => ({
               label: r.name,
               value: r.id,

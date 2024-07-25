@@ -188,7 +188,12 @@ export const Edit = ({
           name="channels"
           rules={[{ required: true, message: "Required" }]}
         >
-          <Select mode="multiple" options={channels} placeholder="Select" />
+          <Select
+            mode="multiple"
+            optionFilterProp="label"
+            options={channels}
+            placeholder="Select"
+          />
         </Form.Item>
 
         <Form.Item
@@ -234,6 +239,7 @@ export const Edit = ({
         <Form.Item hidden={!itemWise} label="Categories" name="categoryIds">
           <Select
             mode="multiple"
+            optionFilterProp="label"
             options={categories.map((i) => ({
               label: i.name,
               value: i.id,
@@ -245,6 +251,7 @@ export const Edit = ({
         <Form.Item hidden={!itemWise} label="Items" name="itemIds">
           <Select
             mode="multiple"
+            optionFilterProp="label"
             options={items.map((i) => ({
               label: i.name,
               value: i.id,

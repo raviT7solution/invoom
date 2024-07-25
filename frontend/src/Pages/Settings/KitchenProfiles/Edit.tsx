@@ -103,6 +103,7 @@ export const Edit = ({
           <Select
             loading={isCategoriesFetching}
             mode="multiple"
+            optionFilterProp="label"
             options={categories.map((i) => ({ label: i.name, value: i.id }))}
             placeholder="Select"
           />

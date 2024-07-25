@@ -154,6 +154,7 @@ export const Edit = ({
         >
           <Select
             mode="multiple"
+            optionFilterProp="label"
             options={modifiers.map((r) => ({
               label: r.name,
               value: r.id,
@@ -169,6 +170,7 @@ export const Edit = ({
         >
           <Select
             mode="multiple"
+            optionFilterProp="label"
             options={addons.map((a) => ({ label: a.name, value: a.id }))}
             placeholder="Select"
           />

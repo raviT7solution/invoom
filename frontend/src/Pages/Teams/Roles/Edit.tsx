@@ -109,7 +109,12 @@ export const Edit = ({
           name="permissions"
           rules={[{ required: true, message: "Required" }]}
         >
-          <Select mode="multiple" options={permissions} placeholder="Select" />
+          <Select
+            mode="multiple"
+            optionFilterProp="label"
+            options={permissions}
+            placeholder="Select"
+          />
         </Form.Item>
       </Form>
     </FormDrawer>

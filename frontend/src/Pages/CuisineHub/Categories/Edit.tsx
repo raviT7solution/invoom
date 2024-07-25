@@ -91,6 +91,7 @@ export const Edit = ({
         >
           <Select
             mode="multiple"
+            optionFilterProp="label"
             options={menus.map((r) => ({ label: r.name, value: r.id }))}
             placeholder="Select"
           />
