@@ -74,7 +74,7 @@ class BookingTest < ActiveSupport::TestCase
 
     booking.update(clocked_out_at: 1.minute.ago)
 
-    assert_equal "Item(s) still present in kitchen", booking.errors.full_messages.to_sentence
+    assert_equal "Unprocessed invoice(s)", booking.errors.full_messages.to_sentence
     assert_nil booking.reload.clocked_out_at
 
     ticket_item.update(status: :served)

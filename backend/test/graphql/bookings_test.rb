@@ -210,10 +210,11 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
     authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
 
-    assert_query_error "Item(s) still present in kitchen"
+    assert_query_error "Unprocessed invoice(s)"
     assert_nil booking.reload.clocked_out_at
 
-    ticket_item.update!(status: :cancelled)
+    ticket_item.update!(status: :served)
+    create(:invoice, booking: booking, status: "paid")
 
     authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
 
