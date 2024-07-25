@@ -13,7 +13,7 @@ class Mutations::PaymentIntentCreate < Mutations::BaseMutation
       {
         amount: Integer(amount * 100),
         currency: Country[restaurant.country].currency_code,
-        payment_method_types: ["card_present"],
+        payment_method_types: ["card_present", "interac_present"],
         capture_method: "manual"
       },
       api_key: api_key
