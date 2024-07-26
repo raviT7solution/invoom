@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :invoice do
     invoice_type { "simple" }
     number { "1" }
+    payment_intent_id { nil }
     payment_mode { "cash" }
     status { "unpaid" }
     tip { 0 }
