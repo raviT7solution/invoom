@@ -36,7 +36,7 @@ class KdsTest < ApplicationSystemTestCase
     assert_equal "preparing", ticket_item.reload.status
     assert_equal "preparing", another_ticket_item.reload.status
 
-    find("b", text: "T1").click(delay: 1)
+    find("b", text: "T1").click(delay: 3)
 
     wait_for_pending_requests
 
@@ -75,7 +75,7 @@ class KdsTest < ApplicationSystemTestCase
 
     assert_equal "preparing", ticket_item.reload.status
 
-    find("b", text: "T1").click(delay: 1)
+    find("b", text: "T1").click(delay: 3)
 
     wait_for_pending_requests
 

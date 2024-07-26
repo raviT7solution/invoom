@@ -159,6 +159,7 @@ export const KDSHome = () => {
                 >
                   <Ticket
                     data={ticket}
+                    isServed={tab === "5"}
                     showColor={tab === "1"}
                     updateStatus={(direction, ticketItemId) => {
                       updateTicketItemsStatusUpdate(

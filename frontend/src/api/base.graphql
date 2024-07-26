@@ -478,6 +478,7 @@ query tickets(
           id
           name
         }
+        updatedAt
       }
     }
   }

@@ -1768,6 +1768,7 @@ type TicketItem {
   rst: Float!
   status: TicketItemStatusType!
   ticketItemAddons: [TicketItemAddon!]!
+  updatedAt: ISO8601DateTime!
 }
 
 type TicketItemAddon {

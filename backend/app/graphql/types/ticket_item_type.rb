@@ -16,6 +16,7 @@ class Types::TicketItemType < Types::BaseObject
   field :quantity, Integer, null: false
   field :rst, Float, null: false
   field :status, enum("TicketItemStatusType", TicketItem.statuses.keys), null: false
+  field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
   field :applied_discount, Types::AppliedDiscountType, scope: "AppliedDiscountPolicy", preload: :applied_discount, null: true # rubocop:disable Layout/LineLength
   field :ticket_item_addons, [Types::TicketItemAddonType], scope: "TicketItemAddonPolicy",

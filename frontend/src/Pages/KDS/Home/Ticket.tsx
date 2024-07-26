@@ -24,12 +24,18 @@ const durationToString = (i: number) => {
 
 const Duration = ({
   data,
+  isServed,
 }: {
   data: TicketsQuery["tickets"]["collection"][number];
+  isServed: boolean;
 }) => {
   useRerender(1000);
 
-  const duration = durationToString(Date.now() - Date.parse(data.createdAt));
+  const endTime = isServed
+    ? Math.max(...data.ticketItems.map((item) => Date.parse(item.updatedAt)))
+    : Date.now();
+
+  const duration = durationToString(endTime - Date.parse(data.createdAt));
 
   return duration;
 };
@@ -50,7 +56,7 @@ const TicketItem = ({
 
   const onTicketItemLongPress = useLongPress(
     () => updateStatus(-1, item.id),
-    500,
+    2000,
   );
   const onTicketItemDoubleClick = useDoubleClick(
     () => updateStatus(1, item.id),
@@ -67,21 +73,23 @@ const TicketItem = ({
       {...onTicketItemLongPress}
     >
       <b>{item.displayName}</b>
-      <Tag>&times;{item.quantity}</Tag>
+      <b className="px-1 bg-gray-100 rounded-sm">&times;{item.quantity}</b>
     </div>
   );
 };
 
 export const Ticket = ({
   data,
+  isServed,
   showColor,
   updateStatus,
 }: {
   data: TicketsQuery["tickets"]["collection"][number];
+  isServed: boolean;
   showColor: boolean;
   updateStatus: (direction: 1 | -1, ticketItemId?: string) => void;
 }) => {
-  const onTicketLongPress = useLongPress(() => updateStatus(-1), 500);
+  const onTicketLongPress = useLongPress(() => updateStatus(-1), 2000);
   const onTicketDoubleClick = useDoubleClick(() => updateStatus(1), 500);
 
   const color = useMemo(
@@ -114,7 +122,7 @@ export const Ticket = ({
           <div>
             <Tag>{data.booking.userFullName}</Tag>
             <Tag className="font-bold" icon={<ClockCircleOutlined />}>
-              <Duration data={data} />
+              <Duration data={data} isServed={isServed} />
             </Tag>
           </div>
         </div>
