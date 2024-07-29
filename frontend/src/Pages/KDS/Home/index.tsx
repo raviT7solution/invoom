@@ -51,7 +51,11 @@ export const KDSHome = () => {
     () => (kitchenProfile ? kitchenProfile.columns * kitchenProfile.rows : 1),
     [kitchenProfile],
   );
-  const { data: tickets, refetch: refetchTickets } = useTickets({
+  const {
+    data: tickets,
+    refetch: refetchTickets,
+    isFetching,
+  } = useTickets({
     bookingTypes: bookingTypes,
     kitchenProfileId: kitchenProfileId,
     page,
@@ -62,6 +66,12 @@ export const KDSHome = () => {
 
   const debouncedNotify = useDebounceFn(notify, 500);
   const debouncedRefetch = useDebounceFn(refetchTickets, 100);
+
+  useEffect(() => {
+    if (!isFetching && tickets.collection.length === 0 && page > 1) {
+      setPage((prev) => prev - 1);
+    }
+  }, [tickets, page, isFetching]);
 
   useEffect(() => {
     const channel = consumer.subscriptions.create(
