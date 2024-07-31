@@ -647,3 +647,122 @@ query printerConfigurations($restaurantId: ID!) {
     visible
   }
 }
+
+query bookings(
+  $restaurantId: ID!
+  $bookingTypes: [String!]
+  $status: String
+  $perPage: Int!
+  $page: Int!
+  $startDate: ISO8601DateTime
+  $endDate: ISO8601DateTime
+) {
+  bookings(
+    restaurantId: $restaurantId
+    bookingTypes: $bookingTypes
+    status: $status
+    perPage: $perPage
+    page: $page
+    startDate: $startDate
+    endDate: $endDate
+  ) {
+    collection {
+      bookingTables {
+        name
+      }
+      bookingType
+      clockedInAt
+      clockedOutAt
+      customer {
+        name
+      }
+      id
+      invoices {
+        id
+        invoiceItems {
+          discountedPrice
+          id
+          ticketItem {
+            cst
+            gst
+            hst
+            id
+            pst
+            qst
+            rst
+          }
+        }
+        number
+        paymentMode
+        total
+      }
+      number
+      pax
+      token
+      userFullName
+    }
+    metadata {
+      currentPage
+      limitValue
+      totalCount
+      totalPages
+    }
+  }
+}
+
+query invoices(
+  $endDate: ISO8601DateTime
+  $page: Int!
+  $perPage: Int!
+  $restaurantId: ID!
+  $startDate: ISO8601DateTime
+) {
+  invoices(
+    endDate: $endDate
+    page: $page
+    perPage: $perPage
+    restaurantId: $restaurantId
+    startDate: $startDate
+  ) {
+    collection {
+      booking {
+        bookingTables {
+          name
+        }
+        bookingType
+        clockedInAt
+        clockedOutAt
+        customer {
+          name
+        }
+        number
+        pax
+        token
+        userFullName
+      }
+      id
+      invoiceItems {
+        discountedPrice
+        id
+        ticketItem {
+          cst
+          gst
+          hst
+          id
+          pst
+          qst
+          rst
+        }
+      }
+      number
+      paymentMode
+      total
+    }
+    metadata {
+      currentPage
+      limitValue
+      totalCount
+      totalPages
+    }
+  }
+}

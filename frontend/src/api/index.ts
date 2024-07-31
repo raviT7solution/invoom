@@ -13,6 +13,8 @@ import {
   AddonsUpdateMutationVariables,
   AdminSessionCreateDocument,
   AdminSessionCreateMutationVariables,
+  BookingsDocument,
+  BookingsQueryVariables,
   CategoriesDocument,
   CategoryDeleteDocument,
   CategoryDeleteMutationVariables,
@@ -46,6 +48,8 @@ import {
   InventoryCategoryDocument,
   InventoryCategoryUpdateDocument,
   InventoryCategoryUpdateMutationVariables,
+  InvoicesDocument,
+  InvoicesQueryVariables,
   ItemCodeGenerateDocument,
   ItemCodeGenerateMutationVariables,
   ItemCreateDocument,
@@ -956,5 +960,23 @@ export const usePrinterConfigurationDelete = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["printerConfigurations"] });
     },
+  });
+};
+
+export const useBookings = (variables: BookingsQueryVariables) => {
+  return useQuery({
+    initialData: collectionInitialData,
+    queryKey: ["bookings", variables],
+    queryFn: async () =>
+      (await client.request(BookingsDocument, variables)).bookings,
+  });
+};
+
+export const useInvoices = (variables: InvoicesQueryVariables) => {
+  return useQuery({
+    initialData: collectionInitialData,
+    queryKey: ["invoices", variables],
+    queryFn: async () =>
+      (await client.request(InvoicesDocument, variables)).invoices,
   });
 };

@@ -45,7 +45,7 @@ export const ReportsLabour = () => {
   const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
     () => [
       {
-        title: "ID",
+        title: "Sr. No",
         render: (_, _r, index) =>
           (metadata.currentPage - 1) * metadata.limitValue + index + 1,
       },

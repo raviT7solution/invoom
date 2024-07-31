@@ -582,6 +582,7 @@ input InventoryCategoryUpdateInput {
 }
 
 type Invoice {
+  booking: Booking!
   id: ID!
   invoiceItems: [InvoiceItem!]!
   invoiceType: InvoiceTypeEnum!
@@ -599,9 +600,25 @@ input InvoiceAttributes {
   total: Float
 }
 
+"""
+InvoiceCollection type
+"""
+type InvoiceCollection {
+  """
+  A collection of paginated InvoiceCollection
+  """
+  collection: [Invoice!]!
+
+  """
+  Pagination Metadata for navigating the Pagination
+  """
+  metadata: CollectionMetadata!
+}
+
 type InvoiceItem {
   consumeBill: Float!
   discountedPrice: Float!
+  id: ID!
   itemDiscount: Float!
   price: Float!
   quantity: Float!
@@ -1493,7 +1510,7 @@ type Query {
   addon(id: ID!): Addons!
   addons(restaurantId: ID!): [Addons!]!
   booking(id: ID!): Booking!
-  bookings(bookingTypes: [String!]!, endDate: ISO8601DateTime, page: Int!, perPage: Int!, restaurantId: ID!, startDate: ISO8601DateTime, status: String!): BookingCollection!
+  bookings(bookingTypes: [String!], endDate: ISO8601DateTime, page: Int!, perPage: Int!, restaurantId: ID!, startDate: ISO8601DateTime, status: String): BookingCollection!
   categories(restaurantId: ID!): [Category!]!
   category(id: ID!): Category!
   cities(alpha2: String!, provinceCode: String!): [City!]!
@@ -1506,6 +1523,8 @@ type Query {
   floorObjects(restaurantId: ID!): [FloorObject!]!
   inventoryCategories(restaurantId: ID!): [InventoryCategory!]!
   inventoryCategory(id: ID!): InventoryCategory!
+  invoice(id: ID!): Invoice!
+  invoices(endDate: ISO8601DateTime, page: Int!, perPage: Int!, restaurantId: ID!, startDate: ISO8601DateTime): InvoiceCollection!
   item(id: ID!): Item!
   items(categoryId: ID, restaurantId: ID!): [Item!]!
   kitchenProfile(id: ID!): KitchenProfile!

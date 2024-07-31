@@ -11,13 +11,13 @@ class Types::QueryType < Types::BaseObject
     argument :id, ID, required: true
   end
   field :bookings, Types::BookingType.collection_type, null: false do
-    argument :booking_types, [String], required: true
+    argument :booking_types, [String], required: false
     argument :end_date, GraphQL::Types::ISO8601DateTime, required: false
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
     argument :start_date, GraphQL::Types::ISO8601DateTime, required: false
-    argument :status, String, required: true
+    argument :status, String, required: false
   end
   field :categories, [Types::CategoryType], null: false do
     argument :restaurant_id, ID, required: true
@@ -55,6 +55,16 @@ class Types::QueryType < Types::BaseObject
   end
   field :inventory_category, Types::InventoryCategoryType, null: false do
     argument :id, ID, required: true
+  end
+  field :invoice, Types::InvoiceType, null: false do
+    argument :id, ID, required: true
+  end
+  field :invoices, Types::InvoiceType.collection_type, null: false do
+    argument :end_date, GraphQL::Types::ISO8601DateTime, required: false
+    argument :page, Integer, required: true
+    argument :per_page, Integer, required: true
+    argument :restaurant_id, ID, required: true
+    argument :start_date, GraphQL::Types::ISO8601DateTime, required: false
   end
   field :item, Types::ItemType, null: false do
     argument :id, ID, required: true
@@ -152,7 +162,7 @@ class Types::QueryType < Types::BaseObject
     BookingPolicy.new(context[:current_user]).scope.find(id)
   end
 
-  def bookings(restaurant_id:, booking_types:, status:, page:, per_page:, start_date: nil, end_date: nil) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
+  def bookings(restaurant_id:, page:, per_page:, booking_types: [], status: nil, start_date: nil, end_date: nil) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
     records = BookingPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
 
     records = records.where(clocked_in_at: start_date..end_date) if start_date.present? && end_date.present?
@@ -249,6 +259,21 @@ class Types::QueryType < Types::BaseObject
 
   def inventory_category(id:)
     InventoryCategoryPolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def invoice(id:)
+    InvoicePolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def invoices(restaurant_id:, page:, per_page:, start_date: nil, end_date: nil)
+    records = InvoicePolicy.new(context[:current_user]).scope
+                           .joins(:booking).where(bookings: { restaurant_id: restaurant_id })
+
+    if start_date.present? && end_date.present?
+      records = records.joins(:booking).where(bookings: { clocked_in_at: start_date..end_date })
+    end
+
+    records.order(created_at: :desc).page(page).per(per_page)
   end
 
   def item(id:)

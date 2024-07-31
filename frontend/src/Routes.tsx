@@ -15,6 +15,7 @@ import { KDSLogin } from "./Pages/KDS/Login";
 import { Login } from "./Pages/Login";
 import { Discounts } from "./Pages/Promotions/Discounts";
 import { ReportsLabour } from "./Pages/Reports/Labour";
+import { ReportsSales } from "./Pages/Reports/Sales";
 import { ChangePassword } from "./Pages/Settings/ChangePassword";
 import { KitchenProfiles } from "./Pages/Settings/KitchenProfiles";
 import { Restaurants } from "./Pages/Settings/Restaurants";
@@ -63,6 +64,7 @@ const routes = {
   Login: "/login",
   PromotionsDiscounts: "/promotions/discounts",
   ReportsLabour: "/reports/labour",
+  ReportsSales: "/reports/sales",
   RestaurantSettings: "/settings/restaurant-settings",
   SettingsKitchenProfiles: "/settings/kitchen-profiles",
   SettingsRestaurants: "/settings/restaurants",
@@ -146,6 +148,11 @@ export const Switch = () => {
     .with({ name: "ReportsLabour" }, () => (
       <PrivateRoute>
         <ReportsLabour />
+      </PrivateRoute>
+    ))
+    .with({ name: "ReportsSales" }, () => (
+      <PrivateRoute>
+        <ReportsSales />
       </PrivateRoute>
     ))
     .with({ name: "KDSLogin" }, () => <KDSLogin />)
