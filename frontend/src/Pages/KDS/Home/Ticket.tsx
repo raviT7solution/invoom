@@ -56,7 +56,7 @@ const TicketItem = ({
 
   const onTicketItemLongPress = useLongPress(
     () => updateStatus(-1, item.id),
-    2000,
+    1500,
   );
   const onTicketItemDoubleClick = useDoubleClick(
     () => updateStatus(1, item.id),
@@ -89,7 +89,7 @@ export const Ticket = ({
   showColor: boolean;
   updateStatus: (direction: 1 | -1, ticketItemId?: string) => void;
 }) => {
-  const onTicketLongPress = useLongPress(() => updateStatus(-1), 2000);
+  const onTicketLongPress = useLongPress(() => updateStatus(-1), 1500);
   const onTicketDoubleClick = useDoubleClick(() => updateStatus(1), 500);
 
   const color = useMemo(

@@ -15,7 +15,7 @@ class Mutations::PaymentIntentCreate < Mutations::BaseMutation
     intent = Stripe::PaymentIntent.create(
       {
         amount: Integer(amount * 100),
-        capture_method: "manual",
+        capture_method: "automatic",
         currency: Country[restaurant.country].currency_code,
         description: "Invoice ##{invoice.number}",
         payment_method_types: ["card_present", "interac_present"]

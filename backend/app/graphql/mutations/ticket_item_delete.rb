@@ -20,18 +20,36 @@ class Mutations::TicketItemDelete < Mutations::BaseMutation
 
   private
 
-  def cancel_not_queued_item(item, pin)
+  def cancel_not_queued_item(item, pin) # rubocop:disable Metrics/AbcSize
     if item.ticket.booking.restaurant.authenticate_pin(pin)
-      raise_error item.errors.full_messages.to_sentence unless item.update(status: :cancelled)
+      invoice_items = InvoiceItem.where(ticket_item_id: item.id)
+      if invoice_items.joins(:invoice).exists?(invoices: { status: :paid })
+        raise_error "Invoice has been paid so item can't be delete"
+      end
+      if invoice_items.present?
+        unless invoice_items.joins(:invoice).exists?(invoices: { status: :paid })
+          invoice_items.destroy_all
+          item.update!(status: :cancelled)
+        end
+      else
+        item.update!(status: :cancelled)
+      end
+
     else
       raise_error "Invalid pin"
     end
   end
 
-  def destroy_queued_item(item, pin)
+  def destroy_queued_item(item, pin) # rubocop:disable Metrics/AbcSize
     authorize_to_delete = TicketItemPolicy.new(context[:current_user]).delete?
 
     if authorize_to_delete || item.ticket.booking.restaurant.authenticate_pin(pin)
+      invoice_items = InvoiceItem.where(ticket_item_id: item.id)
+      if invoice_items.present? && invoice_items.joins(:invoice).exists?(invoices: { status: :paid })
+        raise_error "Invoice has been paid so item can't be delete"
+      end
+
+      invoice_items.destroy_all if invoice_items.present?
       raise_error item.errors.full_messages.to_sentence unless item.destroy
     else
       raise_error "Invalid pin"
