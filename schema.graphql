@@ -582,10 +582,15 @@ input InventoryCategoryUpdateInput {
 }
 
 type Invoice {
+  amountReceived: String
   booking: Booking!
+  brand: String
+  cardNumber: String
+  funding: String
   id: ID!
   invoiceItems: [InvoiceItem!]!
   invoiceType: InvoiceTypeEnum!
+  issuer: String
   number: Int!
   paymentMode: InvoicePaymentModeEnum
   status: InvoiceStatusEnum!

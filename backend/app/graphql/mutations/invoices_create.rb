@@ -37,8 +37,9 @@ class Mutations::InvoicesCreate < Mutations::BaseMutation
           discounted_price = 0
           item_discount = 0
           new_price = 0
+          addon_price = ticket_item.ticket_item_addons.sum(:price)
 
-          price = ticket_item.price
+          price = ticket_item.price + addon_price
           consume_bill = item_attributes[:consume_bill]
           qty = item_attributes[:quantity]
 
