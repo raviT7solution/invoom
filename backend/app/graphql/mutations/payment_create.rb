@@ -6,16 +6,22 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
 
   type Boolean, null: false
 
-  def resolve(attributes:, invoice_id:)
+  def resolve(attributes:, invoice_id:) # rubocop:disable Metrics/AbcSize
     invoice = InvoicePolicy.new(context[:current_user]).scope.find(invoice_id)
 
     case attributes[:mode]
     when "cash"
       update_invoice_with_cash(invoice, attributes)
     when "card"
-      update_invoice_with_card(invoice, attributes)
+      if invoice.payment_intent_id.present?
+        update_invoice_with_card(invoice, attributes)
+      else
+        update_invoice_with_delivery_partner(invoice, attributes)
+      end
     when "void"
       update_invoice_with_void(invoice, attributes)
+    when "uber_eats", "door_dash", "skip_the_dishes"
+      update_invoice_with_delivery_partner(invoice, attributes)
     else
       raise_error "Invalid payment mode"
     end
@@ -29,8 +35,6 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
 
   def update_invoice_with_card(invoice, attributes) # rubocop:disable Metrics/AbcSize
     api_key = context[:current_user].mobile_user!.restaurant.payment_secret_key
-
-    raise_error "Payment intent ID is missing" if invoice.payment_intent_id.blank?
 
     payment_intent = Stripe::PaymentIntent.retrieve(invoice.payment_intent_id, api_key: api_key)
     payment_method = Stripe::PaymentMethod.retrieve(payment_intent.payment_method, api_key: api_key)
@@ -53,7 +57,11 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
     invoice.update!(payment_mode: attributes[:mode], status: "paid", tip: attributes[:tip] || 0)
   end
 
+  def update_invoice_with_delivery_partner(invoice, attributes)
+    invoice.update!(payment_mode: attributes[:mode], status: "paid")
+  end
+
   def update_invoice_with_void(invoice, attributes)
-    invoice.update!(payment_mode: "void", void_type: attributes[:void_type])
+    invoice.update!(payment_mode: attributes[:mode], void_type: attributes[:void_type])
   end
 end

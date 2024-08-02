@@ -62,10 +62,69 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     }
 
     assert_query_success
-
     assert_attributes invoice.reload,
                       payment_mode: "void",
                       void_type: "promotional"
+  end
+
+  test "create delivery partner payment" do
+    restaurant = create(:restaurant)
+    role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
+    user = create(:user, restaurant: restaurant, roles: [role])
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    booking_table = build(:booking_table, floor_object: table)
+    booking = create(:booking,
+                     booking_tables: [booking_table],
+                     booking_type: "dine_in",
+                     pax: 1,
+                     restaurant: restaurant,
+                     user: user)
+
+    invoice = create(:invoice, booking: booking)
+
+    authentic_query user, "mobile_user", payment_create_string, variables: {
+      input: {
+        attributes: {
+          mode: "uber_eats"
+        },
+        invoiceId: invoice.id
+      }
+    }
+
+    assert_query_success
+    assert_attributes invoice.reload,
+                      payment_mode: "uber_eats",
+                      status: "paid"
+  end
+
+  test "create manual card payment" do
+    restaurant = create(:restaurant)
+    role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
+    user = create(:user, restaurant: restaurant, roles: [role])
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    booking_table = build(:booking_table, floor_object: table)
+    booking = create(:booking,
+                     booking_tables: [booking_table],
+                     booking_type: "dine_in",
+                     pax: 1,
+                     restaurant: restaurant,
+                     user: user)
+
+    invoice = create(:invoice, booking: booking)
+
+    authentic_query user, "mobile_user", payment_create_string, variables: {
+      input: {
+        attributes: {
+          mode: "card"
+        },
+        invoiceId: invoice.id
+      }
+    }
+
+    assert_query_success
+    assert_attributes invoice.reload,
+                      payment_mode: "card",
+                      status: "paid"
   end
 
   private

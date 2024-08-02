@@ -640,6 +640,9 @@ input InvoiceItemAttributes {
 enum InvoicePaymentModeEnum {
   card
   cash
+  door_dash
+  skip_the_dishes
+  uber_eats
   void
 }
 
