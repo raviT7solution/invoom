@@ -135,6 +135,9 @@ class Types::QueryType < Types::BaseObject
     argument :restaurant_id, ID, required: true
     argument :status, [String], required: false
   end
+  field :time_sheet, Types::TimeSheetType, null: false do
+    argument :id, ID, required: true
+  end
   field :time_sheets, Types::TimeSheetType.collection_type, null: false do
     argument :end_date, GraphQL::Types::ISO8601DateTime, required: false
     argument :page, Integer, required: true
@@ -397,6 +400,10 @@ class Types::QueryType < Types::BaseObject
 
     order_direction = status.include?("served") ? :desc : :asc
     records.order(created_at: order_direction).page(page).per(per_page)
+  end
+
+  def time_sheet(id:)
+    TimeSheetPolicy.new(context[:current_user]).scope.find(id)
   end
 
   def time_sheets(restaurant_id:, page:, per_page:, start_date: nil, end_date: nil, user_ids: nil) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize

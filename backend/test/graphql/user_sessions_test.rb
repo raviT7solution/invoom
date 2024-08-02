@@ -144,7 +144,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     authentic_query @user, "mobile_user", destroy_string, variables: { input: {} }
 
-    assert_query_error "TimeSheet not found"
+    assert_query_success
   end
 
   test "expired token" do

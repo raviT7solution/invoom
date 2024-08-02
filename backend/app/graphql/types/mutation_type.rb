@@ -73,6 +73,9 @@ class Types::MutationType < Types::BaseObject
   field :ticket_create, mutation: Mutations::TicketCreate, null: false, authorize: "TicketPolicy#create?"
   field :ticket_item_delete, mutation: Mutations::TicketItemDelete, null: false
   field :ticket_items_update, mutation: Mutations::TicketItemsUpdate, null: false, authorize: "TicketItemPolicy#update?"
+  field :time_sheet_create, mutation: Mutations::TimeSheetCreate, null: false, authorize: "TimeSheetPolicy#create?"
+  field :time_sheet_delete, mutation: Mutations::TimeSheetDelete, null: false, authorize: "TimeSheetPolicy#delete?"
+  field :time_sheet_update, mutation: Mutations::TimeSheetUpdate, null: false, authorize: "TimeSheetPolicy#update?"
   field :user_create, mutation: Mutations::UserCreate, null: false, authorize: "UserPolicy#create?"
   field :user_delete, mutation: Mutations::UserDelete, null: false, authorize: "UserPolicy#delete?"
   field :user_session_create, mutation: Mutations::UserSessionCreate, null: false,

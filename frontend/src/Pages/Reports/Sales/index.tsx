@@ -1,11 +1,12 @@
 import { DatePicker, Select, Table, TableColumnsType, Typography } from "antd";
 import { useMemo, useState } from "react";
 
-import { useBookings, useInvoices, useRestaurants } from "../../../api";
+import { useBookings, useInvoices } from "../../../api";
 import { BookingsQuery } from "../../../api/base";
 import { Navbar } from "../../../components/Navbar";
 import { TIME_RANGE_PRESETS } from "../../../helpers";
 import {
+  DATE_FORMAT,
   dateRangePickerToString,
   utcToRestaurantTimezone,
 } from "../../../helpers/dateTime";
@@ -53,14 +54,8 @@ const invoicesTax = (invoices: InvoicesType) => {
   return invoices.reduce((t, i) => t + invoiceTax(i), 0);
 };
 
-const OrdersWise = ({
-  dateRange,
-  tz,
-}: {
-  dateRange: DateRangeType;
-  tz?: string;
-}) => {
-  const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
+const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
+  const { restaurantId, tz } = useRestaurantIdStore();
 
   const [pagination, setPagination] = useState({
     page: 1,
@@ -168,14 +163,8 @@ const OrdersWise = ({
   );
 };
 
-const InvoicesWise = ({
-  dateRange,
-  tz,
-}: {
-  dateRange: DateRangeType;
-  tz?: string;
-}) => {
-  const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
+const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
+  const { restaurantId, tz } = useRestaurantIdStore();
 
   const [pagination, setPagination] = useState({
     page: 1,
@@ -281,7 +270,7 @@ const InvoicesWise = ({
 };
 
 export const ReportsSales = () => {
-  const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
+  const tz = useRestaurantIdStore((s) => s.tz);
 
   const [reportType, setReportType] = useState("orders");
   const [dateRange, setDateRange] = useState<DateRangeType>({
@@ -289,17 +278,8 @@ export const ReportsSales = () => {
     end: null,
   });
 
-  const { data: restaurants } = useRestaurants("active");
-
-  const restaurant = useMemo(
-    () => restaurants.find((r) => r.id === restaurantId),
-    [restaurantId, restaurants],
-  );
-
   const onDateChange = (_: unknown, dates: [string, string]) => {
-    setDateRange(
-      dateRangePickerToString(dates[0], dates[1], restaurant?.timezone),
-    );
+    setDateRange(dateRangePickerToString(dates[0], dates[1], tz));
   };
 
   return (
@@ -317,18 +297,15 @@ export const ReportsSales = () => {
           />
 
           <DatePicker.RangePicker
+            format={DATE_FORMAT}
             onChange={onDateChange}
             presets={TIME_RANGE_PRESETS}
           />
         </div>
       </div>
 
-      {reportType === "orders" && (
-        <OrdersWise dateRange={dateRange} tz={restaurant?.timezone} />
-      )}
-      {reportType === "invoices" && (
-        <InvoicesWise dateRange={dateRange} tz={restaurant?.timezone} />
-      )}
+      {reportType === "orders" && <OrdersWise dateRange={dateRange} />}
+      {reportType === "invoices" && <InvoicesWise dateRange={dateRange} />}
     </Navbar>
   );
 };

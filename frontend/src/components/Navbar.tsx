@@ -67,7 +67,7 @@ export const Navbar = ({
     )
       return;
 
-    restaurantIdStore.create(restaurants[0].id);
+    restaurantIdStore.create(restaurants[0].id, restaurants[0].timezone);
   }, [restaurants, restaurantIdStore]);
 
   const onLogout = () => {
@@ -218,6 +218,7 @@ export const Navbar = ({
   const restaurantOptions = restaurants.map((r) => ({
     value: r.id,
     label: r.name,
+    tz: r.timezone,
   }));
 
   return (
@@ -228,7 +229,7 @@ export const Navbar = ({
           labelRender={({ label }) => (
             <Typography.Text strong>{label}</Typography.Text>
           )}
-          onSelect={(v) => restaurantIdStore.create(v)}
+          onSelect={(_, i) => restaurantIdStore.create(i.value, i.tz)}
           options={restaurantOptions}
           value={restaurantIdStore.restaurantId}
           variant="borderless"

@@ -116,6 +116,13 @@ import {
   RolesDocument,
   RolesQueryVariables,
   TaxesDocument,
+  TimeSheetCreateDocument,
+  TimeSheetCreateMutationVariables,
+  TimeSheetDeleteDocument,
+  TimeSheetDeleteMutationVariables,
+  TimeSheetDocument,
+  TimeSheetUpdateDocument,
+  TimeSheetUpdateMutationVariables,
   TimeSheetsDocument,
   TimeSheetsQueryVariables,
   UserCreateDocument,
@@ -978,5 +985,50 @@ export const useInvoices = (variables: InvoicesQueryVariables) => {
     queryKey: ["invoices", variables],
     queryFn: async () =>
       (await client.request(InvoicesDocument, variables)).invoices,
+  });
+};
+
+export const useTimeSheet = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["timeSheet", id],
+    queryFn: async () =>
+      (await client.request(TimeSheetDocument, { id })).timeSheet,
+  });
+};
+
+export const useTimeSheetCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: TimeSheetCreateMutationVariables) =>
+      client.request(TimeSheetCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["timeSheets"] });
+    },
+  });
+};
+
+export const useTimeSheetDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: TimeSheetDeleteMutationVariables) =>
+      client.request(TimeSheetDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["timeSheets"] });
+    },
+  });
+};
+
+export const useTimeSheetUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: TimeSheetUpdateMutationVariables) =>
+      client.request(TimeSheetUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["timeSheets"] });
+    },
   });
 };

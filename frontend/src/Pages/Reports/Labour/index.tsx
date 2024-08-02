@@ -1,9 +1,21 @@
-import { DatePicker, Select, Table, TableColumnsType, Typography } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  Button,
+  DatePicker,
+  Popconfirm,
+  Select,
+  Table,
+  TableColumnsType,
+  Typography,
+} from "antd";
 import { useMemo, useState } from "react";
 
-import { useRestaurants, useTimeSheets, useUsers } from "../../../api";
+import { Edit } from "./Edit";
+
+import { useTimeSheetDelete, useTimeSheets, useUsers } from "../../../api";
 import { Navbar } from "../../../components/Navbar";
 import {
+  DATE_FORMAT,
   dateRangePickerToString,
   humanizeDuration,
   utcToRestaurantTimezone,
@@ -11,7 +23,7 @@ import {
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
 export const ReportsLabour = () => {
-  const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
+  const { restaurantId, tz } = useRestaurantIdStore();
 
   const [dateRange, setDateRange] = useState<{
     start: string | null;
@@ -22,9 +34,10 @@ export const ReportsLabour = () => {
     page: 1,
     perPage: 10,
   });
+  const [id, setId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const { data: users } = useUsers(restaurantId);
-  const { data: restaurants } = useRestaurants("active");
   const {
     data: { collection, metadata },
     isFetching,
@@ -37,10 +50,12 @@ export const ReportsLabour = () => {
     userIds: userIds,
   });
 
-  const restaurant = useMemo(
-    () => restaurants.find((r) => r.id === restaurantId),
-    [restaurantId, restaurants],
-  );
+  const { mutateAsync: deleteTimeSheet } = useTimeSheetDelete();
+
+  const showEdit = (id: string, open: boolean) => {
+    setId(id);
+    setIsOpen(open);
+  };
 
   const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
     () => [
@@ -59,34 +74,46 @@ export const ReportsLabour = () => {
       },
       {
         title: "Start Time",
-        render: (_, r) =>
-          utcToRestaurantTimezone(r.startTime, restaurant?.timezone),
+        render: (_, r) => utcToRestaurantTimezone(r.startTime, tz),
       },
       {
         title: "End Time",
         render: (_, r) =>
-          r.endTime
-            ? utcToRestaurantTimezone(r.endTime, restaurant?.timezone)
-            : "",
+          r.endTime ? utcToRestaurantTimezone(r.endTime, tz) : "",
       },
       {
         title: "Shift Duration",
         render: (_, r) => humanizeDuration(r.startTime, r.endTime),
       },
+      {
+        title: "Actions",
+        render: (_, r) => (
+          <div className="w-full flex gap-4">
+            <EditOutlined onClick={() => showEdit(r.id, true)} />
+
+            <Popconfirm
+              onConfirm={() => deleteTimeSheet({ id: r.id })}
+              title="Are you sure you'd like to delete this?"
+            >
+              <DeleteOutlined />
+            </Popconfirm>
+          </div>
+        ),
+      },
     ],
-    [metadata, restaurant?.timezone],
+    [deleteTimeSheet, metadata, tz],
   );
 
   const onDateChange = (_: unknown, dates: [string, string]) => {
-    setDateRange(
-      dateRangePickerToString(dates[0], dates[1], restaurant?.timezone),
-    );
+    setDateRange(dateRangePickerToString(dates[0], dates[1], tz));
   };
 
   return (
     <Navbar
       breadcrumbItems={[{ title: "Reports" }, { title: "Labour Report" }]}
     >
+      <Edit id={id} open={isOpen} showEdit={showEdit} />
+
       <div className="flex">
         <Typography.Title level={4}>Labour Report</Typography.Title>
 
@@ -103,7 +130,14 @@ export const ReportsLabour = () => {
             placeholder="Select users"
           />
 
-          <DatePicker.RangePicker onChange={onDateChange} />
+          <DatePicker.RangePicker
+            format={DATE_FORMAT}
+            onChange={onDateChange}
+          />
+
+          <Button onClick={() => showEdit("", true)} type="primary">
+            Add Timesheet
+          </Button>
         </div>
       </div>
 

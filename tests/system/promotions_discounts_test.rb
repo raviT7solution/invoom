@@ -97,7 +97,7 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
 
   test "update" do
     admin = create(:admin)
-    restaurant = create(:restaurant)
+    restaurant = create(:restaurant, timezone: "Asia/Tokyo")
     admin.restaurants = [restaurant]
     category = create(:category, name: "Sandwich", restaurant: restaurant)
     item = create(:item, name: "Veg. Sandwich", category: category, restaurant: restaurant, tax: create(:tax))
@@ -141,10 +141,10 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
         find(".ant-radio-wrapper", text: "Yes").click
       end
       within ".ant-form-item", text: "Start Date & Time" do
-        fill_in_ant_picker with: "02-01-2016 00:00:00"
+        fill_in_ant_picker with: "02-01-2016 10:00 AM"
       end
       within ".ant-form-item", text: "End Date & Time" do
-        fill_in_ant_picker with: "02-01-2016 00:00:00"
+        fill_in_ant_picker with: "02-01-2016 06:00 PM"
       end
       within ".ant-form-item", text: "Clubbed" do
         find(".ant-radio-wrapper", text: "Yes").click
@@ -181,7 +181,7 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
                       value: 10,
                       visible: true
 
-    assert_equal "2016-02-01T00:00:00Z", discount.end_date_time.iso8601
-    assert_equal "2016-02-01T00:00:00Z", discount.start_date_time.iso8601
+    assert_equal "2016-02-01T09:00:00Z", discount.end_date_time.iso8601
+    assert_equal "2016-02-01T01:00:00Z", discount.start_date_time.iso8601
   end
 end

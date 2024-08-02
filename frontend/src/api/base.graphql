@@ -766,3 +766,23 @@ query invoices(
     }
   }
 }
+
+query timeSheet($id: ID!) {
+  timeSheet(id: $id) {
+    endTime
+    startTime
+    userId
+  }
+}
+
+mutation timeSheetCreate($input: TimeSheetCreateInput!) {
+  timeSheetCreate(input: $input)
+}
+
+mutation timeSheetDelete($id: ID!) {
+  timeSheetDelete(input: { id: $id })
+}
+
+mutation timeSheetUpdate($input: TimeSheetUpdateInput!) {
+  timeSheetUpdate(input: $input)
+}
