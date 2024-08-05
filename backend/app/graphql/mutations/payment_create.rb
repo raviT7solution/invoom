@@ -36,20 +36,20 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
   def update_invoice_with_card(invoice, attributes) # rubocop:disable Metrics/AbcSize
     api_key = context[:current_user].mobile_user!.restaurant.payment_secret_key
 
-    payment_intent = Stripe::PaymentIntent.retrieve(invoice.payment_intent_id, api_key: api_key)
-    payment_method = Stripe::PaymentMethod.retrieve(payment_intent.payment_method, api_key: api_key)
+    payment_intent = Stripe::PaymentIntent.retrieve(invoice.payment_intent_id, api_key: api_key).as_json
+    payment_method = Stripe::PaymentMethod.retrieve(payment_intent["payment_method"], api_key: api_key)
 
     card_details = payment_method.public_send(payment_method.type).as_json
 
     invoice.update!(
-      amount_received: payment_intent.amount_received.to_f / 100,
+      amount_received: payment_intent["amount_received"].to_f / 100,
       brand: card_details["brand"],
       card_number: card_details["last4"],
       funding: card_details["funding"],
       issuer: card_details["issuer"],
       payment_mode: attributes[:mode],
       status: "paid",
-      tip: payment_intent.amount_details&.tip&.amount.to_f / 100
+      tip: payment_intent.dig("amount_details", "tip", "amount").to_f / 100
     )
   end
 
