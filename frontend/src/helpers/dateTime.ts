@@ -40,8 +40,8 @@ export const dateRangePickerToString = (
   if (!start || !end) return { start: null, end: null };
 
   return {
-    start: dayjs.tz(start, tz).startOf("day").toISOString(),
-    end: dayjs.tz(end, tz).endOf("day").toISOString(),
+    start: dayjs.tz(start, DATE_FORMAT, tz).startOf("day").toISOString(),
+    end: dayjs.tz(end, DATE_FORMAT, tz).endOf("day").toISOString(),
   };
 };
 
