@@ -240,7 +240,7 @@ export const useRoleDelete = () => {
 export const useRole = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["roles", id],
+    queryKey: ["role", id],
     queryFn: async () => (await client.request(RoleDocument, { id: id })).role,
   });
 };
@@ -293,7 +293,7 @@ export const useUserDelete = () => {
 export const useUser = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["users", id],
+    queryKey: ["user", id],
     queryFn: async () => (await client.request(UserDocument, { id })).user,
   });
 };
@@ -334,7 +334,7 @@ export const useMenu = (id: string) => {
   return useQuery({
     enabled: id !== "",
     queryFn: async () => (await client.request(MenuDocument, { id })).menu,
-    queryKey: ["menus", id],
+    queryKey: ["menu", id],
   });
 };
 
@@ -399,7 +399,7 @@ export const useCategories = (restaurantId: string) => {
 export const useCategory = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["categories", id],
+    queryKey: ["categorie", id],
     queryFn: async () =>
       (await client.request(CategoryDocument, { id: id })).category,
   });
@@ -442,7 +442,7 @@ export const useAddons = (restaurantId: string) => {
 export const useAddon = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["addons", id],
+    queryKey: ["addon", id],
     queryFn: async () =>
       (await client.request(AddonDocument, { id: id })).addon,
   });
@@ -511,7 +511,7 @@ export const useItemCreate = () => {
 export const useItem = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["items", id],
+    queryKey: ["item", id],
     queryFn: async () => (await client.request(ItemDocument, { id: id })).item,
   });
 };
@@ -575,7 +575,7 @@ export const useModifierDelete = () => {
 export const useModifier = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["modifiers", id],
+    queryKey: ["modifier", id],
     queryFn: async () =>
       (await client.request(ModifierDocument, { id: id })).modifier,
   });
@@ -664,7 +664,7 @@ export const useInventoryCategories = (restaurantId: string) => {
 export const useInventoryCategory = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["inventoryCategories", id],
+    queryKey: ["inventoryCategory", id],
     queryFn: async () =>
       (await client.request(InventoryCategoryDocument, { id: id }))
         .inventoryCategory,
@@ -755,7 +755,7 @@ export const useProducts = (restaurantId: string) => {
 export const useProduct = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["products", id],
+    queryKey: ["product", id],
     queryFn: async () =>
       (await client.request(ProductDocument, { id: id })).product,
   });
@@ -802,7 +802,7 @@ export const useChangePassword = () => {
 export const useKitchenProfile = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["kitchenProfiles", id],
+    queryKey: ["kitchenProfile", id],
     queryFn: async () =>
       (await client.request(KitchenProfileDocument, { id: id })).kitchenProfile,
   });
@@ -939,7 +939,7 @@ export const usePrinterConfigurations = (restaurantId: string) => {
 export const usePrinterConfiguration = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["printerConfigurations", id],
+    queryKey: ["printerConfiguration", id],
     queryFn: async () =>
       (await client.request(PrinterConfigurationDocument, { id: id }))
         .printerConfiguration,
