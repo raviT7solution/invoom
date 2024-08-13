@@ -4,6 +4,7 @@ class Invoice < ApplicationRecord
   belongs_to :booking
 
   has_many :invoice_items, dependent: :destroy
+  has_many :invoice_service_charges, dependent: :destroy
 
   enum :invoice_type, [:simple, :split_equally, :custom_split]
   enum :payment_mode, [:cash, :card, :void, :uber_eats, :door_dash, :skip_the_dishes]

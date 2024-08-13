@@ -115,6 +115,14 @@ import {
   RoleUpdateMutationVariables,
   RolesDocument,
   RolesQueryVariables,
+  ServiceChargeCreateDocument,
+  ServiceChargeCreateMutationVariables,
+  ServiceChargeDeleteDocument,
+  ServiceChargeDeleteMutationVariables,
+  ServiceChargeDocument,
+  ServiceChargeUpdateDocument,
+  ServiceChargeUpdateMutationVariables,
+  ServiceChargesDocument,
   TaxesDocument,
   TimeSheetCreateDocument,
   TimeSheetCreateMutationVariables,
@@ -985,6 +993,62 @@ export const useInvoices = (variables: InvoicesQueryVariables) => {
     queryKey: ["invoices", variables],
     queryFn: async () =>
       (await client.request(InvoicesDocument, variables)).invoices,
+  });
+};
+
+export const useServiceChargeCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ServiceChargeCreateMutationVariables) =>
+      client.request(ServiceChargeCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["serviceCharges"] });
+    },
+  });
+};
+
+export const useServiceChargeUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ServiceChargeUpdateMutationVariables) =>
+      client.request(ServiceChargeUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["serviceCharges"] });
+    },
+  });
+};
+
+export const useServiceChargeDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ServiceChargeDeleteMutationVariables) =>
+      client.request(ServiceChargeDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["serviceCharges"] });
+    },
+  });
+};
+
+export const useServiceCharges = (restaurantId: string) => {
+  return useQuery({
+    enabled: restaurantId !== "",
+    initialData: [],
+    queryFn: async () =>
+      (await client.request(ServiceChargesDocument, { restaurantId }))
+        .serviceCharges,
+    queryKey: ["serviceCharges", restaurantId],
+  });
+};
+
+export const useServiceCharge = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryFn: async () =>
+      (await client.request(ServiceChargeDocument, { id })).serviceCharge,
+    queryKey: ["serviceCharge", id],
   });
 };
 

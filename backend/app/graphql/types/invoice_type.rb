@@ -16,4 +16,6 @@ class Types::InvoiceType < Types::BaseObject
 
   field :booking, Types::BookingType, scope: "BookingPolicy", preload: :booking, null: false
   field :invoice_items, [Types::InvoiceItemType], scope: "InvoiceItemPolicy", preload: :invoice_items, null: false
+  field :invoice_service_charges, [Types::InvoiceServiceChargeType], scope: "InvoiceServiceChargePolicy",
+                                                                     preload: :invoice_service_charges, null: false
 end

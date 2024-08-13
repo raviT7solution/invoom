@@ -28,6 +28,8 @@ class Types::MutationType < Types::BaseObject
                                     authorize: "InventoryCategoryPolicy#delete?"
   field :inventory_category_update, mutation: Mutations::InventoryCategoryUpdate, null: false,
                                     authorize: "InventoryCategoryPolicy#update?"
+  field :invoice_service_charges_update, mutation: Mutations::InvoiceServiceChargesUpdate, null: false,
+                                         authorize: "InvoiceServiceChargePolicy#update?"
   field :invoices_create, mutation: Mutations::InvoicesCreate, null: false, authorize: "InvoicePolicy#create?"
   field :item_code_generate, mutation: Mutations::ItemCodeGenerate, null: false, authorize: "ProductPolicy#create?"
   field :item_create, mutation: Mutations::ItemCreate, null: false, authorize: "ItemPolicy#create?"
@@ -70,6 +72,12 @@ class Types::MutationType < Types::BaseObject
   field :role_create, mutation: Mutations::RoleCreate, null: false, authorize: "RolePolicy#create?"
   field :role_delete, mutation: Mutations::RoleDelete, null: false, authorize: "RolePolicy#update?"
   field :role_update, mutation: Mutations::RoleUpdate, null: false, authorize: "RolePolicy#delete?"
+  field :service_charge_create, mutation: Mutations::ServiceChargeCreate, null: false,
+                                authorize: "ServiceChargePolicy#create?"
+  field :service_charge_delete, mutation: Mutations::ServiceChargeDelete, null: false,
+                                authorize: "ServiceChargePolicy#delete?"
+  field :service_charge_update, mutation: Mutations::ServiceChargeUpdate, null: false,
+                                authorize: "ServiceChargePolicy#update?"
   field :ticket_create, mutation: Mutations::TicketCreate, null: false, authorize: "TicketPolicy#create?"
   field :ticket_item_delete, mutation: Mutations::TicketItemDelete, null: false
   field :ticket_items_update, mutation: Mutations::TicketItemsUpdate, null: false, authorize: "TicketItemPolicy#update?"

@@ -786,3 +786,37 @@ mutation timeSheetDelete($id: ID!) {
 mutation timeSheetUpdate($input: TimeSheetUpdateInput!) {
   timeSheetUpdate(input: $input)
 }
+
+mutation serviceChargeCreate($input: ServiceChargeCreateInput!) {
+  serviceChargeCreate(input: $input)
+}
+
+mutation serviceChargeUpdate($input: ServiceChargeUpdateInput!) {
+  serviceChargeUpdate(input: $input)
+}
+
+mutation serviceChargeDelete($id: ID!) {
+  serviceChargeDelete(input: { id: $id })
+}
+
+query serviceCharge($id: ID!) {
+  serviceCharge(id: $id) {
+    chargeType
+    id
+    name
+    taxId
+    value
+    visible
+  }
+}
+
+query serviceCharges($restaurantId: ID!) {
+  serviceCharges(restaurantId: $restaurantId) {
+    chargeType
+    id
+    name
+    taxId
+    value
+    visible
+  }
+}

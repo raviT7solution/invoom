@@ -2,13 +2,14 @@
 
 FactoryBot.define do
   factory :invoice do
+    sequence(:number) { |n| n }
+
     amount_received { nil }
     brand { nil }
     card_number { nil }
     funding { nil }
     invoice_type { "simple" }
     issuer { nil }
-    number { "1" }
     payment_intent_id { nil }
     payment_mode { "cash" }
     status { "unpaid" }

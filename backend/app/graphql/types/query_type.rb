@@ -124,6 +124,12 @@ class Types::QueryType < Types::BaseObject
   field :roles, [Types::RoleType], null: false do
     argument :restaurant_id, ID, required: true
   end
+  field :service_charge, Types::ServiceChargeType, null: false do
+    argument :id, ID, required: true
+  end
+  field :service_charges, [Types::ServiceChargeType], null: false do
+    argument :restaurant_id, ID, required: true
+  end
   field :taxes, [Types::TaxType], null: false do
     argument :restaurant_id, ID, required: true
   end
@@ -374,6 +380,14 @@ class Types::QueryType < Types::BaseObject
 
   def roles(restaurant_id:)
     RolePolicy.new(context[:current_user]).scope.joins(:restaurant).where(restaurant: { id: restaurant_id })
+  end
+
+  def service_charge(id:)
+    ServiceChargePolicy.new(context[:current_user]).scope.find(id)
+  end
+
+  def service_charges(restaurant_id:)
+    ServiceChargePolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
   end
 
   def taxes(restaurant_id:)

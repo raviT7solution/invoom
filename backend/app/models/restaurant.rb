@@ -20,6 +20,7 @@ class Restaurant < ApplicationRecord
   has_many :products, dependent: :destroy
   has_many :reservations, dependent: :destroy
   has_many :roles, dependent: :destroy
+  has_many :service_charges, dependent: :destroy
   has_many :users, dependent: :destroy
 
   has_many :admins, through: :admin_restaurants

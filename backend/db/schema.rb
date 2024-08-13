@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_30_091004) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_31_163331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -184,6 +184,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_30_091004) do
     t.datetime "updated_at", null: false
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
     t.index ["ticket_item_id"], name: "index_invoice_items_on_ticket_item_id"
+  end
+
+  create_table "invoice_service_charges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "charge_type", null: false
+    t.float "value", null: false
+    t.float "gst", null: false
+    t.float "hst", null: false
+    t.float "pst", null: false
+    t.float "qst", null: false
+    t.float "rst", null: false
+    t.float "cst", null: false
+    t.uuid "invoice_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invoice_id"], name: "index_invoice_service_charges_on_invoice_id"
   end
 
   create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -389,6 +405,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_30_091004) do
     t.index ["restaurant_id"], name: "index_roles_on_restaurant_id"
   end
 
+  create_table "service_charges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "charge_type", null: false
+    t.float "value", null: false
+    t.boolean "visible", default: false, null: false
+    t.uuid "restaurant_id", null: false
+    t.uuid "tax_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_service_charges_on_restaurant_id"
+    t.index ["tax_id"], name: "index_service_charges_on_tax_id"
+  end
+
   create_table "taxes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "display_name", null: false
     t.string "province", null: false
@@ -510,6 +539,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_30_091004) do
   add_foreign_key "inventory_categories", "restaurants"
   add_foreign_key "invoice_items", "invoices"
   add_foreign_key "invoice_items", "ticket_items"
+  add_foreign_key "invoice_service_charges", "invoices"
   add_foreign_key "invoices", "bookings"
   add_foreign_key "item_addons", "addons"
   add_foreign_key "item_addons", "items"
@@ -534,6 +564,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_30_091004) do
   add_foreign_key "reservations", "customers"
   add_foreign_key "reservations", "restaurants"
   add_foreign_key "roles", "restaurants"
+  add_foreign_key "service_charges", "restaurants"
+  add_foreign_key "service_charges", "taxes"
   add_foreign_key "ticket_item_addons", "ticket_items"
   add_foreign_key "ticket_items", "items"
   add_foreign_key "ticket_items", "tickets"
