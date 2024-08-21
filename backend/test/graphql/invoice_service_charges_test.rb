@@ -14,10 +14,10 @@ class InvoiceServiceChargesTest < ActionDispatch::IntegrationTest
     invoice1 = create(:invoice, booking: booking)
     invoice2 = create(:invoice, booking: booking)
 
-    service_charge_old = create(:invoice_service_charge, invoice: invoice1)
-
     service_charge1 = create(:service_charge, restaurant: restaurant, tax: create(:tax))
     service_charge2 = create(:service_charge, restaurant: restaurant, tax: create(:tax))
+
+    service_charge_old = create(:invoice_service_charge, invoice: invoice1, service_charge: service_charge1)
 
     authentic_query user, "mobile_user", invoice_service_charges_update, variables: {
       input: {

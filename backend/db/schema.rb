@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_31_163331) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_21_110055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -199,7 +199,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_31_163331) do
     t.uuid "invoice_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "service_charge_id", null: false
     t.index ["invoice_id"], name: "index_invoice_service_charges_on_invoice_id"
+    t.index ["service_charge_id"], name: "index_invoice_service_charges_on_service_charge_id"
   end
 
   create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -540,6 +542,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_31_163331) do
   add_foreign_key "invoice_items", "invoices"
   add_foreign_key "invoice_items", "ticket_items"
   add_foreign_key "invoice_service_charges", "invoices"
+  add_foreign_key "invoice_service_charges", "service_charges"
   add_foreign_key "invoices", "bookings"
   add_foreign_key "item_addons", "addons"
   add_foreign_key "item_addons", "items"

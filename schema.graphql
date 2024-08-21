@@ -595,8 +595,11 @@ type Invoice {
   number: Int!
   paymentMode: InvoicePaymentModeEnum
   status: InvoiceStatusEnum!
+  subTotal: Float!
+  taxSummary: [TaxSummary!]!
   tip: Float!
   total: Float!
+  totalDiscount: Float!
 }
 
 input InvoiceAttributes {
@@ -648,6 +651,7 @@ enum InvoicePaymentModeEnum {
 }
 
 type InvoiceServiceCharge {
+  chargeAmount: Float!
   chargeType: ServiceChargeTypeEnum!
   cst: Float!
   gst: Float!
@@ -657,6 +661,7 @@ type InvoiceServiceCharge {
   pst: Float!
   qst: Float!
   rst: Float!
+  serviceChargeId: ID!
   value: Float!
 }
 
@@ -1875,6 +1880,11 @@ type Tax {
   pst: Float!
   qst: Float!
   rst: Float!
+}
+
+type TaxSummary {
+  name: String
+  value: Float!
 }
 
 type Ticket {

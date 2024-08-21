@@ -22,6 +22,7 @@ class Mutations::InvoiceServiceChargesUpdate < Mutations::BaseMutation
             pst: charge.tax.pst,
             qst: charge.tax.qst,
             rst: charge.tax.rst,
+            service_charge: charge,
             value: charge.value
           )
 
