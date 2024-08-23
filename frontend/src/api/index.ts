@@ -28,6 +28,8 @@ import {
   CreateCategoryDocument,
   CreateCategoryMutationVariables,
   CurrentAdminDocument,
+  DashboardSummaryDocument,
+  DashboardSummaryQueryVariables,
   DiscountCreateDocument,
   DiscountCreateMutationVariables,
   DiscountDeleteDocument,
@@ -1094,5 +1096,17 @@ export const useTimeSheetUpdate = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["timeSheets"] });
     },
+  });
+};
+
+export const useDashboardSummary = (
+  variables: DashboardSummaryQueryVariables,
+) => {
+  return useQuery({
+    enabled: variables.restaurantId !== "",
+    queryKey: ["dashboardSummary", variables],
+    queryFn: async () =>
+      (await client.request(DashboardSummaryDocument, variables))
+        .dashboardSummary,
   });
 };

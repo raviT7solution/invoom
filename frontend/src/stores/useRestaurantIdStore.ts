@@ -12,10 +12,10 @@ export const useRestaurantIdStore = create<State>()(
   persist(
     (set) => ({
       create: (id, tz) => set({ restaurantId: id, tz: tz }),
-      destroy: () => set({ restaurantId: "", tz: "" }),
+      destroy: () => set({ restaurantId: "", tz: "UTC" }),
       restaurantId: "",
-      tz: "",
+      tz: "UTC",
     }),
-    { name: "restaurant-store", version: 1 },
+    { name: "restaurant-store", version: 2 },
   ),
 );

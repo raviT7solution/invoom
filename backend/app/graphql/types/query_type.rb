@@ -38,6 +38,11 @@ class Types::QueryType < Types::BaseObject
     argument :query, String, required: true
     argument :restaurant_id, ID, required: true
   end
+  field :dashboard_summary, Types::DashboardSummaryType, null: false do
+    argument :end_time, GraphQL::Types::ISO8601DateTime, required: true
+    argument :restaurant_id, ID, required: true
+    argument :start_time, GraphQL::Types::ISO8601DateTime, required: true
+  end
   field :discount, Types::DiscountType, null: false do
     argument :id, ID, required: true
   end
@@ -232,6 +237,14 @@ class Types::QueryType < Types::BaseObject
     records = records.where("name ILIKE :q OR phone_number ILIKE :q", q: "%#{query}%") if query.present?
 
     records.order(created_at: :desc).page(page).per(per_page)
+  end
+
+  def dashboard_summary(restaurant_id:, start_time:, end_time:)
+    bookings = BookingPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
+    bookings = bookings.where.not(clocked_out_at: nil).where(created_at: start_time..end_time)
+    invoices = InvoicePolicy.new(context[:current_session]).scope.where(booking_id: bookings).where(status: :paid)
+
+    { bookings: bookings, invoices: invoices }
   end
 
   def discount(id:)

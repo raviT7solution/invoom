@@ -820,3 +820,29 @@ query serviceCharges($restaurantId: ID!) {
     visible
   }
 }
+
+query dashboardSummary(
+  $endTime: ISO8601DateTime!
+  $restaurantId: ID!
+  $startTime: ISO8601DateTime!
+) {
+  dashboardSummary(
+    endTime: $endTime
+    restaurantId: $restaurantId
+    startTime: $startTime
+  ) {
+    avgBookingRevenue
+    avgInvoiceRevenue
+    bookingCount
+    cardRevenue
+    cashRevenue
+    deliveryRevenue
+    dineInRevenue
+    hourlyRevenue
+    invoiceCount
+    paxCount
+    takeoutRevenue
+    totalRevenue
+    voidRevenue
+  }
+}

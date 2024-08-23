@@ -21,6 +21,8 @@
     "dayjs": "^1.11.10",
     "graphql": "^16.8.1",
     "graphql-request": "^6.2.0-next.4",
+    "highcharts": "^11.4.7",
+    "highcharts-react-official": "^3.2.1",
     "moveable-helper": "^0.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

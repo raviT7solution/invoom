@@ -7,6 +7,7 @@ import { Categories } from "./Pages/CuisineHub/Categories";
 import { Item } from "./Pages/CuisineHub/Item";
 import { Menus } from "./Pages/CuisineHub/Menu";
 import { Modifiers } from "./Pages/CuisineHub/Modifiers";
+import { Dashboard } from "./Pages/Dashboard";
 import { FloorPlan } from "./Pages/FloorPlan";
 import { InventoryCategories } from "./Pages/Inventory/Categories";
 import { InventoryProducts } from "./Pages/Inventory/Products";
@@ -82,7 +83,7 @@ export const Switch = () => {
     .with({ name: "Login" }, () => <Login />)
     .with({ name: "Dashboard" }, () => (
       <PrivateRoute>
-        <Roles />
+        <Dashboard />
       </PrivateRoute>
     ))
     .with({ name: "Teams" }, () => (

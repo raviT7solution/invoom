@@ -354,6 +354,22 @@ input CustomerCreateInput {
   restaurantId: ID!
 }
 
+type DashboardSummary {
+  avgBookingRevenue: Float!
+  avgInvoiceRevenue: Float!
+  bookingCount: Int!
+  cardRevenue: Float!
+  cashRevenue: Float!
+  deliveryRevenue: Float!
+  dineInRevenue: Float!
+  hourlyRevenue: [Float!]!
+  invoiceCount: Int!
+  paxCount: Int!
+  takeoutRevenue: Float!
+  totalRevenue: Float!
+  voidRevenue: Float!
+}
+
 type Discount {
   autoApply: Boolean!
   blackOutDates: [ISO8601Date!]!
@@ -1604,6 +1620,7 @@ type Query {
   currentAdmin: Admin!
   currentUser: User!
   customers(page: Int!, perPage: Int!, query: String!, restaurantId: ID!): CustomerCollection!
+  dashboardSummary(endTime: ISO8601DateTime!, restaurantId: ID!, startTime: ISO8601DateTime!): DashboardSummary!
   discount(id: ID!): Discount!
   discounts(channel: DiscountChannelEnum, discountOn: DiscountOnEnum, itemId: ID, restaurantId: ID!): [Discount!]!
   floorObjects(restaurantId: ID!): [FloorObject!]!
