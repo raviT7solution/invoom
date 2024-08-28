@@ -27,6 +27,10 @@ const permissions = [
     value: "floor_plan",
   },
   {
+    label: "Inventory",
+    value: "inventory",
+  },
+  {
     label: "Orders",
     value: "orders",
   },

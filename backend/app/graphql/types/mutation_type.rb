@@ -64,6 +64,8 @@ class Types::MutationType < Types::BaseObject
                                        authorize: "PrinterConfigurationPolicy#update?"
   field :product_create, mutation: Mutations::ProductCreate, null: false, authorize: "ProductPolicy#create?"
   field :product_delete, mutation: Mutations::ProductDelete, null: false, authorize: "ProductPolicy#delete?"
+  field :product_transaction_create, mutation: Mutations::ProductTransactionCreate, null: false,
+                                     authorize: "ProductTransactionPolicy#create?"
   field :product_update, mutation: Mutations::ProductUpdate, null: false, authorize: "ProductPolicy#update?"
   field :reservation_create, mutation: Mutations::ReservationCreate, null: false, authorize: "ReservationPolicy#create?"
   field :reservation_update, mutation: Mutations::ReservationUpdate, null: false, authorize: "ReservationPolicy#update?"

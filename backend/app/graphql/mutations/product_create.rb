@@ -8,7 +8,7 @@ class Mutations::ProductCreate < Mutations::BaseMutation
 
   def resolve(restaurant_id:, attributes:)
     restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
-    product = restaurant.products.new(attributes.to_h)
+    product = restaurant.products.new(available_quantity: 0, **attributes)
 
     raise_error product.errors.full_messages.to_sentence unless product.save
 

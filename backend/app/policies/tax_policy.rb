@@ -2,7 +2,7 @@
 
 class TaxPolicy < ApplicationPolicy
   def scope
-    if web_admin? || mobile_user?("orders") || mobile_user?("takeout")
+    if web_admin? || mobile_user?("orders") || mobile_user?("takeout") || mobile_user?("inventory")
       Tax.all
     else
       Tax.none

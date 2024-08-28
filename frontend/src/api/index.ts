@@ -99,9 +99,12 @@ import {
   ProductDeleteDocument,
   ProductDeleteMutationVariables,
   ProductDocument,
+  ProductTransactionCreateDocument,
+  ProductTransactionCreateMutationVariables,
   ProductUpdateDocument,
   ProductUpdateMutationVariables,
   ProductsDocument,
+  ProductsQueryVariables,
   ProvincesDocument,
   RestaurantCreateDocument,
   RestaurantCreateMutationVariables,
@@ -752,13 +755,25 @@ export const useProductCreate = () => {
   });
 };
 
-export const useProducts = (restaurantId: string) => {
+export const useProducts = (variables: ProductsQueryVariables) => {
   return useQuery({
-    enabled: restaurantId !== "",
-    initialData: [],
+    enabled: !!variables.restaurantId,
+    initialData: collectionInitialData,
     queryFn: async () =>
-      (await client.request(ProductsDocument, { restaurantId })).products,
-    queryKey: ["products", restaurantId],
+      (await client.request(ProductsDocument, variables)).products,
+    queryKey: ["products", variables],
+  });
+};
+
+export const useProductTransactionCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ProductTransactionCreateMutationVariables) =>
+      client.request(ProductTransactionCreateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
   });
 };
 

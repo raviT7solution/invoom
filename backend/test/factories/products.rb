@@ -2,7 +2,8 @@
 
 FactoryBot.define do
   factory :product do
-    description { Faker::Lorem.sentence }
+    available_quantity { 0.0 }
+    description { nil }
     item_code { Faker::Barcode.ean }
     name { Faker::Commerce.product_name }
     price { Faker::Commerce.price(range: 0.01..100.0) }

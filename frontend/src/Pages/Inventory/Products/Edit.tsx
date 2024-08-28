@@ -19,6 +19,7 @@ import {
   useSettingsTaxes,
 } from "../../../api";
 import { FormDrawer } from "../../../components/FormDrawer";
+import { UOM } from "../../../helpers/mapping";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
 type schema = {
@@ -42,81 +43,6 @@ const initialValues = {
   visible: true,
   weight: 0,
 };
-
-const UOM = [
-  {
-    label: "Tonne",
-    value: "tonne",
-  },
-  {
-    label: "Kilograms",
-    value: "kilograms",
-  },
-  {
-    label: "Grams",
-    value: "grams",
-  },
-  {
-    label: "Decagram",
-    value: "decagram",
-  },
-  {
-    label: "Decigram",
-    value: "decigram",
-  },
-  {
-    label: "Centigram",
-    value: "centigram",
-  },
-  {
-    label: "Milligram",
-    value: "milligram",
-  },
-  {
-    label: "Kilolitre",
-    value: "kilolitre",
-  },
-  {
-    label: "Hectolitre",
-    value: "hectolitre",
-  },
-  {
-    label: "Decalitre",
-    value: "decalitre",
-  },
-  {
-    label: "Litre",
-    value: "litre",
-  },
-  {
-    label: "Decilitre",
-    value: "decilitre",
-  },
-  {
-    label: "Centilitre",
-    value: "centilitre",
-  },
-  {
-    label: "Millilitre",
-    value: "millilitre",
-  },
-  {
-    label: "Pound",
-    value: "pound",
-  },
-  {
-    label: "Ounce",
-    value: "ounce",
-  },
-  {
-    label: "Grain",
-    value: "grain",
-  },
-  {
-    label: "Item",
-    value: "item",
-  },
-];
 
 export const Edit = ({
   id,
@@ -266,7 +192,13 @@ export const Edit = ({
               name="uom"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Select options={UOM} placeholder="Select" />
+              <Select
+                options={Object.entries(UOM).map(([value, label]) => ({
+                  label,
+                  value,
+                }))}
+                placeholder="Select"
+              />
             </Form.Item>
           </Col>
 
@@ -320,11 +252,7 @@ export const Edit = ({
           </Col>
 
           <Col span={24}>
-            <Form.Item
-              label="Description"
-              name="description"
-              rules={[{ required: true, message: "Required" }]}
-            >
+            <Form.Item label="Description" name="description">
               <Input.TextArea placeholder="Description" rows={5} />
             </Form.Item>
           </Col>

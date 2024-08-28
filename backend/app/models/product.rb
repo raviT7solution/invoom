@@ -5,7 +5,9 @@ class Product < ApplicationRecord
   belongs_to :restaurant
   belongs_to :tax
 
-  validates :description, presence: true
+  has_many :product_transactions, dependent: :destroy
+
+  validates :available_quantity, presence: true
   validates :item_code, presence: true, uniqueness: { scope: :restaurant_id }
   validates :name, presence: true
   validates :price, presence: true

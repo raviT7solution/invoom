@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_21_110055) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_28_160313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -340,13 +340,23 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_21_110055) do
     t.index ["restaurant_id"], name: "index_printer_configurations_on_restaurant_id"
   end
 
+  create_table "product_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.float "price", null: false
+    t.integer "stock_type", null: false
+    t.float "quantity", null: false
+    t.uuid "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_transactions_on_product_id"
+  end
+
   create_table "products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "visible", default: true, null: false
     t.float "price", null: false
     t.float "reorder_point", null: false
     t.float "stock_limit", null: false
     t.float "weight", null: false
-    t.string "description", null: false
+    t.string "description"
     t.string "item_code", null: false
     t.string "name", null: false
     t.string "uom", null: false
@@ -355,6 +365,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_21_110055) do
     t.uuid "tax_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "available_quantity", null: false
     t.index ["inventory_category_id"], name: "index_products_on_inventory_category_id"
     t.index ["item_code", "restaurant_id"], name: "index_products_on_item_code_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_products_on_restaurant_id"
@@ -561,6 +572,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_21_110055) do
   add_foreign_key "menus", "restaurants"
   add_foreign_key "modifiers", "restaurants"
   add_foreign_key "printer_configurations", "restaurants"
+  add_foreign_key "product_transactions", "products"
   add_foreign_key "products", "inventory_categories"
   add_foreign_key "products", "restaurants"
   add_foreign_key "products", "taxes"

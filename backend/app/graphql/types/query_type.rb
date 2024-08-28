@@ -106,7 +106,9 @@ class Types::QueryType < Types::BaseObject
   field :product, Types::ProductType, null: false do
     argument :id, ID, required: true
   end
-  field :products, [Types::ProductType], null: false do
+  field :products, Types::ProductType.collection_type, null: false do
+    argument :page, Integer, required: true
+    argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
   end
   field :provinces, [Types::ProvinceType], null: false do
@@ -359,8 +361,10 @@ class Types::QueryType < Types::BaseObject
     ProductPolicy.new(context[:current_user]).scope.find(id)
   end
 
-  def products(restaurant_id:)
-    ProductPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  def products(restaurant_id:, page:, per_page:)
+    records = ProductPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+
+    records.order(created_at: :desc).page(page).per(per_page)
   end
 
   def provinces(alpha2:)

@@ -504,20 +504,31 @@ mutation productUpdate($input: ProductUpdateInput!) {
   productUpdate(input: $input)
 }
 
-query products($restaurantId: ID!) {
-  products(restaurantId: $restaurantId) {
-    description
-    id
-    inventoryCategoryId
-    itemCode
-    name
-    price
-    reorderPoint
-    stockLimit
-    taxId
-    uom
-    visible
-    weight
+query products($restaurantId: ID!, $page: Int!, $perPage: Int!) {
+  products(restaurantId: $restaurantId, page: $page, perPage: $perPage) {
+    collection {
+      availableQuantity
+      description
+      id
+      inventoryCategory {
+        name
+      }
+      itemCode
+      name
+      price
+      reorderPoint
+      stockLimit
+      taxId
+      uom
+      visible
+      weight
+    }
+    metadata {
+      currentPage
+      limitValue
+      totalCount
+      totalPages
+    }
   }
 }
 
@@ -536,6 +547,10 @@ query product($id: ID!) {
     visible
     weight
   }
+}
+
+mutation productTransactionCreate($input: ProductTransactionCreateInput!) {
+  productTransactionCreate(input: $input)
 }
 
 mutation changePassword($input: ChangePasswordInput!) {

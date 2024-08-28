@@ -12,6 +12,8 @@ class ProductPolicy < ApplicationPolicy
   def scope
     if web_admin?
       Product.where(restaurant: web_admin!.restaurants)
+    elsif mobile_user?("inventory")
+      Product.where(restaurants: mobile_user!.restaurant_id)
     else
       Product.none
     end

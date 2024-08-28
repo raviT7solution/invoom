@@ -72,10 +72,7 @@ export const ServiceCharges = () => {
                       }}
                       type="secondary"
                     >
-                      <li>
-                        Type:
-                        {chargeTypes[i.chargeType]}
-                      </li>
+                      <li>Type: {chargeTypes[i.chargeType]}</li>
                       <li>Value: {i.value}</li>
                     </Typography.Paragraph>
                   }

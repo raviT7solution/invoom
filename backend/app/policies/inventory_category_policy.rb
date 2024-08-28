@@ -12,6 +12,8 @@ class InventoryCategoryPolicy < ApplicationPolicy
   def scope
     if web_admin?
       InventoryCategory.where(restaurant: web_admin!.restaurants)
+    elsif mobile_user?("inventory")
+      InventoryCategory.where(restaurant_id: mobile_user!.restaurant_id)
     else
       InventoryCategory.none
     end
