@@ -362,11 +362,14 @@ type DashboardSummary {
   cashRevenue: Float!
   deliveryRevenue: Float!
   dineInRevenue: Float!
+  doorDashRevenue: Float!
   hourlyRevenue: [Float!]!
   invoiceCount: Int!
   paxCount: Int!
+  skipTheDishesRevenue: Float!
   takeoutRevenue: Float!
   totalRevenue: Float!
+  uberEatsRevenue: Float!
   voidRevenue: Float!
 }
 

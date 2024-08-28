@@ -34,11 +34,14 @@ class DashboardTest < ActionDispatch::IntegrationTest
       "cashRevenue" => 100.0,
       "deliveryRevenue" => 0.0,
       "dineInRevenue" => 100.0,
+      "doorDashRevenue" => 0.0,
       "hourlyRevenue" => hourly_revenue,
       "invoiceCount" => 1,
       "paxCount" => 2,
+      "skipTheDishesRevenue" => 0.0,
       "takeoutRevenue" => 0.0,
       "totalRevenue" => 100.0,
+      "uberEatsRevenue" => 0.0,
       "voidRevenue" => 0.0
     }
 
@@ -66,11 +69,14 @@ class DashboardTest < ActionDispatch::IntegrationTest
           cashRevenue
           deliveryRevenue
           dineInRevenue
+          doorDashRevenue
           hourlyRevenue
           invoiceCount
           paxCount
+          skipTheDishesRevenue
           takeoutRevenue
           totalRevenue
+          uberEatsRevenue
           voidRevenue
         }
       }

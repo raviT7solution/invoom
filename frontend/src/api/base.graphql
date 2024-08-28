@@ -838,11 +838,14 @@ query dashboardSummary(
     cashRevenue
     deliveryRevenue
     dineInRevenue
+    doorDashRevenue
     hourlyRevenue
     invoiceCount
     paxCount
+    skipTheDishesRevenue
     takeoutRevenue
     totalRevenue
+    uberEatsRevenue
     voidRevenue
   }
 }
