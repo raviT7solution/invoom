@@ -65,11 +65,13 @@ class Types::QueryType < Types::BaseObject
     argument :id, ID, required: true
   end
   field :invoices, Types::InvoiceType.collection_type, null: false do
+    argument :booking_types, [String], required: false
     argument :end_date, GraphQL::Types::ISO8601DateTime, required: false
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
     argument :start_date, GraphQL::Types::ISO8601DateTime, required: false
+    argument :status, String, required: false
   end
   field :item, Types::ItemType, null: false do
     argument :id, ID, required: true
@@ -289,9 +291,12 @@ class Types::QueryType < Types::BaseObject
     InvoicePolicy.new(context[:current_user]).scope.find(id)
   end
 
-  def invoices(restaurant_id:, page:, per_page:, start_date: nil, end_date: nil)
+  def invoices(restaurant_id:, page:, per_page:, booking_types: [], start_date: nil, end_date: nil, status: nil) # rubocop:disable Metrics/AbcSize, Metrics/ParameterLists
     records = InvoicePolicy.new(context[:current_user]).scope
                            .joins(:booking).where(bookings: { restaurant_id: restaurant_id })
+
+    records = records.where(bookings: { booking_type: booking_types }) if booking_types.present?
+    records = records.where(status: status) if status.present?
 
     if start_date.present? && end_date.present?
       records = records.joins(:booking).where(bookings: { clocked_in_at: start_date..end_date })

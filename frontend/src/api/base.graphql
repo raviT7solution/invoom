@@ -726,18 +726,22 @@ query bookings(
 }
 
 query invoices(
+  $bookingTypes: [String!]
   $endDate: ISO8601DateTime
   $page: Int!
   $perPage: Int!
   $restaurantId: ID!
   $startDate: ISO8601DateTime
+  $status: String
 ) {
   invoices(
+    bookingTypes: $bookingTypes
     endDate: $endDate
     page: $page
     perPage: $perPage
     restaurantId: $restaurantId
     startDate: $startDate
+    status: $status
   ) {
     collection {
       booking {
