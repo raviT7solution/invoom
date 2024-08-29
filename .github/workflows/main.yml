@@ -42,7 +42,7 @@ jobs:
           node-version: 18.17.1
       - uses: browser-actions/setup-chrome@latest
         with:
-          chrome-version: stable
+          chrome-version: 120
 
       - run: pnpm install --frozen-lockfile
         working-directory: ./frontend
