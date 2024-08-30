@@ -369,6 +369,8 @@ type DashboardSummary {
   skipTheDishesRevenue: Float!
   takeoutRevenue: Float!
   totalRevenue: Float!
+  totalTax: Float!
+  totalTip: Float!
   uberEatsRevenue: Float!
   voidRevenue: Float!
 }
@@ -1666,7 +1668,7 @@ type Query {
   currentAdmin: Admin!
   currentUser: User!
   customers(page: Int!, perPage: Int!, query: String!, restaurantId: ID!): CustomerCollection!
-  dashboardSummary(endTime: ISO8601DateTime!, restaurantId: ID!, startTime: ISO8601DateTime!): DashboardSummary!
+  dashboardSummary(endTime: ISO8601DateTime, restaurantId: ID!, startTime: ISO8601DateTime): DashboardSummary!
   discount(id: ID!): Discount!
   discounts(channel: DiscountChannelEnum, discountOn: DiscountOnEnum, itemId: ID, restaurantId: ID!): [Discount!]!
   floorObjects(restaurantId: ID!): [FloorObject!]!

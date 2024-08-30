@@ -1,6 +1,8 @@
 import { DatePicker, Select, Table, TableColumnsType, Typography } from "antd";
 import { useMemo, useState } from "react";
 
+import { Summary } from "./Summary";
+
 import { useBookings, useInvoices } from "../../../api";
 import { BookingsQuery } from "../../../api/base";
 import { Navbar } from "../../../components/Navbar";
@@ -22,36 +24,21 @@ type DateRangeType = {
 
 const REPORT_TYPES = [
   {
-    label: "Order Wise",
+    label: "Sales By Order",
     value: "orders",
   },
   {
-    label: "Invoice Wise",
+    label: "Sales By Invoice",
     value: "invoices",
   },
 ];
 
-const invoicesTotal = (invoices: InvoicesType) => {
-  return invoices.reduce((p, c) => p + c.total, 0);
+const invoiceServiceCharge = (invoice: InvoicesType[number]) => {
+  return invoice.invoiceServiceCharges.reduce((p, i) => p + i.chargeAmount, 0);
 };
 
 const invoiceTax = (invoice: InvoicesType[number]) => {
-  let totalTax = 0;
-
-  invoice.invoiceItems.forEach((i) => {
-    totalTax += i.discountedPrice * (i.ticketItem.cst / 100);
-    totalTax += i.discountedPrice * (i.ticketItem.gst / 100);
-    totalTax += i.discountedPrice * (i.ticketItem.hst / 100);
-    totalTax += i.discountedPrice * (i.ticketItem.pst / 100);
-    totalTax += i.discountedPrice * (i.ticketItem.qst / 100);
-    totalTax += i.discountedPrice * (i.ticketItem.rst / 100);
-  });
-
-  return totalTax;
-};
-
-const invoicesTax = (invoices: InvoicesType) => {
-  return invoices.reduce((t, i) => t + invoiceTax(i), 0);
+  return invoice.taxSummary.reduce((p, c) => p + c.value, 0);
 };
 
 const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
@@ -102,7 +89,7 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
           r.clockedOutAt ? utcToRestaurantTimezone(r.clockedOutAt, tz) : "-",
       },
       {
-        title: "Table No.",
+        title: "Table/Order No.",
         render: (_, r) => {
           if (r.bookingType === "dine_in")
             return r.bookingTables.map((i) => i.name).join(", ");
@@ -116,16 +103,32 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       },
       {
         title: "SubTotal",
-        render: (_, r) => invoicesTotal(r.invoices).toFixed(2),
+        render: (_, r) =>
+          r.invoices.reduce((p, c) => p + c.subTotal, 0).toFixed(2),
+      },
+      {
+        title: "Total Dis.",
+        render: (_, r) =>
+          r.invoices.reduce((p, c) => p + c.totalDiscount, 0).toFixed(2),
+      },
+      {
+        title: "Total Service Charge",
+        render: (_, r) =>
+          r.invoices.reduce((p, i) => p + invoiceServiceCharge(i), 0),
       },
       {
         title: "Total Tax",
-        render: (_, r) => invoicesTax(r.invoices).toFixed(2),
+        render: (_, r) =>
+          r.invoices.reduce((p, i) => p + invoiceTax(i), 0).toFixed(2),
+      },
+      {
+        title: "Tip",
+        render: (_, r) => r.invoices.reduce((p, i) => p + i.tip, 0).toFixed(2),
       },
       {
         title: "Total",
         render: (_, r) =>
-          (invoicesTotal(r.invoices) + invoicesTax(r.invoices)).toFixed(2),
+          r.invoices.reduce((p, c) => p + c.total, 0).toFixed(2),
       },
       {
         title: "Payment Type",
@@ -159,6 +162,7 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
         total: metadata.totalCount,
       }}
       rowKey="id"
+      size="small"
     />
   );
 };
@@ -213,7 +217,7 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
             : "-",
       },
       {
-        title: "Table No.",
+        title: "Table/Order No.",
         render: (_, r) => {
           if (r.booking.bookingType === "dine_in")
             return r.booking.bookingTables.map((i) => i.name).join(", ");
@@ -227,15 +231,27 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       },
       {
         title: "Sub Total",
-        render: (_, r) => r.total.toFixed(2),
+        render: (_, r) => r.subTotal.toFixed(2),
+      },
+      {
+        title: "Total Dis.",
+        render: (_, r) => r.totalDiscount.toFixed(2),
+      },
+      {
+        title: "Total Service Charge",
+        render: (_, r) => invoiceServiceCharge(r).toFixed(2),
       },
       {
         title: "Total Tax",
         render: (_, r) => invoiceTax(r).toFixed(2),
       },
       {
+        title: "Tip",
+        dataIndex: ["tip"],
+      },
+      {
         title: "Total",
-        render: (_, r) => (r.total + invoiceTax(r)).toFixed(2),
+        render: (_, r) => r.total.toFixed(2),
       },
       {
         title: "Payment Type",
@@ -265,6 +281,7 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
         total: metadata.totalCount,
       }}
       rowKey="id"
+      size="small"
     />
   );
 };
@@ -303,6 +320,8 @@ export const ReportsSales = () => {
           />
         </div>
       </div>
+
+      <Summary dateRange={dateRange} />
 
       {reportType === "orders" && <OrdersWise dateRange={dateRange} />}
       {reportType === "invoices" && <InvoicesWise dateRange={dateRange} />}

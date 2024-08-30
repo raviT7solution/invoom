@@ -120,6 +120,8 @@ import {
   RoleUpdateMutationVariables,
   RolesDocument,
   RolesQueryVariables,
+  SalesSummaryDocument,
+  SalesSummaryQueryVariables,
   ServiceChargeCreateDocument,
   ServiceChargeCreateMutationVariables,
   ServiceChargeDeleteDocument,
@@ -1123,5 +1125,13 @@ export const useDashboardSummary = (
     queryFn: async () =>
       (await client.request(DashboardSummaryDocument, variables))
         .dashboardSummary,
+  });
+};
+
+export const useSalesSummary = (variables: SalesSummaryQueryVariables) => {
+  return useQuery({
+    queryKey: ["salesSummary", variables],
+    queryFn: async () =>
+      (await client.request(SalesSummaryDocument, variables)).dashboardSummary,
   });
 };

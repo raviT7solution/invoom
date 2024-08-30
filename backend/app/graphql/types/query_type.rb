@@ -39,9 +39,9 @@ class Types::QueryType < Types::BaseObject
     argument :restaurant_id, ID, required: true
   end
   field :dashboard_summary, Types::DashboardSummaryType, null: false do
-    argument :end_time, GraphQL::Types::ISO8601DateTime, required: true
+    argument :end_time, GraphQL::Types::ISO8601DateTime, required: false
     argument :restaurant_id, ID, required: true
-    argument :start_time, GraphQL::Types::ISO8601DateTime, required: true
+    argument :start_time, GraphQL::Types::ISO8601DateTime, required: false
   end
   field :discount, Types::DiscountType, null: false do
     argument :id, ID, required: true
@@ -245,7 +245,9 @@ class Types::QueryType < Types::BaseObject
 
   def dashboard_summary(restaurant_id:, start_time:, end_time:)
     bookings = BookingPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
-    bookings = bookings.where.not(clocked_out_at: nil).where(created_at: start_time..end_time)
+    bookings = bookings.where.not(clocked_out_at: nil)
+    bookings = bookings.where(created_at: start_time..end_time) if start_time.present? && end_time.present?
+
     invoices = InvoicePolicy.new(context[:current_session]).scope.where(booking_id: bookings).where(status: :paid)
 
     { bookings: bookings, invoices: invoices }

@@ -15,6 +15,8 @@ class Types::DashboardSummaryType < Types::BaseObject
   field :skip_the_dishes_revenue, Float, null: false
   field :takeout_revenue, Float, null: false
   field :total_revenue, Float, null: false
+  field :total_tax, Float, null: false
+  field :total_tip, Float, null: false
   field :uber_eats_revenue, Float, null: false
   field :void_revenue, Float, null: false
 
@@ -82,6 +84,32 @@ class Types::DashboardSummaryType < Types::BaseObject
     @total_revenue ||= object[:invoices].sum(:total)
   end
 
+  def total_tax # rubocop:disable Metrics/AbcSize, GraphQL/ResolverMethodLength
+    # object[:invoices] is for only paid invoices
+    invoices = InvoicePolicy.new(context[:current_session]).scope.where(booking_id: object[:bookings])
+    invoice_items = InvoiceItemPolicy.new(context[:current_user]).scope.where(invoice_id: invoices)
+
+    total_tax_percent = invoice_items.joins(invoice: :invoice_service_charges)
+                                     .where(invoice_service_charges: { charge_type: "percentage" })
+                                     .sum(percentage_service_charge_expression)
+
+    invoice_counts = Invoice.group(:booking_id).select(:booking_id, "COUNT(invoices.id) AS invoice_count")
+
+    total_tax_flat = invoices
+                     .joins(:invoice_service_charges)
+                     .where(invoice_service_charges: { charge_type: "flat" })
+                     .joins("INNER JOIN (#{invoice_counts.to_sql}) counts ON counts.booking_id = invoices.booking_id")
+                     .sum(flat_service_charge_expression)
+
+    items_tax = invoice_items.joins(:ticket_item).sum(items_tax_expression)
+
+    total_tax_percent + total_tax_flat + items_tax
+  end
+
+  def total_tip
+    object[:bookings].joins(:invoices).sum(:tip)
+  end
+
   def uber_eats_revenue
     payment_mode_revenue["uber_eats"] || 0
   end
@@ -92,7 +120,53 @@ class Types::DashboardSummaryType < Types::BaseObject
 
   private
 
+  def flat_service_charge_expression # rubocop:disable Metrics/AbcSize
+    invoices = Invoice.arel_table.alias(:counts)
+    service_charges = InvoiceServiceCharge.arel_table
+
+    tax_expression = (
+      service_charges[:hst] +
+      service_charges[:gst] +
+      service_charges[:rst] +
+      service_charges[:pst] +
+      service_charges[:qst] +
+      service_charges[:cst]
+    ) / 100
+
+    (service_charges[:value] / invoices[:invoice_count]) * tax_expression
+  end
+
+  def items_tax_expression
+    invoice_items = InvoiceItem.arel_table
+    ticket_items = TicketItem.arel_table
+
+    invoice_items[:discounted_price] * (
+      ticket_items[:cst] +
+      ticket_items[:gst] +
+      ticket_items[:hst] +
+      ticket_items[:pst] +
+      ticket_items[:qst] +
+      ticket_items[:rst]
+    ) / 100
+  end
+
   def payment_mode_revenue
     @payment_mode_revenue ||= object[:invoices].group(:payment_mode).sum(:total)
+  end
+
+  def percentage_service_charge_expression # rubocop:disable Metrics/AbcSize
+    invoice_items = InvoiceItem.arel_table
+    service_charges = InvoiceServiceCharge.arel_table
+
+    tax_expression = (
+      service_charges[:hst] +
+      service_charges[:gst] +
+      service_charges[:rst] +
+      service_charges[:pst] +
+      service_charges[:qst] +
+      service_charges[:cst]
+    ) / 100
+
+    invoice_items[:discounted_price] * (service_charges[:value] / 100) * tax_expression
   end
 end

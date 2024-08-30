@@ -694,22 +694,20 @@ query bookings(
       id
       invoices {
         id
-        invoiceItems {
-          discountedPrice
+        invoiceServiceCharges {
+          chargeAmount
           id
-          ticketItem {
-            cst
-            gst
-            hst
-            id
-            pst
-            qst
-            rst
-          }
         }
         number
         paymentMode
+        subTotal
+        taxSummary {
+          name
+          value
+        }
+        tip
         total
+        totalDiscount
       }
       number
       pax
@@ -760,22 +758,20 @@ query invoices(
         userFullName
       }
       id
-      invoiceItems {
-        discountedPrice
+      invoiceServiceCharges {
+        chargeAmount
         id
-        ticketItem {
-          cst
-          gst
-          hst
-          id
-          pst
-          qst
-          rst
-        }
       }
       number
       paymentMode
+      subTotal
+      taxSummary {
+        name
+        value
+      }
+      tip
       total
+      totalDiscount
     }
     metadata {
       currentPage
@@ -866,5 +862,26 @@ query dashboardSummary(
     totalRevenue
     uberEatsRevenue
     voidRevenue
+  }
+}
+
+query salesSummary(
+  $endTime: ISO8601DateTime
+  $restaurantId: ID!
+  $startTime: ISO8601DateTime
+) {
+  dashboardSummary(
+    endTime: $endTime
+    restaurantId: $restaurantId
+    startTime: $startTime
+  ) {
+    avgBookingRevenue
+    avgInvoiceRevenue
+    bookingCount
+    invoiceCount
+    paxCount
+    totalTip
+    totalRevenue
+    totalTax
   }
 }
