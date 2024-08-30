@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_28_160313) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_30_101229) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -268,6 +268,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_28_160313) do
     t.datetime "updated_at", null: false
     t.uuid "tax_id", null: false
     t.boolean "eq_price", default: false, null: false
+    t.string "uom", null: false
     t.index ["category_id"], name: "index_items_on_category_id"
     t.index ["name", "restaurant_id"], name: "index_items_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_items_on_restaurant_id"
@@ -460,7 +461,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_28_160313) do
   create_table "ticket_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "display_name", null: false
     t.float "price", null: false
-    t.integer "quantity", null: false
+    t.float "quantity", null: false
     t.integer "status", null: false
     t.string "modifiers", default: [], null: false, array: true
     t.string "name", null: false
@@ -475,6 +476,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_28_160313) do
     t.float "rst", null: false
     t.uuid "item_id", null: false
     t.float "cst", null: false
+    t.string "uom", null: false
     t.index ["item_id"], name: "index_ticket_items_on_item_id"
     t.index ["ticket_id"], name: "index_ticket_items_on_ticket_id"
   end

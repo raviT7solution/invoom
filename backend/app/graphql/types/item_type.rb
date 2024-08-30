@@ -10,6 +10,7 @@ class Types::ItemType < Types::BaseObject
   field :name, String, null: false
   field :price, Float, null: false
   field :takeout_price, Float, null: false
+  field :uom, String, null: false
   field :visible, Boolean, null: false
 
   field :addon_ids, [ID], scope: "AddonPolicy", preload: :addons, null: false

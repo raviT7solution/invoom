@@ -10,6 +10,7 @@ import {
   useSettingsTaxes,
 } from "../../../api";
 import { FormDrawer } from "../../../components/FormDrawer";
+import { UOM } from "../../../helpers/mapping";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
 type schema = {
@@ -36,6 +37,7 @@ const initialValues = {
   name: "",
   price: 0,
   takeoutPrice: 0,
+  uom: "item",
   visible: true,
 };
 
@@ -229,6 +231,20 @@ export const Edit = ({
           >
             = Price
           </Checkbox>
+        </Form.Item>
+
+        <Form.Item
+          label="UOM"
+          name="uom"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <Select
+            options={Object.entries(UOM).map(([value, label]) => ({
+              label,
+              value,
+            }))}
+            placeholder="Select"
+          />
         </Form.Item>
 
         <Form.Item

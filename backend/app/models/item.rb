@@ -22,4 +22,5 @@ class Item < ApplicationRecord
   validates :name, presence: true, uniqueness: { scope: :restaurant_id }
   validates :price, presence: true
   validates :takeout_price, presence: true
+  validates :uom, presence: true
 end

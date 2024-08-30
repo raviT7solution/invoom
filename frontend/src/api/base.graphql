@@ -251,6 +251,7 @@ query items($restaurantId: ID!) {
     price
     takeoutPrice
     taxId
+    uom
     visible
   }
 }
@@ -270,6 +271,7 @@ query item($id: ID!) {
     price
     takeoutPrice
     taxId
+    uom
     visible
   }
 }

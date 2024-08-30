@@ -22,6 +22,7 @@ class TicketItem < ApplicationRecord
   validates :quantity, presence: true
   validates :rst, presence: true
   validates :status, presence: true
+  validates :uom, presence: true
 
   after_commit :broadcast
 

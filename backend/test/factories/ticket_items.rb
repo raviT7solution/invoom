@@ -12,9 +12,10 @@ FactoryBot.define do
     price { 2.0 }
     pst { Faker::Number.decimal(l_digits: 2) }
     qst { Faker::Number.decimal(l_digits: 2) }
-    quantity { 2 }
+    quantity { 2.0 }
     rst { Faker::Number.decimal(l_digits: 2) }
     status { TicketItem.statuses.keys.sample }
+    uom { "item" }
 
     item { nil }
     ticket { nil }

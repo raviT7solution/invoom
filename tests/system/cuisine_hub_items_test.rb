@@ -53,6 +53,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
                       price: 11,
                       takeout_price: 12,
                       tax_id: tax.id,
+                      uom: "item",
                       visible: true
   end
 
@@ -111,6 +112,9 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
       within ".ant-form-item", text: "Modifiers" do
         fill_in_select with: "Jain"
       end
+      within ".ant-form-item", text: "UOM" do
+        fill_in_select with: "Litre"
+      end
       find(".ant-checkbox-wrapper", text: "Visible").click
 
       click_on "Submit"
@@ -127,6 +131,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
                       eq_price: false,
                       modifier_ids: [modifier.id],
                       name: "Vadapav",
+                      uom: "litre",
                       visible: false
   end
 end

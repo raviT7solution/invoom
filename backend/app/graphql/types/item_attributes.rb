@@ -9,6 +9,7 @@ class Types::ItemAttributes < Types::BaseInputObject
   argument :name, String, required: false
   argument :price, Float, required: false
   argument :takeout_price, Float, required: false
+  argument :uom, String, required: false
   argument :visible, Boolean, required: false
 
   argument :addon_ids, [ID], required: false

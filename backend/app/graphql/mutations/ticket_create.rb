@@ -28,7 +28,8 @@ class Mutations::TicketCreate < Mutations::BaseMutation
         pst: tax.pst,
         qst: tax.qst,
         quantity: item_attributes[:quantity],
-        rst: tax.rst
+        rst: tax.rst,
+        uom: item.uom
       )
 
       item.addons.find(item_attributes[:addon_ids]).each do |addon|

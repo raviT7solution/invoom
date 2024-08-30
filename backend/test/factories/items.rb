@@ -10,6 +10,7 @@ FactoryBot.define do
     name { Faker::Food.dish }
     price { 1.0 }
     takeout_price { 3.0 }
+    uom { "item" }
     visible { true }
 
     category { nil }

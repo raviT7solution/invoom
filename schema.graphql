@@ -758,6 +758,7 @@ type Item {
   takeoutPrice: Float!
   tax: Tax!
   taxId: ID!
+  uom: String!
   visible: Boolean!
 }
 
@@ -774,6 +775,7 @@ input ItemAttributes {
   price: Float
   takeoutPrice: Float
   taxId: ID
+  uom: String
   visible: Boolean
 }
 
@@ -2009,10 +2011,11 @@ type TicketItem {
   price: Float!
   pst: Float!
   qst: Float!
-  quantity: Int!
+  quantity: Float!
   rst: Float!
   status: TicketItemStatusType!
   ticketItemAddons: [TicketItemAddon!]!
+  uom: String!
   updatedAt: ISO8601DateTime!
 }
 
@@ -2028,7 +2031,7 @@ input TicketItemAttributes {
   itemId: ID
   modifiers: [String!]
   note: String
-  quantity: Int
+  quantity: Float
   status: TicketItemStatusAttribute
 }
 
