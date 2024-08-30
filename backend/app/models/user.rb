@@ -31,6 +31,14 @@ class User < ApplicationRecord
   validates :start_date, presence: true
   validates :wage, presence: true
 
+  def already_clocked_in?
+    time_sheets.exists?(end_time: nil)
+  end
+
+  def auto_clock_in?
+    roles.any?(&:auto_clock_in)
+  end
+
   def full_name
     "#{first_name} #{last_name}".strip
   end

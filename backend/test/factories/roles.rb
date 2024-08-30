@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :role do
+    auto_clock_in { true }
     name { Faker::Company.profession }
     permissions { [] }
 

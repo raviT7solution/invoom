@@ -92,5 +92,7 @@ class Types::MutationType < Types::BaseObject
                               authorize: "UserSessionPolicy#create?"
   field :user_session_destroy, mutation: Mutations::UserSessionDestroy, null: false,
                                authorize: "UserSessionPolicy#destroy?"
+  field :user_session_time_sheet_create, mutation: Mutations::UserSessionTimeSheetCreate, null: false,
+                                         authorize: "UserSessionPolicy#create_time_sheet?"
   field :user_update, mutation: Mutations::UserUpdate, null: false, authorize: "UserPolicy#update?"
 end

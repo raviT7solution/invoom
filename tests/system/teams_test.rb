@@ -112,6 +112,7 @@ class TeamsTest < ApplicationSystemTestCase
 
     within ".ant-drawer" do
       fill_in "Name", with: "Chef"
+      find(".ant-checkbox-wrapper", text: "Auto Clock-In").click
       fill_in_select with: "Clock In / Clock Out"
 
       click_on "Submit"
@@ -119,7 +120,7 @@ class TeamsTest < ApplicationSystemTestCase
 
     wait_for_pending_requests
 
-    assert_attributes role.reload, name: "Chef", permissions: ["clock_in_clock_out"]
+    assert_attributes role.reload, auto_clock_in: false, name: "Chef", permissions: ["clock_in_clock_out"]
   end
 
   test "update user" do

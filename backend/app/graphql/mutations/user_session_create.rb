@@ -6,18 +6,17 @@ class Mutations::UserSessionCreate < Mutations::BaseMutation
 
   type Types::UserSessionType, null: false
 
-  def resolve(restaurant_id:, attributes:) # rubocop:disable Metrics/AbcSize
+  def resolve(restaurant_id:, attributes:)
     restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
 
-    if attributes[:login_type] == "pin" && attributes[:pin].present?
-      return authenticate_with_pin(restaurant, attributes)
+    case attributes[:login_type]
+    when "pin"
+      authenticate_with_pin(restaurant, attributes)
+    when "password"
+      authenticate_with_password(restaurant, attributes)
+    else
+      raise_error "Invalid login type"
     end
-
-    if attributes[:login_type] == "password" && attributes[:user_id].present? && attributes[:password].present?
-      return authenticate_with_password(restaurant, attributes)
-    end
-
-    raise_error "Invalid login type"
   end
 
   private
@@ -27,11 +26,7 @@ class Mutations::UserSessionCreate < Mutations::BaseMutation
 
     raise_error "Invalid password" unless user.authenticate(attributes[:password])
 
-    if attributes[:clock_type] == "clock_out"
-      update_clock_out(user)
-    else
-      create_clock_in(user)
-    end
+    session_response(user)
   end
 
   def authenticate_with_pin(restaurant, attributes)
@@ -39,43 +34,19 @@ class Mutations::UserSessionCreate < Mutations::BaseMutation
 
     raise_error "Invalid pin" unless user
 
-    if attributes[:clock_type] == "clock_out"
-      update_clock_out(user)
-    else
-      create_clock_in(user)
-    end
+    session_response(user)
   end
 
-  def create_clock_in(user)
-    raise_error "Unauthorized" unless user.permission?("clock_in_clock_out")
-
-    if user_already_clocked_in?(user)
-      return { clock_in_status: "already_clocked_in", permissions: user.permissions, token: user_token(user) }
-    end
-
-    time_sheet = user.time_sheets.new(start_time: DateTime.current)
-    raise_error time_sheet.errors.full_messages.to_sentence unless time_sheet.save
-
-    { token: user_token(user), permissions: user.permissions }
-  end
-
-  def update_clock_out(user)
-    raise_error "Unauthorized" unless user.permission?("clock_in_clock_out")
-
-    time_sheet = user.time_sheets.find_by(end_time: nil)
-
-    return { clock_in_status: "already_clocked_out", permissions: [], token: "" } unless time_sheet
-
-    raise_error time_sheet.errors.full_messages.to_sentence unless time_sheet.update(end_time: DateTime.current)
-
-    { token: "", permissions: [] }
-  end
-
-  def user_already_clocked_in?(user)
-    user.time_sheets.exists?(end_time: nil)
+  def session_response(user)
+    {
+      auto_clock_in: user.auto_clock_in?,
+      clock_in_status: user.already_clocked_in? ? "already_clocked_in" : "already_clocked_out",
+      permissions: user.permissions,
+      token: user_token(user)
+    }
   end
 
   def user_token(user)
-    user.permissions == ["clock_in_clock_out"] ? "" : Session.token(user, "mobile_user_id")
+    Session.token(user, "mobile_user_id")
   end
 end

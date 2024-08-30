@@ -16,10 +16,10 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     authentic_query @admin, "mobile_admin", create_string, variables: {
       input: {
         restaurantId: @restaurant.id,
-        attributes: { clockType: "clock_in",
-                      loginType: "pin",
-                      pin: "1234",
-                      userId: @user.id }
+        attributes: {
+          loginType: "pin",
+          pin: "1234"
+        }
       }
     }
 
@@ -29,18 +29,18 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_equal @user, Session.new(token).mobile_user!
     assert_equal ["clock_in_clock_out", "floor_plan"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
-    assert TimeSheet.last.start_time
-    assert_not TimeSheet.last.end_time
+    assert response.parsed_body["data"]["userSessionCreate"]["autoClockIn"]
   end
 
   test "returns token for valid password" do
     authentic_query @admin, "mobile_admin", create_string, variables: {
       input: {
         restaurantId: @restaurant.id,
-        attributes: { clockType: "clock_in",
-                      loginType: "password",
-                      password: @user.password,
-                      userId: @user.id }
+        attributes: {
+          loginType: "password",
+          password: @user.password,
+          userId: @user.id
+        }
       }
     }
 
@@ -50,27 +50,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_equal @user, Session.new(token).mobile_user!
     assert_equal ["clock_in_clock_out", "floor_plan"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
-    assert TimeSheet.last.start_time
-    assert_not TimeSheet.last.end_time
-  end
-
-  test "does not return token for clock out" do
-    time_sheet = create(:time_sheet, user: @user, start_time: 2.days.ago)
-
-    authentic_query @admin, "mobile_admin", create_string, variables: {
-      input: {
-        restaurantId: @restaurant.id,
-        attributes: { clockType: "clock_out",
-                      loginType: "pin",
-                      pin: "1234",
-                      userId: @user.id }
-      }
-    }
-
-    assert_query_success
-    assert_equal "", response.parsed_body["data"]["userSessionCreate"]["token"]
-    assert time_sheet.reload.start_time
-    assert time_sheet.end_time
+    assert response.parsed_body["data"]["userSessionCreate"]["autoClockIn"]
   end
 
   test "when already clocked in" do
@@ -79,10 +59,10 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     authentic_query @admin, "mobile_admin", create_string, variables: {
       input: {
         restaurantId: @restaurant.id,
-        attributes: { clockType: "clock_in",
-                      loginType: "pin",
-                      pin: "1234",
-                      userId: @user.id }
+        attributes: {
+          loginType: "pin",
+          pin: "1234"
+        }
       }
     }
 
@@ -102,34 +82,32 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     authentic_query @admin, "mobile_admin", create_string, variables: {
       input: {
         restaurantId: @restaurant.id,
-        attributes: { clockType: "clock_out",
-                      loginType: "pin",
-                      pin: "1234",
-                      userId: @user.id }
+        attributes: {
+          loginType: "pin",
+          pin: "1234"
+        }
       }
     }
 
     assert_query_success
-    assert_equal \
-      ({ "clockInStatus" => "already_clocked_out", "permissions" => [], "token" => "" }),
-      response.parsed_body["data"]["userSessionCreate"]
+    assert_equal "already_clocked_out", response.parsed_body["data"]["userSessionCreate"]["clockInStatus"]
+    assert_equal @user.permissions, response.parsed_body["data"]["userSessionCreate"]["permissions"]
+    assert_equal @user, Session.new(response.parsed_body["data"]["userSessionCreate"]["token"]).mobile_user!
   end
 
-  test "raises unauthorized error" do
-    @role.update(permissions: [])
-    create(:time_sheet, user: @user, start_time: 2.days.ago, end_time: 1.day.ago)
+  test "time sheet create session" do
+    create(:time_sheet, user: @user, start_time: 2.days.ago)
 
-    authentic_query @admin, "mobile_admin", create_string, variables: {
-      input: {
-        restaurantId: @restaurant.id,
-        attributes: { clockType: "clock_out",
-                      loginType: "pin",
-                      pin: "1234",
-                      userId: @user.id }
-      }
-    }
+    authentic_query @user, "mobile_user", user_session_time_sheet_create, variables: { input: {} }
 
-    assert_query_error "Unauthorized"
+    assert_query_error "User is already clocked-in"
+
+    authentic_query @user, "mobile_user", destroy_string, variables: { input: {} }
+    authentic_query @user, "mobile_user", user_session_time_sheet_create, variables: { input: {} }
+
+    assert_query_success
+    assert TimeSheet.order(:created_at).last.start_time
+    assert_not TimeSheet.order(:created_at).last.end_time
   end
 
   test "destroy session" do
@@ -187,6 +165,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     <<~GQL
       mutation userSessionCreate($input: UserSessionCreateInput!) {
         userSessionCreate(input: $input) {
+          autoClockIn
           clockInStatus
           permissions
           token
@@ -199,6 +178,14 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     <<~GQL
       mutation userSessionDestroy($input: UserSessionDestroyInput!) {
         userSessionDestroy(input: $input)
+      }
+    GQL
+  end
+
+  def user_session_time_sheet_create
+    <<~GQL
+      mutation userSessionTimeSheetCreate($input: UserSessionTimeSheetCreateInput!) {
+        userSessionTimeSheetCreate(input: $input)
       }
     GQL
   end

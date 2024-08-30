@@ -414,6 +414,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_28_160313) do
     t.string "permissions", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "auto_clock_in", default: true, null: false
     t.index ["restaurant_id", "name"], name: "index_roles_on_restaurant_id_and_name", unique: true
     t.index ["restaurant_id"], name: "index_roles_on_restaurant_id"
   end

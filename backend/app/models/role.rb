@@ -19,6 +19,7 @@ class Role < ApplicationRecord
 
   has_many :users, through: :user_roles
 
+  validates :auto_clock_in, inclusion: [true, false]
   validates :name, presence: true, uniqueness: { scope: :restaurant_id }
 
   validate :permissions_inclusion

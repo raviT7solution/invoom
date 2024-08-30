@@ -1,10 +1,11 @@
-import { Button, Form, Input, Select } from "antd";
+import { Button, Checkbox, Form, Input, Select } from "antd";
 
 import { useRole, useRoleCreate, useRoleUpdate } from "../../../api";
 import { FormDrawer } from "../../../components/FormDrawer";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
 type schema = {
+  autoClockIn: boolean;
   name: string;
   permissions: string[];
 };
@@ -47,6 +48,10 @@ const permissions = [
     value: "takeout",
   },
 ];
+
+const initialValues = {
+  autoClockIn: true,
+};
 
 export const Edit = ({
   roleId,
@@ -95,7 +100,7 @@ export const Edit = ({
       title={isNew ? "New Role" : "Edit Role"}
     >
       <Form
-        initialValues={role}
+        initialValues={isNew ? initialValues : role}
         layout="vertical"
         name="role-form"
         onFinish={onFinish}
@@ -119,6 +124,10 @@ export const Edit = ({
             options={permissions}
             placeholder="Select"
           />
+        </Form.Item>
+
+        <Form.Item name="autoClockIn" valuePropName="checked">
+          <Checkbox>Auto Clock-In</Checkbox>
         </Form.Item>
       </Form>
     </FormDrawer>
