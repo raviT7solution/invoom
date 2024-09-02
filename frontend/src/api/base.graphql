@@ -482,6 +482,7 @@ query tickets(
           id
           name
         }
+        uom
         updatedAt
       }
     }

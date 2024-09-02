@@ -18,3 +18,24 @@ export const UOM: { [key: string]: string } = {
   grain: "Grain",
   item: "Item",
 };
+
+export const UOM_ABBREVIATION: { [key: string]: string } = {
+  tonne: "T",
+  kilograms: "kg",
+  grams: "g",
+  decagram: "dag",
+  decigram: "dg",
+  centigram: "cg",
+  milligram: "mg",
+  kilolitre: "kL",
+  hectolitre: "hL",
+  decalitre: "daL",
+  litre: "L",
+  decilitre: "dL",
+  centilitre: "cL",
+  millilitre: "mL",
+  pound: "lb",
+  ounce: "oz",
+  grain: "gr",
+  item: "",
+};

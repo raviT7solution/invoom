@@ -11,6 +11,7 @@ import {
   useLongPress,
   useRerender,
 } from "../../../helpers/hooks";
+import { UOM_ABBREVIATION } from "../../../helpers/mapping";
 
 const durationToString = (i: number) => {
   const minutes = Math.floor(i / 60000);
@@ -73,7 +74,10 @@ const TicketItem = ({
       {...onTicketItemLongPress}
     >
       <b>{item.displayName}</b>
-      <b className="px-1 bg-gray-100 rounded-sm">&times;{item.quantity}</b>
+      <b className="px-1 bg-gray-100 rounded-sm">
+        {item.quantity}{" "}
+        {item.uom === "item" ? <>&times;</> : UOM_ABBREVIATION[item.uom]}
+      </b>
     </div>
   );
 };
