@@ -243,14 +243,15 @@ class Types::QueryType < Types::BaseObject
     records.order(created_at: :desc).page(page).per(per_page)
   end
 
-  def dashboard_summary(restaurant_id:, start_time:, end_time:)
+  def dashboard_summary(restaurant_id:, start_time:, end_time:) # rubocop:disable Metrics/AbcSize
+    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+
     bookings = BookingPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
     bookings = bookings.where.not(clocked_out_at: nil)
     bookings = bookings.where(created_at: start_time..end_time) if start_time.present? && end_time.present?
-
     invoices = InvoicePolicy.new(context[:current_session]).scope.where(booking_id: bookings).where(status: :paid)
 
-    { bookings: bookings, invoices: invoices }
+    { bookings: bookings, invoices: invoices, restaurant: restaurant }
   end
 
   def discount(id:)

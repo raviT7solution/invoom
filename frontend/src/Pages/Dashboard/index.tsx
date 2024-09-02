@@ -29,14 +29,14 @@ export const Dashboard = () => {
   const hourlyRevenue = useMemo(() => {
     const arr: [string, number][] =
       data?.hourlyRevenue.map((v, i) => [
-        dayjs.utc().hour(i).minute(0).tz(tz).format(TIME_FORMAT),
+        dayjs().hour(i).minute(0).format(TIME_FORMAT),
         v,
       ]) ?? [];
 
     return arr.sort((i, j) =>
       dayjs(i[0], TIME_FORMAT).isBefore(dayjs(j[0], TIME_FORMAT)) ? -1 : 1,
     );
-  }, [data?.hourlyRevenue, tz]);
+  }, [data?.hourlyRevenue]);
 
   return (
     <Navbar breadcrumbItems={[{ title: "Dashboard" }]}>
@@ -159,7 +159,10 @@ export const Dashboard = () => {
                 style: { fontSize: "0.875rem" },
                 text: "Sale Distribution",
               },
-              tooltip: { pointFormat: "<b>{point.percentage:.1f}%</b>" },
+              tooltip: {
+                pointFormat:
+                  "<b>{point.percentage:.1f}%<br />${point.y:.2f}</b>",
+              },
             }}
           />
         </div>
@@ -195,7 +198,10 @@ export const Dashboard = () => {
                 style: { fontSize: "0.875rem" },
                 text: "Payment Distribution",
               },
-              tooltip: { pointFormat: "<b>{point.percentage:.1f}%</b>" },
+              tooltip: {
+                pointFormat:
+                  "<b>{point.percentage:.1f}%<br />${point.y:.2f}</b>",
+              },
             }}
           />
         </div>

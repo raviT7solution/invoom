@@ -23,7 +23,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_query_success
 
     hourly_revenue = Array.new(24, 0.0)
-    hourly_revenue[invoice.created_at.hour] = 100.0
+    hourly_revenue[invoice.created_at.in_time_zone(restaurant.timezone).hour] = 100.0
 
     expected_summary = {
       "avgBookingRevenue" => 100.0,
