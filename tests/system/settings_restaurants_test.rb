@@ -30,6 +30,8 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
       within ".ant-form-item", text: "Operational Since" do
         fill_in_select with: Date.current.year.to_s
       end
+      fill_in "Taxpayer Identification Number", with: "123456789"
+      fill_in "Website", with: "example.com"
       within ".ant-form-item", text: "Country" do
         fill_in with: "Canada"
         fill_in_select with: "Canada"
@@ -80,7 +82,9 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
                       province: "ON",
                       restaurant_type: "Cafe",
                       status: "pending",
-                      timezone: "America/Toronto"
+                      taxpayer_id: "123456789",
+                      timezone: "America/Toronto",
+                      website: "example.com"
 
     assert_equal Time.parse("2000-01-01T09:00:00Z"), admin.restaurants.last!.business_start_time
     assert_equal Time.parse("2000-01-01T23:00:00Z"), admin.restaurants.last!.business_end_time

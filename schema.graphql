@@ -1785,9 +1785,12 @@ type Restaurant {
   city: String!
   id: ID!
   name: String!
+  phoneNumber: String!
   postalCode: String!
   province: String!
+  taxpayerId: String
   timezone: String!
+  website: String
 }
 
 input RestaurantAttributes {
@@ -1808,7 +1811,9 @@ input RestaurantAttributes {
   postalCode: String
   province: String
   restaurantType: String
+  taxpayerId: String
   timezone: String
+  website: String
 }
 
 """

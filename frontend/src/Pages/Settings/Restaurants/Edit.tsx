@@ -309,6 +309,21 @@ export const Edit = ({
                 <Select options={since} placeholder="Select" />
               </Form.Item>
             </Col>
+
+            <Col span={8}>
+              <Form.Item
+                label="Taxpayer Identification Number"
+                name="taxpayerId"
+              >
+                <Input placeholder="eg. 123456789" />
+              </Form.Item>
+            </Col>
+
+            <Col span={8}>
+              <Form.Item label="Website" name="website">
+                <Input placeholder="example.com" />
+              </Form.Item>
+            </Col>
           </Row>
 
           <Divider orientation="left" plain>
