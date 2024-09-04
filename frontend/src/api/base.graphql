@@ -890,3 +890,33 @@ query salesSummary(
     totalTax
   }
 }
+
+query customers(
+  $page: Int!
+  $perPage: Int!
+  $query: String!
+  $restaurantId: ID!
+) {
+  customers(
+    page: $page
+    perPage: $perPage
+    query: $query
+    restaurantId: $restaurantId
+  ) {
+    collection {
+      avgInvoiceAmount
+      email
+      id
+      invoiceCount
+      name
+      phoneNumber
+      totalInvoiceAmount
+    }
+    metadata {
+      currentPage
+      limitValue
+      totalCount
+      totalPages
+    }
+  }
+}

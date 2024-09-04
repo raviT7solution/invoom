@@ -6,7 +6,9 @@ class CustomerPolicy < ApplicationPolicy
   end
 
   def scope
-    if kds_admin?
+    if web_admin?
+      Customer.where(restaurant: web_admin!.restaurants)
+    elsif kds_admin?
       Customer.where(restaurant: kds_admin!.restaurants)
     elsif mobile_user?("takeout") || mobile_user?("reservations")
       Customer.where(restaurant_id: mobile_user!.restaurant_id)

@@ -102,7 +102,7 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
         dataIndex: ["pax"],
       },
       {
-        title: "SubTotal",
+        title: "Subtotal",
         render: (_, r) =>
           r.invoices.reduce((p, c) => p + c.subTotal, 0).toFixed(2),
       },
@@ -230,7 +230,7 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
         dataIndex: ["booking", "pax"],
       },
       {
-        title: "Sub Total",
+        title: "Subtotal",
         render: (_, r) => r.subTotal.toFixed(2),
       },
       {

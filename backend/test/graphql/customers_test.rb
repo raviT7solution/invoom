@@ -30,12 +30,25 @@ class CustomersTest < ActionDispatch::IntegrationTest
     customer = create(:customer, email: "elvis@example.com", name: "Elvis", restaurant: restaurant)
     create(:customer, name: "Erika", restaurant: restaurant)
 
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "takeout", pax: 1, customer: customer)
+
+    create(:invoice, booking: booking, total: 100)
+    create(:invoice, booking: booking, total: 50)
+
     authentic_query user, "mobile_user", index_string,
                     variables: { restaurantId: restaurant.id, query: "El", page: 1, perPage: 10 }
 
     assert_query_success
-    assert_equal [{ "email" => "elvis@example.com", "name" => "Elvis", "phoneNumber" => customer.phone_number }],
-                 response.parsed_body["data"]["customers"]["collection"]
+    assert_equal [
+      {
+        "avgInvoiceAmount" => 75.0,
+        "email" => "elvis@example.com",
+        "invoiceCount" => 2,
+        "name" => "Elvis",
+        "phoneNumber" => customer.phone_number,
+        "totalInvoiceAmount" => 150.0
+      }
+    ], response.parsed_body["data"]["customers"]["collection"]
   end
 
   private
@@ -55,9 +68,12 @@ class CustomersTest < ActionDispatch::IntegrationTest
           restaurantId: $restaurantId
         ) {
           collection {
+            avgInvoiceAmount
             email
+            invoiceCount
             name
             phoneNumber
+            totalInvoiceAmount
           }
         }
       }

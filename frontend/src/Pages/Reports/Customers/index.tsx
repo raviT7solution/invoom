@@ -1,0 +1,96 @@
+import { Input, Table, TableColumnsType, Typography } from "antd";
+import { useMemo, useState } from "react";
+
+import { useCustomers } from "../../../api";
+import { Navbar } from "../../../components/Navbar";
+import { useDebounceFn } from "../../../helpers/hooks";
+import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
+
+export const ReportsCustomers = () => {
+  const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
+
+  const [query, setQuery] = useState("");
+  const [pagination, setPagination] = useState({
+    page: 1,
+    perPage: 10,
+  });
+
+  const {
+    data: { collection, metadata },
+    isFetching,
+  } = useCustomers({
+    page: pagination.page,
+    perPage: pagination.perPage,
+    query: query,
+    restaurantId: restaurantId,
+  });
+
+  const setDebouncedQuery = useDebounceFn(setQuery, 500);
+
+  const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
+    () => [
+      {
+        title: "Sr. No",
+        render: (_, _r, index) =>
+          (metadata.currentPage - 1) * metadata.limitValue + index + 1,
+      },
+      {
+        title: "Name",
+        dataIndex: "name",
+      },
+      {
+        title: "Email",
+        render: (_, r) => r.email ?? "-",
+      },
+      {
+        title: "Phone Number",
+        dataIndex: "phoneNumber",
+      },
+      {
+        title: "Avg Invoice Value",
+        render: (_, r) => r.avgInvoiceAmount.toFixed(2),
+      },
+      {
+        title: "No. of Invoices",
+        render: (_, r) => r.invoiceCount,
+      },
+      {
+        title: "Total Spend",
+        render: (_, r) => r.totalInvoiceAmount.toFixed(2),
+      },
+    ],
+    [metadata],
+  );
+
+  return (
+    <Navbar
+      breadcrumbItems={[{ title: "Reports" }, { title: "Customers Report" }]}
+    >
+      <div className="flex justify-between">
+        <Typography.Title level={4}>Customers Report</Typography.Title>
+
+        <div className="flex gap-2">
+          <Input.Search
+            onChange={(e) => setDebouncedQuery(e.target.value)}
+            placeholder="Search name, email, phone number"
+          />
+        </div>
+      </div>
+
+      <Table
+        columns={columns}
+        dataSource={collection}
+        loading={isFetching}
+        pagination={{
+          current: metadata.currentPage,
+          onChange: (page, pageSize) =>
+            setPagination({ page, perPage: pageSize }),
+          total: metadata.totalCount,
+          pageSize: pagination.perPage,
+        }}
+        rowKey="id"
+        size="small"
+      />
+    </Navbar>
+  );
+};

@@ -161,7 +161,7 @@ export const Dashboard = () => {
               },
               tooltip: {
                 pointFormat:
-                  "<b>{point.percentage:.1f}%<br />${point.y:.2f}</b>",
+                  "<b>{point.percentage:.1f}%<br />$ {point.y:.2f}</b>",
               },
             }}
           />
@@ -200,7 +200,7 @@ export const Dashboard = () => {
               },
               tooltip: {
                 pointFormat:
-                  "<b>{point.percentage:.1f}%<br />${point.y:.2f}</b>",
+                  "<b>{point.percentage:.1f}%<br />$ {point.y:.2f}</b>",
               },
             }}
           />

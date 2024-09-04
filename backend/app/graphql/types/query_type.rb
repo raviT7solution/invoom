@@ -238,7 +238,9 @@ class Types::QueryType < Types::BaseObject
   def customers(restaurant_id:, query:, page:, per_page:)
     records = CustomerPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
 
-    records = records.where("name ILIKE :q OR phone_number ILIKE :q", q: "%#{query}%") if query.present?
+    if query.present?
+      records = records.where("name ILIKE :q OR phone_number ILIKE :q OR email ILIKE :q", q: "%#{query}%")
+    end
 
     records.order(created_at: :desc).page(page).per(per_page)
   end

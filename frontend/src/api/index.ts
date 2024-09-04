@@ -28,6 +28,8 @@ import {
   CreateCategoryDocument,
   CreateCategoryMutationVariables,
   CurrentAdminDocument,
+  CustomersDocument,
+  CustomersQueryVariables,
   DashboardSummaryDocument,
   DashboardSummaryQueryVariables,
   DiscountCreateDocument,
@@ -1133,5 +1135,14 @@ export const useSalesSummary = (variables: SalesSummaryQueryVariables) => {
     queryKey: ["salesSummary", variables],
     queryFn: async () =>
       (await client.request(SalesSummaryDocument, variables)).dashboardSummary,
+  });
+};
+
+export const useCustomers = (variables: CustomersQueryVariables) => {
+  return useQuery({
+    initialData: collectionInitialData,
+    queryKey: ["customers", variables],
+    queryFn: async () =>
+      (await client.request(CustomersDocument, variables)).customers,
   });
 };

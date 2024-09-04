@@ -65,12 +65,12 @@ export const ReportsLabour = () => {
           (metadata.currentPage - 1) * metadata.limitValue + index + 1,
       },
       {
-        dataIndex: ["user", "firstName"],
         title: "First Name",
+        dataIndex: ["user", "firstName"],
       },
       {
-        dataIndex: ["user", "lastName"],
         title: "Last Name",
+        dataIndex: ["user", "lastName"],
       },
       {
         title: "Start Time",

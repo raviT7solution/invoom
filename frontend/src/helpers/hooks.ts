@@ -91,16 +91,22 @@ export const useDoubleClick = (callback: () => void, timeout: number) => {
   return () => setClick((prev) => prev + 1);
 };
 
-export const useDebounceFn = <T extends () => void>(fn: T, delay: number) => {
+export const useDebounceFn = <T extends unknown[]>(
+  fn: (...args: T) => void,
+  delay: number,
+) => {
   const timerRef = useRef<number>();
 
-  const debouncedFn = useCallback(() => {
-    clearTimeout(timerRef.current);
+  const debouncedFn = useCallback(
+    (...args: T) => {
+      clearTimeout(timerRef.current);
 
-    timerRef.current = window.setTimeout(() => {
-      fn();
-    }, delay);
-  }, [fn, delay]);
+      timerRef.current = window.setTimeout(() => {
+        fn(...args);
+      }, delay);
+    },
+    [fn, delay],
+  );
 
   useEffect(() => {
     return () => {

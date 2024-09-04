@@ -56,7 +56,7 @@ export const Summary = ({
           loading={isFetching}
           precision={2}
           prefix="$"
-          title="Avg recipet revenue"
+          title="Avg receipt revenue"
           value={summary?.avgInvoiceRevenue}
         />
       </Card>

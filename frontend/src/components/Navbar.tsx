@@ -15,6 +15,7 @@ import {
   MenuUnfoldOutlined,
   PercentageOutlined,
   PlusCircleOutlined,
+  ProfileOutlined,
   ReconciliationOutlined,
   RiseOutlined,
   SettingOutlined,
@@ -162,14 +163,19 @@ export const Navbar = ({
       key: "7",
       children: [
         {
+          label: <Link to={Router.ReportsCustomers()}>Customers Report</Link>,
+          icon: <ProfileOutlined />,
+          key: "7.1",
+        },
+        {
           label: <Link to={Router.ReportsLabour()}>Labour Report</Link>,
           icon: <FieldTimeOutlined />,
-          key: "7.1",
+          key: "7.2",
         },
         {
           label: <Link to={Router.ReportsSales()}>Sales Report</Link>,
           icon: <FileDoneOutlined />,
-          key: "7.2",
+          key: "7.3",
         },
       ],
     },
