@@ -1,5 +1,6 @@
 type Addons {
   deliveryPrice: Float!
+  eqPrice: Boolean!
   id: ID!
   name: String!
   price: Float!
@@ -9,6 +10,7 @@ type Addons {
 
 input AddonsAttributes {
   deliveryPrice: Float
+  eqPrice: Boolean
   name: String
   price: Float
   takeoutPrice: Float
@@ -219,12 +221,14 @@ type Category {
   items: [Item!]!
   menuIds: [ID!]!
   name: String!
+  taxId: ID
   visible: Boolean!
 }
 
 input CategoryAttributes {
   menuIds: [ID!]
   name: String
+  taxId: ID
   visible: Boolean
 }
 

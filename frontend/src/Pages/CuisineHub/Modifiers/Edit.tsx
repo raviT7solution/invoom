@@ -14,30 +14,30 @@ import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 type schema = {
   categoryIds: string[];
   globalModifier: boolean;
-  values: string[];
   multiSelect: boolean;
   name: string;
+  values: string[];
   visible: boolean;
 };
 
 const initialValues = {
-  globalModifier: true,
-  values: [""],
-  multiSelect: true,
+  globalModifier: false,
+  multiSelect: false,
   name: "",
+  values: [""],
   visible: true,
 };
 
 export const Edit = ({
-  modifierId,
+  id,
   open,
   showEditModifier,
 }: {
-  modifierId: string;
+  id: string;
   open: boolean;
   showEditModifier: (id: string, open: boolean) => void;
 }) => {
-  const isNew = modifierId === "";
+  const isNew = id === "";
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
   const { mutateAsync: modifierCreate, isPending: isCreating } =
@@ -45,7 +45,7 @@ export const Edit = ({
   const { mutateAsync: modifierUpdate, isPending: isUpdating } =
     useModifierUpdate();
 
-  const { data: modifier, isFetching } = useModifier(modifierId);
+  const { data: modifier, isFetching } = useModifier(id);
   const { data: categories } = useCategories(restaurantId);
   const { data: items } = useItems(restaurantId);
 
@@ -59,7 +59,7 @@ export const Edit = ({
           input: { attributes: attributes, restaurantId: restaurantId },
         })
       : await modifierUpdate({
-          input: { attributes: attributes, id: modifierId },
+          input: { attributes: attributes, id: id },
         });
 
     onClose();

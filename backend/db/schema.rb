@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_081343) do
     t.uuid "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "eq_price", default: false, null: false
     t.index ["name", "restaurant_id"], name: "index_addons_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_addons_on_restaurant_id"
   end
@@ -95,8 +96,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_081343) do
     t.uuid "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "tax_id"
     t.index ["name", "restaurant_id"], name: "index_categories_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_categories_on_restaurant_id"
+    t.index ["tax_id"], name: "index_categories_on_tax_id"
   end
 
   create_table "category_discounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -547,6 +550,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_081343) do
   add_foreign_key "bookings", "restaurants"
   add_foreign_key "bookings", "users"
   add_foreign_key "categories", "restaurants"
+  add_foreign_key "categories", "taxes"
   add_foreign_key "category_discounts", "categories"
   add_foreign_key "category_discounts", "discounts"
   add_foreign_key "category_modifiers", "categories"

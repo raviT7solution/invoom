@@ -2,6 +2,7 @@
 
 class Category < ApplicationRecord
   belongs_to :restaurant
+  belongs_to :tax, optional: true
 
   has_many :category_discounts, dependent: :destroy
   has_many :category_modifiers, dependent: :destroy

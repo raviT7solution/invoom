@@ -38,7 +38,7 @@ export const Modifiers = () => {
       </div>
 
       <Edit
-        modifierId={selectedModifierId}
+        id={selectedModifierId}
         open={isModalOpen}
         showEditModifier={showEditModifier}
       />

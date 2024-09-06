@@ -18,6 +18,7 @@ class CuisineHubAddonsTest < ApplicationSystemTestCase
     within ".ant-drawer" do
       fill_in "Name", with: "Extra cheese"
       fill_in "Price", with: 10
+      find(".ant-checkbox-wrapper", text: "= Price").click
       fill_in "Takeout Price", with: 10.5
       fill_in "Delivery Price", with: 11
 
@@ -73,10 +74,11 @@ class CuisineHubAddonsTest < ApplicationSystemTestCase
     within ".ant-drawer" do
       fill_in "Name", with: "Extra cheese"
       fill_in "Price", with: 10
+      find(".ant-checkbox-wrapper", text: "= Price").click
       fill_in "Takeout Price", with: 10.5
       fill_in "Delivery Price", with: 11
 
-      find(".ant-checkbox").click
+      find(".ant-checkbox-wrapper", text: "Visible").click
 
       click_on "Submit"
       wait_for_pending_requests
@@ -86,6 +88,12 @@ class CuisineHubAddonsTest < ApplicationSystemTestCase
 
     addon.reload
 
-    assert_attributes addon, name: "Extra cheese", price: 10, takeout_price: 10.5, delivery_price: 11, visible: false
+    assert_attributes addon, \
+                      delivery_price: 11,
+                      eq_price: false,
+                      name: "Extra cheese",
+                      price: 10,
+                      takeout_price: 10.5,
+                      visible: false
   end
 end

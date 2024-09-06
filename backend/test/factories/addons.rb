@@ -6,6 +6,7 @@ FactoryBot.define do
     price { 1.0 }
     takeout_price { 2.0 }
     delivery_price { 3.0 }
+    eq_price { true }
     visible { true }
   end
 end

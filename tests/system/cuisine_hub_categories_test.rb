@@ -5,8 +5,9 @@ require "application_system_test_case"
 class CuisineHubCategoriesTest < ApplicationSystemTestCase
   test "create" do
     admin = create(:admin)
-    restaurant = create(:restaurant)
+    restaurant = create(:restaurant, country: "CA", province: "ON")
     admin.restaurants = [restaurant]
+    tax = create(:tax, display_name: "GST 5%", country: "CA", province: "ON")
 
     sign_in(admin)
 
@@ -31,12 +32,19 @@ class CuisineHubCategoriesTest < ApplicationSystemTestCase
       within ".ant-form-item", text: "Menu" do
         fill_in_select with: "Breakfast"
       end
+      within ".ant-form-item", text: "Tax" do
+        fill_in_select with: "GST 5%"
+      end
+
       click_on "Submit"
     end
 
     category = restaurant.categories.last!
 
-    assert_attributes category, name: "Sandwich", visible: true
+    assert_attributes category, \
+                      name: "Sandwich",
+                      tax_id: tax.id,
+                      visible: true
   end
 
   test "delete" do

@@ -5,6 +5,7 @@ import {
   useCategoryCreate,
   useCategoryUpdate,
   useMenus,
+  useSettingsTaxes,
 } from "../../../api";
 import { FormDrawer } from "../../../components/FormDrawer";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
@@ -12,6 +13,7 @@ import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 type schema = {
   menuIds: string[];
   name: string;
+  taxId?: string;
   visible: boolean;
 };
 
@@ -37,6 +39,7 @@ export const Edit = ({
     useCategoryUpdate();
 
   const { data: menus } = useMenus(restaurantId);
+  const { data: taxes } = useSettingsTaxes(restaurantId);
 
   const onClose = () => showEditCategory("", false);
 
@@ -93,6 +96,16 @@ export const Edit = ({
             mode="multiple"
             optionFilterProp="label"
             options={menus.map((r) => ({ label: r.name, value: r.id }))}
+            placeholder="Select"
+          />
+        </Form.Item>
+
+        <Form.Item label="Tax" name="taxId">
+          <Select
+            options={taxes.map((i) => ({
+              label: i.displayName,
+              value: i.id,
+            }))}
             placeholder="Select"
           />
         </Form.Item>

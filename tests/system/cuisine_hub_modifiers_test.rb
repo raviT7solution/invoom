@@ -35,9 +35,9 @@ class CuisineHubModifiersTest < ApplicationSystemTestCase
     modifier = restaurant.modifiers.last!
 
     assert_attributes modifier, category_ids: [category.id],
-                                global_modifier: true,
+                                global_modifier: false,
                                 item_ids: [item.id],
-                                multi_select: true,
+                                multi_select: false,
                                 name: "Spice",
                                 values: ["Low"],
                                 visible: true

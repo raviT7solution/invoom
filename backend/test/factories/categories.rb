@@ -6,5 +6,6 @@ FactoryBot.define do
     visible { true }
 
     restaurant { nil }
+    tax { nil }
   end
 end

@@ -12,30 +12,26 @@ import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 export const Addons = () => {
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const [selectedAddonId, setSelectedAddonId] = useState("");
-  const [isAddonEditOpen, setIsAddonEditOpen] = useState(false);
+  const [modal, setModal] = useState({ destroyed: false, id: "", open: false });
 
   const { mutateAsync: deleteAddons } = useAddonsDelete();
 
   const { data: addons } = useAddons(restaurantId);
 
-  const showEditAddon = (id: string, open: boolean) => {
-    setSelectedAddonId(id);
-    setIsAddonEditOpen(open);
+  const showEdit = (destroyed: boolean, id: string, open: boolean) => {
+    setModal({ destroyed, id, open });
   };
 
   return (
     <Navbar breadcrumbItems={[{ title: "Cuisine Hub" }, { title: "Addons" }]}>
-      <Edit
-        addonId={selectedAddonId}
-        open={isAddonEditOpen}
-        showEditAddon={showEditAddon}
-      />
+      {!modal.destroyed && (
+        <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
+      )}
 
       <div className="flex gap-4 mb-4 justify-end">
         <Button
           icon={<PlusOutlined />}
-          onClick={() => showEditAddon("", true)}
+          onClick={() => showEdit(false, "", true)}
           type="primary"
         >
           Add Addons
@@ -54,7 +50,7 @@ export const Addons = () => {
                 actions={[
                   <EditOutlined
                     key="edit"
-                    onClick={() => showEditAddon(addon.id, true)}
+                    onClick={() => showEdit(false, addon.id, true)}
                   />,
                   <Popconfirm
                     key="delete"

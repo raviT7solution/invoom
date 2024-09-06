@@ -3,6 +3,7 @@
 class Types::CategoryType < Types::BaseObject
   field :id, ID, null: false
   field :name, String, null: false
+  field :tax_id, ID, null: true
   field :visible, Boolean, null: false
 
   field :menu_ids, [ID], scope: "MenuPolicy", preload: :menus, null: false

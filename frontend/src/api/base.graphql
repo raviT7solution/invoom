@@ -158,9 +158,6 @@ mutation createCategory($input: CategoryCreateInput!) {
 query categories($restaurantId: ID!) {
   categories(restaurantId: $restaurantId) {
     id
-    name
-    visible
-    menuIds
     items {
       addonIds
       categoryId
@@ -174,15 +171,20 @@ query categories($restaurantId: ID!) {
       takeoutPrice
       visible
     }
+    menuIds
+    name
+    taxId
+    visible
   }
 }
 
 query category($id: ID!) {
   category(id: $id) {
     id
-    name
-    visible
     menuIds
+    name
+    taxId
+    visible
   }
 }
 
@@ -196,22 +198,23 @@ mutation categoryDelete($id: ID!) {
 
 query addons($restaurantId: ID!) {
   addons(restaurantId: $restaurantId) {
+    deliveryPrice
     id
     name
     price
     takeoutPrice
-    deliveryPrice
     visible
   }
 }
 
 query addon($id: ID!) {
   addon(id: $id) {
+    deliveryPrice
+    eqPrice
     id
     name
     price
     takeoutPrice
-    deliveryPrice
     visible
   }
 }
@@ -361,19 +364,19 @@ mutation inventoryCategoryDelete($id: ID!) {
 
 query inventoryCategories($restaurantId: ID!) {
   inventoryCategories(restaurantId: $restaurantId) {
+    description
     id
     name
     visible
-    description
   }
 }
 
 query inventoryCategory($id: ID!) {
   inventoryCategory(id: $id) {
+    description
     id
     name
     visible
-    description
   }
 }
 
@@ -885,9 +888,9 @@ query salesSummary(
     bookingCount
     invoiceCount
     paxCount
-    totalTip
     totalRevenue
     totalTax
+    totalTip
   }
 }
 

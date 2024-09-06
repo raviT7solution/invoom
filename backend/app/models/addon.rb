@@ -7,5 +7,6 @@ class Addon < ApplicationRecord
 
   has_many :items, through: :item_addons
 
+  validates :eq_price, inclusion: [true, false]
   validates :name, presence: true, uniqueness: { scope: :restaurant_id }
 end

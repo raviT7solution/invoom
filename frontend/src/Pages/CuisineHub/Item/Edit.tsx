@@ -34,6 +34,7 @@ const initialValues = {
   deliveryPrice: 0,
   description: "",
   displayName: "",
+  eqPrice: true,
   name: "",
   price: 0,
   takeoutPrice: 0,
@@ -113,7 +114,12 @@ export const Edit = ({
           name="name"
           rules={[{ required: true, message: "Required" }]}
         >
-          <Input placeholder="Name" />
+          <Input
+            onChange={(e) =>
+              form.setFieldsValue({ displayName: e.target.value })
+            }
+            placeholder="Name"
+          />
         </Form.Item>
 
         <Form.Item
@@ -130,7 +136,18 @@ export const Edit = ({
           rules={[{ required: true, message: "Required" }]}
         >
           <Select
-            options={categories.map((a) => ({ label: a.name, value: a.id }))}
+            onChange={(v) => {
+              const category = categories.find((i) => i.id === v);
+
+              if (category?.taxId)
+                form.setFieldsValue({
+                  taxId: category.taxId,
+                });
+            }}
+            options={categories.map((i) => ({
+              label: i.name,
+              value: i.id,
+            }))}
             placeholder="Select"
           />
         </Form.Item>
@@ -184,19 +201,6 @@ export const Edit = ({
           rules={[{ required: false, message: "Required" }]}
         >
           <Input placeholder="Description" />
-        </Form.Item>
-
-        <Form.Item
-          label="Cost Of Production"
-          name="costOfProduction"
-          rules={[{ required: true, message: "Required" }]}
-        >
-          <InputNumber
-            min={0}
-            placeholder="Cost Of Production"
-            prefix="$"
-            style={{ width: "100%" }}
-          />
         </Form.Item>
 
         <Form.Item
@@ -270,6 +274,19 @@ export const Edit = ({
             disabled={eqPrice}
             min={0}
             placeholder="Delivery Price"
+            prefix="$"
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Cost Of Production"
+          name="costOfProduction"
+          rules={[{ required: true, message: "Required" }]}
+        >
+          <InputNumber
+            min={0}
+            placeholder="Cost Of Production"
             prefix="$"
             style={{ width: "100%" }}
           />

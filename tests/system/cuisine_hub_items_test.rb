@@ -33,6 +33,7 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
       end
       fill_in "Cost Of Production", with: 10
       fill_in "Price", with: 11
+      find(".ant-checkbox-wrapper", text: "= Price").click
       fill_in "Takeout Price", with: 12
       fill_in "Delivery Price", with: 13
 
