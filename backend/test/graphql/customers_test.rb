@@ -28,7 +28,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
     role = create(:role, permissions: ["takeout"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
     customer = create(:customer, email: "elvis@example.com", name: "Elvis", restaurant: restaurant)
-    create(:customer, name: "Erika", restaurant: restaurant)
+    create(:customer, email: "erika@example.com", name: "Erika", restaurant: restaurant)
 
     booking = create(:booking, restaurant: restaurant, user: user, booking_type: "takeout", pax: 1, customer: customer)
 
@@ -51,17 +51,38 @@ class CustomersTest < ActionDispatch::IntegrationTest
     ], response.parsed_body["data"]["customers"]["collection"]
   end
 
+  test "customers export" do
+    restaurant = create(:restaurant)
+    role = create(:role, permissions: ["takeout"], restaurant: restaurant)
+    user = create(:user, restaurant: restaurant, roles: [role])
+
+    create(:customer, restaurant: restaurant)
+    create(:customer, restaurant: restaurant)
+
+    authentic_query user, "mobile_user", index_string, variables: {
+      export: true,
+      page: 0,
+      perPage: 0,
+      restaurantId: restaurant.id
+    }
+
+    assert_query_success
+    assert_equal 2, response.parsed_body["data"]["customers"]["collection"].length
+  end
+
   private
 
   def index_string
     <<~GQL
       query customers(
+        $export: Boolean
         $page: Int!
         $perPage: Int!
-        $query: String!
+        $query: String
         $restaurantId: ID!
       ) {
         customers(
+          export: $export
           page: $page
           perPage: $perPage
           query: $query

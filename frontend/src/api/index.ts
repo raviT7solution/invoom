@@ -416,7 +416,7 @@ export const useCategories = (restaurantId: string) => {
 export const useCategory = (id: string) => {
   return useQuery({
     enabled: id !== "",
-    queryKey: ["categorie", id],
+    queryKey: ["category", id],
     queryFn: async () =>
       (await client.request(CategoryDocument, { id: id })).category,
   });
@@ -1143,6 +1143,13 @@ export const useCustomers = (variables: CustomersQueryVariables) => {
     initialData: collectionInitialData,
     queryKey: ["customers", variables],
     queryFn: async () =>
+      (await client.request(CustomersDocument, variables)).customers,
+  });
+};
+
+export const useCustomersExport = () => {
+  return useMutation({
+    mutationFn: async (variables: CustomersQueryVariables) =>
       (await client.request(CustomersDocument, variables)).customers,
   });
 };

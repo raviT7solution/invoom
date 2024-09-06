@@ -104,31 +104,32 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       {
         title: "Subtotal",
         render: (_, r) =>
-          r.invoices.reduce((p, c) => p + c.subTotal, 0).toFixed(2),
+          `$${r.invoices.reduce((p, c) => p + c.subTotal, 0).toFixed(2)}`,
       },
       {
         title: "Total Dis.",
         render: (_, r) =>
-          r.invoices.reduce((p, c) => p + c.totalDiscount, 0).toFixed(2),
+          `$${r.invoices.reduce((p, c) => p + c.totalDiscount, 0).toFixed(2)}`,
       },
       {
         title: "Total Service Charge",
         render: (_, r) =>
-          r.invoices.reduce((p, i) => p + invoiceServiceCharge(i), 0),
+          `$${r.invoices.reduce((p, i) => p + invoiceServiceCharge(i), 0)}`,
       },
       {
         title: "Total Tax",
         render: (_, r) =>
-          r.invoices.reduce((p, i) => p + invoiceTax(i), 0).toFixed(2),
+          `$${r.invoices.reduce((p, i) => p + invoiceTax(i), 0).toFixed(2)}`,
       },
       {
         title: "Tip",
-        render: (_, r) => r.invoices.reduce((p, i) => p + i.tip, 0).toFixed(2),
+        render: (_, r) =>
+          `$${r.invoices.reduce((p, i) => p + i.tip, 0).toFixed(2)}`,
       },
       {
         title: "Total",
         render: (_, r) =>
-          r.invoices.reduce((p, c) => p + c.total, 0).toFixed(2),
+          `$${r.invoices.reduce((p, c) => p + c.total, 0).toFixed(2)}`,
       },
       {
         title: "Payment Type",

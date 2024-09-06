@@ -1,13 +1,18 @@
-import { Input, Table, TableColumnsType, Typography } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
+import { Button, Input, Table, TableColumnsType, Typography } from "antd";
+import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 
-import { useCustomers } from "../../../api";
+import { useCustomers, useCustomersExport } from "../../../api";
 import { Navbar } from "../../../components/Navbar";
+import { displayDate } from "../../../helpers/dateTime";
+import { exportAsCSV } from "../../../helpers/exports";
 import { useDebounceFn } from "../../../helpers/hooks";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
 export const ReportsCustomers = () => {
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
+  const tz = useRestaurantIdStore((s) => s.tz);
 
   const [query, setQuery] = useState("");
   const [pagination, setPagination] = useState({
@@ -24,6 +29,8 @@ export const ReportsCustomers = () => {
     query: query,
     restaurantId: restaurantId,
   });
+
+  const customersExport = useCustomersExport();
 
   const setDebouncedQuery = useDebounceFn(setQuery, 500);
 
@@ -48,19 +55,54 @@ export const ReportsCustomers = () => {
       },
       {
         title: "Avg Invoice Value",
-        render: (_, r) => r.avgInvoiceAmount.toFixed(2),
+        render: (_, r) => `$${r.avgInvoiceAmount.toFixed(2)}`,
       },
       {
-        title: "No. of Invoices",
+        title: "Total Invoice",
         render: (_, r) => r.invoiceCount,
       },
       {
         title: "Total Spend",
-        render: (_, r) => r.totalInvoiceAmount.toFixed(2),
+        render: (_, r) => `$${r.totalInvoiceAmount.toFixed(2)}`,
       },
     ],
     [metadata],
   );
+
+  const onExportClick = async () => {
+    const { collection } = await customersExport.mutateAsync({
+      export: true,
+      page: 1,
+      perPage: -1,
+      restaurantId: restaurantId,
+    });
+
+    const header = [
+      "Sr. No",
+      "Name",
+      "Email",
+      "Phone Number",
+      "Avg Invoice Value",
+      "Total Invoice",
+      "Total Spend",
+    ];
+
+    exportAsCSV(
+      header,
+      collection.map((i, idx) => {
+        return [
+          idx + 1,
+          i.name,
+          i.email,
+          i.phoneNumber,
+          i.avgInvoiceAmount,
+          i.invoiceCount,
+          i.totalInvoiceAmount,
+        ];
+      }),
+      `customers-export-${displayDate(dayjs(), tz)}`,
+    );
+  };
 
   return (
     <Navbar
@@ -74,6 +116,14 @@ export const ReportsCustomers = () => {
             onChange={(e) => setDebouncedQuery(e.target.value)}
             placeholder="Search name, email, phone number"
           />
+
+          <Button
+            icon={<DownloadOutlined />}
+            loading={customersExport.isPending}
+            onClick={onExportClick}
+          >
+            Export
+          </Button>
         </div>
       </div>
 

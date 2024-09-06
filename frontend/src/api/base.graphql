@@ -895,12 +895,14 @@ query salesSummary(
 }
 
 query customers(
+  $export: Boolean
   $page: Int!
   $perPage: Int!
-  $query: String!
+  $query: String
   $restaurantId: ID!
 ) {
   customers(
+    export: $export
     page: $page
     perPage: $perPage
     query: $query

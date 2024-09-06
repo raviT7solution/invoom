@@ -33,9 +33,10 @@ class Types::QueryType < Types::BaseObject
   field :current_admin, Types::AdminType, null: false
   field :current_user, Types::UserType, null: false
   field :customers, Types::CustomerType.collection_type, null: false do
+    argument :export, Boolean, required: false
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
-    argument :query, String, required: true
+    argument :query, String, required: false
     argument :restaurant_id, ID, required: true
   end
   field :dashboard_summary, Types::DashboardSummaryType, null: false do
@@ -235,14 +236,17 @@ class Types::QueryType < Types::BaseObject
     raise GraphQL::ExecutionError, "Unauthorized"
   end
 
-  def customers(restaurant_id:, query:, page:, per_page:)
+  def customers(restaurant_id:, page:, per_page:, export: false, query: nil)
     records = CustomerPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = records.order(created_at: :desc)
 
     if query.present?
       records = records.where("name ILIKE :q OR phone_number ILIKE :q OR email ILIKE :q", q: "%#{query}%")
     end
 
-    records.order(created_at: :desc).page(page).per(per_page)
+    return export_collection(records) if export
+
+    records.page(page).per(per_page)
   end
 
   def dashboard_summary(restaurant_id:, start_time:, end_time:) # rubocop:disable Metrics/AbcSize
@@ -466,5 +470,13 @@ class Types::QueryType < Types::BaseObject
 
   def users(restaurant_id:)
     UserPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  end
+
+  private
+
+  def export_collection(records)
+    paginated = Kaminari.paginate_array(records)
+
+    paginated.page(1).per(paginated.total_count, max_per_page: paginated.total_count)
   end
 end
