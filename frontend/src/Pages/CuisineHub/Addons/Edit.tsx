@@ -113,7 +113,7 @@ export const Edit = ({
           />
         </Form.Item>
 
-        <Form.Item label="eqPrice" name="eqPrice" valuePropName="checked">
+        <Form.Item name="eqPrice" valuePropName="checked">
           <Checkbox
             onChange={(e) => {
               if (e)
