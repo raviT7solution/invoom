@@ -13,6 +13,7 @@ import {
   useTicketItemsUpdate,
   useTickets,
 } from "../../../api/kds";
+import alertSound from "../../../assets/alert.wav";
 import { useDebounceFn } from "../../../helpers/hooks";
 import { useKDSConfigStore } from "../../../stores/useKDSConfigStore";
 import { useKDSSessionStore } from "../../../stores/useKDSSessionStore";
@@ -23,9 +24,7 @@ const menuItems = TABS.map((i) => ({
 }));
 
 const notify = () => {
-  const alert = new Audio(
-    "https://commondatastorage.googleapis.com/codeskulptor-assets/week7-brrring.m4a",
-  );
+  const alert = new Audio(alertSound);
 
   alert.pause();
   alert.currentTime = 0;
