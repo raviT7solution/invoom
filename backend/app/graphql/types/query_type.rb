@@ -194,7 +194,9 @@ class Types::QueryType < Types::BaseObject
   end
 
   def categories(restaurant_id:)
-    CategoryPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = CategoryPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+
+    records.order(:name)
   end
 
   def category(id:)
@@ -323,7 +325,7 @@ class Types::QueryType < Types::BaseObject
 
     records = records.where(category_id: category_id) if category_id.present?
 
-    records
+    records.order(:display_name)
   end
 
   def kitchen_profile(id:)
@@ -339,7 +341,9 @@ class Types::QueryType < Types::BaseObject
   end
 
   def menus(restaurant_id:)
-    MenuPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = MenuPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+
+    records.order(:name)
   end
 
   def modifier(id:)

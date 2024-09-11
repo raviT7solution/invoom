@@ -6,5 +6,15 @@ class Types::MenuType < Types::BaseObject
   field :name, String, null: false
   field :visible, Boolean, null: false
 
-  field :categories, [Types::CategoryType], scope: "CategoryPolicy", preload: :categories, null: false
+  field :categories, [Types::CategoryType], null: false
+
+  def categories
+    BatchLoader::GraphQL.for(object).batch do |objects, loader|
+      scope = CategoryPolicy.new(context[:current_user]).scope.order(:name)
+
+      ActiveRecord::Associations::Preloader.new(records: objects, associations: :categories, scope: scope).call
+
+      objects.each { |i| loader.call(i, i.categories) }
+    end
+  end
 end

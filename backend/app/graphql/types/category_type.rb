@@ -8,5 +8,15 @@ class Types::CategoryType < Types::BaseObject
 
   field :menu_ids, [ID], scope: "MenuPolicy", preload: :menus, null: false
 
-  field :items, [Types::ItemType], scope: "ItemPolicy", preload: :items, null: false
+  field :items, [Types::ItemType], null: false
+
+  def items
+    BatchLoader::GraphQL.for(object).batch do |objects, loader|
+      scope = ItemPolicy.new(context[:current_user]).scope.order(:display_name)
+
+      ActiveRecord::Associations::Preloader.new(records: objects, associations: :items, scope: scope).call
+
+      objects.each { |i| loader.call(i, i.items) }
+    end
+  end
 end
