@@ -47,6 +47,7 @@ class Types::MutationType < Types::BaseObject
   field :modifier_create, mutation: Mutations::ModifierCreate, null: false, authorize: "ModifierPolicy#create?"
   field :modifier_delete, mutation: Mutations::ModifierDelete, null: false, authorize: "ModifierPolicy#delete?"
   field :modifier_update, mutation: Mutations::ModifierUpdate, null: false, authorize: "ModifierPolicy#update?"
+  field :operational_pin_authenticate, mutation: Mutations::OperationalPinAuthenticate, null: false
   field :payment_connection_token_create, mutation: Mutations::PaymentConnectionTokenCreate, null: false,
                                           authorize: "PaymentPolicy#create?"
   field :payment_create, mutation: Mutations::PaymentCreate, null: false, authorize: "PaymentPolicy#create?"
