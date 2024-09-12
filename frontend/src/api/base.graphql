@@ -672,22 +672,24 @@ query printerConfigurations($restaurantId: ID!) {
 }
 
 query bookings(
-  $restaurantId: ID!
   $bookingTypes: [String!]
-  $status: String
-  $perPage: Int!
-  $page: Int!
-  $startDate: ISO8601DateTime
   $endDate: ISO8601DateTime
+  $export: Boolean
+  $page: Int!
+  $perPage: Int!
+  $restaurantId: ID!
+  $startDate: ISO8601DateTime
+  $status: String
 ) {
   bookings(
-    restaurantId: $restaurantId
     bookingTypes: $bookingTypes
-    status: $status
-    perPage: $perPage
-    page: $page
-    startDate: $startDate
     endDate: $endDate
+    export: $export
+    page: $page
+    perPage: $perPage
+    restaurantId: $restaurantId
+    startDate: $startDate
+    status: $status
   ) {
     collection {
       bookingTables {
@@ -734,6 +736,7 @@ query bookings(
 query invoices(
   $bookingTypes: [String!]
   $endDate: ISO8601DateTime
+  $export: Boolean
   $page: Int!
   $perPage: Int!
   $restaurantId: ID!
@@ -743,6 +746,7 @@ query invoices(
   invoices(
     bookingTypes: $bookingTypes
     endDate: $endDate
+    export: $export
     page: $page
     perPage: $perPage
     restaurantId: $restaurantId

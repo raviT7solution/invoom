@@ -1153,3 +1153,17 @@ export const useCustomersExport = () => {
       (await client.request(CustomersDocument, variables)).customers,
   });
 };
+
+export const useInvoicesExport = () => {
+  return useMutation({
+    mutationFn: async (variables: InvoicesQueryVariables) =>
+      (await client.request(InvoicesDocument, variables)).invoices,
+  });
+};
+
+export const useBookingsExport = () => {
+  return useMutation({
+    mutationFn: async (variables: BookingsQueryVariables) =>
+      (await client.request(BookingsDocument, variables)).bookings,
+  });
+};

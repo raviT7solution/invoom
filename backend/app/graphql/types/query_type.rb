@@ -13,6 +13,7 @@ class Types::QueryType < Types::BaseObject
   field :bookings, Types::BookingType.collection_type, null: false do
     argument :booking_types, [String], required: false
     argument :end_date, GraphQL::Types::ISO8601DateTime, required: false
+    argument :export, Boolean, required: false
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
@@ -68,6 +69,7 @@ class Types::QueryType < Types::BaseObject
   field :invoices, Types::InvoiceType.collection_type, null: false do
     argument :booking_types, [String], required: false
     argument :end_date, GraphQL::Types::ISO8601DateTime, required: false
+    argument :export, Boolean, required: false
     argument :page, Integer, required: true
     argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
@@ -181,7 +183,7 @@ class Types::QueryType < Types::BaseObject
     BookingPolicy.new(context[:current_user]).scope.find(id)
   end
 
-  def bookings(restaurant_id:, page:, per_page:, booking_types: [], status: nil, start_date: nil, end_date: nil) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
+  def bookings(restaurant_id:, page:, per_page:, booking_types: [], status: nil, start_date: nil, end_date: nil, export: false) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize, Layout/LineLength
     records = BookingPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
 
     records = records.where(clocked_in_at: start_date..end_date) if start_date.present? && end_date.present?
@@ -189,8 +191,11 @@ class Types::QueryType < Types::BaseObject
     records = records.where(booking_type: booking_types) if booking_types.present?
     records = records.where(clocked_out_at: nil) if status == "current"
     records = records.where.not(clocked_out_at: nil) if status == "completed"
+    records = records.order(created_at: :desc)
 
-    records.order(created_at: :desc).page(page).per(per_page)
+    return export_collection(records) if export
+
+    records.page(page).per(per_page)
   end
 
   def categories(restaurant_id:)
@@ -302,18 +307,21 @@ class Types::QueryType < Types::BaseObject
     InvoicePolicy.new(context[:current_user]).scope.find(id)
   end
 
-  def invoices(restaurant_id:, page:, per_page:, booking_types: [], start_date: nil, end_date: nil, status: nil) # rubocop:disable Metrics/AbcSize, Metrics/ParameterLists
+  def invoices(restaurant_id:, page:, per_page:, booking_types: [], start_date: nil, end_date: nil, status: nil, export: false) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize, Layout/LineLength
     records = InvoicePolicy.new(context[:current_user]).scope
                            .joins(:booking).where(bookings: { restaurant_id: restaurant_id })
 
     records = records.where(bookings: { booking_type: booking_types }) if booking_types.present?
     records = records.where(status: status) if status.present?
+    records = records.order(created_at: :desc)
 
     if start_date.present? && end_date.present?
       records = records.joins(:booking).where(bookings: { clocked_in_at: start_date..end_date })
     end
 
-    records.order(created_at: :desc).page(page).per(per_page)
+    return export_collection(records) if export
+
+    records.page(page).per(per_page)
   end
 
   def item(id:)

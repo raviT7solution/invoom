@@ -1,17 +1,33 @@
-import { DatePicker, Select, Table, TableColumnsType, Typography } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
+import {
+  Button,
+  DatePicker,
+  Select,
+  Table,
+  TableColumnsType,
+  Typography,
+} from "antd";
+import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 
 import { Summary } from "./Summary";
 
-import { useBookings, useInvoices } from "../../../api";
+import {
+  useBookings,
+  useBookingsExport,
+  useInvoices,
+  useInvoicesExport,
+} from "../../../api";
 import { BookingsQuery } from "../../../api/base";
 import { Navbar } from "../../../components/Navbar";
 import { TIME_RANGE_PRESETS } from "../../../helpers";
 import {
   DATE_FORMAT,
   dateRangePickerToString,
+  displayDate,
   utcToRestaurantTimezone,
 } from "../../../helpers/dateTime";
+import { exportAsCSV } from "../../../helpers/exports";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 import { BOOKING_TYPES } from "../../KDS/Home/helpers";
 
@@ -38,7 +54,7 @@ const invoiceServiceCharge = (invoice: InvoicesType[number]) => {
 };
 
 const invoiceTax = (invoice: InvoicesType[number]) => {
-  return invoice.taxSummary.reduce((p, c) => p + c.value, 0);
+  return invoice.taxSummary.reduce((p, i) => p + i.value, 0);
 };
 
 const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
@@ -104,12 +120,12 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       {
         title: "Subtotal",
         render: (_, r) =>
-          `$${r.invoices.reduce((p, c) => p + c.subTotal, 0).toFixed(2)}`,
+          `$${r.invoices.reduce((p, i) => p + i.subTotal, 0).toFixed(2)}`,
       },
       {
         title: "Total Dis.",
         render: (_, r) =>
-          `$${r.invoices.reduce((p, c) => p + c.totalDiscount, 0).toFixed(2)}`,
+          `$${r.invoices.reduce((p, i) => p + i.totalDiscount, 0).toFixed(2)}`,
       },
       {
         title: "Total Service Charge",
@@ -129,7 +145,7 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       {
         title: "Total",
         render: (_, r) =>
-          `$${r.invoices.reduce((p, c) => p + c.total, 0).toFixed(2)}`,
+          `$${r.invoices.reduce((p, i) => p + i.total, 0).toFixed(2)}`,
       },
       {
         title: "Payment Type",
@@ -288,6 +304,7 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
 };
 
 export const ReportsSales = () => {
+  const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
   const tz = useRestaurantIdStore((s) => s.tz);
 
   const [reportType, setReportType] = useState("orders");
@@ -295,6 +312,144 @@ export const ReportsSales = () => {
     start: null,
     end: null,
   });
+
+  const bookingsExport = useBookingsExport();
+  const invoicesExport = useInvoicesExport();
+
+  const onBookingsExportClick = async () => {
+    const { collection } = await bookingsExport.mutateAsync({
+      endDate: dateRange.end,
+      export: true,
+      page: 1,
+      perPage: -1,
+      restaurantId: restaurantId,
+      startDate: dateRange.start,
+    });
+
+    const header = [
+      "Sr. No",
+      "Order ID",
+      "Invoice ID",
+      "Order Type",
+      "Start Time",
+      "End Time",
+      "Table/Order No.",
+      "Pax",
+      "Subtotal",
+      "Total Dis.",
+      "Total Service Charge",
+      "Total Tax",
+      "Tip",
+      "Total",
+      "Payment Type",
+      "Customer Name",
+      "Server Name",
+    ];
+
+    const filename = dateRange.start
+      ? `${dateRange.start}-${dateRange.end}`
+      : displayDate(dayjs(), tz);
+
+    exportAsCSV(
+      header,
+      collection.map((r, idx) => {
+        return [
+          idx + 1,
+          r.number,
+          r.invoices.map((i) => i.number).join(", "),
+          BOOKING_TYPES[r.bookingType],
+          utcToRestaurantTimezone(r.clockedInAt, tz),
+          r.clockedOutAt ? utcToRestaurantTimezone(r.clockedOutAt, tz) : "-",
+          r.bookingType === "dine_in"
+            ? r.bookingTables.map((i) => i.name).join(", ")
+            : r.bookingType === "takeout"
+            ? r.token
+            : "",
+          r.pax,
+          r.invoices.reduce((p, i) => p + i.subTotal, 0).toFixed(2),
+          r.invoices.reduce((p, i) => p + i.totalDiscount, 0).toFixed(2),
+          r.invoices.reduce((p, i) => p + invoiceServiceCharge(i), 0),
+          r.invoices.reduce((p, i) => p + invoiceTax(i), 0).toFixed(2),
+          r.invoices.reduce((p, i) => p + i.tip, 0).toFixed(2),
+          r.invoices.reduce((p, i) => p + i.total, 0).toFixed(2),
+          r.invoices
+            .map((i) => i.paymentMode)
+            .filter(Boolean)
+            .join(", "),
+          r.customer?.name ?? "-",
+          r.userFullName,
+        ];
+      }),
+      `sales-export-${filename}`,
+    );
+  };
+
+  const onInvoicesExportClick = async () => {
+    const { collection } = await invoicesExport.mutateAsync({
+      endDate: dateRange.end,
+      export: true,
+      page: 1,
+      perPage: -1,
+      restaurantId: restaurantId,
+      startDate: dateRange.start,
+    });
+
+    const header = [
+      "Sr. No",
+      "Order ID",
+      "Invoice ID",
+      "Order Type",
+      "Start Time",
+      "End Time",
+      "Table/Order No.",
+      "Pax",
+      "Subtotal",
+      "Total Dis.",
+      "Total Service Charge",
+      "Total Tax",
+      "Tip",
+      "Total",
+      "Payment Type",
+      "Customer Name",
+      "Server Name",
+    ];
+
+    const filename = dateRange.start
+      ? `${dateRange.start}-${dateRange.end}`
+      : displayDate(dayjs(), tz);
+
+    exportAsCSV(
+      header,
+      collection.map((r, idx) => {
+        return [
+          idx + 1,
+          r.booking.number,
+          r.number,
+          BOOKING_TYPES[r.booking.bookingType],
+          utcToRestaurantTimezone(r.booking.clockedInAt, tz),
+          r.booking.clockedOutAt
+            ? utcToRestaurantTimezone(r.booking.clockedOutAt, tz)
+            : "-",
+          r.booking.bookingType === "dine_in"
+            ? r.booking.bookingTables.map((i) => i.name).join(", ")
+            : r.booking.bookingType === "takeout"
+            ? r.booking.token
+            : "",
+          r.booking.pax,
+          r.subTotal.toFixed(2),
+          r.totalDiscount.toFixed(2),
+          invoiceServiceCharge(r).toFixed(2),
+          invoiceTax(r).toFixed(2),
+          r.tip,
+          r.total.toFixed(2),
+          r.paymentMode,
+          r.booking.customer?.name ?? "-",
+          r.booking.userFullName,
+        ];
+      }),
+      `sales-export-${filename}`,
+    );
+  };
 
   const onDateChange = (_: unknown, dates: [string, string]) => {
     setDateRange(dateRangePickerToString(dates[0], dates[1], tz));
@@ -319,6 +474,18 @@ export const ReportsSales = () => {
             onChange={onDateChange}
             presets={TIME_RANGE_PRESETS}
           />
+
+          <Button
+            icon={<DownloadOutlined />}
+            loading={bookingsExport.isPending || invoicesExport.isPending}
+            onClick={
+              reportType === "orders"
+                ? onBookingsExportClick
+                : onInvoicesExportClick
+            }
+          >
+            Export
+          </Button>
         </div>
       </div>
 
