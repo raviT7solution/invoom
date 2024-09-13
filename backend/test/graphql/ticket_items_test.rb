@@ -55,104 +55,12 @@ class TicketItemsTest < ActionDispatch::IntegrationTest
     assert_attributes another_ticket_item.reload, status: "queued", quantity: 2 # as is
   end
 
-  test "delete queued ticket item" do
-    restaurant = create(:restaurant, pin: "1234")
-
-    role = create(:role, permissions: ["orders", "delete_ticket_item"], restaurant: restaurant)
-    user = create(:user, restaurant: restaurant, roles: [role])
-    customer = create(:customer, restaurant: restaurant)
-
-    category = create(:category, restaurant: restaurant)
-    item = create(:item, category: category, restaurant: restaurant, tax: create(:tax))
-
-    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "takeout", customer: customer)
-
-    ticket = create(:ticket, booking: booking)
-    ticket_item = create(:ticket_item, ticket: ticket, item: item, status: :queued)
-
-    authentic_query user, "mobile_user", ticket_item_delete_string, variables: {
-      input: {
-        id: ticket_item.id
-      }
-    }
-
-    assert_query_success
-    assert_empty TicketItem.where(id: ticket_item.id)
-
-    another_role = create(:role, permissions: ["orders"], restaurant: restaurant)
-    another_user = create(:user, restaurant: restaurant, roles: [another_role], pin: "9999")
-
-    another_ticket_item = create(:ticket_item, ticket: ticket, item: item, status: :queued)
-
-    authentic_query another_user, "mobile_user", ticket_item_delete_string, variables: {
-      input: {
-        id: another_ticket_item.id
-      }
-    }
-
-    assert_query_error "Invalid pin"
-    assert TicketItem.exists?(id: another_ticket_item.id)
-
-    authentic_query another_user, "mobile_user", ticket_item_delete_string, variables: {
-      input: {
-        id: another_ticket_item.id,
-        operationPin: "1234"
-      }
-    }
-
-    assert_query_success
-    assert_empty TicketItem.where(id: another_ticket_item.id)
-  end
-
-  test "delete not queued ticket item" do
-    restaurant = create(:restaurant, pin: "1234")
-
-    role = create(:role, permissions: ["orders", "delete_ticket_item"], restaurant: restaurant)
-    user = create(:user, restaurant: restaurant, roles: [role])
-    customer = create(:customer, restaurant: restaurant)
-
-    category = create(:category, restaurant: restaurant)
-    item = create(:item, category: category, restaurant: restaurant, tax: create(:tax))
-
-    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "takeout", customer: customer)
-
-    ticket = create(:ticket, booking: booking)
-    ticket_item = create(:ticket_item, ticket: ticket, item: item, status: :preparing)
-
-    authentic_query user, "mobile_user", ticket_item_delete_string, variables: {
-      input: {
-        id: ticket_item.id
-      }
-    }
-
-    assert_query_error "Invalid pin"
-    assert TicketItem.exists?(id: ticket_item.id)
-
-    authentic_query user, "mobile_user", ticket_item_delete_string, variables: {
-      input: {
-        id: ticket_item.id,
-        operationPin: "1234"
-      }
-    }
-
-    assert_query_success
-    assert_equal "cancelled", ticket_item.reload.status
-  end
-
   private
 
   def ticket_items_update_string
     <<~GQL
       mutation ticketItemsUpdate($input: TicketItemsUpdateInput!){
         ticketItemsUpdate(input: $input)
-      }
-    GQL
-  end
-
-  def ticket_item_delete_string
-    <<~GQL
-      mutation ticketItemDelete($input: TicketItemDeleteInput!){
-        ticketItemDelete(input: $input)
       }
     GQL
   end

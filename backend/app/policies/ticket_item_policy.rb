@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class TicketItemPolicy < ApplicationPolicy
-  def delete?
-    mobile_user?("delete_ticket_item")
-  end
-
   def scope # rubocop:disable Metrics/AbcSize
     if web_admin?
       TicketItem.where.not(status: :cancelled).joins(ticket: :booking)

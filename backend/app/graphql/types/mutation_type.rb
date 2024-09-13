@@ -82,7 +82,6 @@ class Types::MutationType < Types::BaseObject
   field :service_charge_update, mutation: Mutations::ServiceChargeUpdate, null: false,
                                 authorize: "ServiceChargePolicy#update?"
   field :ticket_create, mutation: Mutations::TicketCreate, null: false, authorize: "TicketPolicy#create?"
-  field :ticket_item_delete, mutation: Mutations::TicketItemDelete, null: false
   field :ticket_items_update, mutation: Mutations::TicketItemsUpdate, null: false, authorize: "TicketItemPolicy#update?"
   field :time_sheet_create, mutation: Mutations::TimeSheetCreate, null: false, authorize: "TimeSheetPolicy#create?"
   field :time_sheet_delete, mutation: Mutations::TimeSheetDelete, null: false, authorize: "TimeSheetPolicy#delete?"
