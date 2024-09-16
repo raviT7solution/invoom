@@ -32,8 +32,14 @@ class Mutations::TicketCreate < Mutations::BaseMutation
         uom: item.uom
       )
 
-      item.addons.find(item_attributes[:addon_ids]).each do |addon|
-        ticket_item.ticket_item_addons.new(name: addon.name, price: addon_price_by_type(addon, booking.booking_type))
+      if item_attributes[:quantity].negative?
+        TicketItemAddonPolicy.new(context[:current_user]).scope.find(item_attributes[:addon_ids]).each do |addon|
+          ticket_item.ticket_item_addons.new(name: addon.name, price: addon.price)
+        end
+      else
+        item.addons.find(item_attributes[:addon_ids]).each do |addon|
+          ticket_item.ticket_item_addons.new(name: addon.name, price: addon_price_by_type(addon, booking.booking_type))
+        end
       end
     end
 
