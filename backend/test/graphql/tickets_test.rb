@@ -80,9 +80,12 @@ class TicketsTest < ActionDispatch::IntegrationTest
     }
 
     assert_query_success
+
+    ticket = Ticket.order(:created_at).last!
+
     assert response.parsed_body["data"]["ticketCreate"]
-    assert_attributes Ticket.last, booking: booking
-    assert_attributes Ticket.last.ticket_items.first!,
+    assert_attributes ticket, booking: booking
+    assert_attributes ticket.ticket_items.first!,
                       cst: item.tax.cst,
                       gst: item.tax.gst,
                       hst: item.tax.hst,
