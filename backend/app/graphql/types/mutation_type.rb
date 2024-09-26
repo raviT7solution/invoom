@@ -51,12 +51,12 @@ class Types::MutationType < Types::BaseObject
   field :payment_connection_token_create, mutation: Mutations::PaymentConnectionTokenCreate, null: false,
                                           authorize: "PaymentPolicy#create?"
   field :payment_create, mutation: Mutations::PaymentCreate, null: false, authorize: "PaymentPolicy#create?"
+  field :payment_delete, mutation: Mutations::PaymentDelete, null: false, authorize: "PaymentPolicy#delete?"
   field :payment_intent_cancel, mutation: Mutations::PaymentIntentCancel, null: false,
                                 authorize: "PaymentPolicy#create?"
-  field :payment_intent_capture, mutation: Mutations::PaymentIntentCapture, null: false,
-                                 authorize: "PaymentPolicy#create?"
   field :payment_intent_create, mutation: Mutations::PaymentIntentCreate, null: false,
                                 authorize: "PaymentPolicy#create?"
+  field :payment_update, mutation: Mutations::PaymentUpdate, null: false, authorize: "PaymentPolicy#update?"
   field :printer_configuration_create, mutation: Mutations::PrinterConfigurationCreate, null: false,
                                        authorize: "PrinterConfigurationPolicy#create?"
   field :printer_configuration_delete, mutation: Mutations::PrinterConfigurationDelete, null: false,

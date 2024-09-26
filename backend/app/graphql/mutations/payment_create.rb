@@ -9,19 +9,21 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
   def resolve(attributes:, invoice_id:) # rubocop:disable Metrics/AbcSize
     invoice = InvoicePolicy.new(context[:current_user]).scope.find(invoice_id)
 
-    case attributes[:mode]
-    when "cash"
-      update_invoice_with_cash(invoice, attributes)
+    if invoice.payments.exists?(payment_mode: "void")
+      raise_error "Void payment is present, you can't create a new payment"
+    end
+
+    case attributes[:payment_mode]
     when "card"
-      if invoice.payment_intent_id.present?
-        update_invoice_with_card(invoice, attributes)
+      if attributes[:payment_intent_id].present?
+        create_stripe_card_payment(invoice, attributes)
       else
-        update_invoice_with_delivery_partner(invoice, attributes)
+        create_payment(invoice, attributes)
       end
     when "void"
-      update_invoice_with_void(invoice, attributes)
-    when "uber_eats", "door_dash", "skip_the_dishes"
-      update_invoice_with_delivery_partner(invoice, attributes)
+      create_void_payment(invoice, attributes)
+    when "cash", "uber_eats", "door_dash", "skip_the_dishes"
+      create_payment(invoice, attributes)
     else
       raise_error "Invalid payment mode"
     end
@@ -33,35 +35,44 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
 
   private
 
-  def update_invoice_with_card(invoice, attributes) # rubocop:disable Metrics/AbcSize
+  def create_payment(invoice, attributes)
+    Payment.create!(
+      amount: attributes[:amount] || 0,
+      invoice: invoice,
+      payment_mode: attributes[:payment_mode],
+      tip: attributes[:tip] || 0,
+      void_type: attributes[:void_type]
+    )
+  end
+
+  def create_stripe_card_payment(invoice, attributes) # rubocop:disable Metrics/AbcSize
     api_key = context[:current_user].mobile_user!.restaurant.payment_secret_key
 
-    payment_intent = Stripe::PaymentIntent.retrieve(invoice.payment_intent_id, api_key: api_key).as_json
+    payment_intent = Stripe::PaymentIntent.retrieve(attributes[:payment_intent_id], api_key: api_key).as_json
     payment_method = Stripe::PaymentMethod.retrieve(payment_intent["payment_method"], api_key: api_key)
 
     card_details = payment_method.public_send(payment_method.type).as_json
 
-    invoice.update!(
-      amount_received: payment_intent["amount_received"].to_f / 100,
+    amount_received = payment_intent["amount_received"].to_f / 100
+    tip = payment_intent.dig("amount_details", "tip", "amount").to_f / 100
+
+    Payment.create!(
+      amount: amount_received - tip,
       brand: card_details["brand"],
       card_number: card_details["last4"],
       funding: card_details["funding"],
+      invoice: invoice,
       issuer: card_details["issuer"],
-      payment_mode: attributes[:mode],
-      status: "paid",
-      tip: payment_intent.dig("amount_details", "tip", "amount").to_f / 100
+      payment_intent_id: attributes[:payment_intent_id],
+      payment_mode: attributes[:payment_mode],
+      tip: tip,
+      void_type: attributes[:void_type]
     )
   end
 
-  def update_invoice_with_cash(invoice, attributes)
-    invoice.update!(payment_mode: attributes[:mode], status: "paid", tip: attributes[:tip] || 0)
-  end
+  def create_void_payment(invoice, attributes)
+    invoice.payments.update!(amount: 0, tip: 0)
 
-  def update_invoice_with_delivery_partner(invoice, attributes)
-    invoice.update!(payment_mode: attributes[:mode], status: "paid")
-  end
-
-  def update_invoice_with_void(invoice, attributes)
-    invoice.update!(payment_mode: attributes[:mode], void_type: attributes[:void_type])
+    create_payment(invoice, attributes)
   end
 end

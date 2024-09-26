@@ -23,8 +23,6 @@ class Mutations::PaymentIntentCreate < Mutations::BaseMutation
       api_key: api_key
     )
 
-    invoice.update!(payment_intent_id: intent.id)
-
     { client_secret: intent.client_secret }
   end
 end

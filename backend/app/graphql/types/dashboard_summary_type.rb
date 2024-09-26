@@ -93,7 +93,7 @@ class Types::DashboardSummaryType < Types::BaseObject
     invoices = InvoicePolicy.new(context[:current_session]).scope.where(booking_id: object[:bookings])
     invoice_items = InvoiceItemPolicy.new(context[:current_user]).scope.where(invoice_id: invoices)
 
-    total_tax_percent = invoice_items.joins(invoice: :invoice_service_charges)
+    total_tax_percent = invoice_items.joins(:invoice_item_summary, invoice: :invoice_service_charges)
                                      .where(invoice_service_charges: { charge_type: "percentage" })
                                      .sum(percentage_service_charge_expression)
 
@@ -105,13 +105,13 @@ class Types::DashboardSummaryType < Types::BaseObject
                      .joins("INNER JOIN (#{invoice_counts.to_sql}) counts ON counts.booking_id = invoices.booking_id")
                      .sum(flat_service_charge_expression)
 
-    items_tax = invoice_items.joins(:ticket_item).sum(items_tax_expression)
+    items_tax = invoice_items.joins(:ticket_item, :invoice_item_summary).sum(items_tax_expression)
 
     total_tax_percent + total_tax_flat + items_tax
   end
 
   def total_tip
-    object[:bookings].joins(:invoices).sum(:tip)
+    payments.sum(:tip)
   end
 
   def uber_eats_revenue
@@ -141,10 +141,10 @@ class Types::DashboardSummaryType < Types::BaseObject
   end
 
   def items_tax_expression
-    invoice_items = InvoiceItem.arel_table
+    invoice_item_summaries = InvoiceItemSummary.arel_table
     ticket_items = TicketItem.arel_table
 
-    invoice_items[:discounted_price] * (
+    invoice_item_summaries[:discounted_amount] * (
       ticket_items[:cst] +
       ticket_items[:gst] +
       ticket_items[:hst] +
@@ -155,11 +155,15 @@ class Types::DashboardSummaryType < Types::BaseObject
   end
 
   def payment_mode_revenue
-    @payment_mode_revenue ||= object[:invoices].group(:payment_mode).sum(:total)
+    @payment_mode_revenue ||= payments.group(:payment_mode).sum(:amount)
+  end
+
+  def payments
+    Payment.joins(invoice: :booking).where(bookings: { id: object[:bookings] })
   end
 
   def percentage_service_charge_expression # rubocop:disable Metrics/AbcSize
-    invoice_items = InvoiceItem.arel_table
+    invoice_item_summaries = InvoiceItemSummary.arel_table
     service_charges = InvoiceServiceCharge.arel_table
 
     tax_expression = (
@@ -171,6 +175,6 @@ class Types::DashboardSummaryType < Types::BaseObject
       service_charges[:cst]
     ) / 100
 
-    invoice_items[:discounted_price] * (service_charges[:value] / 100) * tax_expression
+    invoice_item_summaries[:discounted_amount] * (service_charges[:value] / 100) * tax_expression
   end
 end

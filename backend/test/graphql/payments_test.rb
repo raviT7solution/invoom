@@ -21,7 +21,8 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     authentic_query user, "mobile_user", payment_create_string, variables: {
       input: {
         attributes: {
-          mode: "cash",
+          amount: 10,
+          paymentMode: "cash",
           tip: 10
         },
         invoiceId: invoice.id
@@ -29,10 +30,9 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     }
 
     assert_query_success
-
-    assert_attributes invoice.reload,
+    assert_attributes Payment.first!,
+                      amount: 10,
                       payment_mode: "cash",
-                      status: "paid",
                       tip: 10
   end
 
@@ -54,7 +54,8 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     authentic_query user, "mobile_user", payment_create_string, variables: {
       input: {
         attributes: {
-          mode: "void",
+          amount: 10,
+          paymentMode: "void",
           voidType: "promotional"
         },
         invoiceId: invoice.id
@@ -62,7 +63,8 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     }
 
     assert_query_success
-    assert_attributes invoice.reload,
+    assert_attributes Payment.first!,
+                      amount: 10,
                       payment_mode: "void",
                       void_type: "promotional"
   end
@@ -85,16 +87,17 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     authentic_query user, "mobile_user", payment_create_string, variables: {
       input: {
         attributes: {
-          mode: "uber_eats"
+          amount: 10,
+          paymentMode: "uber_eats"
         },
         invoiceId: invoice.id
       }
     }
 
     assert_query_success
-    assert_attributes invoice.reload,
-                      payment_mode: "uber_eats",
-                      status: "paid"
+    assert_attributes Payment.first!,
+                      amount: 10,
+                      payment_mode: "uber_eats"
   end
 
   test "create manual card payment" do
@@ -115,16 +118,17 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     authentic_query user, "mobile_user", payment_create_string, variables: {
       input: {
         attributes: {
-          mode: "card"
+          amount: 10,
+          paymentMode: "card"
         },
         invoiceId: invoice.id
       }
     }
 
     assert_query_success
-    assert_attributes invoice.reload,
-                      payment_mode: "card",
-                      status: "paid"
+    assert_attributes Payment.first!,
+                      amount: 10,
+                      payment_mode: "card"
   end
 
   private

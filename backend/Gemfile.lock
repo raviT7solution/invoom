@@ -254,6 +254,9 @@ GEM
       rubocop (>= 1.33.0, < 2.0)
     ruby-progressbar (1.13.0)
     rubyzip (2.3.2)
+    scenic (1.8.0)
+      activerecord (>= 4.0.0)
+      railties (>= 4.0.0)
     stringio (3.0.8)
     stripe (7.1.0)
     thor (1.2.2)
@@ -302,6 +305,7 @@ DEPENDENCIES
   rubocop-minitest
   rubocop-ordered_methods
   rubocop-rails
+  scenic
   stripe
   tzinfo-data
 

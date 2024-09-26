@@ -91,7 +91,7 @@ class BookingTest < ActiveSupport::TestCase
     assert_equal "Unprocessed invoice(s)", booking.errors.full_messages.to_sentence
     assert_nil booking.reload.clocked_out_at
 
-    invoice.update(status: "paid")
+    create(:payment, invoice: invoice, payment_mode: "cash", amount: invoice.total)
 
     booking.update(clocked_out_at: 1.minute.ago)
 

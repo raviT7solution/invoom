@@ -3,5 +3,8 @@
 class Types::Invoice::StatusEnum < Types::BaseEnum
   graphql_name "InvoiceStatusEnum"
 
-  Invoice.statuses.each_key { |i| value(i, value: i) }
+  value "overpaid"
+  value "paid"
+  value "unpaid"
+  value "voided"
 end

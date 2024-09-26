@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_04_081343) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_23_101536) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -175,12 +175,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_081343) do
   end
 
   create_table "invoice_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.float "quantity", null: false
     t.float "consume_bill", null: false
     t.float "price", null: false
-    t.float "ticket_item_price", null: false
-    t.float "discounted_price", null: false
-    t.float "item_discount", null: false
     t.uuid "ticket_item_id", null: false
     t.uuid "invoice_id", null: false
     t.datetime "created_at", null: false
@@ -210,20 +206,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_081343) do
   create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigserial "number", null: false
     t.float "total", null: false
-    t.integer "payment_mode"
-    t.integer "status", null: false
     t.integer "invoice_type", null: false
     t.uuid "booking_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "void_type"
-    t.float "tip", default: 0.0, null: false
-    t.string "payment_intent_id"
-    t.string "amount_received"
-    t.string "brand"
-    t.string "card_number"
-    t.string "funding"
-    t.string "issuer"
+    t.boolean "primary", default: false, null: false
     t.index ["booking_id"], name: "index_invoices_on_booking_id"
     t.index ["number"], name: "index_invoices_on_number", unique: true
   end
@@ -330,6 +317,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_081343) do
     t.datetime "updated_at", null: false
     t.index ["name", "restaurant_id"], name: "index_modifiers_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_modifiers_on_restaurant_id"
+  end
+
+  create_table "payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.float "amount", null: false
+    t.float "tip", null: false
+    t.integer "payment_mode", null: false
+    t.integer "void_type"
+    t.string "brand"
+    t.string "card_number"
+    t.string "funding"
+    t.string "issuer"
+    t.string "payment_intent_id"
+    t.uuid "invoice_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invoice_id"], name: "index_payments_on_invoice_id"
   end
 
   create_table "printer_configurations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -580,6 +583,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_081343) do
   add_foreign_key "menu_categories", "menus"
   add_foreign_key "menus", "restaurants"
   add_foreign_key "modifiers", "restaurants"
+  add_foreign_key "payments", "invoices"
   add_foreign_key "printer_configurations", "restaurants"
   add_foreign_key "product_transactions", "products"
   add_foreign_key "products", "inventory_categories"
@@ -598,4 +602,41 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_081343) do
   add_foreign_key "user_roles", "roles"
   add_foreign_key "user_roles", "users"
   add_foreign_key "users", "restaurants"
+
+  create_view "invoice_item_summaries", sql_definition: <<-SQL
+      WITH ticket_item_discounts AS (
+           SELECT ii_1.id AS invoice_item_id,
+                  CASE
+                      WHEN (ad.discount_type = 0) THEN (ii_1.price * ((1)::double precision - (ad.value / (100.0)::double precision)))
+                      WHEN (ad.discount_type = 1) THEN (ii_1.price - (ad.value * (ii_1.price / ti.price)))
+                      ELSE ii_1.price
+                  END AS ticket_item_discounted_amount
+             FROM ((invoice_items ii_1
+               JOIN ticket_items ti ON ((ti.id = ii_1.ticket_item_id)))
+               LEFT JOIN applied_discounts ad ON ((((ad.discountable_type)::text = 'TicketItem'::text) AND (ad.discountable_id = ti.id))))
+          ), booking_sub_totals AS (
+           SELECT i.booking_id AS id,
+              sum(tid.ticket_item_discounted_amount) AS booking_sub_total
+             FROM ((invoices i
+               JOIN invoice_items ii_1 ON ((ii_1.invoice_id = i.id)))
+               JOIN ticket_item_discounts tid ON ((tid.invoice_item_id = ii_1.id)))
+            GROUP BY i.booking_id
+          ), booking_discounts AS (
+           SELECT ii_1.id,
+                  CASE
+                      WHEN (ad.discount_type = 0) THEN (tid.ticket_item_discounted_amount * ((1)::double precision - (ad.value / (100.0)::double precision)))
+                      WHEN (ad.discount_type = 1) THEN (tid.ticket_item_discounted_amount - (ad.value * (tid.ticket_item_discounted_amount / bst.booking_sub_total)))
+                      ELSE tid.ticket_item_discounted_amount
+                  END AS discounted_amount
+             FROM ((((invoice_items ii_1
+               JOIN ticket_item_discounts tid ON ((tid.invoice_item_id = ii_1.id)))
+               JOIN invoices i ON ((i.id = ii_1.invoice_id)))
+               JOIN booking_sub_totals bst ON ((bst.id = i.booking_id)))
+               LEFT JOIN applied_discounts ad ON ((((ad.discountable_type)::text = 'Booking'::text) AND (ad.discountable_id = i.booking_id))))
+          )
+   SELECT ii.id AS invoice_item_id,
+      bd.discounted_amount
+     FROM (invoice_items ii
+       JOIN booking_discounts bd ON ((bd.id = ii.id)));
+  SQL
 end

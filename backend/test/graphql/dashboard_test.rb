@@ -5,16 +5,17 @@ require "test_helper"
 class DashboardTest < ActionDispatch::IntegrationTest
   test "dashboard summary" do
     restaurant = create(:restaurant)
-    role = create(:role, permissions: ["orders"], restaurant: restaurant)
-    user = create(:user, restaurant: restaurant, roles: [role])
+    admin = create(:admin, restaurant_ids: [restaurant.id])
+    user = create(:user, restaurant: restaurant)
 
     booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
                                booking_tables: [build(:booking_table)],
                                clocked_out_at: Time.current)
 
-    invoice = create(:invoice, booking: booking, status: :paid)
+    invoice = create(:invoice, booking: booking, total: 100)
+    create(:payment, invoice: invoice, payment_mode: "cash", amount: invoice.total)
 
-    authentic_query user, "mobile_user", dashboard_summary, variables: {
+    authentic_query admin, "web_admin", dashboard_summary, variables: {
       endTime: 10.minutes.after.iso8601,
       restaurantId: restaurant.id,
       startTime: 10.days.ago.iso8601
@@ -48,7 +49,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
   end
 
   test "sales summary" do
-    restaurant = create(:restaurant, country: "CA")
+    restaurant = create(:restaurant)
     admin = create(:admin)
     admin.restaurants = [restaurant]
     user = create(:user, restaurant: restaurant)
@@ -62,7 +63,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
                      user: user)
 
     category = create(:category, restaurant: restaurant)
-    item = create(:item, restaurant: restaurant, category: category, price: 5, tax: create(:tax))
+    item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
 
     ticket = create(:ticket, booking: booking)
     ticket_item1, ticket_item2 = create_list(
@@ -82,11 +83,11 @@ class DashboardTest < ActionDispatch::IntegrationTest
     service_charge1 = create(:service_charge, restaurant: restaurant, tax: create(:tax))
     service_charge2 = create(:service_charge, restaurant: restaurant, tax: create(:tax))
 
-    invoice1 = create(:invoice, booking: booking, total: 25.38, tip: 3, status: :paid)
-    invoice2 = create(:invoice, booking: booking, total: 12.1, status: :paid)
+    invoice1 = create(:invoice, booking: booking)
+    invoice2 = create(:invoice, booking: booking)
 
-    create(:invoice_item, ticket_item: ticket_item1, invoice: invoice1, discounted_price: 9)
-    create(:invoice_item, ticket_item: ticket_item2, invoice: invoice2, discounted_price: 18)
+    create(:invoice_item, ticket_item: ticket_item1, invoice: invoice1, price: 9)
+    create(:invoice_item, ticket_item: ticket_item2, invoice: invoice2, price: 18)
 
     create(:invoice_service_charge,
            charge_type: "flat",
@@ -109,6 +110,9 @@ class DashboardTest < ActionDispatch::IntegrationTest
            value: 17.0,
            service_charge: service_charge2, invoice: invoice2)
 
+    create(:payment, payment_mode: "cash", invoice: invoice1, amount: invoice1.total, tip: 1.0)
+    create(:payment, payment_mode: "cash", invoice: invoice2, amount: invoice2.total, tip: 2.0)
+
     authentic_query admin, "web_admin", sales_summary_query, variables: {
       endTime: nil,
       restaurantId: restaurant.id,
@@ -123,8 +127,8 @@ class DashboardTest < ActionDispatch::IntegrationTest
     service_charge2_tax = (18 * 17 / 100.0) * 9 / 100
     service_charge2_amount = 18 * 17 / 100.0
 
-    total_revenue = (25.38 + service_charge1_tax + service_charge1_amount).round(2) + \
-                    (12.1 + service_charge2_tax + service_charge2_amount).round(2)
+    total_revenue = (9.54 + service_charge1_tax + service_charge1_amount) + \
+                    (19.08 + service_charge2_tax + service_charge2_amount)
     total_tax = (9 * 0.06) + \
                 (18 * 0.06) + \
                 service_charge1_tax + \

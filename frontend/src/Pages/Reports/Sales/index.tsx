@@ -57,6 +57,14 @@ const invoiceTax = (invoice: InvoicesType[number]) => {
   return invoice.taxSummary.reduce((p, i) => p + i.value, 0);
 };
 
+const invoiceTip = (invoice: InvoicesType[number]) => {
+  return invoice.payments.reduce((p, i) => p + i.tip, 0);
+};
+
+const invoicePaymentModes = (invoice: InvoicesType[number]) => {
+  return invoice.payments.map((i) => i.paymentMode);
+};
+
 const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
   const { restaurantId, tz } = useRestaurantIdStore();
 
@@ -140,7 +148,7 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       {
         title: "Tip",
         render: (_, r) =>
-          `$${r.invoices.reduce((p, i) => p + i.tip, 0).toFixed(2)}`,
+          `$${r.invoices.reduce((p, i) => p + invoiceTip(i), 0).toFixed(2)}`,
       },
       {
         title: "Total",
@@ -149,11 +157,7 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       },
       {
         title: "Payment Type",
-        render: (_, r) =>
-          r.invoices
-            .map((i) => i.paymentMode)
-            .filter(Boolean)
-            .join(", "),
+        render: (_, r) => r.invoices.flatMap(invoicePaymentModes).join(", "),
       },
       {
         title: "Customer Name",
@@ -264,7 +268,7 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       },
       {
         title: "Tip",
-        dataIndex: ["tip"],
+        render: (_, r) => invoiceTip(r).toFixed(2),
       },
       {
         title: "Total",
@@ -272,7 +276,7 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       },
       {
         title: "Payment Type",
-        dataIndex: ["paymentMode"],
+        render: (_, r) => invoicePaymentModes(r).join(", "),
       },
       {
         title: "Customer Name",
@@ -370,12 +374,9 @@ export const ReportsSales = () => {
           r.invoices.reduce((p, i) => p + i.totalDiscount, 0).toFixed(2),
           r.invoices.reduce((p, i) => p + invoiceServiceCharge(i), 0),
           r.invoices.reduce((p, i) => p + invoiceTax(i), 0).toFixed(2),
-          r.invoices.reduce((p, i) => p + i.tip, 0).toFixed(2),
+          r.invoices.reduce((p, i) => p + invoiceTip(i), 0).toFixed(2),
           r.invoices.reduce((p, i) => p + i.total, 0).toFixed(2),
-          r.invoices
-            .map((i) => i.paymentMode)
-            .filter(Boolean)
-            .join(", "),
+          r.invoices.flatMap(invoicePaymentModes).join(", "),
           r.customer?.name ?? "-",
           r.userFullName,
         ];
@@ -440,9 +441,9 @@ export const ReportsSales = () => {
           r.totalDiscount.toFixed(2),
           invoiceServiceCharge(r).toFixed(2),
           invoiceTax(r).toFixed(2),
-          r.tip,
+          invoiceTip(r).toFixed(2),
           r.total.toFixed(2),
-          r.paymentMode,
+          invoicePaymentModes(r).join(", "),
           r.booking.customer?.name ?? "-",
           r.booking.userFullName,
         ];

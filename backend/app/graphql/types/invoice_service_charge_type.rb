@@ -15,15 +15,13 @@ class Types::InvoiceServiceChargeType < Types::BaseObject
   field :value, Float, null: false
 
   def charge_amount # rubocop:disable Metrics/AbcSize
-    inv_total = object.invoice.invoice_items.sum(:discounted_price)
+    inv_total = object.invoice.invoice_items.sum { |i| i.invoice_item_summary.discounted_amount }
 
-    value = if object.charge_type == "percentage"
-              inv_total * (object.value / 100)
-            else
-              inv_count = object.invoice.booking.invoices.count
-              object.value / inv_count
-            end
-
-    value.round(2)
+    if object.charge_type == "percentage"
+      inv_total * (object.value / 100)
+    else
+      inv_count = object.invoice.booking.invoices.count
+      object.value / inv_count
+    end
   end
 end

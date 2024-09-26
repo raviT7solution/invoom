@@ -709,13 +709,15 @@ query bookings(
           id
         }
         number
-        paymentMode
+        payments {
+          paymentMode
+          tip
+        }
         subTotal
         taxSummary {
           name
           value
         }
-        tip
         total
         totalDiscount
       }
@@ -775,13 +777,15 @@ query invoices(
         id
       }
       number
-      paymentMode
+      payments {
+        paymentMode
+        tip
+      }
       subTotal
       taxSummary {
         name
         value
       }
-      tip
       total
       totalDiscount
     }

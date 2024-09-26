@@ -10,7 +10,7 @@ class Mutations::InvoiceServiceChargesUpdate < Mutations::BaseMutation
 
     ApplicationRecord.transaction do
       invoices.each_with_index do |invoice, i|
-        invoice.invoice_service_charges.each(&:destroy!)
+        InvoiceServiceCharge.where(invoice_id: invoice.id).destroy_all
 
         ServiceChargePolicy.new(context[:current_user]).scope.find(attributes[i][:service_charge_ids]).each do |charge|
           invoice_service_charge = invoice.invoice_service_charges.new(

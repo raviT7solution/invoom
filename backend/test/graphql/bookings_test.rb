@@ -214,7 +214,9 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_nil booking.reload.clocked_out_at
 
     ticket_item.update!(status: :served)
-    create(:invoice, booking: booking, status: "paid")
+
+    invoice = create(:invoice, booking: booking)
+    create(:payment, invoice: invoice, amount: invoice.total)
 
     authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
 

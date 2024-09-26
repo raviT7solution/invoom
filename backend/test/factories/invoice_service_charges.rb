@@ -13,7 +13,7 @@ FactoryBot.define do
     rst { Faker::Number.decimal(l_digits: 2) }
     value { 10 }
 
-    service_charge { nil }
     invoice { nil }
+    service_charge { nil }
   end
 end
