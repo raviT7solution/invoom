@@ -315,12 +315,13 @@ class Types::QueryType < Types::BaseObject
                            .joins(:booking).where(bookings: { restaurant_id: restaurant_id })
 
     records = records.where(bookings: { booking_type: booking_types }) if booking_types.present?
-    records = records.where(status: status) if status.present?
-    records = records.order(created_at: :desc)
+    records = records.completed if status == "completed"
 
     if start_date.present? && end_date.present?
       records = records.joins(:booking).where(bookings: { clocked_in_at: start_date..end_date })
     end
+
+    records = records.order(created_at: :desc)
 
     return export_collection(records) if export
 

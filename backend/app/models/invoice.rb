@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Invoice < ApplicationRecord
+  scope :completed, -> { joins(:booking).where.not(bookings: { clocked_out_at: nil }) }
+
   belongs_to :booking
 
   has_many :invoice_items, dependent: :destroy

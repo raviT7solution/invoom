@@ -13,10 +13,20 @@ class Types::BookingType < Types::BaseObject
   field :applied_discount, Types::AppliedDiscountType, scope: "AppliedDiscountPolicy", preload: :applied_discount, null: true # rubocop:disable Layout/LineLength
   field :booking_tables, [Types::BookingTableType], scope: "BookingTablePolicy", preload: :booking_tables, null: false
   field :customer, Types::CustomerType, scope: "CustomerPolicy", preload: :customer, null: true
-  field :invoices, [Types::InvoiceType], scope: "InvoicePolicy", preload: :invoices, null: false
+  field :invoices, [Types::InvoiceType], null: false
   field :tickets, [Types::TicketType], scope: "TicketPolicy", preload: :tickets, null: false
 
   field :user_full_name, String, preload: :user, null: false
+
+  def invoices
+    BatchLoader::GraphQL.for(object).batch do |objects, loader|
+      scope = InvoicePolicy.new(context[:current_user]).scope.order(:number)
+
+      ActiveRecord::Associations::Preloader.new(records: objects, associations: :invoices, scope: scope).call
+
+      objects.each { |i| loader.call(i, i.invoices) }
+    end
+  end
 
   def user_full_name
     object.user.full_name
