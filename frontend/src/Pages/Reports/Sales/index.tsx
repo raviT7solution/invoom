@@ -252,27 +252,27 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       },
       {
         title: "Subtotal",
-        render: (_, r) => r.subTotal.toFixed(2),
+        render: (_, r) => `$${r.subTotal.toFixed(2)}`,
       },
       {
         title: "Total Dis.",
-        render: (_, r) => r.totalDiscount.toFixed(2),
+        render: (_, r) => `$${r.totalDiscount.toFixed(2)}`,
       },
       {
         title: "Total Service Charge",
-        render: (_, r) => invoiceServiceCharge(r).toFixed(2),
+        render: (_, r) => `$${invoiceServiceCharge(r).toFixed(2)}`,
       },
       {
         title: "Total Tax",
-        render: (_, r) => invoiceTax(r).toFixed(2),
+        render: (_, r) => `$${invoiceTax(r).toFixed(2)}`,
       },
       {
         title: "Tip",
-        render: (_, r) => invoiceTip(r).toFixed(2),
+        render: (_, r) => `$${invoiceTip(r).toFixed(2)}`,
       },
       {
         title: "Total",
-        render: (_, r) => r.total.toFixed(2),
+        render: (_, r) => `$${r.total.toFixed(2)}`,
       },
       {
         title: "Payment Type",
