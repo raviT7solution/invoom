@@ -17,7 +17,7 @@ class TeamsTest < ApplicationSystemTestCase
 
     within ".ant-drawer" do
       fill_in "Name", with: "Chef"
-      fill_in_select with: "Clock In / Clock Out"
+      fill_in_select with: "Clock in / Clock out"
 
       click_on "Submit"
     end
@@ -113,7 +113,7 @@ class TeamsTest < ApplicationSystemTestCase
     within ".ant-drawer" do
       fill_in "Name", with: "Chef"
       find(".ant-checkbox-wrapper", text: "Auto Clock-In").click
-      fill_in_select with: "Clock In / Clock Out"
+      fill_in_select with: "Clock in / Clock out"
 
       click_on "Submit"
     end

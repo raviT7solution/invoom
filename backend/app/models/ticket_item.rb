@@ -9,7 +9,7 @@ class TicketItem < ApplicationRecord
 
   has_one :applied_discount, as: :discountable, dependent: :destroy
 
-  enum :status, [:queued, :preparing, :ready, :served, :cancelled], default: :queued
+  enum :status, [:queued, :preparing, :ready, :served], default: :queued
 
   validates :cst, presence: true
   validates :display_name, presence: true

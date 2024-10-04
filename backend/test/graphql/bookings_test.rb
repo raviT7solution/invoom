@@ -201,28 +201,76 @@ class BookingsTest < ActionDispatch::IntegrationTest
     booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
                                booking_tables: [build(:booking_table, floor_object: table)])
 
-    ticket = create(:ticket, booking: booking)
     category = create(:category, restaurant: restaurant)
     item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
 
-    create(:ticket_item, ticket: ticket, item: item, status: :cancelled)
-    ticket_item = create(:ticket_item, ticket: ticket, item: item, status: :queued)
+    ticket = create(:ticket, booking: booking)
+    create(:ticket_item, ticket: ticket, item: item)
 
+    # without invoices
     authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
 
     assert_query_error "Unprocessed invoice(s)"
     assert_nil booking.reload.clocked_out_at
 
-    ticket_item.update!(status: :served)
-
     invoice = create(:invoice, booking: booking)
+
+    # with unpaid invoice
+    authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
+
+    assert_query_error "Unprocessed invoice(s)"
+    assert_nil booking.reload.clocked_out_at
+
     create(:payment, invoice: invoice, amount: invoice.total)
 
+    # with paid invoice
     authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
 
     assert_query_success
     assert_not booking.booking_tables.where.not(floor_object_id: nil).exists?
     assert_not_nil booking.reload.clocked_out_at
+  end
+
+  test "booking force clock out" do
+    restaurant = create(:restaurant)
+    role = create(:role, permissions: ["orders", "force_clock_out"], restaurant: restaurant)
+    user = create(:user, restaurant: restaurant, roles: [role])
+
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
+                               booking_tables: [build(:booking_table, floor_object: table)])
+
+    category = create(:category, restaurant: restaurant)
+    item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
+
+    ticket = create(:ticket, booking: booking)
+    ticket_item = create(:ticket_item, ticket: ticket, name: item.name, price: item.price, quantity: 2, item: item)
+
+    invoice = create(:invoice, booking: booking)
+    invoice_item = create(:invoice_item, ticket_item: ticket_item, invoice: invoice)
+
+    authentic_query user, "mobile_user", booking_force_clock_out, variables: {
+      input: {
+        bookingId: booking.id
+      }
+    }
+
+    assert_query_error "Cannot delete record because dependent invoices exist"
+    assert_equal 1, Ticket.count
+    assert_equal 1, TicketItem.count
+    assert_nil booking.reload.clocked_out_at
+
+    invoice_item.destroy!
+    invoice.destroy!
+
+    authentic_query user, "mobile_user", booking_force_clock_out, variables: {
+      input: {
+        bookingId: booking.id
+      }
+    }
+
+    assert_query_success
+    assert_not Booking.exists?(id: booking.id)
   end
 
   private
@@ -275,6 +323,14 @@ class BookingsTest < ActionDispatch::IntegrationTest
     <<~GQL
       mutation bookingClose($id: ID!) {
         bookingClose(input: { id: $id })
+      }
+    GQL
+  end
+
+  def booking_force_clock_out
+    <<~GQL
+      mutation bookingForceClockOut($input: BookingForceClockOutInput!){
+        bookingForceClockOut(input: $input)
       }
     GQL
   end

@@ -9,11 +9,12 @@ class DashboardTest < ActionDispatch::IntegrationTest
     user = create(:user, restaurant: restaurant)
 
     booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                               booking_tables: [build(:booking_table)],
-                               clocked_out_at: Time.current)
+                               booking_tables: [build(:booking_table)])
 
     invoice = create(:invoice, booking: booking, total: 100)
     create(:payment, invoice: invoice, payment_mode: "cash", amount: invoice.total)
+
+    booking.update!(clocked_out_at: Time.current)
 
     authentic_query admin, "web_admin", dashboard_summary, variables: {
       endTime: 10.minutes.after.iso8601,
@@ -57,7 +58,6 @@ class DashboardTest < ActionDispatch::IntegrationTest
     customer = create(:customer, restaurant: restaurant)
     booking = create(:booking,
                      booking_type: "takeout",
-                     clocked_out_at: Time.current,
                      customer: customer,
                      restaurant: restaurant,
                      user: user)
@@ -112,6 +112,9 @@ class DashboardTest < ActionDispatch::IntegrationTest
 
     create(:payment, payment_mode: "cash", invoice: invoice1, amount: invoice1.total, tip: 1.0)
     create(:payment, payment_mode: "cash", invoice: invoice2, amount: invoice2.total, tip: 2.0)
+
+    # TODO: Remove reload after virtual total field
+    booking.reload.update!(clocked_out_at: Time.current)
 
     authentic_query admin, "web_admin", sales_summary_query, variables: {
       endTime: nil,

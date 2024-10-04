@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
+# rubocop:disable Layout/LineLength
 class Types::MutationType < Types::BaseObject
   field :addons_create, mutation: Mutations::AddonsCreate, null: false, authorize: "AddonPolicy#create?"
   field :addons_delete, mutation: Mutations::AddonsDelete, null: false, authorize: "AddonPolicy#delete?"
   field :addons_update, mutation: Mutations::AddonsUpdate, null: false, authorize: "AddonPolicy#update?"
   field :admin_session_create, mutation: Mutations::AdminSessionCreate, null: false
-  field :applied_discount_create, mutation: Mutations::AppliedDiscountCreate, null: false,
-                                  authorize: "AppliedDiscountPolicy#create?"
-  field :applied_discount_delete, mutation: Mutations::AppliedDiscountDelete, null: false,
-                                  authorize: "AppliedDiscountPolicy#delete?"
+  field :applied_discount_create, mutation: Mutations::AppliedDiscountCreate, null: false, authorize: "AppliedDiscountPolicy#create?"
+  field :applied_discount_delete, mutation: Mutations::AppliedDiscountDelete, null: false, authorize: "AppliedDiscountPolicy#delete?"
   field :booking_close, mutation: Mutations::BookingClose, null: false, authorize: "BookingPolicy#close?"
   field :booking_create, mutation: Mutations::BookingCreate, null: false, authorize: "BookingPolicy#create?"
+  field :booking_force_clock_out, mutation: Mutations::BookingForceClockOut, null: false, authorize: "BookingPolicy#force_clock_out?"
   field :booking_update, mutation: Mutations::BookingUpdate, null: false, authorize: "BookingPolicy#update?"
   field :category_create, mutation: Mutations::CategoryCreate, null: false, authorize: "CategoryPolicy#create?"
   field :category_delete, mutation: Mutations::CategoryDelete, null: false, authorize: "CategoryPolicy#delete?"
@@ -20,27 +20,19 @@ class Types::MutationType < Types::BaseObject
   field :discount_create, mutation: Mutations::DiscountCreate, null: false, authorize: "DiscountPolicy#create?"
   field :discount_delete, mutation: Mutations::DiscountDelete, null: false, authorize: "DiscountPolicy#delete?"
   field :discount_update, mutation: Mutations::DiscountUpdate, null: false, authorize: "DiscountPolicy#update?"
-  field :floor_object_update, mutation: Mutations::FloorObjectUpdate, null: false,
-                              authorize: "FloorObjectPolicy#update?"
-  field :inventory_category_create, mutation: Mutations::InventoryCategoryCreate, null: false,
-                                    authorize: "InventoryCategoryPolicy#create?"
-  field :inventory_category_delete, mutation: Mutations::InventoryCategoryDelete, null: false,
-                                    authorize: "InventoryCategoryPolicy#delete?"
-  field :inventory_category_update, mutation: Mutations::InventoryCategoryUpdate, null: false,
-                                    authorize: "InventoryCategoryPolicy#update?"
-  field :invoice_service_charges_update, mutation: Mutations::InvoiceServiceChargesUpdate, null: false,
-                                         authorize: "InvoiceServiceChargePolicy#update?"
+  field :floor_object_update, mutation: Mutations::FloorObjectUpdate, null: false, authorize: "FloorObjectPolicy#update?"
+  field :inventory_category_create, mutation: Mutations::InventoryCategoryCreate, null: false, authorize: "InventoryCategoryPolicy#create?"
+  field :inventory_category_delete, mutation: Mutations::InventoryCategoryDelete, null: false, authorize: "InventoryCategoryPolicy#delete?"
+  field :inventory_category_update, mutation: Mutations::InventoryCategoryUpdate, null: false, authorize: "InventoryCategoryPolicy#update?"
+  field :invoice_service_charges_update, mutation: Mutations::InvoiceServiceChargesUpdate, null: false, authorize: "InvoiceServiceChargePolicy#update?"
   field :invoices_create, mutation: Mutations::InvoicesCreate, null: false, authorize: "InvoicePolicy#create?"
   field :item_code_generate, mutation: Mutations::ItemCodeGenerate, null: false, authorize: "ProductPolicy#create?"
   field :item_create, mutation: Mutations::ItemCreate, null: false, authorize: "ItemPolicy#create?"
   field :item_delete, mutation: Mutations::ItemDelete, null: false, authorize: "ItemPolicy#delete?"
   field :item_update, mutation: Mutations::ItemUpdate, null: false, authorize: "ItemPolicy#update?"
-  field :kitchen_profile_create, mutation: Mutations::KitchenProfileCreate, null: false,
-                                 authorize: "KitchenProfilePolicy#create?"
-  field :kitchen_profile_delete, mutation: Mutations::KitchenProfileDelete, null: false,
-                                 authorize: "KitchenProfilePolicy#delete?"
-  field :kitchen_profile_update, mutation: Mutations::KitchenProfileUpdate, null: false,
-                                 authorize: "KitchenProfilePolicy#update?"
+  field :kitchen_profile_create, mutation: Mutations::KitchenProfileCreate, null: false, authorize: "KitchenProfilePolicy#create?"
+  field :kitchen_profile_delete, mutation: Mutations::KitchenProfileDelete, null: false, authorize: "KitchenProfilePolicy#delete?"
+  field :kitchen_profile_update, mutation: Mutations::KitchenProfileUpdate, null: false, authorize: "KitchenProfilePolicy#update?"
   field :menu_create, mutation: Mutations::MenuCreate, null: false, authorize: "MenuPolicy#create?"
   field :menu_delete, mutation: Mutations::MenuDelete, null: false, authorize: "MenuPolicy#delete?"
   field :menu_update, mutation: Mutations::MenuUpdate, null: false, authorize: "MenuPolicy#update?"
@@ -48,25 +40,18 @@ class Types::MutationType < Types::BaseObject
   field :modifier_delete, mutation: Mutations::ModifierDelete, null: false, authorize: "ModifierPolicy#delete?"
   field :modifier_update, mutation: Mutations::ModifierUpdate, null: false, authorize: "ModifierPolicy#update?"
   field :operational_pin_authenticate, mutation: Mutations::OperationalPinAuthenticate, null: false
-  field :payment_connection_token_create, mutation: Mutations::PaymentConnectionTokenCreate, null: false,
-                                          authorize: "PaymentPolicy#create?"
+  field :payment_connection_token_create, mutation: Mutations::PaymentConnectionTokenCreate, null: false, authorize: "PaymentPolicy#create?"
   field :payment_create, mutation: Mutations::PaymentCreate, null: false, authorize: "PaymentPolicy#create?"
   field :payment_delete, mutation: Mutations::PaymentDelete, null: false, authorize: "PaymentPolicy#delete?"
-  field :payment_intent_cancel, mutation: Mutations::PaymentIntentCancel, null: false,
-                                authorize: "PaymentPolicy#create?"
-  field :payment_intent_create, mutation: Mutations::PaymentIntentCreate, null: false,
-                                authorize: "PaymentPolicy#create?"
+  field :payment_intent_cancel, mutation: Mutations::PaymentIntentCancel, null: false, authorize: "PaymentPolicy#create?"
+  field :payment_intent_create, mutation: Mutations::PaymentIntentCreate, null: false, authorize: "PaymentPolicy#create?"
   field :payment_update, mutation: Mutations::PaymentUpdate, null: false, authorize: "PaymentPolicy#update?"
-  field :printer_configuration_create, mutation: Mutations::PrinterConfigurationCreate, null: false,
-                                       authorize: "PrinterConfigurationPolicy#create?"
-  field :printer_configuration_delete, mutation: Mutations::PrinterConfigurationDelete, null: false,
-                                       authorize: "PrinterConfigurationPolicy#delete?"
-  field :printer_configuration_update, mutation: Mutations::PrinterConfigurationUpdate, null: false,
-                                       authorize: "PrinterConfigurationPolicy#update?"
+  field :printer_configuration_create, mutation: Mutations::PrinterConfigurationCreate, null: false, authorize: "PrinterConfigurationPolicy#create?"
+  field :printer_configuration_delete, mutation: Mutations::PrinterConfigurationDelete, null: false, authorize: "PrinterConfigurationPolicy#delete?"
+  field :printer_configuration_update, mutation: Mutations::PrinterConfigurationUpdate, null: false, authorize: "PrinterConfigurationPolicy#update?"
   field :product_create, mutation: Mutations::ProductCreate, null: false, authorize: "ProductPolicy#create?"
   field :product_delete, mutation: Mutations::ProductDelete, null: false, authorize: "ProductPolicy#delete?"
-  field :product_transaction_create, mutation: Mutations::ProductTransactionCreate, null: false,
-                                     authorize: "ProductTransactionPolicy#create?"
+  field :product_transaction_create, mutation: Mutations::ProductTransactionCreate, null: false, authorize: "ProductTransactionPolicy#create?"
   field :product_update, mutation: Mutations::ProductUpdate, null: false, authorize: "ProductPolicy#update?"
   field :reservation_create, mutation: Mutations::ReservationCreate, null: false, authorize: "ReservationPolicy#create?"
   field :reservation_update, mutation: Mutations::ReservationUpdate, null: false, authorize: "ReservationPolicy#update?"
@@ -75,12 +60,9 @@ class Types::MutationType < Types::BaseObject
   field :role_create, mutation: Mutations::RoleCreate, null: false, authorize: "RolePolicy#create?"
   field :role_delete, mutation: Mutations::RoleDelete, null: false, authorize: "RolePolicy#update?"
   field :role_update, mutation: Mutations::RoleUpdate, null: false, authorize: "RolePolicy#delete?"
-  field :service_charge_create, mutation: Mutations::ServiceChargeCreate, null: false,
-                                authorize: "ServiceChargePolicy#create?"
-  field :service_charge_delete, mutation: Mutations::ServiceChargeDelete, null: false,
-                                authorize: "ServiceChargePolicy#delete?"
-  field :service_charge_update, mutation: Mutations::ServiceChargeUpdate, null: false,
-                                authorize: "ServiceChargePolicy#update?"
+  field :service_charge_create, mutation: Mutations::ServiceChargeCreate, null: false, authorize: "ServiceChargePolicy#create?"
+  field :service_charge_delete, mutation: Mutations::ServiceChargeDelete, null: false, authorize: "ServiceChargePolicy#delete?"
+  field :service_charge_update, mutation: Mutations::ServiceChargeUpdate, null: false, authorize: "ServiceChargePolicy#update?"
   field :ticket_create, mutation: Mutations::TicketCreate, null: false, authorize: "TicketPolicy#create?"
   field :ticket_items_update, mutation: Mutations::TicketItemsUpdate, null: false, authorize: "TicketItemPolicy#update?"
   field :time_sheet_create, mutation: Mutations::TimeSheetCreate, null: false, authorize: "TimeSheetPolicy#create?"
@@ -88,11 +70,9 @@ class Types::MutationType < Types::BaseObject
   field :time_sheet_update, mutation: Mutations::TimeSheetUpdate, null: false, authorize: "TimeSheetPolicy#update?"
   field :user_create, mutation: Mutations::UserCreate, null: false, authorize: "UserPolicy#create?"
   field :user_delete, mutation: Mutations::UserDelete, null: false, authorize: "UserPolicy#delete?"
-  field :user_session_create, mutation: Mutations::UserSessionCreate, null: false,
-                              authorize: "UserSessionPolicy#create?"
-  field :user_session_destroy, mutation: Mutations::UserSessionDestroy, null: false,
-                               authorize: "UserSessionPolicy#destroy?"
-  field :user_session_time_sheet_create, mutation: Mutations::UserSessionTimeSheetCreate, null: false,
-                                         authorize: "UserSessionPolicy#create_time_sheet?"
+  field :user_session_create, mutation: Mutations::UserSessionCreate, null: false, authorize: "UserSessionPolicy#create?"
+  field :user_session_destroy, mutation: Mutations::UserSessionDestroy, null: false, authorize: "UserSessionPolicy#destroy?"
+  field :user_session_time_sheet_create, mutation: Mutations::UserSessionTimeSheetCreate, null: false, authorize: "UserSessionPolicy#create_time_sheet?"
   field :user_update, mutation: Mutations::UserUpdate, null: false, authorize: "UserPolicy#update?"
 end
+# rubocop:enable Layout/LineLength

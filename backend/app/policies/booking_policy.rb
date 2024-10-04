@@ -9,6 +9,10 @@ class BookingPolicy < ApplicationPolicy
     mobile_user?("orders") || mobile_user?("takeout")
   end
 
+  def force_clock_out?
+    mobile_user?("force_clock_out")
+  end
+
   def scope
     if web_admin?
       Booking.where(restaurant: web_admin!.restaurants)

@@ -12,8 +12,8 @@ class Booking < ApplicationRecord
   belongs_to :user
 
   has_many :booking_tables, dependent: :destroy
-  has_many :invoices, dependent: :destroy
-  has_many :tickets, dependent: :restrict_with_error
+  has_many :invoices, dependent: :restrict_with_error
+  has_many :tickets, dependent: :destroy
 
   has_one :applied_discount, as: :discountable, dependent: :destroy
 
@@ -41,9 +41,6 @@ class Booking < ApplicationRecord
   end
 
   def validate_clocked_out_at
-    non_cancelled_tickets_exists = tickets.joins(:ticket_items).where.not(ticket_items: { status: :cancelled }).exists?
-    invoices_blank_or_incomplete = invoices.blank? || !invoices.all?(&:completed?)
-
-    errors.add(:base, "Unprocessed invoice(s)") if non_cancelled_tickets_exists && invoices_blank_or_incomplete
+    errors.add(:base, "Unprocessed invoice(s)") if invoices.blank? || !invoices.all?(&:completed?)
   end
 end

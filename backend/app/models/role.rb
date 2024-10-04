@@ -6,6 +6,7 @@ class Role < ApplicationRecord
     "clock_in_clock_out",
     "delete_ticket_item",
     "floor_plan",
+    "force_clock_out",
     "inventory",
     "orders",
     "payments",

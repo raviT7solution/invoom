@@ -3,7 +3,7 @@
 class Ticket < ApplicationRecord
   belongs_to :booking
 
-  has_many :ticket_items, dependent: :restrict_with_error
+  has_many :ticket_items, dependent: :destroy
 
   after_create_commit :broadcast
 

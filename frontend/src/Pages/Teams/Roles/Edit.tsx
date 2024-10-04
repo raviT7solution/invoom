@@ -12,20 +12,24 @@ type schema = {
 
 const permissions = [
   {
-    label: "Apply Discount",
+    label: "Apply discount",
     value: "apply_discount",
   },
   {
-    label: "Clock In / Clock Out",
+    label: "Clock in / Clock out",
     value: "clock_in_clock_out",
   },
   {
-    label: "Delete Order Item",
+    label: "Delete order item",
     value: "delete_ticket_item",
   },
   {
-    label: "Floor Plan",
+    label: "Floor plan",
     value: "floor_plan",
+  },
+  {
+    label: "Force clock out",
+    value: "force_clock_out",
   },
   {
     label: "Inventory",

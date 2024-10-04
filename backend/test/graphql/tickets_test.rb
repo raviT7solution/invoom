@@ -61,7 +61,7 @@ class TicketsTest < ActionDispatch::IntegrationTest
     item = create(:item, restaurant: restaurant, category: category, price: 5, tax: create(:tax))
 
     ticket = create(:ticket, booking: booking)
-    ticket_item = create(:ticket_item, ticket: ticket, item: item, status: :queued)
+    ticket_item = create(:ticket_item, ticket: ticket, item: item)
     ticket_item_addon = create(:ticket_item_addon, ticket_item: ticket_item)
 
     authentic_query user, "mobile_user", ticket_create_string, variables: {
