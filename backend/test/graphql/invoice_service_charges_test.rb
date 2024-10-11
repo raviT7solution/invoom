@@ -64,7 +64,7 @@ class InvoiceServiceChargesTest < ActionDispatch::IntegrationTest
       invoice: invoice1
     )
 
-    assert_attributes invoice1.reload, total: 11.466
+    assert_attributes invoice1.reload.invoice_summary, total: 11.466
 
     authentic_query user, "mobile_user", invoice_service_charges_update, variables: {
       input: {
@@ -100,8 +100,8 @@ class InvoiceServiceChargesTest < ActionDispatch::IntegrationTest
                       rst: service_charge2.tax.rst,
                       value: service_charge2.value
 
-    assert_in_delta 12.365, invoice1.reload.total
-    assert_in_delta 22.4154, invoice2.reload.total
+    assert_in_delta 12.365, invoice1.reload.invoice_summary.total
+    assert_in_delta 22.4154, invoice2.reload.invoice_summary.total
   end
 
   test "destroy" do
@@ -145,7 +145,7 @@ class InvoiceServiceChargesTest < ActionDispatch::IntegrationTest
       invoice: invoice
     )
 
-    assert_attributes invoice.reload, total: 11.466
+    assert_attributes invoice.reload.invoice_summary, total: 11.466
 
     authentic_query user, "mobile_user", invoice_service_charges_update, variables: { input: {
       attributes: [{ invoiceId: invoice.id, serviceChargeIds: [] }]
@@ -153,7 +153,8 @@ class InvoiceServiceChargesTest < ActionDispatch::IntegrationTest
 
     assert_query_success
     assert_attributes invoice.reload,
-                      invoice_service_charge_ids: [],
+                      invoice_service_charge_ids: []
+    assert_attributes invoice.reload.invoice_summary,
                       total: 9.54
   end
 

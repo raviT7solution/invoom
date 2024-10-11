@@ -11,8 +11,31 @@ class DashboardTest < ActionDispatch::IntegrationTest
     booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
                                booking_tables: [build(:booking_table)])
 
-    invoice = create(:invoice, booking: booking, total: 100)
-    create(:payment, invoice: invoice, payment_mode: "cash", amount: invoice.total)
+    category = create(:category, restaurant: restaurant)
+    item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
+
+    ticket = create(:ticket, booking: booking)
+    ticket_item1, ticket_item2 = create_list(
+      :ticket_item,
+      2,
+      cst: 0,
+      gst: 0,
+      hst: 0,
+      item: item,
+      pst: 0,
+      qst: 0,
+      rst: 0,
+      status: "queued",
+      ticket: ticket
+    )
+
+    invoice = create(:invoice, booking: booking)
+
+    create(:invoice_item, ticket_item: ticket_item1, invoice: invoice, price: 70)
+    create(:invoice_item, ticket_item: ticket_item2, invoice: invoice, price: 30)
+
+    create(:payment, invoice: invoice, payment_mode: "cash", amount: 60.0)
+    create(:payment, invoice: invoice, payment_mode: "cash", amount: 40.0)
 
     booking.update!(clocked_out_at: Time.current)
 
@@ -110,11 +133,10 @@ class DashboardTest < ActionDispatch::IntegrationTest
            value: 17.0,
            service_charge: service_charge2, invoice: invoice2)
 
-    create(:payment, payment_mode: "cash", invoice: invoice1, amount: invoice1.total, tip: 1.0)
-    create(:payment, payment_mode: "cash", invoice: invoice2, amount: invoice2.total, tip: 2.0)
+    create(:payment, payment_mode: "cash", invoice: invoice1, amount: invoice1.invoice_summary.total, tip: 1.0)
+    create(:payment, payment_mode: "cash", invoice: invoice2, amount: invoice2.invoice_summary.total, tip: 2.0)
 
-    # TODO: Remove reload after virtual total field
-    booking.reload.update!(clocked_out_at: Time.current)
+    booking.update!(clocked_out_at: Time.current)
 
     authentic_query admin, "web_admin", sales_summary_query, variables: {
       endTime: nil,

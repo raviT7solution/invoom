@@ -39,12 +39,15 @@ class InvoicesTest < ActionDispatch::IntegrationTest
     assert_attributes first,
                       booking_id: booking.id,
                       invoice_type: "split_equally",
-                      primary: true,
-                      total: 193.9
+                      primary: true
     assert_attributes second,
                       booking_id: booking.id,
                       invoice_type: "split_equally",
-                      primary: false,
+                      primary: false
+
+    assert_attributes first.invoice_summary,
+                      total: 193.9
+    assert_attributes second.invoice_summary,
                       total: 193.9
 
     assert_attributes first_items[0],
@@ -97,8 +100,8 @@ class InvoicesTest < ActionDispatch::IntegrationTest
 
     first, second = Invoice.order(:number)
 
-    create(:payment, invoice: first, payment_mode: "cash", amount: first.total)
-    create(:payment, invoice: second, payment_mode: "cash", amount: second.total)
+    create(:payment, invoice: first, payment_mode: "cash", amount: first.invoice_summary.total)
+    create(:payment, invoice: second, payment_mode: "cash", amount: second.invoice_summary.total)
 
     assert_equal 2, Invoice.count
     assert_equal 2, Payment.count
@@ -125,7 +128,8 @@ class InvoicesTest < ActionDispatch::IntegrationTest
     assert_equal 2, invoice.payments.count
     assert_attributes invoice,
                       invoice_type: "simple",
-                      primary: true,
+                      primary: true
+    assert_attributes invoice.invoice_summary,
                       total: 387.8
   end
 
@@ -178,12 +182,15 @@ class InvoicesTest < ActionDispatch::IntegrationTest
     assert_attributes first,
                       booking_id: booking.id,
                       invoice_type: "split_equally",
-                      primary: true,
-                      total: 91.37954545454545
+                      primary: true
     assert_attributes second,
                       booking_id: booking.id,
                       invoice_type: "split_equally",
-                      primary: false,
+                      primary: false
+
+    assert_attributes first.invoice_summary,
+                      total: 91.37954545454545
+    assert_attributes second.invoice_summary,
                       total: 91.37954545454545
 
     assert_attributes first_items[0],
@@ -215,28 +222,6 @@ class InvoicesTest < ActionDispatch::IntegrationTest
       discountable: booking, discount_type: "percentage", value: 10, restaurant: booking.restaurant
     )
 
-    authentic_query booking.user, "mobile_user", invoices_create, variables: { input: {
-      bookingId: booking.id,
-      attributes: [
-        {
-          invoiceType: "split_equally",
-          invoiceItems: [
-            { consumeBill: 2, ticketItemId: ticket_item1.id },
-            { consumeBill: 2, ticketItemId: ticket_item2.id }
-          ]
-        },
-        {
-          invoiceType: "split_equally",
-          invoiceItems: [
-            { consumeBill: 2, ticketItemId: ticket_item1.id },
-            { consumeBill: 2, ticketItemId: ticket_item2.id }
-          ]
-        }
-      ]
-    } }
-
-    assert_query_success
-
     first, second = Invoice.order(:number)
     first_items = first.invoice_items.order(:created_at)
     second_items = second.invoice_items.order(:created_at)
@@ -248,12 +233,15 @@ class InvoicesTest < ActionDispatch::IntegrationTest
     assert_attributes first,
                       booking_id: booking.id,
                       invoice_type: "split_equally",
-                      primary: true,
-                      total: 87.5475
+                      primary: true
     assert_attributes second,
                       booking_id: booking.id,
                       invoice_type: "split_equally",
-                      primary: false,
+                      primary: false
+
+    assert_attributes first.invoice_summary,
+                      total: 87.5475
+    assert_attributes second.invoice_summary,
                       total: 87.5475
 
     assert_attributes first_items[0],
@@ -312,8 +300,8 @@ class InvoicesTest < ActionDispatch::IntegrationTest
     assert_equal 2, first_items.count
     assert_equal 2, second_items.count
 
-    assert_attributes first, total: 193.9
-    assert_attributes second, total: 193.9
+    assert_attributes first.invoice_summary, total: 193.9
+    assert_attributes second.invoice_summary, total: 193.9
 
     ticket_item2.dup.save!
 
@@ -325,8 +313,8 @@ class InvoicesTest < ActionDispatch::IntegrationTest
     assert_equal 3, first_items.count
     assert_equal 3, second_items.count
 
-    assert_attributes first, total: 366.4
-    assert_attributes second, total: 366.4
+    assert_attributes first.invoice_summary, total: 366.4
+    assert_attributes second.invoice_summary, total: 366.4
   end
 
   private

@@ -11,11 +11,13 @@ class Types::CustomerType < Types::BaseObject
 
   def avg_invoice_amount # rubocop:disable Metrics/AbcSize
     BatchLoader::GraphQL.for(object.id).batch do |ids, loader|
-      invoices = Invoice.arel_table
+      invoice_summaries = InvoiceSummary.arel_table
 
       average = CustomerPolicy.new(context[:current_user]).scope
-                              .joins(bookings: :invoices).where(bookings: { customer_id: ids })
-                              .group(:id).average(invoices[:total])
+                              .joins(bookings: { invoices: :invoice_summary })
+                              .where(bookings: { customer_id: ids })
+                              .group(:id)
+                              .average(invoice_summaries[:total])
 
       ids.each { |i| loader.call(i, average[i] || 0) }
     end
@@ -35,11 +37,13 @@ class Types::CustomerType < Types::BaseObject
 
   def total_invoice_amount # rubocop:disable Metrics/AbcSize
     BatchLoader::GraphQL.for(object.id).batch do |ids, loader|
-      invoices = Invoice.arel_table
+      invoice_summaries = InvoiceSummary.arel_table
 
       total = CustomerPolicy.new(context[:current_user]).scope
-                            .joins(bookings: :invoices).where(bookings: { customer_id: ids })
-                            .group(:id).sum(invoices[:total])
+                            .joins(bookings: { invoices: :invoice_summary })
+                            .where(bookings: { customer_id: ids })
+                            .group(:id)
+                            .sum(invoice_summaries[:total])
 
       ids.each { |i| loader.call(i, total[i] || 0) }
     end

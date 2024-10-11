@@ -45,11 +45,11 @@ class Types::DashboardSummaryType < Types::BaseObject
   end
 
   def delivery_revenue
-    object[:invoices].joins(:booking).where(bookings: { booking_type: :delivery }).sum(:total)
+    booking_type_revenue["delivery"] || 0
   end
 
   def dine_in_revenue
-    object[:invoices].joins(:booking).where(bookings: { booking_type: :dine_in }).sum(:total)
+    booking_type_revenue["dine_in"] || 0
   end
 
   def door_dash_revenue
@@ -58,10 +58,10 @@ class Types::DashboardSummaryType < Types::BaseObject
 
   def hourly_revenue
     tz = object[:restaurant].timezone
-    hourly_revenue = object[:invoices]
+    hourly_revenue = invoices
                      .select(
                        "EXTRACT(HOUR FROM (invoices.created_at::timestamptz AT TIME ZONE '#{tz}')) AS hour",
-                       "SUM(invoices.total) AS revenue"
+                       "SUM(invoice_summaries.total) AS revenue"
                      )
                      .group("hour")
 
@@ -69,7 +69,7 @@ class Types::DashboardSummaryType < Types::BaseObject
   end
 
   def invoice_count
-    @invoice_count ||= object[:invoices].size
+    @invoice_count ||= invoices.size
   end
 
   def pax_count
@@ -81,11 +81,11 @@ class Types::DashboardSummaryType < Types::BaseObject
   end
 
   def takeout_revenue
-    object[:invoices].joins(:booking).where(bookings: { booking_type: :takeout }).sum(:total)
+    booking_type_revenue["takeout"] || 0
   end
 
   def total_revenue
-    @total_revenue ||= object[:invoices].sum(:total)
+    @total_revenue ||= invoices.sum(InvoiceSummary.arel_table[:total])
   end
 
   def total_tax # rubocop:disable Metrics/AbcSize, GraphQL/ResolverMethodLength
@@ -124,6 +124,10 @@ class Types::DashboardSummaryType < Types::BaseObject
 
   private
 
+  def booking_type_revenue
+    @booking_type_revenue ||= invoices.group(Booking.arel_table[:booking_type]).sum(InvoiceSummary.arel_table[:total])
+  end
+
   def flat_service_charge_expression # rubocop:disable Metrics/AbcSize
     invoices = Invoice.arel_table.alias(:counts)
     service_charges = InvoiceServiceCharge.arel_table
@@ -138,6 +142,10 @@ class Types::DashboardSummaryType < Types::BaseObject
     ) / 100
 
     (service_charges[:value] / invoices[:invoice_count]) * tax_expression
+  end
+
+  def invoices
+    Invoice.joins(:booking, :invoice_summary).where(booking_id: object[:bookings]).not_void
   end
 
   def items_tax_expression

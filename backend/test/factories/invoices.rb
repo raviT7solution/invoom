@@ -6,7 +6,6 @@ FactoryBot.define do
 
     invoice_type { "simple" }
     primary { false }
-    total { Faker::Number.decimal(l_digits: 2) }
 
     booking { nil }
   end

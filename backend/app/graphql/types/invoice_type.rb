@@ -5,7 +5,6 @@ class Types::InvoiceType < Types::BaseObject
   field :invoice_type, Types::Invoice::InvoiceTypeEnum, null: false
   field :number, Integer, null: false
   field :primary, Boolean, null: false
-  field :total, Float, null: false
 
   field :booking, Types::BookingType, scope: "BookingPolicy", preload: :booking, null: false
   field :invoice_items, [Types::InvoiceItemType], scope: "InvoiceItemPolicy", preload: :invoice_items, null: false
@@ -13,36 +12,29 @@ class Types::InvoiceType < Types::BaseObject
   field :payments, [Types::PaymentType], scope: "PaymentPolicy", preload: :payments, null: false
 
   field :paid_amount, Float, preload: :payments, null: false
-  field :status, Types::Invoice::StatusEnum, preload: :payments, null: false
-  field :sub_total, Float, null: false
+  field :status, Types::Invoice::StatusEnum, preload: [:invoice_summary, :payments], null: false
+  field :sub_total, Float, preload: :invoice_summary, null: false
   field :tax_summary, [Types::TaxSummaryType], preload: [:invoice_items, :invoice_service_charges], null: false
+  field :total, Float, preload: :invoice_summary, null: false
   field :total_discount, Float, null: false
 
   def paid_amount
     object.payments.reject { |i| i.payment_mode == "void" }.sum(&:amount)
   end
 
-  def status
+  def status # rubocop:disable Metrics/AbcSize
     paid_amount = object.payments.reject { |i| i.payment_mode == "void" }.sum(&:amount)
     void_payment = object.payments.any? { |i| i.payment_mode == "void" }
 
     return "voided" if void_payment
-    return "paid" if paid_amount == object.total
-    return "overpaid" if paid_amount > object.total
+    return "paid" if paid_amount == object.invoice_summary.total
+    return "overpaid" if paid_amount > object.invoice_summary.total
 
     "unpaid"
   end
 
-  def sub_total # rubocop:disable Metrics/AbcSize
-    BatchLoader::GraphQL.for(object.id).batch do |ids, loader|
-      invoice_items = InvoiceItem.arel_table
-
-      sub_total = InvoicePolicy.new(context[:current_session]).scope.where(id: ids)
-                               .joins(:invoice_items)
-                               .group(:id).sum(invoice_items[:price])
-
-      ids.each { |i| loader.call(i, sub_total[i] || 0) }
-    end
+  def sub_total
+    object.invoice_summary.subtotal
   end
 
   def tax_summary # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, GraphQL/ResolverMethodLength, Metrics/CyclomaticComplexity
@@ -110,6 +102,10 @@ class Types::InvoiceType < Types::BaseObject
     end
 
     taxes
+  end
+
+  def total
+    object.invoice_summary.total
   end
 
   def total_discount # rubocop:disable Metrics/AbcSize

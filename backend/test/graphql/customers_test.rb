@@ -30,10 +30,31 @@ class CustomersTest < ActionDispatch::IntegrationTest
     customer = create(:customer, email: "elvis@example.com", name: "Elvis", restaurant: restaurant)
     create(:customer, email: "erika@example.com", name: "Erika", restaurant: restaurant)
 
+    category = create(:category, restaurant: restaurant)
+    item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
+
     booking = create(:booking, restaurant: restaurant, user: user, booking_type: "takeout", pax: 1, customer: customer)
 
-    create(:invoice, booking: booking, total: 100)
-    create(:invoice, booking: booking, total: 50)
+    ticket = create(:ticket, booking: booking)
+    ticket_item1, ticket_item2 = create_list(
+      :ticket_item,
+      2,
+      cst: 0,
+      gst: 0,
+      hst: 0,
+      item: item,
+      pst: 0,
+      qst: 0,
+      rst: 0,
+      status: "queued",
+      ticket: ticket
+    )
+
+    invoice1 = create(:invoice, booking: booking)
+    invoice2 = create(:invoice, booking: booking)
+
+    create(:invoice_item, ticket_item: ticket_item1, invoice: invoice1, price: 100)
+    create(:invoice_item, ticket_item: ticket_item2, invoice: invoice2, price: 50)
 
     authentic_query user, "mobile_user", index_string,
                     variables: { restaurantId: restaurant.id, query: "El", page: 1, perPage: 10 }

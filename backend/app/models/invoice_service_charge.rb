@@ -15,13 +15,4 @@ class InvoiceServiceCharge < ApplicationRecord
   validates :qst, presence: true
   validates :rst, presence: true
   validates :value, presence: true
-
-  after_create :set_invoice_amount
-  after_destroy :set_invoice_amount
-
-  private
-
-  def set_invoice_amount
-    invoice.update_amount!
-  end
 end

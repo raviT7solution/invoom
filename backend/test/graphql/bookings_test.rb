@@ -205,7 +205,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
 
     ticket = create(:ticket, booking: booking)
-    create(:ticket_item, ticket: ticket, item: item)
+    ticket_item = create(:ticket_item, ticket: ticket, item: item)
 
     # without invoices
     authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
@@ -214,6 +214,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_nil booking.reload.clocked_out_at
 
     invoice = create(:invoice, booking: booking)
+    create(:invoice_item, ticket_item: ticket_item, invoice: invoice)
 
     # with unpaid invoice
     authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
@@ -221,7 +222,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_query_error "Unprocessed invoice(s)"
     assert_nil booking.reload.clocked_out_at
 
-    create(:payment, invoice: invoice, amount: invoice.total)
+    create(:payment, invoice: invoice, amount: invoice.invoice_summary.total)
 
     # with paid invoice
     authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }

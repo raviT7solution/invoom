@@ -44,10 +44,8 @@ class Mutations::InvoicesCreate < Mutations::BaseMutation
         )
       end
 
-      invoice.update!(invoice_type: invoice_attributes[:invoice_type], primary: i.zero?, total: 0)
+      invoice.update!(invoice_type: invoice_attributes[:invoice_type], primary: i.zero?)
     end
-
-    booking.invoices.each(&:update_amount!)
   end
 
   def revert_split!(invoices)
