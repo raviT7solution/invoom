@@ -40,9 +40,6 @@ jobs:
           cache-dependency-path: |
             ./frontend/pnpm-lock.yaml
           node-version: 18.17.1
-      - uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: 120
 
       - run: pnpm install --frozen-lockfile
         working-directory: ./frontend
