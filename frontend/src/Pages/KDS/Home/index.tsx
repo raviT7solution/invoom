@@ -13,7 +13,7 @@ import {
   useTicketItemsUpdate,
   useTickets,
 } from "../../../api/kds";
-import alertSound from "../../../assets/alert.wav";
+import { assetsPath } from "../../../helpers/assets";
 import { useDebounceFn } from "../../../helpers/hooks";
 import { useKDSConfigStore } from "../../../stores/useKDSConfigStore";
 import { useKDSSessionStore } from "../../../stores/useKDSSessionStore";
@@ -24,7 +24,7 @@ const menuItems = TABS.map((i) => ({
 }));
 
 const notify = () => {
-  const alert = new Audio(alertSound);
+  const alert = new Audio(assetsPath("kds/alert.wav"));
 
   alert.pause();
   alert.currentTime = 0;

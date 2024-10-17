@@ -38,8 +38,8 @@ import {
 import { ReactNode, useEffect } from "react";
 
 import { useCurrentAdmin, useRestaurants } from "../api";
-import Logo from "../assets/logo.png";
 import { classNames, initials } from "../helpers";
+import { assetsPath } from "../helpers/assets";
 import { Router } from "../Routes";
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
 import { useRestaurantIdStore } from "../stores/useRestaurantIdStore";
@@ -245,7 +245,10 @@ export const Navbar = ({
       </Layout.Sider>
       <Layout>
         <Layout.Header className="!bg-white flex items-center">
-          <img className="h-14 absolute left-1/2 -translate-x-1/2" src={Logo} />
+          <img
+            className="h-14 absolute left-1/2 -translate-x-1/2"
+            src={assetsPath("logo/horizontal.png")}
+          />
 
           <div className="absolute cursor-pointer right-4">
             <Dropdown menu={{ items: headerItems }} trigger={["click"]}>
