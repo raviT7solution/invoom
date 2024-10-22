@@ -1,9 +1,11 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import {
   Button,
+  Card,
   DatePicker,
   Popconfirm,
   Select,
+  Statistic,
   Table,
   TableColumnsType,
   Typography,
@@ -12,7 +14,12 @@ import { useMemo, useState } from "react";
 
 import { Edit } from "./Edit";
 
-import { useTimeSheetDelete, useTimeSheets, useUsers } from "../../../api";
+import {
+  useTimeSheetDelete,
+  useTimeSheets,
+  useTimeSheetSummary,
+  useUsers,
+} from "../../../api";
 import { Navbar } from "../../../components/Navbar";
 import {
   DATE_FORMAT,
@@ -47,6 +54,12 @@ export const ReportsLabour = () => {
     perPage: pagination.perPage,
     restaurantId: restaurantId,
     startDate: dateRange.start,
+    userIds: userIds,
+  });
+  const timeSheetSummary = useTimeSheetSummary({
+    endTime: dateRange.end,
+    restaurantId: restaurantId,
+    startTime: dateRange.start,
     userIds: userIds,
   });
 
@@ -139,6 +152,17 @@ export const ReportsLabour = () => {
             Add Timesheet
           </Button>
         </div>
+      </div>
+
+      <div className="flex my-2">
+        <Card bordered size="small">
+          <Statistic
+            loading={timeSheetSummary.isFetching}
+            precision={2}
+            title="Total Hours"
+            value={timeSheetSummary.data?.totalHours}
+          />
+        </Card>
       </div>
 
       <Table

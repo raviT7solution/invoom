@@ -138,6 +138,8 @@ import {
   TimeSheetDeleteDocument,
   TimeSheetDeleteMutationVariables,
   TimeSheetDocument,
+  TimeSheetSummaryDocument,
+  TimeSheetSummaryQueryVariables,
   TimeSheetUpdateDocument,
   TimeSheetUpdateMutationVariables,
   TimeSheetsDocument,
@@ -1165,5 +1167,16 @@ export const useBookingsExport = () => {
   return useMutation({
     mutationFn: async (variables: BookingsQueryVariables) =>
       (await client.request(BookingsDocument, variables)).bookings,
+  });
+};
+
+export const useTimeSheetSummary = (
+  variables: TimeSheetSummaryQueryVariables,
+) => {
+  return useQuery({
+    queryKey: ["timeSheetSummary", variables],
+    queryFn: async () =>
+      (await client.request(TimeSheetSummaryDocument, variables))
+        .timeSheetSummary,
   });
 };

@@ -1756,6 +1756,7 @@ type Query {
   taxes(restaurantId: ID!): [Tax!]!
   tickets(bookingTypes: [String!], kitchenProfileId: ID, page: Int!, perPage: Int!, restaurantId: ID!, status: [String!]): TicketCollection!
   timeSheet(id: ID!): TimeSheet!
+  timeSheetSummary(endTime: ISO8601DateTime, restaurantId: ID!, startTime: ISO8601DateTime, userIds: [ID!]): TimeSheetSummary!
   timeSheets(endDate: ISO8601DateTime, page: Int!, perPage: Int!, restaurantId: ID!, startDate: ISO8601DateTime, userIds: [String!]): TimeSheetCollection!
   user(id: ID!): User!
   users(restaurantId: ID!): [User!]!
@@ -2166,6 +2167,10 @@ input TimeSheetDeleteInput {
   """
   clientMutationId: String
   id: ID!
+}
+
+type TimeSheetSummary {
+  totalHours: Float!
 }
 
 """

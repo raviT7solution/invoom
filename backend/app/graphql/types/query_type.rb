@@ -156,6 +156,12 @@ class Types::QueryType < Types::BaseObject
   field :time_sheet, Types::TimeSheetType, null: false do
     argument :id, ID, required: true
   end
+  field :time_sheet_summary, Types::TimeSheetSummaryType, null: false do
+    argument :end_time, GraphQL::Types::ISO8601DateTime, required: false
+    argument :restaurant_id, ID, required: true
+    argument :start_time, GraphQL::Types::ISO8601DateTime, required: false
+    argument :user_ids, [ID], required: false
+  end
   field :time_sheets, Types::TimeSheetType.collection_type, null: false do
     argument :end_date, GraphQL::Types::ISO8601DateTime, required: false
     argument :page, Integer, required: true
@@ -463,14 +469,21 @@ class Types::QueryType < Types::BaseObject
     TimeSheetPolicy.new(context[:current_user]).scope.find(id)
   end
 
-  def time_sheets(restaurant_id:, page:, per_page:, start_date: nil, end_date: nil, user_ids: nil) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize
+  def time_sheet_summary(restaurant_id:, start_time: nil, end_time: nil, user_ids: [])
     records = TimeSheetPolicy.new(context[:current_user]).scope
     records = records.joins(:user).where(user: { restaurant_id: restaurant_id })
 
-    if user_ids.present?
-      records = records.where(user_id: UserPolicy.new(context[:current_user]).scope.where(id: user_ids))
-    end
+    records = records.where(user_id: user_ids) if user_ids.present?
+    records = records.where(start_time: start_time..end_time) if start_time.present? && end_time.present?
 
+    records
+  end
+
+  def time_sheets(restaurant_id:, page:, per_page:, start_date: nil, end_date: nil, user_ids: nil) # rubocop:disable Metrics/ParameterLists
+    records = TimeSheetPolicy.new(context[:current_user]).scope
+    records = records.joins(:user).where(user: { restaurant_id: restaurant_id })
+
+    records = records.where(user_id: user_ids) if user_ids.present?
     records = records.where(start_time: start_date..end_date) if start_date.present? && end_date.present?
 
     records.order(created_at: :desc).page(page).per(per_page)

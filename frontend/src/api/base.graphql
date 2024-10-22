@@ -933,3 +933,19 @@ query customers(
     }
   }
 }
+
+query timeSheetSummary(
+  $endTime: ISO8601DateTime
+  $restaurantId: ID!
+  $startTime: ISO8601DateTime
+  $userIds: [ID!]
+) {
+  timeSheetSummary(
+    endTime: $endTime
+    restaurantId: $restaurantId
+    startTime: $startTime
+    userIds: $userIds
+  ) {
+    totalHours
+  }
+}
