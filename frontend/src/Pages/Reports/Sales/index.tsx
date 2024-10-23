@@ -7,7 +7,6 @@ import {
   TableColumnsType,
   Typography,
 } from "antd";
-import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 
 import { Summary } from "./Summary";
@@ -24,7 +23,6 @@ import { TIME_RANGE_PRESETS } from "../../../helpers";
 import {
   DATE_FORMAT,
   dateRangePickerToString,
-  displayDate,
   utcToRestaurantTimezone,
 } from "../../../helpers/dateTime";
 import { exportAsCSV } from "../../../helpers/exports";
@@ -350,10 +348,6 @@ export const ReportsSales = () => {
       "Server Name",
     ];
 
-    const filename = dateRange.start
-      ? `${dateRange.start}-${dateRange.end}`
-      : displayDate(dayjs(), tz);
-
     exportAsCSV(
       header,
       collection.map((r, idx) => {
@@ -381,7 +375,7 @@ export const ReportsSales = () => {
           r.userFullName,
         ];
       }),
-      `sales-export-${filename}`,
+      "sales-export",
     );
   };
 
@@ -415,10 +409,6 @@ export const ReportsSales = () => {
       "Server Name",
     ];
 
-    const filename = dateRange.start
-      ? `${dateRange.start}-${dateRange.end}`
-      : displayDate(dayjs(), tz);
-
     exportAsCSV(
       header,
       collection.map((r, idx) => {
@@ -448,7 +438,7 @@ export const ReportsSales = () => {
           r.booking.userFullName,
         ];
       }),
-      `sales-export-${filename}`,
+      "sales-export",
     );
   };
 

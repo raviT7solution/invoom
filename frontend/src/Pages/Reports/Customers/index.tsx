@@ -1,18 +1,15 @@
 import { DownloadOutlined } from "@ant-design/icons";
 import { Button, Input, Table, TableColumnsType, Typography } from "antd";
-import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 
 import { useCustomers, useCustomersExport } from "../../../api";
 import { Navbar } from "../../../components/Navbar";
-import { displayDate } from "../../../helpers/dateTime";
 import { exportAsCSV } from "../../../helpers/exports";
 import { useDebounceFn } from "../../../helpers/hooks";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
 export const ReportsCustomers = () => {
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
-  const tz = useRestaurantIdStore((s) => s.tz);
 
   const [query, setQuery] = useState("");
   const [pagination, setPagination] = useState({
@@ -100,7 +97,7 @@ export const ReportsCustomers = () => {
           i.totalInvoiceAmount,
         ];
       }),
-      `customers-export-${displayDate(dayjs(), tz)}`,
+      "customers-export",
     );
   };
 

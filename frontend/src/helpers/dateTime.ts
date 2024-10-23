@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 
@@ -12,10 +12,6 @@ const BACKEND_DATE_FORMAT = "YYYY-MM-DD";
 export const DATE_FORMAT = "MM-DD-YYYY";
 export const DATE_TIME_FORMAT = "MM-DD-YYYY hh:mm A";
 export const TIME_FORMAT = "hh:mm A";
-
-export const displayDate = (date: Dayjs, tz: string) => {
-  return date.tz(tz).format(DATE_FORMAT);
-};
 
 export const utcToRestaurantTimezone = (dateTime: string, tz: string) => {
   return dayjs(dateTime).tz(tz).format(DATE_TIME_FORMAT);
