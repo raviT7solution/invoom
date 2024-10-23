@@ -30,7 +30,7 @@ class TicketItem < ApplicationRecord
   private
 
   def broadcast
-    item.category.kitchen_profiles.each { |i| TicketItemsChannel.broadcast_to i, {} }
+    item.category.kitchen_profiles.each { |i| KitchenProfilesChannel.broadcast_to i, {} }
   end
 
   def invoice_item_create

@@ -75,7 +75,7 @@ export const KDSHome = () => {
   useEffect(() => {
     const channel = consumer.subscriptions.create(
       {
-        channel: "TicketItemsChannel",
+        channel: "KitchenProfilesChannel",
         Authorization: token,
         kitchen_profile_id: kitchenProfileId,
       },
