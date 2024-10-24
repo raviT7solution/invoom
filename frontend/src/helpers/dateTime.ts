@@ -22,13 +22,11 @@ export const humanizeDuration = (startTime: string, endTime: string) => {
 
   const hours = Math.floor(duration / (1000 * 60 * 60));
   const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((duration % (1000 * 60)) / 1000);
 
   let durationString = "";
 
   if (hours > 0) durationString += `${hours} hours `;
-  if (minutes > 0) durationString += `${minutes} min `;
-  if (seconds > 0) durationString += `${seconds} sec`;
+  durationString += `${minutes} min`;
 
   return durationString.trim();
 };
