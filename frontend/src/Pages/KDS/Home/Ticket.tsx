@@ -74,7 +74,12 @@ const TicketItem = ({
       {...onTicketItemLongPress}
     >
       <b>{item.displayName}</b>
-      <b className="px-1 bg-gray-100 rounded-sm">
+      <b
+        className={classNames(
+          "px-1 rounded-sm",
+          item.quantity > 0 ? "bg-gray-100" : "bg-red-100 text-red-600",
+        )}
+      >
         {item.quantity}{" "}
         {item.uom === "item" ? <>&times;</> : UOM_ABBREVIATION[item.uom]}
       </b>
