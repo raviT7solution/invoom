@@ -828,6 +828,7 @@ type KitchenProfile {
   id: ID!
   name: String!
   notify: Boolean!
+  printerConfigurationId: ID
   rows: Int!
 }
 
@@ -836,6 +837,7 @@ input KitchenProfileAttributes {
   columns: Int
   name: String
   notify: Boolean
+  printerConfigurationId: ID
   rows: Int
 }
 

@@ -7,6 +7,7 @@ FactoryBot.define do
     notify { true }
     rows { 3 }
 
+    printer_configuration { nil }
     restaurant { nil }
   end
 end

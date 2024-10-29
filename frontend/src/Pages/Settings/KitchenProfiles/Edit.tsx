@@ -5,6 +5,7 @@ import {
   useKitchenProfile,
   useKitchenProfileCreate,
   useKitchenProfileUpdate,
+  usePrinterConfigurations,
 } from "../../../api";
 import { FormDrawer } from "../../../components/FormDrawer";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
@@ -14,6 +15,7 @@ type schema = {
   columns: number;
   name: string;
   notify: boolean;
+  printerConfigurationId: string | null;
   rows: number;
 };
 
@@ -41,6 +43,8 @@ export const Edit = ({
   const { data: categories, isFetching: isCategoriesFetching } =
     useCategories(restaurantId);
   const { data: kitchenProfile, isFetching } = useKitchenProfile(id);
+  const printerConfigurations = usePrinterConfigurations(restaurantId);
+
   const { mutateAsync: kitchenProfileCreate, isPending: isCreating } =
     useKitchenProfileCreate();
   const { mutateAsync: kitchenProfileUpdate, isPending: isUpdating } =
@@ -105,6 +109,21 @@ export const Edit = ({
             mode="multiple"
             optionFilterProp="label"
             options={categories.map((i) => ({ label: i.name, value: i.id }))}
+            placeholder="Select"
+          />
+        </Form.Item>
+
+        <Form.Item label="Printer" name="printerConfigurationId">
+          <Select
+            allowClear
+            loading={printerConfigurations.isFetching}
+            onChange={(i) => {
+              if (!i) form.setFieldsValue({ printerConfigurationId: null });
+            }}
+            options={printerConfigurations.data.map((i) => ({
+              label: i.name,
+              value: i.id,
+            }))}
             placeholder="Select"
           />
         </Form.Item>

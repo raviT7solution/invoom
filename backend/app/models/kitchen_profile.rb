@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class KitchenProfile < ApplicationRecord
+  belongs_to :printer_configuration, optional: true
   belongs_to :restaurant
 
   has_many :kitchen_profile_categories, dependent: :destroy

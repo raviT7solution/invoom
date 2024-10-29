@@ -5,6 +5,7 @@ class Types::KitchenProfileType < Types::BaseObject
   field :id, ID, null: false
   field :name, String, null: false
   field :notify, Boolean, null: false
+  field :printer_configuration_id, ID, null: true
   field :rows, Integer, null: false
 
   field :category_ids, [ID], scope: "CategoryPolicy", preload: :categories, null: false

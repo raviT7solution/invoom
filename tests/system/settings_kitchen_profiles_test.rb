@@ -9,6 +9,7 @@ class SettingsKitchenProfilesTest < ApplicationSystemTestCase
     admin.restaurants = [restaurant]
 
     category = create(:category, restaurant: restaurant, name: "Category 1")
+    printer_configuration = create(:printer_configuration, restaurant: restaurant)
 
     sign_in(admin)
 
@@ -20,6 +21,9 @@ class SettingsKitchenProfilesTest < ApplicationSystemTestCase
       fill_in "Name", with: "Kitchen Profile 1"
       within ".ant-form-item", text: "Categories" do
         fill_in_select with: "Category 1"
+      end
+      within ".ant-form-item", text: "Printer" do
+        fill_in_select with: printer_configuration.name
       end
       within ".ant-form-item", text: "Rows" do
         find(".ant-slider-mark-text", text: "2").click
@@ -42,6 +46,7 @@ class SettingsKitchenProfilesTest < ApplicationSystemTestCase
                       columns: 3,
                       name: "Kitchen Profile 1",
                       notify: true,
+                      printer_configuration_id: printer_configuration.id,
                       rows: 2
   end
 
@@ -112,5 +117,6 @@ class SettingsKitchenProfilesTest < ApplicationSystemTestCase
                       name: "Kitchen Profile Updated",
                       notify: true,
                       rows: 3
+    assert_nil kitchen_profile.printer_configuration_id
   end
 end
