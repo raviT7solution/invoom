@@ -131,6 +131,72 @@ class PaymentsTest < ActionDispatch::IntegrationTest
                       payment_mode: "card"
   end
 
+  test "create cheque payment" do
+    restaurant = create(:restaurant)
+    role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
+    user = create(:user, restaurant: restaurant, roles: [role])
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    booking_table = build(:booking_table, floor_object: table)
+    booking = create(:booking,
+                     booking_tables: [booking_table],
+                     booking_type: "dine_in",
+                     pax: 1,
+                     restaurant: restaurant,
+                     user: user)
+
+    invoice = create(:invoice, booking: booking)
+
+    authentic_query user, "mobile_user", payment_create_string, variables: {
+      input: {
+        attributes: {
+          amount: 10,
+          paymentMode: "cheque",
+          tip: 10
+        },
+        invoiceId: invoice.id
+      }
+    }
+
+    assert_query_success
+    assert_attributes Payment.first!,
+                      amount: 10,
+                      payment_mode: "cheque",
+                      tip: 10
+  end
+
+  test "create gift card payment" do
+    restaurant = create(:restaurant)
+    role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
+    user = create(:user, restaurant: restaurant, roles: [role])
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    booking_table = build(:booking_table, floor_object: table)
+    booking = create(:booking,
+                     booking_tables: [booking_table],
+                     booking_type: "dine_in",
+                     pax: 1,
+                     restaurant: restaurant,
+                     user: user)
+
+    invoice = create(:invoice, booking: booking)
+
+    authentic_query user, "mobile_user", payment_create_string, variables: {
+      input: {
+        attributes: {
+          amount: 10,
+          paymentMode: "gift_card",
+          tip: 10
+        },
+        invoiceId: invoice.id
+      }
+    }
+
+    assert_query_success
+    assert_attributes Payment.first!,
+                      amount: 10,
+                      payment_mode: "gift_card",
+                      tip: 10
+  end
+
   private
 
   def payment_create_string

@@ -6,9 +6,11 @@ class Types::DashboardSummaryType < Types::BaseObject
   field :booking_count, Integer, null: false
   field :card_revenue, Float, null: false
   field :cash_revenue, Float, null: false
+  field :cheque_revenue, Float, null: false
   field :delivery_revenue, Float, null: false
   field :dine_in_revenue, Float, null: false
   field :door_dash_revenue, Float, null: false
+  field :gift_card_revenue, Float, null: false
   field :hourly_revenue, [Float], null: false
   field :invoice_count, Integer, null: false
   field :pax_count, Integer, null: false
@@ -44,6 +46,10 @@ class Types::DashboardSummaryType < Types::BaseObject
     payment_mode_revenue["cash"] || 0
   end
 
+  def cheque_revenue
+    payment_mode_revenue["cheque"] || 0
+  end
+
   def delivery_revenue
     booking_type_revenue["delivery"] || 0
   end
@@ -54,6 +60,10 @@ class Types::DashboardSummaryType < Types::BaseObject
 
   def door_dash_revenue
     payment_mode_revenue["door_dash"] || 0
+  end
+
+  def gift_card_revenue
+    payment_mode_revenue["gift_card"] || 0
   end
 
   def hourly_revenue

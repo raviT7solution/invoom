@@ -56,9 +56,11 @@ class DashboardTest < ActionDispatch::IntegrationTest
       "bookingCount" => 1,
       "cardRevenue" => 0.0,
       "cashRevenue" => 100.0,
+      "chequeRevenue" => 0.0,
       "deliveryRevenue" => 0.0,
       "dineInRevenue" => 100.0,
       "doorDashRevenue" => 0.0,
+      "giftCardRevenue" => 0.0,
       "hourlyRevenue" => hourly_revenue,
       "invoiceCount" => 1,
       "paxCount" => 2,
@@ -192,9 +194,11 @@ class DashboardTest < ActionDispatch::IntegrationTest
           bookingCount
           cardRevenue
           cashRevenue
+          chequeRevenue
           deliveryRevenue
           dineInRevenue
           doorDashRevenue
+          giftCardRevenue
           hourlyRevenue
           invoiceCount
           paxCount

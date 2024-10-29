@@ -379,9 +379,11 @@ type DashboardSummary {
   bookingCount: Int!
   cardRevenue: Float!
   cashRevenue: Float!
+  chequeRevenue: Float!
   deliveryRevenue: Float!
   dineInRevenue: Float!
   doorDashRevenue: Float!
+  giftCardRevenue: Float!
   hourlyRevenue: [Float!]!
   invoiceCount: Int!
   paxCount: Int!
@@ -1521,7 +1523,9 @@ type PaymentIntentCreatePayload {
 enum PaymentModeEnum {
   card
   cash
+  cheque
   door_dash
+  gift_card
   skip_the_dishes
   uber_eats
   void
