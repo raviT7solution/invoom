@@ -274,6 +274,41 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_not Booking.exists?(id: booking.id)
   end
 
+  test "booking force clock with pin" do
+    restaurant = create(:restaurant, pin: "1234")
+    role = create(:role, permissions: ["orders"], restaurant: restaurant)
+    user = create(:user, restaurant: restaurant, roles: [role])
+
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
+                               booking_tables: [build(:booking_table, floor_object: table)])
+
+    category = create(:category, restaurant: restaurant)
+    item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
+
+    ticket = create(:ticket, booking: booking)
+    create(:ticket_item, ticket: ticket, name: item.name, price: item.price, quantity: 2, item: item)
+
+    authentic_query user, "mobile_user", booking_force_clock_out, variables: {
+      input: {
+        bookingId: booking.id
+      }
+    }
+
+    assert_query_error "Invalid pin"
+    assert_nil booking.reload.clocked_out_at
+
+    authentic_query user, "mobile_user", booking_force_clock_out, variables: {
+      input: {
+        bookingId: booking.id,
+        pin: "1234"
+      }
+    }
+
+    assert_query_success
+    assert_not Booking.exists?(id: booking.id)
+  end
+
   private
 
   def bookings
