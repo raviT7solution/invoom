@@ -8,18 +8,26 @@ class Types::InvoiceType < Types::BaseObject
 
   field :booking, Types::BookingType, scope: "BookingPolicy", preload: :booking, null: false
   field :invoice_items, [Types::InvoiceItemType], scope: "InvoiceItemPolicy", preload: :invoice_items, null: false
-  field :invoice_service_charges, [Types::InvoiceServiceChargeType], scope: "InvoiceServiceChargePolicy", preload: :invoice_service_charges, null: false # rubocop:disable Layout/LineLength
   field :payments, [Types::PaymentType], scope: "PaymentPolicy", preload: :payments, null: false
 
   field :paid_amount, Float, preload: :payments, null: false
+  field :service_charge_summary, [Types::NameValueType], null: false
   field :status, Types::Invoice::StatusEnum, preload: [:invoice_summary, :payments], null: false
   field :sub_total, Float, preload: :invoice_summary, null: false
-  field :tax_summary, [Types::TaxSummaryType], preload: [:invoice_items, :invoice_service_charges], null: false
+  field :tax_summary, [Types::NameValueType], preload: :invoice_items, null: false
   field :total, Float, preload: :invoice_summary, null: false
   field :total_discount, Float, null: false
 
   def paid_amount
     object.payments.reject { |i| i.payment_mode == "void" }.sum(&:amount)
+  end
+
+  def service_charge_summary
+    BatchLoader::GraphQL.for(object.id).batch do |ids, loader|
+      amounts = Invoice.service_charge_summaries.where(id: ids).group_by(&:id)
+
+      ids.each { |i| loader.call(i, amounts[i] || []) }
+    end
   end
 
   def status # rubocop:disable Metrics/AbcSize
@@ -88,7 +96,7 @@ class Types::InvoiceType < Types::BaseObject
     inv_total = invoice_items.sum(&:discounted_amount)
     inv_count = object.booking.invoices.count
 
-    object.invoice_service_charges.each do |i|
+    object.booking.booking_service_charges.each do |i|
       value = i.charge_type == "percentage" ? inv_total * (i.value / 100.0) : (i.value / inv_count)
 
       [:hst, :gst, :pst, :rst, :qst, :cst].each do |tax_type|

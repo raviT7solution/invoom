@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_04_143154) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_15_141000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,6 +59,24 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_04_143154) do
     t.datetime "updated_at", null: false
     t.index ["discountable_type", "discountable_id"], name: "index_applied_discounts_on_discountable", unique: true
     t.index ["restaurant_id"], name: "index_applied_discounts_on_restaurant_id"
+  end
+
+  create_table "booking_service_charges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.float "cst", null: false
+    t.float "gst", null: false
+    t.float "hst", null: false
+    t.float "pst", null: false
+    t.float "qst", null: false
+    t.float "rst", null: false
+    t.float "value", null: false
+    t.integer "charge_type", null: false
+    t.string "name", null: false
+    t.uuid "booking_id", null: false
+    t.uuid "service_charge_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_booking_service_charges_on_booking_id"
+    t.index ["service_charge_id"], name: "index_booking_service_charges_on_service_charge_id"
   end
 
   create_table "booking_tables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -183,24 +201,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_04_143154) do
     t.datetime "updated_at", null: false
     t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
     t.index ["ticket_item_id"], name: "index_invoice_items_on_ticket_item_id"
-  end
-
-  create_table "invoice_service_charges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.integer "charge_type", null: false
-    t.float "value", null: false
-    t.float "gst", null: false
-    t.float "hst", null: false
-    t.float "pst", null: false
-    t.float "qst", null: false
-    t.float "rst", null: false
-    t.float "cst", null: false
-    t.uuid "invoice_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.uuid "service_charge_id", null: false
-    t.index ["invoice_id"], name: "index_invoice_service_charges_on_invoice_id"
-    t.index ["service_charge_id"], name: "index_invoice_service_charges_on_service_charge_id"
   end
 
   create_table "invoices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -548,6 +548,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_04_143154) do
   add_foreign_key "admin_restaurants", "admins"
   add_foreign_key "admin_restaurants", "restaurants"
   add_foreign_key "applied_discounts", "restaurants"
+  add_foreign_key "booking_service_charges", "bookings"
+  add_foreign_key "booking_service_charges", "service_charges"
   add_foreign_key "booking_tables", "bookings"
   add_foreign_key "booking_tables", "floor_objects"
   add_foreign_key "bookings", "customers"
@@ -565,8 +567,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_04_143154) do
   add_foreign_key "inventory_categories", "restaurants"
   add_foreign_key "invoice_items", "invoices"
   add_foreign_key "invoice_items", "ticket_items"
-  add_foreign_key "invoice_service_charges", "invoices"
-  add_foreign_key "invoice_service_charges", "service_charges"
   add_foreign_key "invoices", "bookings"
   add_foreign_key "item_addons", "addons"
   add_foreign_key "item_addons", "items"
@@ -650,7 +650,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_04_143154) do
           ), subtotals AS (
            SELECT i_1.id,
               sum(iis.discounted_amount) AS subtotal,
-              sum(((iis.discounted_amount * (((((ti.gst + ti.hst) + ti.pst) + ti.rst) + ti.qst) + ti.cst)) / (100.0)::double precision)) AS total_tax
+              sum(((iis.discounted_amount * (((((ti.gst + ti.hst) + ti.pst) + ti.rst) + ti.qst) + ti.cst)) / (100.0)::double precision)) AS subtotal_tax
              FROM (((invoices i_1
                JOIN invoice_items ii ON ((ii.invoice_id = i_1.id)))
                JOIN invoice_item_summaries iis ON ((iis.invoice_item_id = ii.id)))
@@ -658,23 +658,30 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_04_143154) do
             GROUP BY i_1.id
           ), total_service_charges AS (
            SELECT i_1.id,
+              sum(
+                  CASE
+                      WHEN (bsc.charge_type = 0) THEN ((s_1.subtotal * bsc.value) / (100.0)::double precision)
+                      WHEN (bsc.charge_type = 1) THEN (bsc.value / (ic.count)::double precision)
+                      ELSE (0.0)::double precision
+                  END) AS total_service_charge,
               sum((
                   CASE
-                      WHEN (isc.charge_type = 0) THEN ((s_1.subtotal * isc.value) / (100.0)::double precision)
-                      WHEN (isc.charge_type = 1) THEN (isc.value / (ic.count)::double precision)
+                      WHEN (bsc.charge_type = 0) THEN ((s_1.subtotal * bsc.value) / (100.0)::double precision)
+                      WHEN (bsc.charge_type = 1) THEN (bsc.value / (ic.count)::double precision)
                       ELSE (0.0)::double precision
-                  END * ((1)::double precision + ((((((isc.gst + isc.hst) + isc.pst) + isc.rst) + isc.qst) + isc.cst) / (100.0)::double precision)))) AS total_service_charge
+                  END * ((((((bsc.gst + bsc.hst) + bsc.pst) + bsc.rst) + bsc.qst) + bsc.cst) / (100.0)::double precision))) AS total_service_charge_tax
              FROM (((invoices i_1
-               JOIN invoice_service_charges isc ON ((isc.invoice_id = i_1.id)))
+               JOIN booking_service_charges bsc ON ((bsc.booking_id = i_1.booking_id)))
                JOIN subtotals s_1 ON ((s_1.id = i_1.id)))
                JOIN invoice_counts ic ON ((ic.booking_id = i_1.booking_id)))
             GROUP BY i_1.id
           )
    SELECT i.id AS invoice_id,
       s.subtotal,
-      s.total_tax,
-      COALESCE(sc.total_service_charge, (0.0)::double precision) AS "coalesce",
-      ((s.subtotal + s.total_tax) + COALESCE(sc.total_service_charge, (0.0)::double precision)) AS total
+      s.subtotal_tax,
+      COALESCE(sc.total_service_charge, (0.0)::double precision) AS total_service_charge,
+      COALESCE(sc.total_service_charge_tax, (0.0)::double precision) AS total_service_charge_tax,
+      (((s.subtotal + s.subtotal_tax) + COALESCE(sc.total_service_charge, (0.0)::double precision)) + COALESCE(sc.total_service_charge_tax, (0.0)::double precision)) AS total
      FROM ((invoices i
        JOIN subtotals s ON ((s.id = i.id)))
        LEFT JOIN total_service_charges sc ON ((sc.id = i.id)));

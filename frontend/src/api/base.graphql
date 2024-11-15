@@ -705,14 +705,14 @@ query bookings(
       id
       invoices {
         id
-        invoiceServiceCharges {
-          chargeAmount
-          id
-        }
         number
         payments {
           paymentMode
           tip
+        }
+        serviceChargeSummary {
+          name
+          value
         }
         subTotal
         taxSummary {
@@ -773,14 +773,14 @@ query invoices(
         userFullName
       }
       id
-      invoiceServiceCharges {
-        chargeAmount
-        id
-      }
       number
       payments {
         paymentMode
         tip
+      }
+      serviceChargeSummary {
+        name
+        value
       }
       subTotal
       taxSummary {

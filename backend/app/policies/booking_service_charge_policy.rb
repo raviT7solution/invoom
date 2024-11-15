@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class InvoiceServiceChargePolicy < ApplicationPolicy
+class BookingServiceChargePolicy < ApplicationPolicy
   def scope
     if mobile_user?("orders") || mobile_user?("takeout")
-      InvoiceServiceCharge.joins(invoice: :booking).where(bookings: { restaurant_id: mobile_user!.restaurant_id })
+      BookingServiceCharge.joins(:booking).where(bookings: { restaurant_id: mobile_user!.restaurant_id })
     else
-      InvoiceServiceCharge.none
+      BookingServiceCharge.none
     end
   end
 

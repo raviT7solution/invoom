@@ -11,6 +11,7 @@ class Booking < ApplicationRecord
   belongs_to :restaurant
   belongs_to :user
 
+  has_many :booking_service_charges, dependent: :destroy
   has_many :booking_tables, dependent: :destroy
   has_many :invoices, dependent: :restrict_with_error
   has_many :tickets, dependent: :destroy

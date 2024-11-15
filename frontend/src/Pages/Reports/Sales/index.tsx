@@ -48,7 +48,7 @@ const REPORT_TYPES = [
 ];
 
 const invoiceServiceCharge = (invoice: InvoicesType[number]) => {
-  return invoice.invoiceServiceCharges.reduce((p, i) => p + i.chargeAmount, 0);
+  return invoice.serviceChargeSummary.reduce((p, i) => p + i.value, 0);
 };
 
 const invoiceTax = (invoice: InvoicesType[number]) => {
@@ -136,7 +136,9 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       {
         title: "Total Service Charge",
         render: (_, r) =>
-          `$${r.invoices.reduce((p, i) => p + invoiceServiceCharge(i), 0)}`,
+          `$${r.invoices
+            .reduce((p, i) => p + invoiceServiceCharge(i), 0)
+            .toFixed(2)}`,
       },
       {
         title: "Total Tax",

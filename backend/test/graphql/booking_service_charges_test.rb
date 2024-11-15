@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class InvoiceServiceChargesTest < ActionDispatch::IntegrationTest
+class BookingServiceChargesTest < ActionDispatch::IntegrationTest
   test "update" do
     restaurant = create(:restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
@@ -50,8 +50,8 @@ class InvoiceServiceChargesTest < ActionDispatch::IntegrationTest
     create(:invoice_item, ticket_item: ticket_item1, invoice: invoice1, price: 9)
     create(:invoice_item, ticket_item: ticket_item2, invoice: invoice2, price: 18)
 
-    invoice_service_charge_old = create(
-      :invoice_service_charge,
+    create(
+      :booking_service_charge,
       charge_type: "percentage",
       cst: 0,
       gst: 7,
@@ -61,47 +61,34 @@ class InvoiceServiceChargesTest < ActionDispatch::IntegrationTest
       rst: 0,
       value: 20,
       service_charge: create(:service_charge, restaurant: restaurant, tax: create(:tax)),
-      invoice: invoice1
+      booking: booking
     )
 
     assert_attributes invoice1.reload.invoice_summary, total: 11.466
 
-    authentic_query user, "mobile_user", invoice_service_charges_update, variables: {
+    authentic_query user, "mobile_user", booking_service_charges_update, variables: {
       input: {
-        attributes: [
-          { invoiceId: invoice1.id, serviceChargeIds: [service_charge1.id] },
-          { invoiceId: invoice2.id, serviceChargeIds: [service_charge2.id] }
-        ]
+        bookingId: booking.id,
+        serviceChargeIds: [service_charge1.id, service_charge2.id]
       }
     }
 
     assert_query_success
-    assert_not InvoiceServiceCharge.exists?(id: invoice_service_charge_old)
-    assert_attributes InvoiceServiceCharge.find_by!(invoice_id: invoice1.id),
+    assert_equal 2, booking.booking_service_charges.ids.count
+    assert_attributes BookingServiceCharge.find_by!(booking_id: booking.id),
+                      booking_id: booking.id,
                       charge_type: service_charge1.charge_type,
                       cst: service_charge1.tax.cst,
                       gst: service_charge1.tax.gst,
                       hst: service_charge1.tax.hst,
-                      invoice_id: invoice1.id,
                       name: service_charge1.name,
                       pst: service_charge1.tax.pst,
                       qst: service_charge1.tax.qst,
                       rst: service_charge1.tax.rst,
                       value: service_charge1.value
-    assert_attributes InvoiceServiceCharge.find_by!(invoice_id: invoice2.id),
-                      charge_type: service_charge2.charge_type,
-                      cst: service_charge2.tax.cst,
-                      gst: service_charge2.tax.gst,
-                      hst: service_charge2.tax.hst,
-                      invoice_id: invoice2.id,
-                      name: service_charge2.name,
-                      pst: service_charge2.tax.pst,
-                      qst: service_charge2.tax.qst,
-                      rst: service_charge2.tax.rst,
-                      value: service_charge2.value
 
-    assert_in_delta 12.365, invoice1.reload.invoice_summary.total
-    assert_in_delta 22.4154, invoice2.reload.invoice_summary.total
+    assert_in_delta 14.0327, invoice1.reload.invoice_summary.total
+    assert_in_delta 25.2404, invoice2.reload.invoice_summary.total
   end
 
   test "destroy" do
@@ -132,7 +119,7 @@ class InvoiceServiceChargesTest < ActionDispatch::IntegrationTest
     create(:invoice_item, ticket_item: ticket_item, invoice: invoice, price: 9)
 
     create(
-      :invoice_service_charge,
+      :booking_service_charge,
       charge_type: "percentage",
       cst: 0,
       gst: 7,
@@ -142,28 +129,28 @@ class InvoiceServiceChargesTest < ActionDispatch::IntegrationTest
       rst: 0,
       value: 20,
       service_charge: create(:service_charge, restaurant: restaurant, tax: create(:tax)),
-      invoice: invoice
+      booking: booking
     )
 
     assert_attributes invoice.reload.invoice_summary, total: 11.466
 
-    authentic_query user, "mobile_user", invoice_service_charges_update, variables: { input: {
-      attributes: [{ invoiceId: invoice.id, serviceChargeIds: [] }]
+    authentic_query user, "mobile_user", booking_service_charges_update, variables: { input: {
+      bookingId: booking.id, serviceChargeIds: []
     } }
 
     assert_query_success
-    assert_attributes invoice.reload,
-                      invoice_service_charge_ids: []
+    assert_attributes booking.reload,
+                      booking_service_charge_ids: []
     assert_attributes invoice.reload.invoice_summary,
                       total: 9.54
   end
 
   private
 
-  def invoice_service_charges_update
+  def booking_service_charges_update
     <<~GQL
-      mutation invoiceServiceChargesUpdate($input: InvoiceServiceChargesUpdateInput!) {
-        invoiceServiceChargesUpdate(input: $input)
+      mutation bookingServiceChargesUpdate($input: BookingServiceChargesUpdateInput!) {
+        bookingServiceChargesUpdate(input: $input)
       }
     GQL
   end

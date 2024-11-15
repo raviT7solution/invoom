@@ -11,6 +11,7 @@ class Types::MutationType < Types::BaseObject
   field :booking_close, mutation: Mutations::BookingClose, null: false, authorize: "BookingPolicy#close?"
   field :booking_create, mutation: Mutations::BookingCreate, null: false, authorize: "BookingPolicy#create?"
   field :booking_force_clock_out, mutation: Mutations::BookingForceClockOut, null: false
+  field :booking_service_charges_update, mutation: Mutations::BookingServiceChargesUpdate, null: false, authorize: "BookingServiceChargePolicy#update?"
   field :booking_update, mutation: Mutations::BookingUpdate, null: false, authorize: "BookingPolicy#update?"
   field :category_create, mutation: Mutations::CategoryCreate, null: false, authorize: "CategoryPolicy#create?"
   field :category_delete, mutation: Mutations::CategoryDelete, null: false, authorize: "CategoryPolicy#delete?"
@@ -24,7 +25,6 @@ class Types::MutationType < Types::BaseObject
   field :inventory_category_create, mutation: Mutations::InventoryCategoryCreate, null: false, authorize: "InventoryCategoryPolicy#create?"
   field :inventory_category_delete, mutation: Mutations::InventoryCategoryDelete, null: false, authorize: "InventoryCategoryPolicy#delete?"
   field :inventory_category_update, mutation: Mutations::InventoryCategoryUpdate, null: false, authorize: "InventoryCategoryPolicy#update?"
-  field :invoice_service_charges_update, mutation: Mutations::InvoiceServiceChargesUpdate, null: false, authorize: "InvoiceServiceChargePolicy#update?"
   field :invoices_create, mutation: Mutations::InvoicesCreate, null: false, authorize: "InvoicePolicy#create?"
   field :item_code_generate, mutation: Mutations::ItemCodeGenerate, null: false, authorize: "ProductPolicy#create?"
   field :item_create, mutation: Mutations::ItemCreate, null: false, authorize: "ItemPolicy#create?"

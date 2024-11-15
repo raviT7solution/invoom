@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class InvoiceServiceCharge < ApplicationRecord
-  belongs_to :invoice
+class BookingServiceCharge < ApplicationRecord
+  belongs_to :booking
   belongs_to :service_charge
 
   enum :charge_type, [:percentage, :flat]

@@ -103,15 +103,16 @@ class Types::DashboardSummaryType < Types::BaseObject
     invoices = InvoicePolicy.new(context[:current_session]).scope.where(booking_id: object[:bookings])
     invoice_items = InvoiceItemPolicy.new(context[:current_user]).scope.where(invoice_id: invoices)
 
-    total_tax_percent = invoice_items.joins(:invoice_item_summary, invoice: :invoice_service_charges)
-                                     .where(invoice_service_charges: { charge_type: "percentage" })
-                                     .sum(percentage_service_charge_expression)
+    total_tax_percent = invoice_items
+                        .joins(:invoice_item_summary, invoice: { booking: :booking_service_charges })
+                        .where(booking_service_charges: { charge_type: "percentage" })
+                        .sum(percentage_service_charge_expression)
 
     invoice_counts = Invoice.group(:booking_id).select(:booking_id, "COUNT(invoices.id) AS invoice_count")
 
     total_tax_flat = invoices
-                     .joins(:invoice_service_charges)
-                     .where(invoice_service_charges: { charge_type: "flat" })
+                     .joins(booking: :booking_service_charges)
+                     .where(booking_service_charges: { charge_type: "flat" })
                      .joins("INNER JOIN (#{invoice_counts.to_sql}) counts ON counts.booking_id = invoices.booking_id")
                      .sum(flat_service_charge_expression)
 
@@ -140,7 +141,7 @@ class Types::DashboardSummaryType < Types::BaseObject
 
   def flat_service_charge_expression # rubocop:disable Metrics/AbcSize
     invoices = Invoice.arel_table.alias(:counts)
-    service_charges = InvoiceServiceCharge.arel_table
+    service_charges = BookingServiceCharge.arel_table
 
     tax_expression = (
       service_charges[:hst] +
@@ -182,7 +183,7 @@ class Types::DashboardSummaryType < Types::BaseObject
 
   def percentage_service_charge_expression # rubocop:disable Metrics/AbcSize
     invoice_item_summaries = InvoiceItemSummary.arel_table
-    service_charges = InvoiceServiceCharge.arel_table
+    service_charges = BookingServiceCharge.arel_table
 
     tax_expression = (
       service_charges[:hst] +

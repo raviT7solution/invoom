@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :invoice_service_charge do
-    sequence(:name) { |n| "Invoice Service Charge #{n}" }
+  factory :booking_service_charge do
+    sequence(:name) { |n| "Booking Service Charge #{n}" }
 
     charge_type { "flat" }
     cst { Faker::Number.decimal(l_digits: 2) }
@@ -13,7 +13,7 @@ FactoryBot.define do
     rst { Faker::Number.decimal(l_digits: 2) }
     value { 10 }
 
-    invoice { nil }
+    booking { nil }
     service_charge { nil }
   end
 end

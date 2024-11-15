@@ -62,6 +62,7 @@ group :test do
   gem "cuprite", require: "capybara/cuprite"
 end
 
+gem "activerecord-cte"
 gem "city-state"
 gem "countries", require: "countries/global"
 gem "graphql"

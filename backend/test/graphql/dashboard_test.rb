@@ -114,7 +114,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     create(:invoice_item, ticket_item: ticket_item1, invoice: invoice1, price: 9)
     create(:invoice_item, ticket_item: ticket_item2, invoice: invoice2, price: 18)
 
-    create(:invoice_service_charge,
+    create(:booking_service_charge,
            charge_type: "flat",
            cst: 0,
            gst: 0,
@@ -123,8 +123,8 @@ class DashboardTest < ActionDispatch::IntegrationTest
            qst: 0,
            rst: 0,
            value: 5,
-           service_charge: service_charge1, invoice: invoice1)
-    create(:invoice_service_charge,
+           service_charge: service_charge1, booking: booking)
+    create(:booking_service_charge,
            charge_type: "percentage",
            cst: 0,
            gst: 9,
@@ -133,7 +133,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
            qst: 0,
            rst: 0,
            value: 17.0,
-           service_charge: service_charge2, invoice: invoice2)
+           service_charge: service_charge2, booking: booking)
 
     create(:payment, payment_mode: "cash", invoice: invoice1, amount: invoice1.invoice_summary.total, tip: 1.0)
     create(:payment, payment_mode: "cash", invoice: invoice2, amount: invoice2.invoice_summary.total, tip: 2.0)
@@ -148,28 +148,15 @@ class DashboardTest < ActionDispatch::IntegrationTest
 
     assert_query_success
 
-    service_charge1_tax = 2.5 * 13 / 100
-    service_charge1_amount = 2.5
-
-    service_charge2_tax = (18 * 17 / 100.0) * 9 / 100
-    service_charge2_amount = 18 * 17 / 100.0
-
-    total_revenue = (9.54 + service_charge1_tax + service_charge1_amount) + \
-                    (19.08 + service_charge2_tax + service_charge2_amount)
-    total_tax = (9 * 0.06) + \
-                (18 * 0.06) + \
-                service_charge1_tax + \
-                service_charge2_tax
-
     expected_summary = {
-      "avgBookingRevenue" => total_revenue,
-      "avgInvoiceRevenue" => total_revenue / 2,
+      "avgBookingRevenue" => 39.2731,
+      "avgInvoiceRevenue" => 19.63655,
       "invoiceCount" => 2,
       "bookingCount" => 1,
       "paxCount" => 0,
       "totalTip" => 3.0,
-      "totalRevenue" => total_revenue,
-      "totalTax" => total_tax
+      "totalRevenue" => 39.2731,
+      "totalTax" => 2.6831
     }
 
     assert_equal expected_summary, response.parsed_body["data"]["dashboardSummary"]
