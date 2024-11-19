@@ -18,6 +18,8 @@ class Types::RestaurantAttributes < Types::BaseInputObject
   argument :postal_code, String, required: false
   argument :province, String, required: false
   argument :restaurant_type, String, required: false
+  argument :stripe_account_id, String, required: false
+  argument :stripe_account_type, Types::Restaurant::StripeAccountTypeEnum, required: false
   argument :taxpayer_id, String, required: false
   argument :timezone, String, required: false
   argument :website, String, required: false

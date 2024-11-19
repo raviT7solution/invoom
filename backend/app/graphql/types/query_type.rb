@@ -127,6 +127,9 @@ class Types::QueryType < Types::BaseObject
     argument :start_time, GraphQL::Types::ISO8601DateTime, required: false
     argument :status, String, required: false
   end
+  field :restaurant, Types::RestaurantType, null: false do
+    argument :id, String, required: true
+  end
   field :restaurants, [Types::RestaurantType], null: false do
     argument :status, String, required: false
   end
@@ -413,6 +416,10 @@ class Types::QueryType < Types::BaseObject
     records = records.where(reservation_at: start_time..end_time) if start_time.present? && end_time.present?
 
     records.order(:created_at).page(page).per(per_page)
+  end
+
+  def restaurant(id:)
+    RestaurantPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def restaurants(status: nil)

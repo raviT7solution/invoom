@@ -10,6 +10,14 @@ query currentAdmin {
   }
 }
 
+query restaurant($id: String!) {
+  restaurant(id: $id) {
+    id
+    stripeAccountId
+    stripeAccountType
+  }
+}
+
 query restaurants($status: String) {
   restaurants(status: $status) {
     city

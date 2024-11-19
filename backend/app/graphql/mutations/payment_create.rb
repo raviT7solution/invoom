@@ -46,10 +46,11 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
   end
 
   def create_stripe_card_payment(invoice, attributes) # rubocop:disable Metrics/AbcSize
-    api_key = context[:current_user].mobile_user!.restaurant.payment_secret_key
+    restaurant = context[:current_user].mobile_user!.restaurant
+    service = StripeService.new(restaurant)
 
-    payment_intent = Stripe::PaymentIntent.retrieve(attributes[:payment_intent_id], api_key: api_key).as_json
-    payment_method = Stripe::PaymentMethod.retrieve(payment_intent["payment_method"], api_key: api_key)
+    payment_intent = service.payment_intent_retrieve(attributes[:payment_intent_id]).as_json
+    payment_method = service.payment_method_retrieve(payment_intent["payment_method"])
 
     card_details = payment_method.public_send(payment_method.type).as_json
 

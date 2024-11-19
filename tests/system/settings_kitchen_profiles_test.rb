@@ -116,7 +116,7 @@ class SettingsKitchenProfilesTest < ApplicationSystemTestCase
                       columns: 4,
                       name: "Kitchen Profile Updated",
                       notify: true,
+                      printer_configuration_id: nil,
                       rows: 3
-    assert_nil kitchen_profile.printer_configuration_id
   end
 end

@@ -3,7 +3,11 @@
 module AssertHelpers
   def assert_attributes(record, hash)
     hash.each do |k, v|
-      assert_equal v, record.public_send(k)
+      if v.nil?
+        assert_nil v
+      else
+        assert_equal v, record.public_send(k)
+      end
     end
   end
 end

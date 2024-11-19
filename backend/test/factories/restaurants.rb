@@ -21,6 +21,8 @@ FactoryBot.define do
     province { Faker::Address.state_abbr }
     restaurant_type { Faker::Restaurant.type }
     status { "active" }
+    stripe_account_id { nil }
+    stripe_account_type { nil }
     taxpayer_id { nil }
     timezone { Faker::Address.time_zone }
     website { nil }

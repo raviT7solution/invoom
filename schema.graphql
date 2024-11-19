@@ -1756,6 +1756,7 @@ type Query {
   products(page: Int!, perPage: Int!, restaurantId: ID!): ProductCollection!
   provinces(alpha2: String!): [Province!]!
   reservations(endTime: ISO8601DateTime, page: Int!, perPage: Int!, restaurantId: ID!, startTime: ISO8601DateTime, status: String): ReservationCollection!
+  restaurant(id: String!): Restaurant!
   restaurants(status: String): [Restaurant!]!
   role(id: ID!): Role!
   roles(restaurantId: ID!): [Role!]!
@@ -1844,6 +1845,8 @@ type Restaurant {
   phoneNumber: String!
   postalCode: String!
   province: String!
+  stripeAccountId: String
+  stripeAccountType: RestaurantStripeAccountTypeEnum
   taxpayerId: String
   timezone: String!
   website: String
@@ -1867,6 +1870,8 @@ input RestaurantAttributes {
   postalCode: String
   province: String
   restaurantType: String
+  stripeAccountId: String
+  stripeAccountType: RestaurantStripeAccountTypeEnum
   taxpayerId: String
   timezone: String
   website: String
@@ -1882,6 +1887,11 @@ input RestaurantCreateInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+}
+
+enum RestaurantStripeAccountTypeEnum {
+  connect
+  own
 }
 
 """

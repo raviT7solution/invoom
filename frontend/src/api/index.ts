@@ -110,6 +110,7 @@ import {
   ProvincesDocument,
   RestaurantCreateDocument,
   RestaurantCreateMutationVariables,
+  RestaurantDocument,
   RestaurantUpdateDocument,
   RestaurantUpdateMutationVariables,
   RestaurantsDocument,
@@ -208,6 +209,15 @@ export const useCurrentAdmin = () => {
     queryFn: async () =>
       (await client.request(CurrentAdminDocument)).currentAdmin,
     queryKey: ["currentAdmin"],
+  });
+};
+
+export const useRestaurant = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryKey: ["restaurant", id],
+    queryFn: async () =>
+      (await client.request(RestaurantDocument, { id })).restaurant,
   });
 };
 
@@ -714,9 +724,14 @@ export const useInventoryCategoryDelete = () => {
 };
 
 export const useRestaurantUpdate = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (variables: RestaurantUpdateMutationVariables) =>
       client.request(RestaurantUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["restaurant"] });
+    },
   });
 };
 

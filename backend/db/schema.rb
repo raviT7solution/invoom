@@ -416,6 +416,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_15_141000) do
     t.string "payment_secret_key"
     t.string "taxpayer_id"
     t.string "website"
+    t.integer "stripe_account_type"
+    t.string "stripe_account_id"
   end
 
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -1,59 +1,53 @@
-import { Button, Col, Form, Input, Row } from "antd";
+import { Alert, Button, Spin, Typography } from "antd";
+import { useState } from "react";
 
-import { useRestaurantUpdate } from "../../../../api";
+import { StripeEdit } from "./StripeEdit";
+
+import { useRestaurant } from "../../../../api";
 import { useRestaurantIdStore } from "../../../../stores/useRestaurantIdStore";
 
-type schema = {
-  paymentPublishableKey: string;
-  paymentSecretKey: string;
-};
-
 export const PaymentConfiguration = () => {
-  const [form] = Form.useForm<schema>();
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const { mutateAsync: restaurantUpdate, isPending } = useRestaurantUpdate();
+  const [modal, setModal] = useState({ destroyed: false, open: false });
 
-  const onFinish = async (values: schema) => {
-    await restaurantUpdate({
-      input: {
-        id: restaurantId,
-        attributes: values,
-      },
-    });
+  const restaurant = useRestaurant(restaurantId);
 
-    form.resetFields();
+  const requiresConfiguration = !restaurant.data?.stripeAccountType;
+
+  const isConnect = restaurant.data?.stripeAccountType === "connect";
+  const isOwn = restaurant.data?.stripeAccountType === "own";
+
+  const showEdit = (destroyed: boolean, open: boolean) => {
+    setModal({ destroyed, open });
   };
 
   return (
-    <Form form={form} layout="vertical" onFinish={onFinish} preserve={false}>
-      <Row gutter={8}>
-        <Col span={8}>
-          <Form.Item
-            label="Payment Publishable Key"
-            name="paymentPublishableKey"
-            rules={[{ required: true, message: "Required" }]}
-          >
-            <Input placeholder="Publishable Key" />
-          </Form.Item>
-        </Col>
-      </Row>
+    <Spin spinning={restaurant.isFetching}>
+      {!modal.destroyed && <StripeEdit open={modal.open} showEdit={showEdit} />}
 
-      <Row gutter={8}>
-        <Col span={8}>
-          <Form.Item
-            label="Payment Secret Key"
-            name="paymentSecretKey"
-            rules={[{ required: true, message: "Required" }]}
-          >
-            <Input placeholder="Secret Key" />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Button htmlType="submit" loading={isPending} type="primary">
-        Submit
-      </Button>
-    </Form>
+      <Alert
+        action={
+          <Button onClick={() => showEdit(false, true)}>
+            {requiresConfiguration ? "Configure" : "Reconfigure"}
+          </Button>
+        }
+        className="max-w-xl"
+        description={
+          <Typography.Text type="secondary">
+            {isConnect &&
+              `Uses stripe connect account ID: ${restaurant.data?.stripeAccountId}`}
+            {isOwn && "Uses stripe own account"}
+          </Typography.Text>
+        }
+        message={
+          requiresConfiguration
+            ? "Stripe account is not configured"
+            : "Stripe account is already configured"
+        }
+        showIcon
+        type={requiresConfiguration ? "error" : "success"}
+      />
+    </Spin>
   );
 };
