@@ -206,7 +206,10 @@ export const Edit = ({
             <Form.Item
               label="Price"
               name="price"
-              rules={[{ required: true, message: "Required" }]}
+              rules={[
+                { required: true, message: "Required" },
+                { type: "number", min: 0, message: "Must be non-negative" },
+              ]}
             >
               <InputNumber placeholder="Price" style={{ width: "100%" }} />
             </Form.Item>
@@ -216,7 +219,10 @@ export const Edit = ({
             <Form.Item
               label="Quantity / Weight"
               name="weight"
-              rules={[{ required: true, message: "Required" }]}
+              rules={[
+                { required: true, message: "Required" },
+                { type: "number", min: 0, message: "Must be non-negative" },
+              ]}
             >
               <InputNumber
                 placeholder="Quantity / Weight"
@@ -229,7 +235,10 @@ export const Edit = ({
             <Form.Item
               label="Reorder Point"
               name="reorderPoint"
-              rules={[{ required: true, message: "Required" }]}
+              rules={[
+                { required: true, message: "Required" },
+                { type: "number", min: 0, message: "Must be non-negative" },
+              ]}
             >
               <InputNumber
                 placeholder="Reorder Point"
@@ -242,7 +251,10 @@ export const Edit = ({
             <Form.Item
               label="Stock Limit"
               name="stockLimit"
-              rules={[{ required: true, message: "Required" }]}
+              rules={[
+                { required: true, message: "Required" },
+                { type: "number", min: 0, message: "Must be non-negative" },
+              ]}
             >
               <InputNumber
                 placeholder="Stock Limit"

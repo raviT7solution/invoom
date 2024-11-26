@@ -68,14 +68,8 @@ class Types::DashboardSummaryType < Types::BaseObject
 
   def hourly_revenue
     tz = object[:restaurant].timezone
-    hourly_revenue = invoices
-                     .select(
-                       "EXTRACT(HOUR FROM (invoices.created_at::timestamptz AT TIME ZONE '#{tz}')) AS hour",
-                       "SUM(invoice_summaries.total) AS revenue"
-                     )
-                     .group("hour")
 
-    hourly_revenue.each_with_object(Array.new(24, 0.0)) { |row, arr| arr[row.hour] = row.revenue }
+    invoices.group_by_hour_of_day(:created_at, time_zone: tz).sum("invoice_summaries.total").values
   end
 
   def invoice_count

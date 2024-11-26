@@ -111,9 +111,12 @@ export const Edit = ({
         <Form.Item
           label="Value"
           name="value"
-          rules={[{ required: true, message: "Required" }]}
+          rules={[
+            { required: true, message: "Required" },
+            { type: "number", min: 0, message: "Must be non-negative" },
+          ]}
         >
-          <InputNumber min={0} placeholder="Value" style={{ width: "100%" }} />
+          <InputNumber placeholder="Value" style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item

@@ -73,7 +73,7 @@ export const Item = () => {
                       }}
                       type="secondary"
                     >
-                      Price:{item.price}
+                      Price: ${item.price}
                     </Typography.Paragraph>
                   }
                   title={item.name}

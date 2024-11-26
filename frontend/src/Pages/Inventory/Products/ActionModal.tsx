@@ -97,7 +97,10 @@ export const ActionModal = ({
         <Form.Item
           label="Quantity"
           name="quantity"
-          rules={[{ required: true, message: "Required" }]}
+          rules={[
+            { required: true, message: "Required" },
+            { type: "number", min: 0, message: "Must be non-negative" },
+          ]}
         >
           <InputNumber
             placeholder="Quantity"
@@ -110,7 +113,10 @@ export const ActionModal = ({
           hidden={stockType !== "receive"}
           label="Cost"
           name="price"
-          rules={[{ required: true, message: "Required" }]}
+          rules={[
+            { required: true, message: "Required" },
+            { type: "number", min: 0, message: "Must be non-negative" },
+          ]}
         >
           <InputNumber
             placeholder="Cost per UOM"

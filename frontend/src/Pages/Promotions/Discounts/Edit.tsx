@@ -199,25 +199,28 @@ export const Edit = ({
         <Form.Item
           label="Discount Value"
           name="value"
-          rules={[{ required: true, message: "Required" }]}
+          rules={[
+            { required: true, message: "Required" },
+            { type: "number", min: 0, message: "Must be non-negative" },
+          ]}
         >
-          <InputNumber min={0} placeholder="Value" style={{ width: "100%" }} />
+          <InputNumber placeholder="Value" style={{ width: "100%" }} />
         </Form.Item>
 
-        <Form.Item label="Threshold" name="threshold">
-          <InputNumber
-            min={0}
-            placeholder="Threshold"
-            style={{ width: "100%" }}
-          />
+        <Form.Item
+          label="Threshold"
+          name="threshold"
+          rules={[{ type: "number", min: 0, message: "Must be non-negative" }]}
+        >
+          <InputNumber placeholder="Threshold" style={{ width: "100%" }} />
         </Form.Item>
 
-        <Form.Item label="Capping" name="capping">
-          <InputNumber
-            min={0}
-            placeholder="Capping"
-            style={{ width: "100%" }}
-          />
+        <Form.Item
+          label="Capping"
+          name="capping"
+          rules={[{ type: "number", min: 0, message: "Must be non-negative" }]}
+        >
+          <InputNumber placeholder="Capping" style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item

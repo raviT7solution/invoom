@@ -77,8 +77,8 @@ export const Addons = () => {
                       type="secondary"
                     >
                       <>
-                        <li>Price: $ {addon.price}</li>
-                        <li>Takeout Price: $ {addon.takeoutPrice}</li>
+                        <li>Price: ${addon.price}</li>
+                        <li>Takeout Price: ${addon.takeoutPrice}</li>
                       </>
                     </Typography.Paragraph>
                   }

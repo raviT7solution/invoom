@@ -229,7 +229,12 @@ export const UserEdit = ({
             >
               <Input
                 addonBefore={
-                  <Form.Item label="Country Code" name="countryCode" noStyle>
+                  <Form.Item
+                    label="Country Code"
+                    name="countryCode"
+                    noStyle
+                    rules={[{ required: true, message: "Required" }]}
+                  >
                     <Select
                       filterOption
                       filterSort={selectLabelFilterSort}
@@ -348,7 +353,10 @@ export const UserEdit = ({
             <Form.Item
               label="Weekly Hour Restriction"
               name="maxHour"
-              rules={[{ required: true, message: "Required" }]}
+              rules={[
+                { required: true, message: "Required" },
+                { type: "number", min: 0, message: "Must be non-negative" },
+              ]}
             >
               <InputNumber
                 disabled={employmentType !== "hourly"}
@@ -362,7 +370,10 @@ export const UserEdit = ({
             <Form.Item
               label="Wage"
               name="wage"
-              rules={[{ required: true, message: "Required" }]}
+              rules={[
+                { required: true, message: "Required" },
+                { type: "number", min: 0, message: "Must be non-negative" },
+              ]}
             >
               <InputNumber placeholder="Wage" style={{ width: "100%" }} />
             </Form.Item>
@@ -374,7 +385,7 @@ export const UserEdit = ({
                 {employmentType === "hourly"
                   ? `Weekly Wage: ${wage * maxHour}/week`
                   : employmentType === "salary"
-                  ? `Daily Wage: ${wage / 30}/day`
+                  ? `Daily Wage: ${(wage / 30).toFixed(2)}/day`
                   : ""}
               </Tag>
             )}

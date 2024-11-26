@@ -26,7 +26,7 @@ export const humanizeDuration = (startTime: string, endTime: string) => {
   let durationString = "";
 
   if (hours > 0) durationString += `${hours} hours `;
-  durationString += `${minutes} min`;
+  if (minutes > 0) durationString += `${minutes} min`;
 
   return durationString.trim();
 };

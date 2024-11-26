@@ -125,6 +125,8 @@ GEM
     graphql (2.1.0)
     graphql-pagination (2.2.0)
       graphql (~> 2.0)
+    groupdate (6.5.1)
+      activesupport (>= 7)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     io-console (0.6.0)
@@ -294,6 +296,7 @@ DEPENDENCIES
   faker
   graphql
   graphql-pagination
+  groupdate
   jwt
   kaminari
   pg (~> 1.1)

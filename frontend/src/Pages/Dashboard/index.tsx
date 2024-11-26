@@ -33,9 +33,7 @@ export const Dashboard = () => {
         v,
       ]) ?? [];
 
-    return arr.sort((i, j) =>
-      dayjs(i[0], TIME_FORMAT).isBefore(dayjs(j[0], TIME_FORMAT)) ? -1 : 1,
-    );
+    return arr;
   }, [data?.hourlyRevenue]);
 
   return (

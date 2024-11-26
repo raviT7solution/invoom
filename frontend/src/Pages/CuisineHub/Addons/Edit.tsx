@@ -96,11 +96,13 @@ export const Edit = ({
         <Form.Item
           label="Price"
           name="price"
-          rules={[{ required: true, message: "Required" }]}
+          rules={[
+            { required: true, message: "Required" },
+            { type: "number", min: 0, message: "Must be non-negative" },
+          ]}
         >
           <InputNumber
-            min={0}
-            onChange={(e) => {
+            onChange={(e: number | null) => {
               if (eqPrice)
                 form.setFieldsValue({
                   deliveryPrice: e ?? 0,
@@ -130,11 +132,13 @@ export const Edit = ({
         <Form.Item
           label="Takeout Price"
           name="takeoutPrice"
-          rules={[{ required: true, message: "Required" }]}
+          rules={[
+            { required: true, message: "Required" },
+            { type: "number", min: 0, message: "Must be non-negative" },
+          ]}
         >
           <InputNumber
             disabled={eqPrice}
-            min={0}
             placeholder="Takeout Price"
             prefix="$"
             style={{ width: "100%" }}
@@ -144,11 +148,13 @@ export const Edit = ({
         <Form.Item
           label="Delivery Price"
           name="deliveryPrice"
-          rules={[{ required: true, message: "Required" }]}
+          rules={[
+            { required: true, message: "Required" },
+            { type: "number", min: 0, message: "Must be non-negative" },
+          ]}
         >
           <InputNumber
             disabled={eqPrice}
-            min={0}
             placeholder="Delivery Price"
             prefix="$"
             style={{ width: "100%" }}

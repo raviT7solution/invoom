@@ -246,7 +246,7 @@ export const AddItemModal = ({ open, setOpen }: Props) => {
   const onCancel = () => setOpen(false);
 
   return (
-    <Modal onCancel={onCancel} open={open} title="Objects">
+    <Modal footer={null} onCancel={onCancel} open={open} title="Objects">
       <List
         className="cursor-pointer"
         dataSource={objects}

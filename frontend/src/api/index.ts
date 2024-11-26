@@ -1107,6 +1107,7 @@ export const useTimeSheetCreate = () => {
       client.request(TimeSheetCreateDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["timeSheets"] });
+      queryClient.invalidateQueries({ queryKey: ["timeSheetSummary"] });
     },
   });
 };
@@ -1119,6 +1120,7 @@ export const useTimeSheetDelete = () => {
       client.request(TimeSheetDeleteDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["timeSheets"] });
+      queryClient.invalidateQueries({ queryKey: ["timeSheetSummary"] });
     },
   });
 };
@@ -1131,6 +1133,7 @@ export const useTimeSheetUpdate = () => {
       client.request(TimeSheetUpdateDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["timeSheets"] });
+      queryClient.invalidateQueries({ queryKey: ["timeSheetSummary"] });
     },
   });
 };
