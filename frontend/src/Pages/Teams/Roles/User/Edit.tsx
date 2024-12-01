@@ -236,7 +236,6 @@ export const UserEdit = ({
                     rules={[{ required: true, message: "Required" }]}
                   >
                     <Select
-                      filterOption
                       filterSort={selectLabelFilterSort}
                       optionFilterProp="label"
                       options={countyCodesOptions}
@@ -261,7 +260,6 @@ export const UserEdit = ({
             <Form.Item label="Country" name="country">
               <Select
                 disabled={isCountryFetching}
-                filterOption
                 onChange={() =>
                   form.setFieldsValue({ province: undefined, city: undefined })
                 }
@@ -280,7 +278,6 @@ export const UserEdit = ({
             <Form.Item label="Province" name="province">
               <Select
                 disabled={isProvinceFetching}
-                filterOption
                 onChange={() => form.setFieldsValue({ city: undefined })}
                 optionFilterProp="label"
                 options={provinces.map((i) => ({
@@ -297,7 +294,6 @@ export const UserEdit = ({
             <Form.Item label="City" name="city">
               <Select
                 disabled={isCityFetching}
-                filterOption
                 optionFilterProp="label"
                 options={cities.map((i) => ({
                   label: i.name,

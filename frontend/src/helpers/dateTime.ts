@@ -79,3 +79,13 @@ export const dateTimePickerGetValueFromEvent = (_: unknown, v?: string) => {
         .toISOString()
     : null;
 };
+
+export const tzTimePickerGetValueProps = (v?: string, tz?: string) => {
+  return {
+    value: v ? dayjs(v).tz(tz) : null,
+  };
+};
+
+export const tzTimePickerGetValueFromEvent = (v?: string, tz?: string) => {
+  return v ? dayjs.tz(v, TIME_FORMAT, tz).toISOString() : null;
+};

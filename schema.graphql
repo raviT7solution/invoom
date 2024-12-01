@@ -1839,12 +1839,20 @@ input ReservationUpdateInput {
 
 type Restaurant {
   address: String
+  breakEndTime: ISO8601DateTime
+  breakStartTime: ISO8601DateTime
+  businessEndTime: ISO8601DateTime
+  businessStartTime: ISO8601DateTime
   city: String!
+  country: String!
+  email: String!
   id: ID!
   name: String!
+  operationalSince: String!
   phoneNumber: String!
   postalCode: String!
   province: String!
+  restaurantType: String!
   stripeAccountId: String
   stripeAccountType: RestaurantStripeAccountTypeEnum
   taxpayerId: String

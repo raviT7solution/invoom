@@ -35,10 +35,7 @@ export const StripeEdit = ({
 
   const onFinish = async (values: schema) => {
     await restaurantUpdate.mutateAsync({
-      input: {
-        id: id,
-        attributes: values,
-      },
+      input: { id: id, attributes: values },
     });
 
     onClose();

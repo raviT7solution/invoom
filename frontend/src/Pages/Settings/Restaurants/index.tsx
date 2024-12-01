@@ -1,6 +1,6 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Avatar, Badge, Button, Card, List } from "antd";
-import { ReactNode, useState } from "react";
+import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { Avatar, Badge, Button, Card, List, Space } from "antd";
+import { useState } from "react";
 
 import { Edit } from "./Edit";
 
@@ -8,43 +8,30 @@ import { useRestaurants } from "../../../api";
 import { Navbar } from "../../../components/Navbar";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
-const WithRibbon = ({
-  active,
-  children,
-}: {
-  active: boolean;
-  children: ReactNode;
-}) =>
-  active ? (
-    <Badge.Ribbon color="green" text="Current">
-      {children}
-    </Badge.Ribbon>
-  ) : (
-    children
-  );
-
 export const Restaurants = () => {
   const { data: activeRestaurants } = useRestaurants("active");
   const { data: pendingRestaurants } = useRestaurants("pending");
 
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const [modal, setModal] = useState({ destroyed: false, open: false });
+  const [modal, setModal] = useState({ destroyed: false, id: "", open: false });
 
-  const showEdit = (destroyed: boolean, open: boolean) => {
-    setModal({ destroyed, open });
+  const showEdit = (destroyed: boolean, id: string, open: boolean) => {
+    setModal({ destroyed, id, open });
   };
 
   return (
     <Navbar
       breadcrumbItems={[{ title: "Settings" }, { title: "My Restaurants" }]}
     >
-      {!modal.destroyed && <Edit open={modal.open} showEdit={showEdit} />}
+      {!modal.destroyed && (
+        <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
+      )}
 
       <div className="flex gap-4 mb-4 justify-end">
         <Button
           icon={<PlusOutlined />}
-          onClick={() => showEdit(false, true)}
+          onClick={() => showEdit(false, "", true)}
           type="primary"
         >
           Add Restaurant
@@ -80,19 +67,31 @@ export const Restaurants = () => {
             grid={{ column: 2, gutter: 16 }}
             renderItem={(item, index) => (
               <List.Item>
-                <WithRibbon active={item.id === restaurantId}>
-                  <div className="border p-4 rounded-lg">
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar
-                          src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
-                        />
-                      }
-                      description={[item.city, item.province].join(", ")}
-                      title={item.name}
-                    />
-                  </div>
-                </WithRibbon>
+                <div className="border p-4 rounded-lg flex items-center">
+                  <List.Item.Meta
+                    avatar={
+                      <Avatar
+                        src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
+                      />
+                    }
+                    description={[item.city, item.province].join(", ")}
+                    title={
+                      <Space>
+                        {item.name}
+                        {item.id === restaurantId && (
+                          <Badge color="green" count="Current" />
+                        )}
+                      </Space>
+                    }
+                  />
+
+                  <Button
+                    icon={<EditOutlined />}
+                    onClick={() => showEdit(false, item.id, true)}
+                  >
+                    Edit
+                  </Button>
+                </div>
               </List.Item>
             )}
           />

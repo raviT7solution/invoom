@@ -12,9 +12,26 @@ query currentAdmin {
 
 query restaurant($id: String!) {
   restaurant(id: $id) {
+    address
+    breakEndTime
+    breakStartTime
+    businessEndTime
+    businessStartTime
+    city
+    country
+    email
     id
+    name
+    operationalSince
+    phoneNumber
+    postalCode
+    province
+    restaurantType
     stripeAccountId
     stripeAccountType
+    taxpayerId
+    timezone
+    website
   }
 }
 

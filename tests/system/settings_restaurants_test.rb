@@ -5,6 +5,7 @@ require "application_system_test_case"
 class SettingsRestaurantsTest < ApplicationSystemTestCase
   test "create restaurants" do
     admin = create(:admin)
+    tz = "America/Toronto"
 
     sign_in(admin)
 
@@ -18,12 +19,10 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
     within ".ant-drawer" do
       wait_for_pending_requests
 
-      within ".ant-list-item", text: "Cafe" do
-        find(".ant-checkbox").click
+      within ".ant-form-item", text: "Restaurant Type" do
+        fill_in with: "Cafe"
+        fill_in_select with: "Cafe\nConquer the rush, maximize margins, and boost loyalty with a powerful cafe POS."
       end
-
-      click_on "Next"
-
       fill_in "Restaurant Name", with: "Cafe 1"
       fill_in "Email", with: "cafe@example.com"
       fill_in "Phone Number", with: "1111111111"
@@ -53,16 +52,16 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
       fill_in "Address", with: "837 Auer Divide"
       fill_in "Postal Code", with: "15721"
       within ".ant-form-item", text: "Business Start Time" do
-        fill_in_ant_picker with: "09:00:00"
+        fill_in_ant_picker with: "09:00 AM"
       end
       within ".ant-form-item", text: "Business End Time" do
-        fill_in_ant_picker with: "23:00:00"
+        fill_in_ant_picker with: "11:00 PM"
       end
       within ".ant-form-item", text: "Break Start Time" do
-        fill_in_ant_picker with: "14:00:00"
+        fill_in_ant_picker with: "02:00 PM"
       end
       within ".ant-form-item", text: "Break End Time" do
-        fill_in_ant_picker with: "14:30:00"
+        fill_in_ant_picker with: "02:30 PM"
       end
 
       click_on "Submit"
@@ -83,13 +82,13 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
                       restaurant_type: "Cafe",
                       status: "pending",
                       taxpayer_id: "123456789",
-                      timezone: "America/Toronto",
+                      timezone: tz,
                       website: "example.com"
 
-    assert_equal Time.parse("2000-01-01T09:00:00Z"), admin.restaurants.last!.business_start_time
-    assert_equal Time.parse("2000-01-01T23:00:00Z"), admin.restaurants.last!.business_end_time
-    assert_equal Time.parse("2000-01-01T14:00:00Z"), admin.restaurants.last!.break_start_time
-    assert_equal Time.parse("2000-01-01T14:30:00Z"), admin.restaurants.last!.break_end_time
+    assert_equal "09:00 AM", admin.restaurants.last!.business_start_time.in_time_zone(tz).strftime("%I:%M %p")
+    assert_equal "11:00 PM", admin.restaurants.last!.business_end_time.in_time_zone(tz).strftime("%I:%M %p")
+    assert_equal "02:00 PM", admin.restaurants.last!.break_start_time.in_time_zone(tz).strftime("%I:%M %p")
+    assert_equal "02:30 PM", admin.restaurants.last!.break_end_time.in_time_zone(tz).strftime("%I:%M %p")
 
     assert_text "In Progress (1)"
     assert_text "Active (0)"
