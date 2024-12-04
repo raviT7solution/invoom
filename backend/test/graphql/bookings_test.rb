@@ -320,7 +320,6 @@ class BookingsTest < ActionDispatch::IntegrationTest
         $perPage: Int!
         $restaurantId: ID!
         $startDate: ISO8601DateTime
-        $status: String!
       ) {
         bookings(
           bookingTypes: $bookingTypes
@@ -329,7 +328,6 @@ class BookingsTest < ActionDispatch::IntegrationTest
           perPage: $perPage
           restaurantId: $restaurantId
           startDate: $startDate
-          status: $status
         ) {
           collection {
             id

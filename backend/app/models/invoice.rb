@@ -2,6 +2,7 @@
 
 class Invoice < ApplicationRecord
   scope :completed, -> { joins(:booking).where.not(bookings: { clocked_out_at: nil }) }
+  scope :current, -> { joins(:booking).where(bookings: { clocked_out_at: nil }) }
   scope :not_void, -> { where(id: Payment.not_void.select(:invoice_id)) }
 
   belongs_to :booking

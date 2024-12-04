@@ -705,7 +705,6 @@ query bookings(
   $perPage: Int!
   $restaurantId: ID!
   $startDate: ISO8601DateTime
-  $status: String
 ) {
   bookings(
     bookingTypes: $bookingTypes
@@ -715,7 +714,6 @@ query bookings(
     perPage: $perPage
     restaurantId: $restaurantId
     startDate: $startDate
-    status: $status
   ) {
     collection {
       bookingTables {
