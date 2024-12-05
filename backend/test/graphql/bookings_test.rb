@@ -24,7 +24,8 @@ class BookingsTest < ActionDispatch::IntegrationTest
       perPage: 100,
       restaurantId: restaurant.id,
       startDate: "2024-04-01T11:20:00",
-      status: "current"
+      status: "current",
+      tableName: booking_table.name
     }
 
     assert_query_success
@@ -320,6 +321,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
         $perPage: Int!
         $restaurantId: ID!
         $startDate: ISO8601DateTime
+        $tableName: String
       ) {
         bookings(
           bookingTypes: $bookingTypes
@@ -328,6 +330,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
           perPage: $perPage
           restaurantId: $restaurantId
           startDate: $startDate
+          tableName: $tableName
         ) {
           collection {
             id
