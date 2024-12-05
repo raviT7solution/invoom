@@ -730,7 +730,7 @@ export const useRestaurantUpdate = () => {
     mutationFn: (variables: RestaurantUpdateMutationVariables) =>
       client.request(RestaurantUpdateDocument, variables),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["restaurant"] });
+      queryClient.invalidateQueries({ queryKey: ["restaurants"] });
     },
   });
 };
