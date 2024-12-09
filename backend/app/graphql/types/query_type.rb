@@ -18,6 +18,7 @@ class Types::QueryType < Types::BaseObject
     argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
     argument :start_date, GraphQL::Types::ISO8601DateTime, required: false
+    argument :status, String, required: false
     argument :table_name, String, required: false
   end
   field :categories, [Types::CategoryType], null: false do
@@ -192,12 +193,14 @@ class Types::QueryType < Types::BaseObject
     BookingPolicy.new(context[:current_user]).scope.find(id)
   end
 
-  def bookings(restaurant_id:, page:, per_page:, booking_types: [], start_date: nil, end_date: nil, export: false, table_name: nil) # rubocop:disable Metrics/ParameterLists, Layout/LineLength, Metrics/AbcSize
+  def bookings(page:, per_page:, restaurant_id:, booking_types: [], end_date: nil, export: false, start_date: nil, status: nil, table_name: nil) # rubocop:disable Metrics/ParameterLists,Layout/LineLength,Metrics/AbcSize,Metrics/CyclomaticComplexity
     records = BookingPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
 
     records = records.where(clocked_in_at: start_date..end_date) if start_date.present? && end_date.present?
 
     records = records.where(booking_type: booking_types) if booking_types.present?
+    records = records.where(clocked_out_at: nil) if status == "current"
+    records = records.where.not(clocked_out_at: nil) if status == "completed"
     records = records.joins(:booking_tables).where(booking_tables: { name: table_name }) if table_name.present?
 
     records = records.order(created_at: :desc)
