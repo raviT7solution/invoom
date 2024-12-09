@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_15_141000) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_20_100713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -177,6 +177,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_15_141000) do
     t.json "data", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "active_user_full_name"
     t.index ["name", "restaurant_id"], name: "index_floor_objects_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_floor_objects_on_restaurant_id"
   end

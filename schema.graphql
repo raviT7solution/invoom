@@ -533,6 +533,7 @@ input DiscountUpdateInput {
 }
 
 type FloorObject {
+  activeUserFullName: String
   bookingTable: BookingTable
   data: FloorObjectData!
   id: ID!
