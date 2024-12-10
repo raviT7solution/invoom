@@ -1744,7 +1744,7 @@ type Query {
   invoice(id: ID!): Invoice!
   invoices(bookingTypes: [String!], endDate: ISO8601DateTime, export: Boolean, page: Int!, perPage: Int!, restaurantId: ID!, startDate: ISO8601DateTime, status: String): InvoiceCollection!
   item(id: ID!): Item!
-  items(categoryId: ID, restaurantId: ID!): [Item!]!
+  items(categoryId: ID, query: String, restaurantId: ID!): [Item!]!
   kitchenProfile(id: ID!): KitchenProfile!
   kitchenProfiles(restaurantId: ID!): [KitchenProfile!]!
   menu(id: ID!): Menu!

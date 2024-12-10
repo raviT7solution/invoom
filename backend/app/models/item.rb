@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Item < ApplicationRecord
+  scope :search, ->(q) { where("items.display_name ILIKE ?", "%#{q}%") }
+
   belongs_to :category
   belongs_to :restaurant
   belongs_to :tax
