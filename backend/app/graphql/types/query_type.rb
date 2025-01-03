@@ -421,7 +421,7 @@ class Types::QueryType < Types::BaseObject
     records = records.where(status: status) if status.present?
     records = records.where(reservation_at: start_time..end_time) if start_time.present? && end_time.present?
 
-    records.order(:created_at).page(page).per(per_page)
+    records.order(:reservation_at).page(page).per(per_page)
   end
 
   def restaurant(id:)

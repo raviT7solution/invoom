@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_20_100713) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_22_080540) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -383,12 +383,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_100713) do
 
   create_table "reservations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer "status", null: false
-    t.integer "pax", null: false
+    t.integer "adults", null: false
     t.datetime "reservation_at", null: false
     t.uuid "customer_id", null: false
     t.uuid "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "kids", null: false
+    t.string "special_request"
     t.index ["customer_id"], name: "index_reservations_on_customer_id"
     t.index ["restaurant_id"], name: "index_reservations_on_restaurant_id"
   end

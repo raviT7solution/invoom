@@ -5,6 +5,10 @@ class ReservationPolicy < ApplicationPolicy
     mobile_user?("reservations")
   end
 
+  def delete?
+    mobile_user?("reservations")
+  end
+
   def scope
     if mobile_user?("reservations")
       Reservation.where(restaurant: mobile_user!.restaurant)

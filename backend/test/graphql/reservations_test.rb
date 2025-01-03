@@ -12,9 +12,11 @@ class ReservationTest < ActionDispatch::IntegrationTest
     authentic_query user, "mobile_user", reservation_create_string, variables: {
       input: {
         attributes: {
+          adults: 1,
           customerId: customer.id,
+          kids: 0,
           reservationAt: "2024-04-01T11:20:00",
-          pax: 1
+          specialRequest: "Test"
         },
         restaurantId: restaurant.id
       }
@@ -22,8 +24,10 @@ class ReservationTest < ActionDispatch::IntegrationTest
 
     assert_query_success
     assert_attributes Reservation.last!, \
+                      adults: 1,
                       customer_id: customer.id,
-                      pax: 1
+                      kids: 0,
+                      special_request: "Test"
   end
 
   test "invalid permission" do
@@ -35,15 +39,33 @@ class ReservationTest < ActionDispatch::IntegrationTest
     authentic_query user, "mobile_user", reservation_create_string, variables: {
       input: {
         attributes: {
+          adults: 1,
           customerId: customer.id,
-          reservationAt: "2024-04-01T11:20:00",
-          pax: 1
+          kids: 0,
+          reservationAt: "2024-04-01T11:20:00"
         },
         restaurantId: restaurant.id
       }
     }
 
     assert_query_error "Unauthorized"
+    assert_nil Reservation.last
+  end
+
+  test "delete reservation" do
+    restaurant = create(:restaurant)
+    role = create(:role, permissions: ["reservations"], restaurant: restaurant)
+    user = create(:user, roles: [role], restaurant: restaurant)
+    customer = create(:customer, restaurant: restaurant)
+    reservation = create(:reservation, restaurant: restaurant, customer: customer)
+
+    authentic_query user, "mobile_user", reservation_delete, variables: {
+      input: {
+        id: reservation.id
+      }
+    }
+
+    assert_query_success
     assert_nil Reservation.last
   end
 
@@ -84,11 +106,15 @@ class ReservationTest < ActionDispatch::IntegrationTest
     }
 
     assert_query_success
-    assert_equal({ "id" => reservation.id,
-                   "pax" => reservation.pax,
+    assert_equal({
+                   "adults" => reservation.adults,
+                   "customer" => { "name" => customer.name },
+                   "id" => reservation.id,
+                   "kids" => reservation.kids,
                    "reservationAt" => reservation.reservation_at,
-                   "status" => "pending",
-                   "customer" => { "name" => customer.name } },
+                   "specialRequest" => reservation.special_request,
+                   "status" => "pending"
+                 },
                  response.parsed_body["data"]["reservations"]["collection"][0])
   end
 
@@ -96,15 +122,23 @@ class ReservationTest < ActionDispatch::IntegrationTest
 
   def reservation_create_string
     <<~GQL
-      mutation ReservationCreate($input: ReservationCreateInput!){
+      mutation reservationCreate($input: ReservationCreateInput!){
         reservationCreate(input: $input)
+      }
+    GQL
+  end
+
+  def reservation_delete
+    <<~GQL
+      mutation reservationDelete($input: ReservationDeleteInput!){
+        reservationDelete(input: $input)
       }
     GQL
   end
 
   def reservation_update_string
     <<~GQL
-      mutation ReservationUpdate($input: ReservationUpdateInput!){
+      mutation reservationUpdate($input: ReservationUpdateInput!){
         reservationUpdate(input: $input)
       }
     GQL
@@ -129,13 +163,15 @@ class ReservationTest < ActionDispatch::IntegrationTest
           status: $status
         ) {
           collection {
-            id
-            pax
-            reservationAt
-            status
+            adults
             customer {
               name
             }
+            id
+            kids
+            reservationAt
+            specialRequest
+            status
           }
         }
       }
