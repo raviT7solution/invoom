@@ -91,6 +91,28 @@ class CustomersTest < ActionDispatch::IntegrationTest
     assert_equal 2, response.parsed_body["data"]["customers"]["collection"].length
   end
 
+  test "update customer" do
+    restaurant = create(:restaurant)
+    role = create(:role, permissions: ["takeout"], restaurant: restaurant)
+    user = create(:user, restaurant: restaurant, roles: [role])
+    customer = create(:customer, restaurant: restaurant)
+
+    authentic_query user, "mobile_user", customer_update, variables: {
+      input: {
+        attributes: {
+          name: "Elvis",
+          phoneNumber: "1234"
+        },
+        id: customer.id
+      }
+    }
+
+    assert_query_success
+    assert_attributes customer.reload,
+                      name: "Elvis",
+                      phone_number: "1234"
+  end
+
   private
 
   def index_string
@@ -126,6 +148,14 @@ class CustomersTest < ActionDispatch::IntegrationTest
     <<~GQL
       mutation customerCreate($input: CustomerCreateInput!) {
         customerCreate(input: $input)
+      }
+    GQL
+  end
+
+  def customer_update
+    <<~GQL
+      mutation customerUpdate($input: CustomerUpdateInput!) {
+        customerUpdate(input: $input)
       }
     GQL
   end

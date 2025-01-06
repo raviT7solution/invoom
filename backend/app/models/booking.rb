@@ -22,7 +22,6 @@ class Booking < ApplicationRecord
   validates :booking_tables, length: { minimum: 1 }, if: :dine_in?
   validates :booking_type, presence: true
   validates :clocked_in_at, presence: true
-  validates :customer_id, absence: true, if: :dine_in?
   validates :customer_id, presence: true, if: :delivery?
   validates :estimated_duration, absence: true, if: :dine_in?
   validates :pax, comparison: { greater_than: 0 }, if: :dine_in?

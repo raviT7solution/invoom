@@ -18,6 +18,7 @@ class Types::MutationType < Types::BaseObject
   field :category_update, mutation: Mutations::CategoryUpdate, null: false, authorize: "CategoryPolicy#update?"
   field :change_password, mutation: Mutations::Admin::ChangePassword, null: false
   field :customer_create, mutation: Mutations::CustomerCreate, null: false, authorize: "CustomerPolicy#create?"
+  field :customer_update, mutation: Mutations::CustomerUpdate, null: false, authorize: "CustomerPolicy#update?"
   field :discount_create, mutation: Mutations::DiscountCreate, null: false, authorize: "DiscountPolicy#create?"
   field :discount_delete, mutation: Mutations::DiscountDelete, null: false, authorize: "DiscountPolicy#delete?"
   field :discount_update, mutation: Mutations::DiscountUpdate, null: false, authorize: "DiscountPolicy#update?"

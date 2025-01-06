@@ -4,7 +4,7 @@ class Mutations::BookingUpdate < Mutations::BaseMutation
   argument :attributes, Types::BookingAttributes, required: true
   argument :id, ID, required: true
 
-  type ID, null: false
+  type Boolean, null: false
 
   def resolve(attributes:, id:)
     booking = BookingPolicy.new(context[:current_user]).scope.find(id)

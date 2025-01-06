@@ -179,10 +179,12 @@ class BookingsTest < ActionDispatch::IntegrationTest
     booking_table = build(:booking_table, floor_object: table)
     booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 1,
                                booking_tables: [booking_table])
+    customer = create(:customer, restaurant: restaurant)
 
     authentic_query user, "mobile_user", booking_update_string, variables: {
       input: {
         attributes: {
+          customerId: customer.id,
           pax: 3
         },
         id: booking.id
@@ -190,7 +192,9 @@ class BookingsTest < ActionDispatch::IntegrationTest
     }
 
     assert_query_success
-    assert_equal 3, booking.reload.pax
+    assert_attributes booking.reload,
+                      customer_id: customer.id,
+                      pax: 3
   end
 
   test "booking close" do
