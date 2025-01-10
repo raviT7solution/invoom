@@ -26,11 +26,16 @@ class TicketItem < ApplicationRecord
 
   after_commit :broadcast
   after_create_commit :invoice_item_create
+  after_update_commit :broadcast_status, if: :saved_change_to_status?
 
   private
 
   def broadcast
     item.category.kitchen_profiles.each { |i| KitchenProfilesChannel.broadcast_to i, {} }
+  end
+
+  def broadcast_status
+    TicketItemsChannel.broadcast_to(ticket.booking, {})
   end
 
   def invoice_item_create
