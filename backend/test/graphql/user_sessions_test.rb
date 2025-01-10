@@ -9,7 +9,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     @admin.restaurants = [@restaurant]
 
     @role = create(:role, permissions: ["clock_in_clock_out", "floor_plan"], restaurant: @restaurant)
-    @user = create(:user, roles: [@role], restaurant: @restaurant)
+    @user = create(:user, roles: [@role], restaurant: @restaurant, pin: "1234")
   end
 
   test "returns token for valid pin" do

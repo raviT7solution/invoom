@@ -13,6 +13,7 @@ class Types::MutationType < Types::BaseObject
   field :booking_force_clock_out, mutation: Mutations::BookingForceClockOut, null: false
   field :booking_service_charges_update, mutation: Mutations::BookingServiceChargesUpdate, null: false, authorize: "BookingServiceChargePolicy#update?"
   field :booking_update, mutation: Mutations::BookingUpdate, null: false, authorize: "BookingPolicy#update?"
+  field :booking_users_update, mutation: Mutations::BookingUsersUpdate, null: false, authorize: "BookingPolicy#update?"
   field :category_create, mutation: Mutations::CategoryCreate, null: false, authorize: "CategoryPolicy#create?"
   field :category_delete, mutation: Mutations::CategoryDelete, null: false, authorize: "CategoryPolicy#delete?"
   field :category_update, mutation: Mutations::CategoryUpdate, null: false, authorize: "CategoryPolicy#update?"

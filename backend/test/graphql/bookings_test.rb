@@ -148,7 +148,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     restaurant = create(:restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    other_user = create(:user, restaurant: restaurant, pin: "9999")
+    other_user = create(:user, restaurant: restaurant)
 
     used_table = create(:floor_object, :rectangular_table, restaurant: restaurant)
     unused_table = create(:floor_object, :rectangular_table, restaurant: restaurant)
@@ -314,6 +314,46 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_not Booking.exists?(id: booking.id)
   end
 
+  test "booking users update" do
+    restaurant = create(:restaurant)
+    role = create(:role, permissions: ["orders", "floor_plan"], restaurant: restaurant)
+    user = create(:user, restaurant: restaurant, roles: [role])
+    another_user = create(:user, restaurant: restaurant, roles: [role])
+
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+
+    category = create(:category, restaurant: restaurant)
+    item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
+
+    booking_one = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
+                                   booking_tables: [build(:booking_table, name: table.name)])
+    booking_two = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
+                                   booking_tables: [build(:booking_table, floor_object: table, name: table.name)])
+    booking_three = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
+                                     booking_tables: [build(:booking_table, floor_object: table, name: table.name)])
+
+    ticket = create(:ticket, booking: booking_one)
+    ticket_item = create(:ticket_item, ticket: ticket, item: item)
+
+    invoice = create(:invoice, booking: booking_one)
+    create(:invoice_item, ticket_item: ticket_item, invoice: invoice)
+    create(:payment, invoice: invoice, amount: invoice.invoice_summary.total)
+
+    booking_one.update(clocked_out_at: Time.current)
+
+    authentic_query user, "mobile_user", booking_users_update_string, variables: {
+      input: {
+        tableName: table.name,
+        userId: another_user.id
+      }
+    }
+
+    assert_query_success
+    assert_equal booking_one.reload.user_id, user.id
+    assert_equal booking_two.reload.user_id, another_user.id
+    assert_equal booking_three.reload.user_id, another_user.id
+  end
+
   private
 
   def bookings
@@ -372,8 +412,16 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   def booking_force_clock_out
     <<~GQL
-      mutation bookingForceClockOut($input: BookingForceClockOutInput!){
+      mutation bookingForceClockOut($input: BookingForceClockOutInput!) {
         bookingForceClockOut(input: $input)
+      }
+    GQL
+  end
+
+  def booking_users_update_string
+    <<~GQL
+      mutation bookingUsersUpdate($input: BookingUsersUpdateInput!) {
+        bookingUsersUpdate(input: $input)
       }
     GQL
   end

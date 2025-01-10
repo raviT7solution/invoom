@@ -15,7 +15,7 @@ FactoryBot.define do
     max_hour { 0 }
     password { "password@123" }
     phone_number { Faker::PhoneNumber.cell_phone_in_e164 }
-    pin { "1234" }
+    pin { Faker::Number.number(digits: 4).to_s }
     preferred_name { Faker::Internet.username }
     province { "ON" }
     start_date { "01/01/2023" }
