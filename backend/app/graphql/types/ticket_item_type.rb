@@ -20,6 +20,5 @@ class Types::TicketItemType < Types::BaseObject
   field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
   field :applied_discount, Types::AppliedDiscountType, scope: "AppliedDiscountPolicy", preload: :applied_discount, null: true # rubocop:disable Layout/LineLength
-  field :ticket_item_addons, [Types::TicketItemAddonType], scope: "TicketItemAddonPolicy",
-                                                           preload: :ticket_item_addons, null: false
+  field :ticket_item_addons, [Types::TicketItemAddonType], scope: "TicketItemAddonPolicy", preload: :ticket_item_addons, null: false # rubocop:disable Layout/LineLength
 end

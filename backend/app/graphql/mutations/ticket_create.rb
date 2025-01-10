@@ -4,7 +4,7 @@ class Mutations::TicketCreate < Mutations::BaseMutation
   argument :attributes, [Types::TicketItemAttributes], required: true
   argument :booking_id, ID, required: true
 
-  type Boolean, null: false
+  type ID, null: false
 
   def resolve(attributes:, booking_id:) # rubocop:disable Metrics/AbcSize
     booking = BookingPolicy.new(context[:current_user]).scope.find(booking_id)
@@ -45,7 +45,7 @@ class Mutations::TicketCreate < Mutations::BaseMutation
 
     raise_error ticket.errors.full_messages.to_sentence unless ticket.save
 
-    true
+    ticket.id
   end
 
   private

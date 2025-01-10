@@ -32,7 +32,7 @@ class TicketsTest < ActionDispatch::IntegrationTest
     }
 
     assert_query_success
-    assert response.parsed_body["data"]["ticketCreate"]
+    assert_equal Ticket.last.id, response.parsed_body["data"]["ticketCreate"]
     assert_attributes Ticket.last, booking: booking
     assert_attributes Ticket.last.ticket_items.first!,
                       cst: item.tax.cst,

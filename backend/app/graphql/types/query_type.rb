@@ -109,6 +109,7 @@ class Types::QueryType < Types::BaseObject
   end
   field :printer_configurations, [Types::PrinterConfigurationType], null: false do
     argument :restaurant_id, ID, required: true
+    argument :ticket_id, ID, required: false
   end
   field :product, Types::ProductType, null: false do
     argument :id, ID, required: true
@@ -394,8 +395,12 @@ class Types::QueryType < Types::BaseObject
     PrinterConfigurationPolicy.new(context[:current_user]).scope.find(id)
   end
 
-  def printer_configurations(restaurant_id:)
-    PrinterConfigurationPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+  def printer_configurations(restaurant_id:, ticket_id: nil)
+    records = PrinterConfigurationPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+
+    records = records.eager_load(:ticket_items).where(ticket_items: { ticket_id: ticket_id }) if ticket_id.present?
+
+    records
   end
 
   def product(id:)
