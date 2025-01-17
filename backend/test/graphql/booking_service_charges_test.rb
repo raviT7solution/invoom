@@ -5,6 +5,7 @@ require "test_helper"
 class BookingServiceChargesTest < ActionDispatch::IntegrationTest
   test "update" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -66,7 +67,7 @@ class BookingServiceChargesTest < ActionDispatch::IntegrationTest
 
     assert_attributes invoice1.reload.invoice_summary, total: 11.466
 
-    authentic_query user, "mobile_user", booking_service_charges_update, variables: {
+    authentic_query mobile_user_token(user, device), booking_service_charges_update, variables: {
       input: {
         bookingId: booking.id,
         serviceChargeIds: [service_charge1.id, service_charge2.id]
@@ -93,6 +94,7 @@ class BookingServiceChargesTest < ActionDispatch::IntegrationTest
 
   test "destroy" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -134,7 +136,7 @@ class BookingServiceChargesTest < ActionDispatch::IntegrationTest
 
     assert_attributes invoice.reload.invoice_summary, total: 11.466
 
-    authentic_query user, "mobile_user", booking_service_charges_update, variables: { input: {
+    authentic_query mobile_user_token(user, device), booking_service_charges_update, variables: { input: {
       bookingId: booking.id, serviceChargeIds: []
     } }
 

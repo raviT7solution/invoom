@@ -5,6 +5,7 @@ require "test_helper"
 class DiscountsTest < ActionDispatch::IntegrationTest
   test "discounts" do
     restaurant = create(:restaurant, timezone: "America/Toronto")
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["apply_discount"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -28,7 +29,7 @@ class DiscountsTest < ActionDispatch::IntegrationTest
 
     # Blackout
     travel_to "2024-04-01T05:00:00Z" do
-      authentic_query user, "mobile_user", discounts_query, variables: {
+      authentic_query mobile_user_token(user, device), discounts_query, variables: {
         restaurantId: restaurant.id, channel: "takeout", discountOn: "item_wise", itemId: item.id
       }
 
@@ -38,7 +39,7 @@ class DiscountsTest < ActionDispatch::IntegrationTest
 
     # Blackout in only UTC
     travel_to "2024-04-01" do
-      authentic_query user, "mobile_user", discounts_query, variables: {
+      authentic_query mobile_user_token(user, device), discounts_query, variables: {
         restaurantId: restaurant.id, channel: "takeout", discountOn: "item_wise", itemId: item.id
       }
 
@@ -48,7 +49,7 @@ class DiscountsTest < ActionDispatch::IntegrationTest
 
     # Tue
     travel_to "2024-04-02T05:00:00Z" do
-      authentic_query user, "mobile_user", discounts_query, variables: {
+      authentic_query mobile_user_token(user, device), discounts_query, variables: {
         restaurantId: restaurant.id, channel: "takeout", discountOn: "item_wise", itemId: item.id
       }
 
@@ -58,7 +59,7 @@ class DiscountsTest < ActionDispatch::IntegrationTest
 
     # Tue dine_ine
     travel_to "2024-04-02T05:00:00Z" do
-      authentic_query user, "mobile_user", discounts_query, variables: {
+      authentic_query mobile_user_token(user, device), discounts_query, variables: {
         restaurantId: restaurant.id, channel: "dine_in", discountOn: "item_wise", itemId: item.id
       }
 
@@ -68,7 +69,7 @@ class DiscountsTest < ActionDispatch::IntegrationTest
 
     # Tue booking_wise
     travel_to "2024-04-02T05:00:00Z" do
-      authentic_query user, "mobile_user", discounts_query, variables: {
+      authentic_query mobile_user_token(user, device), discounts_query, variables: {
         restaurantId: restaurant.id, channel: "dine_in", discountOn: "bill_wise"
       }
 

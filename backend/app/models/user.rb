@@ -9,6 +9,7 @@ class User < ApplicationRecord
   belongs_to :restaurant
 
   has_many :bookings, dependent: :restrict_with_error
+  has_many :sessions, as: :sessionable, dependent: :destroy
   has_many :time_sheets, dependent: :destroy
   has_many :user_roles, dependent: :destroy
 
@@ -23,10 +24,7 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :max_hour, presence: true
   validates :phone_number, presence: true
-  validates :pin, length: { is: 4 },
-                  numericality: { only_integer: true },
-                  presence: true,
-                  uniqueness: { scope: :restaurant_id }
+  validates :pin, length: { is: 4 }, numericality: { only_integer: true }, presence: true, uniqueness: { scope: :restaurant_id } # rubocop:disable Layout/LineLength
   validates :preferred_name, presence: true
   validates :start_date, presence: true
   validates :wage, presence: true

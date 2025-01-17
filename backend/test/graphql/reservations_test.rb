@@ -5,11 +5,12 @@ require "test_helper"
 class ReservationTest < ActionDispatch::IntegrationTest
   test "create reservation" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["reservations"], restaurant: restaurant)
     user = create(:user, roles: [role], restaurant: restaurant)
     customer = create(:customer, restaurant: restaurant)
 
-    authentic_query user, "mobile_user", reservation_create_string, variables: {
+    authentic_query mobile_user_token(user, device), reservation_create_string, variables: {
       input: {
         attributes: {
           adults: 1,
@@ -32,11 +33,12 @@ class ReservationTest < ActionDispatch::IntegrationTest
 
   test "invalid permission" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, roles: [role], restaurant: restaurant)
     customer = create(:customer, restaurant: restaurant)
 
-    authentic_query user, "mobile_user", reservation_create_string, variables: {
+    authentic_query mobile_user_token(user, device), reservation_create_string, variables: {
       input: {
         attributes: {
           adults: 1,
@@ -54,12 +56,13 @@ class ReservationTest < ActionDispatch::IntegrationTest
 
   test "delete reservation" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["reservations"], restaurant: restaurant)
     user = create(:user, roles: [role], restaurant: restaurant)
     customer = create(:customer, restaurant: restaurant)
     reservation = create(:reservation, restaurant: restaurant, customer: customer)
 
-    authentic_query user, "mobile_user", reservation_delete, variables: {
+    authentic_query mobile_user_token(user, device), reservation_delete, variables: {
       input: {
         id: reservation.id
       }
@@ -71,12 +74,13 @@ class ReservationTest < ActionDispatch::IntegrationTest
 
   test "update reservation" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["reservations"], restaurant: restaurant)
     user = create(:user, roles: [role], restaurant: restaurant)
     customer = create(:customer, restaurant: restaurant)
     reservation = create(:reservation, restaurant: restaurant, customer: customer)
 
-    authentic_query user, "mobile_user", reservation_update_string, variables: {
+    authentic_query mobile_user_token(user, device), reservation_update_string, variables: {
       input: {
         attributes: {
           status: "completed"
@@ -91,13 +95,14 @@ class ReservationTest < ActionDispatch::IntegrationTest
 
   test "reservations" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["reservations"], restaurant: restaurant)
     user = create(:user, roles: [role], restaurant: restaurant)
     customer = create(:customer, restaurant: restaurant)
     reservation = create(:reservation, restaurant: restaurant, customer: customer,
                                        reservation_at: "2024-04-02T11:20:00")
 
-    authentic_query user, "mobile_user", reservations_string, variables: {
+    authentic_query mobile_user_token(user, device), reservations_string, variables: {
       endTime: "2024-04-03T11:20:00",
       page: 1,
       perPage: 100,

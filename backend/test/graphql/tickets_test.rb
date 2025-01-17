@@ -5,6 +5,7 @@ require "test_helper"
 class TicketsTest < ActionDispatch::IntegrationTest
   test "ticket create" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -16,7 +17,7 @@ class TicketsTest < ActionDispatch::IntegrationTest
     item = create(:item, restaurant: restaurant, category: category, price: 5, tax: create(:tax))
     addon = create(:addon, restaurant: restaurant, items: [item], price: 7)
 
-    authentic_query user, "mobile_user", ticket_create_string, variables: {
+    authentic_query mobile_user_token(user, device), ticket_create_string, variables: {
       input: {
         bookingId: booking.id,
         attributes: [
@@ -50,6 +51,7 @@ class TicketsTest < ActionDispatch::IntegrationTest
 
   test "ticket create with negative quantity" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -64,7 +66,7 @@ class TicketsTest < ActionDispatch::IntegrationTest
     ticket_item = create(:ticket_item, ticket: ticket, item: item)
     ticket_item_addon = create(:ticket_item_addon, ticket_item: ticket_item)
 
-    authentic_query user, "mobile_user", ticket_create_string, variables: {
+    authentic_query mobile_user_token(user, device), ticket_create_string, variables: {
       input: {
         bookingId: booking.id,
         attributes: [

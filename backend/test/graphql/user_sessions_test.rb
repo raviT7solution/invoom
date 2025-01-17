@@ -4,16 +4,15 @@ require "test_helper"
 
 class UserSessionsTest < ActionDispatch::IntegrationTest
   setup do
-    @admin = create(:admin)
     @restaurant = create(:restaurant)
-    @admin.restaurants = [@restaurant]
-
-    @role = create(:role, permissions: ["clock_in_clock_out", "floor_plan"], restaurant: @restaurant)
-    @user = create(:user, roles: [@role], restaurant: @restaurant, pin: "1234")
+    @admin = create(:admin, restaurants: [@restaurant])
+    @device = create(:device, restaurant: @restaurant)
+    role = create(:role, permissions: ["clock_in_clock_out", "floor_plan"], restaurant: @restaurant)
+    @user = create(:user, roles: [role], restaurant: @restaurant, pin: "1234")
   end
 
   test "returns token for valid pin" do
-    authentic_query @admin, "mobile_admin", create_string, variables: {
+    authentic_query mobile_admin_token(@admin, @device), create_string, variables: {
       input: {
         restaurantId: @restaurant.id,
         attributes: {
@@ -27,13 +26,13 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     token = response.parsed_body["data"]["userSessionCreate"]["token"]
 
-    assert_equal @user, Session.new(token).mobile_user!
+    assert_equal @user, Session.find_signed!(token).mobile_user!
     assert_equal ["clock_in_clock_out", "floor_plan"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
     assert response.parsed_body["data"]["userSessionCreate"]["autoClockIn"]
   end
 
   test "returns token for valid password" do
-    authentic_query @admin, "mobile_admin", create_string, variables: {
+    authentic_query mobile_admin_token(@admin, @device), create_string, variables: {
       input: {
         restaurantId: @restaurant.id,
         attributes: {
@@ -48,7 +47,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     token = response.parsed_body["data"]["userSessionCreate"]["token"]
 
-    assert_equal @user, Session.new(token).mobile_user!
+    assert_equal @user, Session.find_signed!(token).mobile_user!
     assert_equal ["clock_in_clock_out", "floor_plan"], response.parsed_body["data"]["userSessionCreate"]["permissions"]
     assert response.parsed_body["data"]["userSessionCreate"]["autoClockIn"]
   end
@@ -56,7 +55,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
   test "when already clocked in" do
     time_sheet = create(:time_sheet, user: @user, start_time: 2.days.ago)
 
-    authentic_query @admin, "mobile_admin", create_string, variables: {
+    authentic_query mobile_admin_token(@admin, @device), create_string, variables: {
       input: {
         restaurantId: @restaurant.id,
         attributes: {
@@ -70,7 +69,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_equal "already_clocked_in", response.parsed_body["data"]["userSessionCreate"]["clockInStatus"]
     assert_equal @user.permissions, response.parsed_body["data"]["userSessionCreate"]["permissions"]
-    assert_equal @user, Session.new(response.parsed_body["data"]["userSessionCreate"]["token"]).mobile_user!
+    assert_equal @user, Session.find_signed!(response.parsed_body["data"]["userSessionCreate"]["token"]).mobile_user!
 
     assert time_sheet.reload.start_time
     assert_not time_sheet.end_time
@@ -79,7 +78,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
   test "when already clocked out" do
     create(:time_sheet, user: @user, start_time: 2.days.ago, end_time: 1.day.ago)
 
-    authentic_query @admin, "mobile_admin", create_string, variables: {
+    authentic_query mobile_admin_token(@admin, @device), create_string, variables: {
       input: {
         restaurantId: @restaurant.id,
         attributes: {
@@ -92,18 +91,18 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     assert_query_success
     assert_equal "already_clocked_out", response.parsed_body["data"]["userSessionCreate"]["clockInStatus"]
     assert_equal @user.permissions, response.parsed_body["data"]["userSessionCreate"]["permissions"]
-    assert_equal @user, Session.new(response.parsed_body["data"]["userSessionCreate"]["token"]).mobile_user!
+    assert_equal @user, Session.find_signed!(response.parsed_body["data"]["userSessionCreate"]["token"]).mobile_user!
   end
 
   test "time sheet create session" do
     create(:time_sheet, user: @user, start_time: 2.days.ago)
 
-    authentic_query @user, "mobile_user", user_session_time_sheet_create, variables: { input: {} }
+    authentic_query mobile_user_token(@user, @device), user_session_time_sheet_create, variables: { input: {} }
 
     assert_query_error "User is already clocked-in"
 
-    authentic_query @user, "mobile_user", destroy_string, variables: { input: {} }
-    authentic_query @user, "mobile_user", user_session_time_sheet_create, variables: { input: {} }
+    authentic_query mobile_user_token(@user, @device), destroy_string, variables: { input: {} }
+    authentic_query mobile_user_token(@user, @device), user_session_time_sheet_create, variables: { input: {} }
 
     assert_query_success
     assert TimeSheet.order(:created_at).last.start_time
@@ -113,36 +112,30 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
   test "destroy session" do
     create(:time_sheet, user: @user, start_time: 2.days.ago)
 
-    authentic_query @user, "mobile_user", destroy_string, variables: { input: {} }
+    authentic_query mobile_user_token(@user, @device), destroy_string, variables: { input: {} }
 
     assert_query_success
     assert_nil @user.time_sheets.find_by(end_time: nil)
 
     create(:time_sheet, user: @user, start_time: 2.days.ago, end_time: 1.day.ago)
 
-    authentic_query @user, "mobile_user", destroy_string, variables: { input: {} }
+    authentic_query mobile_user_token(@user, @device), destroy_string, variables: { input: {} }
 
     assert_query_success
   end
 
   test "expired token" do
-    exp = 2.days.ago.to_i
+    token = Session.create!(sessionable: @admin, subject: "web_admin").signed_id(expires_in: 15.minutes)
 
-    post \
-      graphql_path,
-      headers: {
-        "Authorization" => "Bearer #{JWT.encode({ 'mobile_user_id' => @user.id, exp: exp }, Session.secret)}"
-      },
-      params: { query: current_user_string }
+    travel 16.minutes
+
+    authentic_query token, current_user_string
 
     assert_query_error "Session not found"
   end
 
   test "invalid token with different secrets" do
-    post \
-      graphql_path,
-      headers: { "Authorization" => "Bearer #{JWT.encode({ 'mobile_user_id' => @user.id }, SecureRandom.uuid)}" },
-      params: { query: current_user_string }
+    authentic_query "fake-token", current_user_string
 
     assert_query_error "Session not found"
   end

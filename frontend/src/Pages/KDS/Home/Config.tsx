@@ -50,7 +50,9 @@ const AccountSection = () => {
   const queryClient = useQueryClient();
 
   const onFinish = async (values: schema) => {
-    create((await mutateAsync({ input: { ...values, subject: "kds" } })).token);
+    create(
+      (await mutateAsync({ input: { ...values, subject: "kds_admin" } })).token,
+    );
 
     configure("restaurantId", selectedRestaurantId);
     setIsOpen(false);

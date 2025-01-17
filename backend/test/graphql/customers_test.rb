@@ -5,10 +5,11 @@ require "test_helper"
 class CustomersTest < ActionDispatch::IntegrationTest
   test "create customer" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["takeout"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    authentic_query user, "mobile_user", customer_create_string, variables: {
+    authentic_query mobile_user_token(user, device), customer_create_string, variables: {
       input: {
         restaurantId: restaurant.id,
         attributes: {
@@ -25,6 +26,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
 
   test "customers" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["takeout"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
     customer = create(:customer, email: "elvis@example.com", name: "Elvis", restaurant: restaurant)
@@ -56,7 +58,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
     create(:invoice_item, ticket_item: ticket_item1, invoice: invoice1, price: 100)
     create(:invoice_item, ticket_item: ticket_item2, invoice: invoice2, price: 50)
 
-    authentic_query user, "mobile_user", index_string,
+    authentic_query mobile_user_token(user, device), index_string,
                     variables: { restaurantId: restaurant.id, query: "El", page: 1, perPage: 10 }
 
     assert_query_success
@@ -74,13 +76,14 @@ class CustomersTest < ActionDispatch::IntegrationTest
 
   test "customers export" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["takeout"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
     create(:customer, restaurant: restaurant)
     create(:customer, restaurant: restaurant)
 
-    authentic_query user, "mobile_user", index_string, variables: {
+    authentic_query mobile_user_token(user, device), index_string, variables: {
       export: true,
       page: 0,
       perPage: 0,
@@ -93,11 +96,12 @@ class CustomersTest < ActionDispatch::IntegrationTest
 
   test "update customer" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["takeout"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
     customer = create(:customer, restaurant: restaurant)
 
-    authentic_query user, "mobile_user", customer_update, variables: {
+    authentic_query mobile_user_token(user, device), customer_update, variables: {
       input: {
         attributes: {
           name: "Elvis",

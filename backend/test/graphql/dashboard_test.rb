@@ -39,7 +39,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
 
     booking.update!(clocked_out_at: Time.current)
 
-    authentic_query admin, "web_admin", dashboard_summary, variables: {
+    authentic_query web_admin_token(admin), dashboard_summary, variables: {
       endTime: 10.minutes.after.iso8601,
       restaurantId: restaurant.id,
       startTime: 10.days.ago.iso8601
@@ -140,7 +140,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
 
     booking.update!(clocked_out_at: Time.current)
 
-    authentic_query admin, "web_admin", sales_summary_query, variables: {
+    authentic_query web_admin_token(admin), sales_summary_query, variables: {
       endTime: nil,
       restaurantId: restaurant.id,
       startTime: nil

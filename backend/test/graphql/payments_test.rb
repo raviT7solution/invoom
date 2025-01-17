@@ -5,6 +5,7 @@ require "test_helper"
 class PaymentsTest < ActionDispatch::IntegrationTest
   test "create cash payment" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
     table = create(:floor_object, :rectangular_table, restaurant: restaurant)
@@ -18,7 +19,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query user, "mobile_user", payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -38,6 +39,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
   test "invoice void payment create" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
     table = create(:floor_object, :rectangular_table, restaurant: restaurant)
@@ -51,7 +53,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query user, "mobile_user", payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -71,6 +73,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
   test "create delivery partner payment" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
     table = create(:floor_object, :rectangular_table, restaurant: restaurant)
@@ -84,7 +87,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query user, "mobile_user", payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -102,6 +105,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
   test "create manual card payment" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
     table = create(:floor_object, :rectangular_table, restaurant: restaurant)
@@ -115,7 +119,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query user, "mobile_user", payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -133,6 +137,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
   test "create cheque payment" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
     table = create(:floor_object, :rectangular_table, restaurant: restaurant)
@@ -146,7 +151,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query user, "mobile_user", payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -166,6 +171,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
   test "create gift card payment" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
     table = create(:floor_object, :rectangular_table, restaurant: restaurant)
@@ -179,7 +185,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query user, "mobile_user", payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
       input: {
         attributes: {
           amount: 10,

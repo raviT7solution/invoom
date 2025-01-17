@@ -16,7 +16,7 @@ class TimeSheetsTest < ActionDispatch::IntegrationTest
     create(:time_sheet, user: user, start_time: start_time + 14.hours, end_time: start_time + 17.hours) # 3 hours
     create(:time_sheet, user: user, start_time: start_time + 19.hours, end_time: start_time + 20.hours) # 1 hour
 
-    authentic_query admin, "web_admin", time_sheet_summary, variables: {
+    authentic_query web_admin_token(admin), time_sheet_summary, variables: {
       restaurantId: restaurant.id,
       userIds: []
     }

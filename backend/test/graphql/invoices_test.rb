@@ -4,9 +4,9 @@ require "test_helper"
 
 class InvoicesTest < ActionDispatch::IntegrationTest
   test "split_equally invoices create" do
-    booking, ticket_item1, ticket_item2 = setup_ticket_items
+    booking, ticket_item1, ticket_item2, device = setup_ticket_items
 
-    authentic_query booking.user, "mobile_user", invoices_create, variables: { input: {
+    authentic_query mobile_user_token(booking.user, device), invoices_create, variables: { input: {
       bookingId: booking.id,
       attributes: [
         {
@@ -74,9 +74,9 @@ class InvoicesTest < ActionDispatch::IntegrationTest
   end
 
   test "revert split" do
-    booking, ticket_item1, ticket_item2 = setup_ticket_items
+    booking, ticket_item1, ticket_item2, device = setup_ticket_items
 
-    authentic_query booking.user, "mobile_user", invoices_create, variables: { input: {
+    authentic_query mobile_user_token(booking.user, device), invoices_create, variables: { input: {
       bookingId: booking.id,
       attributes: [
         {
@@ -106,7 +106,7 @@ class InvoicesTest < ActionDispatch::IntegrationTest
     assert_equal 2, Invoice.count
     assert_equal 2, Payment.count
 
-    authentic_query booking.user, "mobile_user", invoices_create, variables: {
+    authentic_query mobile_user_token(booking.user, device), invoices_create, variables: {
       input: {
         bookingId: booking.id,
         attributes: [
@@ -134,7 +134,7 @@ class InvoicesTest < ActionDispatch::IntegrationTest
   end
 
   test "apply discount" do
-    booking, ticket_item1, ticket_item2 = setup_ticket_items
+    booking, ticket_item1, ticket_item2, device = setup_ticket_items
 
     booking_discount = create(
       :applied_discount,
@@ -149,7 +149,7 @@ class InvoicesTest < ActionDispatch::IntegrationTest
       discountable: ticket_item2, discount_type: "percentage", value: 25, restaurant: booking.restaurant
     )
 
-    authentic_query booking.user, "mobile_user", invoices_create, variables: { input: {
+    authentic_query mobile_user_token(booking.user, device), invoices_create, variables: { input: {
       bookingId: booking.id,
       attributes: [
         {
@@ -268,9 +268,9 @@ class InvoicesTest < ActionDispatch::IntegrationTest
   end
 
   test "create ticket item after invoices are generated" do
-    booking, ticket_item1, ticket_item2 = setup_ticket_items
+    booking, ticket_item1, ticket_item2, device = setup_ticket_items
 
-    authentic_query booking.user, "mobile_user", invoices_create, variables: { input: {
+    authentic_query mobile_user_token(booking.user, device), invoices_create, variables: { input: {
       bookingId: booking.id,
       attributes: [
         {
@@ -321,6 +321,7 @@ class InvoicesTest < ActionDispatch::IntegrationTest
 
   def setup_ticket_items # rubocop:disable Metrics/AbcSize
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -339,7 +340,7 @@ class InvoicesTest < ActionDispatch::IntegrationTest
                                         price: 75, quantity: 4,
                                         cst: 0, gst: 15, hst: 0, pst: 0, qst: 0, rst: 0)
 
-    [booking, ticket_item1, ticket_item2]
+    [booking, ticket_item1, ticket_item2, device]
   end
 
   def invoices_create

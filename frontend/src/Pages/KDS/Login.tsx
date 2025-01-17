@@ -22,8 +22,8 @@ type schema = {
 };
 
 type configSchema = {
-  restaurantId: string;
   kitchenProfileId: string;
+  restaurantId: string;
 };
 
 const ConfigForm = () => {
@@ -37,8 +37,8 @@ const ConfigForm = () => {
   const configure = useKDSConfigStore((s) => s.configure);
 
   const onFinish = (values: configSchema) => {
-    configure("restaurantId", values.restaurantId);
     configure("kitchenProfileId", values.kitchenProfileId);
+    configure("restaurantId", values.restaurantId);
 
     Router.push("KDS");
   };
@@ -75,7 +75,7 @@ const ConfigForm = () => {
             label: i.name,
             value: i.id,
           }))}
-          placeholder="Kitchen Profile"
+          placeholder="Select"
         />
       </Form.Item>
     </Form>
@@ -90,7 +90,9 @@ export const KDSLogin = () => {
   const { isPending, mutateAsync } = useKDSSessionCreate();
 
   const onFinish = async (values: schema) => {
-    create((await mutateAsync({ input: { ...values, subject: "kds" } })).token);
+    create(
+      (await mutateAsync({ input: { ...values, subject: "kds_admin" } })).token,
+    );
 
     setIsOpen(true);
   };

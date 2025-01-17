@@ -7,11 +7,11 @@ class UsersTest < ActionDispatch::IntegrationTest
     admin = create(:admin)
     restaurant = create(:restaurant)
     admin.restaurants = [restaurant]
-
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["clock_in_clock_out"], restaurant: restaurant)
     user = create(:user, roles: [role], restaurant: restaurant)
 
-    authentic_query user, "mobile_user", current_user_string, variables: {}
+    authentic_query mobile_user_token(user, device), current_user_string, variables: {}
 
     assert_query_success
     assert_equal \

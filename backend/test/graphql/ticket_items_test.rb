@@ -5,6 +5,7 @@ require "test_helper"
 class TicketItemsTest < ActionDispatch::IntegrationTest
   test "ticket items update" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -20,7 +21,7 @@ class TicketItemsTest < ActionDispatch::IntegrationTest
     another_ticket_item = create(:ticket_item, ticket: ticket, name: item.name, price: item.price, quantity: 2,
                                                status: "queued", item: item)
 
-    authentic_query user, "mobile_user", ticket_items_update_string, variables: {
+    authentic_query mobile_user_token(user, device), ticket_items_update_string, variables: {
       input: {
         attributes: [
           {
@@ -35,7 +36,7 @@ class TicketItemsTest < ActionDispatch::IntegrationTest
     assert_attributes ticket_item.reload, status: "preparing"
     assert_attributes another_ticket_item.reload, status: "queued"
 
-    authentic_query user, "mobile_user", ticket_items_update_string, variables: {
+    authentic_query mobile_user_token(user, device), ticket_items_update_string, variables: {
       input: {
         attributes: [
           {

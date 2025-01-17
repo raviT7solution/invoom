@@ -5,6 +5,7 @@ require "test_helper"
 class TicketItemsChannelTest < ActionCable::Channel::TestCase
   test "ticket item status broadcast" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -17,7 +18,7 @@ class TicketItemsChannelTest < ActionCable::Channel::TestCase
     ticket_item = create(:ticket_item, ticket: ticket, status: "queued", item: item)
 
     subscribe(
-      "Authorization" => Session.token(user, "mobile_user_id"),
+      "Authorization" => mobile_user_token(user, device),
       "booking_id" => booking.id
     )
 

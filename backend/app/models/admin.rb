@@ -4,6 +4,7 @@ class Admin < ApplicationRecord
   has_secure_password
 
   has_many :admin_restaurants, dependent: :destroy
+  has_many :sessions, as: :sessionable, dependent: :destroy
 
   has_many :restaurants, through: :admin_restaurants
 

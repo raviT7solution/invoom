@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class GraphqlController < ApplicationController
+  before_action :load_session
+
   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      current_session: current_session
+      current_session: @session
     }
     result = BackendSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
@@ -14,8 +16,12 @@ class GraphqlController < ApplicationController
 
   private
 
-  def current_session
-    @current_session ||= Session.new(request.headers["Authorization"].try(:gsub, "Bearer ", ""))
+  def load_session
+    header = request.headers["Authorization"].try(:gsub, "Bearer ", "")
+
+    @session = header.present? ? Session.find_signed!(header) : Session.new
+  rescue ActiveSupport::MessageVerifier::InvalidSignature, ActiveRecord::RecordNotFound
+    render json: { errors: [{ message: "Session not found" }] }
   end
 
   def prepare_variables(variables_param)

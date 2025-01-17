@@ -22,7 +22,7 @@ export const Login = () => {
 
   const onFinish = async (values: schema) => {
     create(
-      (await mutateAsync({ input: { ...values, subject: "web" } }))
+      (await mutateAsync({ input: { ...values, subject: "web_admin" } }))
         .adminSessionCreate.token,
     );
 

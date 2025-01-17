@@ -15,7 +15,7 @@ class ModifiersTest < ActionDispatch::IntegrationTest
     m2 = create(:modifier, restaurant: restaurant, category_ids: [category.id])
     m3 = create(:modifier, restaurant: restaurant, global_modifier: true)
 
-    authentic_query admin, "web_admin", modifiers_query, variables: {
+    authentic_query web_admin_token(admin), modifiers_query, variables: {
       restaurantId: restaurant.id,
       itemId: item.id
     }

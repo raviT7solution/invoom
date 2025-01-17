@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_22_080540) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_16_111039) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -147,6 +147,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_080540) do
     t.datetime "updated_at", null: false
     t.index ["email", "restaurant_id"], name: "index_customers_on_email_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_customers_on_restaurant_id"
+  end
+
+  create_table "devices", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "fingerprint", null: false
+    t.string "name", null: false
+    t.uuid "restaurant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fingerprint", "restaurant_id"], name: "index_devices_on_fingerprint_and_restaurant_id", unique: true
+    t.index ["restaurant_id"], name: "index_devices_on_restaurant_id"
   end
 
   create_table "discounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -447,6 +457,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_080540) do
     t.index ["tax_id"], name: "index_service_charges_on_tax_id"
   end
 
+  create_table "sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "sessionable_type", null: false
+    t.uuid "sessionable_id", null: false
+    t.string "subject", null: false
+    t.uuid "device_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["device_id"], name: "index_sessions_on_device_id"
+    t.index ["sessionable_type", "sessionable_id"], name: "index_sessions_on_sessionable"
+  end
+
   create_table "taxes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "display_name", null: false
     t.string "province", null: false
@@ -567,6 +588,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_080540) do
   add_foreign_key "category_modifiers", "categories"
   add_foreign_key "category_modifiers", "modifiers"
   add_foreign_key "customers", "restaurants"
+  add_foreign_key "devices", "restaurants"
   add_foreign_key "discounts", "restaurants"
   add_foreign_key "floor_objects", "restaurants"
   add_foreign_key "inventory_categories", "restaurants"
@@ -601,6 +623,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_22_080540) do
   add_foreign_key "roles", "restaurants"
   add_foreign_key "service_charges", "restaurants"
   add_foreign_key "service_charges", "taxes"
+  add_foreign_key "sessions", "devices"
   add_foreign_key "ticket_item_addons", "ticket_items"
   add_foreign_key "ticket_items", "items"
   add_foreign_key "ticket_items", "tickets"

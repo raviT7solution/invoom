@@ -5,6 +5,7 @@ require "test_helper"
 class PrinterConfigurationsTest < ActionDispatch::IntegrationTest
   test "ticket_id filter" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -21,7 +22,7 @@ class PrinterConfigurationsTest < ActionDispatch::IntegrationTest
     kitchen_profile = create(:kitchen_profile, restaurant: restaurant, printer_configuration: printer_configuration)
     create(:kitchen_profile_category, kitchen_profile: kitchen_profile, category: category)
 
-    authentic_query user, "mobile_user", printer_configurations, variables: {
+    authentic_query mobile_user_token(user, device), printer_configurations, variables: {
       restaurantId: restaurant.id,
       ticketId: ticket.id
     }

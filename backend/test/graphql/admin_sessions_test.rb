@@ -8,28 +8,28 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
   end
 
   test "valid credentials" do
-    query create_string, variables: { input: { email: @admin.email, password: @admin.password, subject: "web" } }
+    query create_string, variables: { input: { email: @admin.email, password: @admin.password, subject: "web_admin" } }
 
     assert_query_success
 
     token = response.parsed_body["data"]["adminSessionCreate"]["token"]
 
-    assert_equal @admin, Session.new(token).web_admin!
-    assert Session.new(token).web_admin?
-    assert_not Session.new(token).mobile_admin?
-    assert_not Session.new(token).mobile_user?
-    assert_raises(GraphQL::ExecutionError) { Session.new(token).mobile_admin! }
-    assert_raises(GraphQL::ExecutionError) { Session.new(token).mobile_user! }
+    assert_equal @admin, Session.find_signed!(token).web_admin!
+    assert Session.find_signed!(token).web_admin?
+    assert_not Session.find_signed!(token).mobile_admin?
+    assert_not Session.find_signed!(token).mobile_user?
+    assert_raises(GraphQL::ExecutionError) { Session.find_signed!(token).mobile_admin! }
+    assert_raises(GraphQL::ExecutionError) { Session.find_signed!(token).mobile_user! }
   end
 
   test "invalid credentials" do
-    query create_string, variables: { input: { email: @admin.email, password: "wrong", subject: "web" } }
+    query create_string, variables: { input: { email: @admin.email, password: "wrong", subject: "web_admin" } }
 
     assert_query_error "Invalid password"
   end
 
   test "invalid admin" do
-    query create_string, variables: { input: { email: "hacker", password: "wrong", subject: "web" } }
+    query create_string, variables: { input: { email: "hacker", password: "wrong", subject: "web_admin" } }
 
     assert_query_error "Admin not found"
   end
@@ -40,10 +40,9 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
     admin.restaurants = [restaurant]
     create(:role, restaurant: restaurant)
 
-    post \
-      graphql_path,
-      headers: { "Authorization" => "Bearer #{JWT.encode({ 'web_admin_id' => admin.id }, Session.secret)}" },
-      params: { query: roles_index_string, variables: { restaurantId: restaurant.id } }
+    token = Session.create!(sessionable: admin, subject: "web_admin").signed_id(expires_in: 1.day)
+
+    authentic_query token, current_admin
 
     assert_query_success
   end
@@ -54,12 +53,11 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
     admin.restaurants = [restaurant]
     create(:role, restaurant: restaurant)
 
-    exp = 2.days.ago.to_i
+    token = Session.create!(sessionable: admin, subject: "web_admin").signed_id(expires_in: 15.minutes)
 
-    post \
-      graphql_path,
-      headers: { "Authorization" => "Bearer #{JWT.encode({ 'web_admin_id' => admin.id, exp: exp }, Session.secret)}" },
-      params: { query: roles_index_string, variables: { restaurantId: restaurant.id } }
+    travel 16.minutes
+
+    authentic_query token, current_admin
 
     assert_query_error "Session not found"
   end
@@ -70,21 +68,15 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
     admin.restaurants = [restaurant]
     create(:role, restaurant: restaurant)
 
-    post \
-      graphql_path,
-      headers: { "Authorization" => "Bearer #{JWT.encode({ 'web_admin_id' => admin.id }, SecureRandom.uuid)}" },
-      params: { query: roles_index_string, variables: { restaurantId: restaurant.id } }
+    authentic_query "fake-token", current_admin
 
     assert_query_error "Session not found"
   end
 
   test "no token passed for authorized query" do
-    restaurant = create(:restaurant)
-    create(:role, restaurant: restaurant)
+    query booking_close, variables: { id: SecureRandom.uuid }
 
-    query roles_index_string, variables: { restaurantId: restaurant.id }
-
-    assert_query_error "Session not found"
+    assert_query_error "Unauthorized"
   end
 
   test "public query" do
@@ -94,6 +86,14 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
   end
 
   private
+
+  def booking_close
+    <<~GQL
+      mutation bookingClose($id: ID!) {
+        bookingClose(input: { id: $id })
+      }
+    GQL
+  end
 
   def countries_query
     <<~GQL
@@ -106,22 +106,21 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def roles_index_string
-    <<~GQL
-      query roles($restaurantId: ID!) {
-        roles(restaurantId: $restaurantId) {
-          id
-          name
-        }
-      }
-    GQL
-  end
-
   def create_string
     <<~GQL
       mutation adminSessionCreate($input: AdminSessionCreateInput!) {
         adminSessionCreate(input: $input) {
           token
+        }
+      }
+    GQL
+  end
+
+  def current_admin
+    <<~GQL
+      query currentAdmin {
+        currentAdmin {
+          id
         }
       }
     GQL

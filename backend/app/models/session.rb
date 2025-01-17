@@ -1,75 +1,59 @@
 # frozen_string_literal: true
 
-class Session
-  attr_reader :header
+class Session < ApplicationRecord
+  belongs_to :device, optional: true
+  belongs_to :sessionable, polymorphic: true
 
-  def initialize(header)
-    @header = header
+  enum :subject, { kds_admin: "kds_admin", mobile_admin: "mobile_admin", mobile_user: "mobile_user", web_admin: "web_admin" }, scopes: false # rubocop:disable Layout/LineLength
+
+  validates :device_id, presence: true, if: :mobile_user?
+  validates :subject, presence: true
+
+  def self.kds_admin_token(admin)
+    create!(sessionable: admin, subject: "kds_admin").signed_id
+  end
+
+  def self.mobile_admin_token(admin, device = nil)
+    create!(device: device, sessionable: admin, subject: "mobile_admin").signed_id
+  end
+
+  def self.mobile_user_token(user, device)
+    create!(device: device, sessionable: user, subject: "mobile_user").signed_id
+  end
+
+  def self.web_admin_token(admin)
+    create!(sessionable: admin, subject: "web_admin").signed_id(expires_in: 1.day)
   end
 
   def kds_admin!
     @kds_admin ||= begin
       raise GraphQL::ExecutionError, "Unauthorized" unless kds_admin?
 
-      Admin.find(token["kds_admin_id"])
+      sessionable
     end
-  end
-
-  def kds_admin?
-    token["kds_admin_id"].present?
   end
 
   def mobile_admin!
     @mobile_admin ||= begin
       raise GraphQL::ExecutionError, "Unauthorized" unless mobile_admin?
 
-      Admin.find(token["mobile_admin_id"])
+      sessionable
     end
-  end
-
-  def mobile_admin?
-    token["mobile_admin_id"].present?
   end
 
   def mobile_user!
     @mobile_user ||= begin
       raise GraphQL::ExecutionError, "Unauthorized" unless mobile_user?
 
-      User.find(token["mobile_user_id"])
+      sessionable
     end
-  end
-
-  def mobile_user?
-    token["mobile_user_id"].present?
   end
 
   def web_admin!
     @web_admin ||= begin
       raise GraphQL::ExecutionError, "Unauthorized" unless web_admin?
 
-      Admin.find(token["web_admin_id"])
-    end
-  end
-
-  def web_admin?
-    token["web_admin_id"].present?
-  end
-
-  def self.secret
-    @secret ||= Rails.application.credentials.secret_key_base || SecureRandom.uuid
-  end
-
-  def self.token(record, key, options = {})
-    JWT.encode({ key => record.id, **options }, secret)
-  end
-
-  private
-
-  def token
-    @token ||= begin
-      JWT.decode(header, self.class.secret)[0]
-    rescue JWT::DecodeError
-      raise ActiveRecord::RecordNotFound.new("", self.class.name)
+      sessionable
     end
   end
 end

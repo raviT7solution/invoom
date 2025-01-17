@@ -2,7 +2,7 @@
 
 class FloorObjectChannel < ApplicationCable::Channel
   def subscribed # rubocop:disable Metrics/AbcSize
-    session = Session.new(params["Authorization"])
+    session = Session.find_signed!(params["Authorization"])
     restaurant = RestaurantPolicy.new(session).scope.find(params["restaurant_id"])
     floor_object = FloorObjectPolicy.new(session).scope.find(params["floor_object_id"])
 

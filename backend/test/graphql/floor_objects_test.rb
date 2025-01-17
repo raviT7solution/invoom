@@ -13,7 +13,7 @@ class FloorObjectsTest < ActionDispatch::IntegrationTest
 
     assert_equal 2, FloorObject.count
 
-    authentic_query admin, "web_admin", floor_object_update, variables: {
+    authentic_query web_admin_token(admin), floor_object_update, variables: {
       input: {
         restaurantId: restaurant.id,
         attributes: [

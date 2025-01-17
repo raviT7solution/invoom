@@ -26,7 +26,7 @@ import { Roles } from "./Pages/Teams/Roles";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 import { useKDSSessionStore } from "./stores/useKDSSessionStore";
 
-export const PrivateRoute = ({ children }: PropsWithChildren) => {
+const PrivateRoute = ({ children }: PropsWithChildren) => {
   const token = useAdminSessionStore((s) => s.token);
 
   if (!token) {
@@ -38,7 +38,7 @@ export const PrivateRoute = ({ children }: PropsWithChildren) => {
   return children;
 };
 
-export const KDSPrivateRoute = ({ children }: PropsWithChildren) => {
+const KDSPrivateRoute = ({ children }: PropsWithChildren) => {
   const token = useKDSSessionStore((s) => s.token);
 
   if (!token) {

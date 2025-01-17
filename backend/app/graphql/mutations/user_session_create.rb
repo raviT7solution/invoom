@@ -47,6 +47,6 @@ class Mutations::UserSessionCreate < Mutations::BaseMutation
   end
 
   def user_token(user)
-    Session.token(user, "mobile_user_id")
+    Session.mobile_user_token(user, context[:current_session].device)
   end
 end

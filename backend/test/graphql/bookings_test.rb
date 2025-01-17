@@ -5,6 +5,7 @@ require "test_helper"
 class BookingsTest < ActionDispatch::IntegrationTest
   test "bookings" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
     table = create(:floor_object, :rectangular_table, restaurant: restaurant)
@@ -17,7 +18,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                      restaurant: restaurant,
                      user: user)
 
-    authentic_query user, "mobile_user", bookings, variables: {
+    authentic_query mobile_user_token(user, device), bookings, variables: {
       bookingTypes: ["dine_in"],
       endDate: "2024-04-03T11:20:00",
       page: 1,
@@ -35,12 +36,13 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "create dine_in" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
     table1 = create(:floor_object, :rectangular_table, restaurant: restaurant)
     table2 = create(:floor_object, :rectangular_table, restaurant: restaurant)
 
-    authentic_query user, "mobile_user", booking_create_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
       input: {
         attributes: {
           bookingType: "dine_in",
@@ -64,6 +66,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "create takeout" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "takeout"])
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -71,7 +74,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     table1 = create(:floor_object, :rectangular_table, restaurant: restaurant)
     table2 = create(:floor_object, :rectangular_table, restaurant: restaurant)
 
-    authentic_query user, "mobile_user", booking_create_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
       input: {
         attributes: {
           bookingType: "takeout",
@@ -86,7 +89,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_query_error "Booking tables is the wrong length"
     assert_nil Booking.last
 
-    authentic_query user, "mobile_user", booking_create_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
       input: {
         attributes: {
           bookingType: "takeout",
@@ -108,10 +111,11 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "dine-in booking must have a table" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    authentic_query user, "mobile_user", booking_create_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
       input: {
         attributes: {
           bookingType: "dine_in",
@@ -127,11 +131,12 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "floor object must be table for dine_in booking" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
     buffet = create(:floor_object, :speaker, object_type: "speaker", restaurant: restaurant)
 
-    authentic_query user, "mobile_user", booking_create_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
       input: {
         attributes: {
           bookingType: "dine_in",
@@ -146,6 +151,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "booked table can not be utilized for new booking" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
     other_user = create(:user, restaurant: restaurant)
@@ -157,7 +163,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     create(:booking, restaurant: restaurant, user: other_user, booking_type: "dine_in", pax: 1,
                      booking_tables: [used_booking_table])
 
-    authentic_query user, "mobile_user", booking_create_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
       input: {
         attributes: {
           bookingType: "dine_in",
@@ -173,6 +179,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "booking update" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
     table = create(:floor_object, :rectangular_table, restaurant: restaurant)
@@ -181,7 +188,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
                                booking_tables: [booking_table])
     customer = create(:customer, restaurant: restaurant)
 
-    authentic_query user, "mobile_user", booking_update_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_update_string, variables: {
       input: {
         attributes: {
           customerId: customer.id,
@@ -199,6 +206,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "booking close" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -213,7 +221,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     ticket_item = create(:ticket_item, ticket: ticket, item: item)
 
     # without invoices
-    authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
+    authentic_query mobile_user_token(user, device), booking_close, variables: { id: booking.id }
 
     assert_query_error "Unprocessed invoice(s)"
     assert_nil booking.reload.clocked_out_at
@@ -222,7 +230,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     create(:invoice_item, ticket_item: ticket_item, invoice: invoice)
 
     # with unpaid invoice
-    authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
+    authentic_query mobile_user_token(user, device), booking_close, variables: { id: booking.id }
 
     assert_query_error "Unprocessed invoice(s)"
     assert_nil booking.reload.clocked_out_at
@@ -230,7 +238,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     create(:payment, invoice: invoice, amount: invoice.invoice_summary.total)
 
     # with paid invoice
-    authentic_query user, "mobile_user", booking_close, variables: { id: booking.id }
+    authentic_query mobile_user_token(user, device), booking_close, variables: { id: booking.id }
 
     assert_query_success
     assert_not booking.booking_tables.where.not(floor_object_id: nil).exists?
@@ -239,6 +247,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "booking force clock out" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders", "force_clock_out"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -255,7 +264,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     invoice = create(:invoice, booking: booking)
     invoice_item = create(:invoice_item, ticket_item: ticket_item, invoice: invoice)
 
-    authentic_query user, "mobile_user", booking_force_clock_out, variables: {
+    authentic_query mobile_user_token(user, device), booking_force_clock_out, variables: {
       input: {
         bookingId: booking.id
       }
@@ -269,7 +278,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     invoice_item.destroy!
     invoice.destroy!
 
-    authentic_query user, "mobile_user", booking_force_clock_out, variables: {
+    authentic_query mobile_user_token(user, device), booking_force_clock_out, variables: {
       input: {
         bookingId: booking.id
       }
@@ -281,6 +290,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "booking force clock with pin" do
     restaurant = create(:restaurant, pin: "1234")
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
@@ -294,7 +304,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     ticket = create(:ticket, booking: booking)
     create(:ticket_item, ticket: ticket, name: item.name, price: item.price, quantity: 2, item: item)
 
-    authentic_query user, "mobile_user", booking_force_clock_out, variables: {
+    authentic_query mobile_user_token(user, device), booking_force_clock_out, variables: {
       input: {
         bookingId: booking.id
       }
@@ -303,7 +313,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_query_error "Invalid pin"
     assert_nil booking.reload.clocked_out_at
 
-    authentic_query user, "mobile_user", booking_force_clock_out, variables: {
+    authentic_query mobile_user_token(user, device), booking_force_clock_out, variables: {
       input: {
         bookingId: booking.id,
         pin: "1234"
@@ -316,6 +326,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
   test "booking users update" do
     restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["orders", "floor_plan"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
     another_user = create(:user, restaurant: restaurant, roles: [role])
@@ -341,7 +352,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
     booking_one.update(clocked_out_at: Time.current)
 
-    authentic_query user, "mobile_user", booking_users_update_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_users_update_string, variables: {
       input: {
         tableName: table.name,
         userId: another_user.id

@@ -5,6 +5,7 @@ import {
   DatePicker,
   Popconfirm,
   Select,
+  Space,
   Statistic,
   Table,
   TableColumnsType,
@@ -101,7 +102,7 @@ export const ReportsLabour = () => {
       {
         title: "Actions",
         render: (_, r) => (
-          <div className="w-full flex gap-4">
+          <Space size="middle">
             <EditOutlined onClick={() => showEdit(r.id, true)} />
 
             <Popconfirm
@@ -110,7 +111,7 @@ export const ReportsLabour = () => {
             >
               <DeleteOutlined />
             </Popconfirm>
-          </div>
+          </Space>
         ),
       },
     ],
