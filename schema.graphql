@@ -1364,19 +1364,19 @@ type Mutation {
     Parameters for RoleCreate
     """
     input: RoleCreateInput!
-  ): Role!
+  ): Boolean!
   roleDelete(
     """
     Parameters for RoleDelete
     """
     input: RoleDeleteInput!
-  ): Role!
+  ): Boolean!
   roleUpdate(
     """
     Parameters for RoleUpdate
     """
     input: RoleUpdateInput!
-  ): Role!
+  ): Boolean!
   serviceChargeCreate(
     """
     Parameters for ServiceChargeCreate
@@ -1436,7 +1436,7 @@ type Mutation {
     Parameters for UserDelete
     """
     input: UserDeleteInput!
-  ): User!
+  ): Boolean!
   userSessionCreate(
     """
     Parameters for UserSessionCreate
@@ -2347,7 +2347,7 @@ input UserDeleteInput {
 
 type UserSession {
   autoClockIn: Boolean!
-  clockInStatus: UserSessionClockInStatus
+  clockInStatus: UserSessionClockInStatus!
   permissions: [UserSessionPermissionsType!]!
   token: String!
 }

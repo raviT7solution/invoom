@@ -9,11 +9,7 @@ class Mutations::UserUpdate < Mutations::BaseMutation
   def resolve(id:, attributes:)
     user = UserPolicy.new(context[:current_session]).scope.find(id)
 
-    if user.update(attributes.to_h)
-      user
-    else
-      raise_error user.errors.full_messages.to_sentence
-    end
+    raise_error user.errors.full_messages.to_sentence unless user.update(attributes.to_h)
 
     true
   end

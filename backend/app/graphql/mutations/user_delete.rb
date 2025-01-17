@@ -3,15 +3,13 @@
 class Mutations::UserDelete < Mutations::BaseMutation
   argument :id, ID, required: true
 
-  type Types::UserType, null: false
+  type Boolean, null: false
 
   def resolve(id:)
     user = UserPolicy.new(context[:current_session]).scope.find(id)
 
-    if user.destroy
-      user
-    else
-      raise_error user.errors.full_messages.to_sentence
-    end
+    raise_error user.errors.full_messages.to_sentence unless user.destroy
+
+    true
   end
 end

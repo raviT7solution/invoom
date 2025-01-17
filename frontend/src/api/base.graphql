@@ -46,21 +46,15 @@ query restaurants($status: String) {
 }
 
 mutation roleCreate($input: RoleCreateInput!) {
-  roleCreate(input: $input) {
-    id
-  }
+  roleCreate(input: $input)
 }
 
 mutation roleUpdate($input: RoleUpdateInput!) {
-  roleUpdate(input: $input) {
-    id
-  }
+  roleUpdate(input: $input)
 }
 
 mutation roleDelete($id: ID!) {
-  roleDelete(input: { id: $id }) {
-    id
-  }
+  roleDelete(input: { id: $id })
 }
 
 query role($id: ID!) {
@@ -93,9 +87,7 @@ mutation userUpdate($input: UserUpdateInput!) {
 }
 
 mutation userDelete($id: ID!) {
-  userDelete(input: { id: $id }) {
-    id
-  }
+  userDelete(input: { id: $id })
 }
 
 query user($id: ID!) {

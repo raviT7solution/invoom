@@ -10,11 +10,7 @@ class Mutations::UserCreate < Mutations::BaseMutation
     restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
     user = restaurant.users.new(attributes.to_h)
 
-    if user.save
-      user
-    else
-      raise_error user.errors.full_messages.to_sentence
-    end
+    raise_error user.errors.full_messages.to_sentence unless user.save
 
     true
   end
