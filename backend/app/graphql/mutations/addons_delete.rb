@@ -6,7 +6,7 @@ class Mutations::AddonsDelete < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:)
-    addon = AddonPolicy.new(context[:current_user]).scope.find(id)
+    addon = AddonPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error addon.errors.full_messages.to_sentence unless addon.destroy
 

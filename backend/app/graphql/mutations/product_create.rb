@@ -7,7 +7,7 @@ class Mutations::ProductCreate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(restaurant_id:, attributes:)
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
     product = restaurant.products.new(available_quantity: 0, **attributes)
 
     raise_error product.errors.full_messages.to_sentence unless product.save

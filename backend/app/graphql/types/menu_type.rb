@@ -10,7 +10,7 @@ class Types::MenuType < Types::BaseObject
 
   def categories
     BatchLoader::GraphQL.for(object).batch do |objects, loader|
-      scope = CategoryPolicy.new(context[:current_user]).scope.order(:name)
+      scope = CategoryPolicy.new(context[:current_session]).scope.order(:name)
 
       ActiveRecord::Associations::Preloader.new(records: objects, associations: :categories, scope: scope).call
 

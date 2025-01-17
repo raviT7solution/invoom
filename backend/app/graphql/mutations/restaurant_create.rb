@@ -6,7 +6,7 @@ class Mutations::RestaurantCreate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(attributes:)
-    admin = context[:current_user].web_admin!
+    admin = context[:current_session].web_admin!
 
     restaurant = Restaurant.new(admin_ids: [admin.id], **attributes)
 

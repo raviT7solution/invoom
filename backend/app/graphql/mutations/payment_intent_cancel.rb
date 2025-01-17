@@ -6,7 +6,7 @@ class Mutations::PaymentIntentCancel < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(payment_intent_id:)
-    restaurant = context[:current_user].mobile_user!.restaurant
+    restaurant = context[:current_session].mobile_user!.restaurant
 
     StripeService.new(restaurant).payment_intent_cancel(payment_intent_id)
 

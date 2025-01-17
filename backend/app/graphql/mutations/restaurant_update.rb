@@ -7,7 +7,7 @@ class Mutations::RestaurantUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:, attributes:)
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(id)
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error restaurant.errors.full_messages.to_sentence unless restaurant.update(**attributes)
 

@@ -21,7 +21,7 @@ class Types::BookingType < Types::BaseObject
 
   def invoices
     BatchLoader::GraphQL.for(object).batch do |objects, loader|
-      scope = InvoicePolicy.new(context[:current_user]).scope.order(:number)
+      scope = InvoicePolicy.new(context[:current_session]).scope.order(:number)
 
       ActiveRecord::Associations::Preloader.new(records: objects, associations: :invoices, scope: scope).call
 

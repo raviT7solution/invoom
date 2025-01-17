@@ -6,7 +6,7 @@ class Mutations::PaymentDelete < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:)
-    payment = PaymentPolicy.new(context[:current_user]).scope.where(payment_mode: "void").find(id)
+    payment = PaymentPolicy.new(context[:current_session]).scope.where(payment_mode: "void").find(id)
 
     raise_error payment.errors.full_messages.to_sentence unless payment.destroy
 

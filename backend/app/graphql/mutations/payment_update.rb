@@ -7,7 +7,7 @@ class Mutations::PaymentUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:, attributes:)
-    payment = PaymentPolicy.new(context[:current_user]).scope.find(id)
+    payment = PaymentPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error payment.errors.full_messages.to_sentence unless payment.update(**attributes)
 

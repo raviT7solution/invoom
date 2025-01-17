@@ -7,7 +7,7 @@ class Mutations::ProductUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:, attributes:)
-    product = ProductPolicy.new(context[:current_user]).scope.find(id)
+    product = ProductPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error product.errors.full_messages.to_sentence unless product.update(attributes.to_h)
 

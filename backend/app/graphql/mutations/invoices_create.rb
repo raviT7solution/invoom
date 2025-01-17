@@ -19,7 +19,7 @@ class Mutations::InvoicesCreate < Mutations::BaseMutation
   private
 
   def create_invoices(attributes, booking_id) # rubocop:disable Metrics/AbcSize
-    booking = BookingPolicy.new(context[:current_user]).scope.find(booking_id)
+    booking = BookingPolicy.new(context[:current_session]).scope.find(booking_id)
     invoices = booking.invoices
 
     revert_split!(invoices)
@@ -29,7 +29,7 @@ class Mutations::InvoicesCreate < Mutations::BaseMutation
 
       invoice_attributes[:invoice_items].each do |item_attributes|
         consume_bill = item_attributes[:consume_bill]
-        ticket_item = TicketItemPolicy.new(context[:current_user]).scope.find(item_attributes[:ticket_item_id])
+        ticket_item = TicketItemPolicy.new(context[:current_session]).scope.find(item_attributes[:ticket_item_id])
 
         addon_price = ticket_item.ticket_item_addons.sum(:price)
         unit_price = ticket_item.price + addon_price

@@ -6,7 +6,7 @@ class Mutations::ModifierDelete < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:)
-    modifier = ModifierPolicy.new(context[:current_user]).scope.find(id)
+    modifier = ModifierPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error modifier.errors.full_messages.to_sentence unless modifier.destroy
 

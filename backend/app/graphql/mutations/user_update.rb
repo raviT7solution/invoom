@@ -7,7 +7,7 @@ class Mutations::UserUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:, attributes:)
-    user = UserPolicy.new(context[:current_user]).scope.find(id)
+    user = UserPolicy.new(context[:current_session]).scope.find(id)
 
     if user.update(attributes.to_h)
       user

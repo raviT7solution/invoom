@@ -7,7 +7,7 @@ class Mutations::CategoryUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:, attributes:)
-    category = CategoryPolicy.new(context[:current_user]).scope.find(id)
+    category = CategoryPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error category.errors.full_messages.to_sentence unless category.update(attributes.to_h)
 

@@ -7,7 +7,7 @@ class Mutations::Admin::ChangePassword < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(current_password:, password:)
-    admin = context[:current_user].web_admin!
+    admin = context[:current_session].web_admin!
 
     raise_error "Invalid current password" unless admin.authenticate(current_password)
     raise_error admin.errors.full_messages.to_sentence unless admin.update(password: password)

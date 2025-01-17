@@ -6,7 +6,7 @@ class Mutations::InventoryCategoryDelete < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:)
-    inventory_category = InventoryCategoryPolicy.new(context[:current_user]).scope.find(id)
+    inventory_category = InventoryCategoryPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error inventory_category.errors.full_messages.to_sentence unless inventory_category.destroy
 

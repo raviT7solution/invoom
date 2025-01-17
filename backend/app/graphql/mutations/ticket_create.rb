@@ -7,12 +7,12 @@ class Mutations::TicketCreate < Mutations::BaseMutation
   type ID, null: false
 
   def resolve(attributes:, booking_id:) # rubocop:disable Metrics/AbcSize
-    booking = BookingPolicy.new(context[:current_user]).scope.find(booking_id)
+    booking = BookingPolicy.new(context[:current_session]).scope.find(booking_id)
 
     ticket = Ticket.new(booking: booking)
 
     attributes.each do |item_attributes|
-      item = ItemPolicy.new(context[:current_user]).scope.find(item_attributes[:item_id])
+      item = ItemPolicy.new(context[:current_session]).scope.find(item_attributes[:item_id])
       tax = item.tax
 
       ticket_item = ticket.ticket_items.new(
@@ -33,7 +33,7 @@ class Mutations::TicketCreate < Mutations::BaseMutation
       )
 
       if item_attributes[:quantity].negative?
-        TicketItemAddonPolicy.new(context[:current_user]).scope.find(item_attributes[:addon_ids]).each do |addon|
+        TicketItemAddonPolicy.new(context[:current_session]).scope.find(item_attributes[:addon_ids]).each do |addon|
           ticket_item.ticket_item_addons.new(name: addon.name, price: addon.price)
         end
       else

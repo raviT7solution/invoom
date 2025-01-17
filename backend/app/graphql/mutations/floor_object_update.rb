@@ -7,7 +7,7 @@ class Mutations::FloorObjectUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(restaurant_id:, attributes:) # rubocop:disable Metrics/AbcSize
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
 
     ApplicationRecord.transaction do
       attributes_map = attributes.index_by { |a| a[:id] }

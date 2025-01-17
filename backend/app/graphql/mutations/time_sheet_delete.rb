@@ -6,7 +6,7 @@ class Mutations::TimeSheetDelete < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:)
-    time_sheet = TimeSheetPolicy.new(context[:current_user]).scope.find(id)
+    time_sheet = TimeSheetPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error time_sheet.errors.full_messages.to_sentence unless time_sheet.destroy
 

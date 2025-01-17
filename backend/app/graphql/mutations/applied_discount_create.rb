@@ -8,12 +8,12 @@ class Mutations::AppliedDiscountCreate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(discount_id:, discountable_id:, discountable_type:) # rubocop:disable Metrics/AbcSize
-    discount = DiscountPolicy.new(context[:current_user]).scope.find(discount_id)
+    discount = DiscountPolicy.new(context[:current_session]).scope.find(discount_id)
 
     discountable = if discountable_type == "item_wise"
-                     TicketItemPolicy.new(context[:current_user]).scope.find(discountable_id)
+                     TicketItemPolicy.new(context[:current_session]).scope.find(discountable_id)
                    else
-                     BookingPolicy.new(context[:current_user]).scope.find(discountable_id)
+                     BookingPolicy.new(context[:current_session]).scope.find(discountable_id)
                    end
 
     applied_discount = AppliedDiscount.new(

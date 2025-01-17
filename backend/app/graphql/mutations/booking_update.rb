@@ -7,7 +7,7 @@ class Mutations::BookingUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(attributes:, id:)
-    booking = BookingPolicy.new(context[:current_user]).scope.find(id)
+    booking = BookingPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error booking.errors.full_messages.to_sentence unless booking.update(attributes.to_h)
 

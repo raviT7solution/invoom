@@ -13,7 +13,7 @@ class Types::CustomerType < Types::BaseObject
     BatchLoader::GraphQL.for(object.id).batch do |ids, loader|
       invoice_summaries = InvoiceSummary.arel_table
 
-      average = CustomerPolicy.new(context[:current_user]).scope
+      average = CustomerPolicy.new(context[:current_session]).scope
                               .joins(bookings: { invoices: :invoice_summary })
                               .where(bookings: { customer_id: ids })
                               .group(:id)
@@ -27,7 +27,7 @@ class Types::CustomerType < Types::BaseObject
     BatchLoader::GraphQL.for(object.id).batch do |ids, loader|
       invoices = Invoice.arel_table
 
-      counts = CustomerPolicy.new(context[:current_user]).scope
+      counts = CustomerPolicy.new(context[:current_session]).scope
                              .joins(bookings: :invoices).where(bookings: { customer_id: ids })
                              .group(:id).count(invoices[:id])
 
@@ -39,7 +39,7 @@ class Types::CustomerType < Types::BaseObject
     BatchLoader::GraphQL.for(object.id).batch do |ids, loader|
       invoice_summaries = InvoiceSummary.arel_table
 
-      total = CustomerPolicy.new(context[:current_user]).scope
+      total = CustomerPolicy.new(context[:current_session]).scope
                             .joins(bookings: { invoices: :invoice_summary })
                             .where(bookings: { customer_id: ids })
                             .group(:id)

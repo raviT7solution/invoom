@@ -7,7 +7,7 @@ class Mutations::UserSessionCreate < Mutations::BaseMutation
   type Types::UserSessionType, null: false
 
   def resolve(restaurant_id:, attributes:)
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
 
     case attributes[:login_type]
     when "pin"

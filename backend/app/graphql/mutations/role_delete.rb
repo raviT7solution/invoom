@@ -6,7 +6,7 @@ class Mutations::RoleDelete < Mutations::BaseMutation
   type Types::RoleType, null: false
 
   def resolve(id:)
-    role = RolePolicy.new(context[:current_user]).scope.find(id)
+    role = RolePolicy.new(context[:current_session]).scope.find(id)
 
     if role.destroy
       role

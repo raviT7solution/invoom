@@ -95,7 +95,7 @@ class Types::DashboardSummaryType < Types::BaseObject
   def total_tax # rubocop:disable Metrics/AbcSize, GraphQL/ResolverMethodLength
     # object[:invoices] is for only paid invoices
     invoices = InvoicePolicy.new(context[:current_session]).scope.where(booking_id: object[:bookings])
-    invoice_items = InvoiceItemPolicy.new(context[:current_user]).scope.where(invoice_id: invoices)
+    invoice_items = InvoiceItemPolicy.new(context[:current_session]).scope.where(invoice_id: invoices)
 
     total_tax_percent = invoice_items
                         .joins(:invoice_item_summary, invoice: { booking: :booking_service_charges })

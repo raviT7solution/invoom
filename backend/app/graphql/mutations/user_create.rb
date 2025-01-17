@@ -7,7 +7,7 @@ class Mutations::UserCreate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(attributes:, restaurant_id:)
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
     user = restaurant.users.new(attributes.to_h)
 
     if user.save

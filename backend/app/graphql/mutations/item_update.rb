@@ -7,7 +7,7 @@ class Mutations::ItemUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:, attributes:)
-    item = ItemPolicy.new(context[:current_user]).scope.find(id)
+    item = ItemPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error item.errors.full_messages.to_sentence unless item.update(attributes.to_h)
 

@@ -7,12 +7,12 @@ class Mutations::BookingServiceChargesUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(booking_id:, service_charge_ids:) # rubocop:disable Metrics/AbcSize
-    booking = BookingPolicy.new(context[:current_user]).scope.find(booking_id)
+    booking = BookingPolicy.new(context[:current_session]).scope.find(booking_id)
 
     ApplicationRecord.transaction do
       BookingServiceCharge.where(booking_id: booking.id).destroy_all
 
-      ServiceChargePolicy.new(context[:current_user]).scope.find(service_charge_ids).each do |charge|
+      ServiceChargePolicy.new(context[:current_session]).scope.find(service_charge_ids).each do |charge|
         booking_service_charge = booking.booking_service_charges.new(
           charge_type: charge.charge_type,
           cst: charge.tax.cst,

@@ -7,7 +7,7 @@ class Mutations::TimeSheetCreate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(attributes:, user_id:)
-    user = UserPolicy.new(context[:current_user]).scope.find(user_id)
+    user = UserPolicy.new(context[:current_session]).scope.find(user_id)
     time_sheet = user.time_sheets.new(attributes.to_h)
 
     raise_error time_sheet.errors.full_messages.to_sentence unless time_sheet.save

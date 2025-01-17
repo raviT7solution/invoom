@@ -6,7 +6,7 @@ class Mutations::UserDelete < Mutations::BaseMutation
   type Types::UserType, null: false
 
   def resolve(id:)
-    user = UserPolicy.new(context[:current_user]).scope.find(id)
+    user = UserPolicy.new(context[:current_session]).scope.find(id)
 
     if user.destroy
       user

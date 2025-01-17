@@ -7,7 +7,7 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(attributes:, invoice_id:) # rubocop:disable Metrics/AbcSize
-    invoice = InvoicePolicy.new(context[:current_user]).scope.find(invoice_id)
+    invoice = InvoicePolicy.new(context[:current_session]).scope.find(invoice_id)
 
     if invoice.payments.exists?(payment_mode: "void")
       raise_error "Void payment is present, you can't create a new payment"
@@ -46,7 +46,7 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
   end
 
   def create_stripe_card_payment(invoice, attributes) # rubocop:disable Metrics/AbcSize
-    restaurant = context[:current_user].mobile_user!.restaurant
+    restaurant = context[:current_session].mobile_user!.restaurant
     service = StripeService.new(restaurant)
 
     payment_intent = service.payment_intent_retrieve(attributes[:payment_intent_id]).as_json

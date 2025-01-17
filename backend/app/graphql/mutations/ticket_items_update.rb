@@ -6,7 +6,7 @@ class Mutations::TicketItemsUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(attributes:)
-    items = TicketItemPolicy.new(context[:current_user]).scope.find(attributes.map(&:id))
+    items = TicketItemPolicy.new(context[:current_session]).scope.find(attributes.map(&:id))
 
     ApplicationRecord.transaction do
       items.each.with_index do |item, i|

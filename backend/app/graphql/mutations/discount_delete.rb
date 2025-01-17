@@ -6,7 +6,7 @@ class Mutations::DiscountDelete < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:)
-    discount = DiscountPolicy.new(context[:current_user]).scope.find(id)
+    discount = DiscountPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error discount.errors.full_messages.to_sentence unless discount.destroy
 

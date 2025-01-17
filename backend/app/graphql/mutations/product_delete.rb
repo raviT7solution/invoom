@@ -6,7 +6,7 @@ class Mutations::ProductDelete < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:)
-    product = ProductPolicy.new(context[:current_user]).scope.find(id)
+    product = ProductPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error product.errors.full_messages.to_sentence unless product.destroy
 

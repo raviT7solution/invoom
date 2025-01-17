@@ -7,7 +7,7 @@ class Mutations::BookingUsersUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(table_name:, user_id:)
-    bookings = BookingPolicy.new(context[:current_user]).scope
+    bookings = BookingPolicy.new(context[:current_session]).scope
                             .joins(:booking_tables)
                             .where(booking_tables: { name: table_name })
                             .where(clocked_out_at: nil)

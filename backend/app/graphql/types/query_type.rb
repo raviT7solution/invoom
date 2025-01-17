@@ -184,19 +184,19 @@ class Types::QueryType < Types::BaseObject
   end
 
   def addon(id:)
-    AddonPolicy.new(context[:current_user]).scope.find(id)
+    AddonPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def addons(restaurant_id:)
-    AddonPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    AddonPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
   end
 
   def booking(id:)
-    BookingPolicy.new(context[:current_user]).scope.find(id)
+    BookingPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def bookings(page:, per_page:, restaurant_id:, booking_types: [], end_date: nil, export: false, start_date: nil, status: nil, table_name: nil) # rubocop:disable Metrics/ParameterLists,Layout/LineLength,Metrics/AbcSize,Metrics/CyclomaticComplexity
-    records = BookingPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = BookingPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
 
     records = records.where(clocked_in_at: start_date..end_date) if start_date.present? && end_date.present?
 
@@ -213,13 +213,13 @@ class Types::QueryType < Types::BaseObject
   end
 
   def categories(restaurant_id:)
-    records = CategoryPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = CategoryPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
 
     records.order(:name)
   end
 
   def category(id:)
-    CategoryPolicy.new(context[:current_user]).scope.find(id)
+    CategoryPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def cities(alpha2:, province_code:)
@@ -240,25 +240,25 @@ class Types::QueryType < Types::BaseObject
   end
 
   def current_admin
-    current_user = context[:current_user]
+    current_session = context[:current_session]
 
-    return current_user.web_admin! if current_user.web_admin?
-    return current_user.mobile_admin! if current_user.mobile_admin?
-    return current_user.kds_admin! if current_user.kds_admin?
+    return current_session.kds_admin! if current_session.kds_admin?
+    return current_session.mobile_admin! if current_session.mobile_admin?
+    return current_session.web_admin! if current_session.web_admin?
 
     raise GraphQL::ExecutionError, "Unauthorized"
   end
 
   def current_user
-    current_user = context[:current_user]
+    current_session = context[:current_session]
 
-    return current_user.mobile_user! if current_user.mobile_user?
+    return current_session.mobile_user! if current_session.mobile_user?
 
     raise GraphQL::ExecutionError, "Unauthorized"
   end
 
   def customers(restaurant_id:, page:, per_page:, export: false, query: nil)
-    records = CustomerPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = CustomerPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
     records = records.order(created_at: :desc)
 
     if query.present?
@@ -271,7 +271,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def dashboard_summary(restaurant_id:, start_time:, end_time:)
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
 
     bookings = BookingPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
     bookings = bookings.where.not(clocked_out_at: nil)
@@ -281,14 +281,14 @@ class Types::QueryType < Types::BaseObject
   end
 
   def discount(id:)
-    DiscountPolicy.new(context[:current_user]).scope.find(id)
+    DiscountPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def discounts(restaurant_id:, discount_on: nil, channel: nil, item_id: nil) # rubocop:disable Metrics/AbcSize
     restaurant = Restaurant.find(restaurant_id)
 
     records = Time.use_zone(restaurant.timezone) do
-      DiscountPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+      DiscountPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
     end
 
     records = records.where(discount_on: discount_on) if discount_on.present?
@@ -305,23 +305,23 @@ class Types::QueryType < Types::BaseObject
   end
 
   def floor_objects(restaurant_id:)
-    FloorObjectPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    FloorObjectPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
   end
 
   def inventory_categories(restaurant_id:)
-    InventoryCategoryPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    InventoryCategoryPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
   end
 
   def inventory_category(id:)
-    InventoryCategoryPolicy.new(context[:current_user]).scope.find(id)
+    InventoryCategoryPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def invoice(id:)
-    InvoicePolicy.new(context[:current_user]).scope.find(id)
+    InvoicePolicy.new(context[:current_session]).scope.find(id)
   end
 
   def invoices(restaurant_id:, page:, per_page:, booking_types: [], start_date: nil, end_date: nil, status: nil, export: false) # rubocop:disable Metrics/ParameterLists, Metrics/AbcSize, Layout/LineLength
-    records = InvoicePolicy.new(context[:current_user]).scope
+    records = InvoicePolicy.new(context[:current_session]).scope
                            .joins(:booking).where(bookings: { restaurant_id: restaurant_id })
 
     records = records.where(bookings: { booking_type: booking_types }) if booking_types.present?
@@ -340,11 +340,11 @@ class Types::QueryType < Types::BaseObject
   end
 
   def item(id:)
-    ItemPolicy.new(context[:current_user]).scope.find(id)
+    ItemPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def items(restaurant_id:, category_id: nil, query: nil)
-    records = ItemPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = ItemPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
 
     records = records.where(category_id: category_id) if category_id.present?
     records = records.search(query) if query.present?
@@ -353,32 +353,32 @@ class Types::QueryType < Types::BaseObject
   end
 
   def kitchen_profile(id:)
-    KitchenProfilePolicy.new(context[:current_user]).scope.find(id)
+    KitchenProfilePolicy.new(context[:current_session]).scope.find(id)
   end
 
   def kitchen_profiles(restaurant_id:)
-    KitchenProfilePolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    KitchenProfilePolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
   end
 
   def menu(id:)
-    MenuPolicy.new(context[:current_user]).scope.find(id)
+    MenuPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def menus(restaurant_id:)
-    records = MenuPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = MenuPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
 
     records.order(:name)
   end
 
   def modifier(id:)
-    ModifierPolicy.new(context[:current_user]).scope.find(id)
+    ModifierPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def modifiers(restaurant_id:, item_id: nil) # rubocop:disable Metrics/AbcSize
-    records = ModifierPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = ModifierPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
 
     if item_id.present?
-      item = ItemPolicy.new(context[:current_user]).scope.find(item_id)
+      item = ItemPolicy.new(context[:current_session]).scope.find(item_id)
 
       category_modifiers = records.joins(:category_modifiers)
                                   .where(category_modifiers: { category_id: item.category_id })
@@ -392,11 +392,11 @@ class Types::QueryType < Types::BaseObject
   end
 
   def printer_configuration(id:)
-    PrinterConfigurationPolicy.new(context[:current_user]).scope.find(id)
+    PrinterConfigurationPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def printer_configurations(restaurant_id:, ticket_id: nil)
-    records = PrinterConfigurationPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = PrinterConfigurationPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
 
     records = records.eager_load(:ticket_items).where(ticket_items: { ticket_id: ticket_id }) if ticket_id.present?
 
@@ -404,11 +404,11 @@ class Types::QueryType < Types::BaseObject
   end
 
   def product(id:)
-    ProductPolicy.new(context[:current_user]).scope.find(id)
+    ProductPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def products(restaurant_id:, page:, per_page:)
-    records = ProductPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    records = ProductPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
 
     records.order(created_at: :desc).page(page).per(per_page)
   end
@@ -420,7 +420,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def reservations(restaurant_id:, page:, per_page:, status: nil, start_time: nil, end_time: nil) # rubocop:disable Metrics/ParameterLists
-    records = ReservationPolicy.new(context[:current_user]).scope
+    records = ReservationPolicy.new(context[:current_session]).scope
     records = records.where(restaurant_id: restaurant_id)
 
     records = records.where(status: status) if status.present?
@@ -442,24 +442,24 @@ class Types::QueryType < Types::BaseObject
   end
 
   def role(id:)
-    RolePolicy.new(context[:current_user]).scope.find(id)
+    RolePolicy.new(context[:current_session]).scope.find(id)
   end
 
   def roles(restaurant_id:)
-    RolePolicy.new(context[:current_user]).scope.joins(:restaurant).where(restaurant: { id: restaurant_id })
+    RolePolicy.new(context[:current_session]).scope.joins(:restaurant).where(restaurant: { id: restaurant_id })
   end
 
   def service_charge(id:)
-    ServiceChargePolicy.new(context[:current_user]).scope.find(id)
+    ServiceChargePolicy.new(context[:current_session]).scope.find(id)
   end
 
   def service_charges(restaurant_id:)
-    ServiceChargePolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    ServiceChargePolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
   end
 
   def taxes(restaurant_id:)
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
-    records = TaxPolicy.new(context[:current_user]).scope
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
+    records = TaxPolicy.new(context[:current_session]).scope
     records = records.where(province: restaurant.province, country: restaurant.country)
 
     postal_code_records = records.where(postal_code: restaurant.postal_code)
@@ -467,13 +467,13 @@ class Types::QueryType < Types::BaseObject
   end
 
   def tickets(restaurant_id:, page:, per_page:, kitchen_profile_id: nil, booking_types: [], status: []) # rubocop:disable Metrics/AbcSize, Metrics/ParameterLists
-    records = TicketPolicy.new(context[:current_user]).scope.joins(booking: :restaurant)
+    records = TicketPolicy.new(context[:current_session]).scope.joins(booking: :restaurant)
                           .where(restaurants: { id: restaurant_id })
 
     records = records.where(bookings: { booking_type: booking_types }) if booking_types.present?
 
     if kitchen_profile_id.present?
-      profile = KitchenProfilePolicy.new(context[:current_user]).scope.find(kitchen_profile_id)
+      profile = KitchenProfilePolicy.new(context[:current_session]).scope.find(kitchen_profile_id)
       records = records.joins(ticket_items: :item).where(items: { category_id: profile.categories })
     end
 
@@ -484,11 +484,11 @@ class Types::QueryType < Types::BaseObject
   end
 
   def time_sheet(id:)
-    TimeSheetPolicy.new(context[:current_user]).scope.find(id)
+    TimeSheetPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def time_sheet_summary(restaurant_id:, start_time: nil, end_time: nil, user_ids: [])
-    records = TimeSheetPolicy.new(context[:current_user]).scope
+    records = TimeSheetPolicy.new(context[:current_session]).scope
     records = records.joins(:user).where(user: { restaurant_id: restaurant_id })
 
     records = records.where(user_id: user_ids) if user_ids.present?
@@ -498,7 +498,7 @@ class Types::QueryType < Types::BaseObject
   end
 
   def time_sheets(restaurant_id:, page:, per_page:, start_date: nil, end_date: nil, user_ids: nil) # rubocop:disable Metrics/ParameterLists
-    records = TimeSheetPolicy.new(context[:current_user]).scope
+    records = TimeSheetPolicy.new(context[:current_session]).scope
     records = records.joins(:user).where(user: { restaurant_id: restaurant_id })
 
     records = records.where(user_id: user_ids) if user_ids.present?
@@ -508,11 +508,11 @@ class Types::QueryType < Types::BaseObject
   end
 
   def user(id:)
-    UserPolicy.new(context[:current_user]).scope.find(id)
+    UserPolicy.new(context[:current_session]).scope.find(id)
   end
 
   def users(restaurant_id:)
-    UserPolicy.new(context[:current_user]).scope.where(restaurant_id: restaurant_id)
+    UserPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
   end
 
   private

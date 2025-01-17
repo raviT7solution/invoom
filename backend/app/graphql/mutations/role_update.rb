@@ -7,7 +7,7 @@ class Mutations::RoleUpdate < Mutations::BaseMutation
   type Types::RoleType, null: false
 
   def resolve(id:, attributes:)
-    role = RolePolicy.new(context[:current_user]).scope.find(id)
+    role = RolePolicy.new(context[:current_session]).scope.find(id)
 
     if role.update(attributes.to_h)
       role

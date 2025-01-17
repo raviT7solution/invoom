@@ -7,9 +7,9 @@ class Mutations::PaymentIntentCreate < Mutations::BaseMutation
   field :client_secret, String, null: false
 
   def resolve(amount:, invoice_id:)
-    restaurant = context[:current_user].mobile_user!.restaurant
+    restaurant = context[:current_session].mobile_user!.restaurant
 
-    invoice = InvoicePolicy.new(context[:current_user]).scope.find(invoice_id)
+    invoice = InvoicePolicy.new(context[:current_session]).scope.find(invoice_id)
 
     intent = StripeService.new(restaurant).payment_intent_create(
       amount: Integer(amount * 100),

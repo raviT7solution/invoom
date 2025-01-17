@@ -6,8 +6,7 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      current_session: current_session,
-      current_user: current_session
+      current_session: current_session
     }
     result = BackendSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result

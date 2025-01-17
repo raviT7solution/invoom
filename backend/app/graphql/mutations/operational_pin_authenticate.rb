@@ -7,7 +7,7 @@ class Mutations::OperationalPinAuthenticate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(restaurant_id:, pin:)
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
 
     raise_error "Invalid pin" unless restaurant.authenticate_pin(pin)
 

@@ -7,7 +7,7 @@ class Mutations::ReservationCreate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(restaurant_id:, attributes:)
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
     reservation = restaurant.reservations.new(attributes.to_h)
 
     raise_error reservation.errors.full_messages.to_sentence unless reservation.save

@@ -7,10 +7,10 @@ class Mutations::BookingCreate < Mutations::BaseMutation
   type ID, null: false
 
   def resolve(attributes:, restaurant_id:) # rubocop:disable Metrics/AbcSize
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
 
     if attributes[:customer_id].present?
-      customer = CustomerPolicy.new(context[:current_user]).scope.find(attributes[:customer_id])
+      customer = CustomerPolicy.new(context[:current_session]).scope.find(attributes[:customer_id])
     end
 
     booking = Booking.new(
@@ -20,10 +20,10 @@ class Mutations::BookingCreate < Mutations::BaseMutation
       estimated_duration: attributes[:estimated_duration],
       pax: attributes[:pax],
       restaurant: restaurant,
-      user: context[:current_user].mobile_user!
+      user: context[:current_session].mobile_user!
     )
 
-    tables = FloorObjectPolicy.new(context[:current_user]).scope.object_type_table
+    tables = FloorObjectPolicy.new(context[:current_session]).scope.object_type_table
                               .find(attributes[:floor_object_ids] || [])
 
     tables.each do |t|

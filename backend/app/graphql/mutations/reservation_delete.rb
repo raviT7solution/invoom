@@ -6,7 +6,7 @@ class Mutations::ReservationDelete < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:)
-    reservation = ReservationPolicy.new(context[:current_user]).scope.find(id)
+    reservation = ReservationPolicy.new(context[:current_session]).scope.find(id)
 
     raise_error reservation.errors.full_messages.to_sentence unless reservation.destroy
 

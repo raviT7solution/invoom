@@ -6,7 +6,7 @@ class Mutations::ServiceChargeDelete < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:)
-    service_charge = ServiceChargePolicy.new(context[:current_user]).scope.find(id)
+    service_charge = ServiceChargePolicy.new(context[:current_session]).scope.find(id)
 
     raise_error service_charge.errors.full_messages.to_sentence unless service_charge.destroy
 

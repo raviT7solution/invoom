@@ -6,7 +6,7 @@ class Mutations::BookingClose < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:)
-    booking = BookingPolicy.new(context[:current_user]).scope.find(id)
+    booking = BookingPolicy.new(context[:current_session]).scope.find(id)
 
     ApplicationRecord.transaction do
       booking.booking_tables.update!(floor_object_id: nil)

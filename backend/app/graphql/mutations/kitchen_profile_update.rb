@@ -7,7 +7,7 @@ class Mutations::KitchenProfileUpdate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(id:, attributes:)
-    kitchen_profile = KitchenProfilePolicy.new(context[:current_user]).scope.find(id)
+    kitchen_profile = KitchenProfilePolicy.new(context[:current_session]).scope.find(id)
 
     raise_error kitchen_profile.errors.full_messages.to_sentence unless kitchen_profile.update(attributes.to_h)
 

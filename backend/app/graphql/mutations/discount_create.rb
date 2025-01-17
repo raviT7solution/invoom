@@ -7,7 +7,7 @@ class Mutations::DiscountCreate < Mutations::BaseMutation
   type Boolean, null: false
 
   def resolve(restaurant_id:, attributes:)
-    restaurant = RestaurantPolicy.new(context[:current_user]).scope.find(restaurant_id)
+    restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
     discount = restaurant.discounts.new(attributes.to_h)
 
     raise_error discount.errors.full_messages.to_sentence unless discount.save
