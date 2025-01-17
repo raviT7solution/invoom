@@ -32,6 +32,12 @@ import {
   CustomersQueryVariables,
   DashboardSummaryDocument,
   DashboardSummaryQueryVariables,
+  DeviceDeleteDocument,
+  DeviceDeleteMutationVariables,
+  DeviceDocument,
+  DeviceUpdateDocument,
+  DeviceUpdateMutationVariables,
+  DevicesDocument,
   DiscountCreateDocument,
   DiscountCreateMutationVariables,
   DiscountDeleteDocument,
@@ -1197,5 +1203,46 @@ export const useTimeSheetSummary = (
     queryFn: async () =>
       (await client.request(TimeSheetSummaryDocument, variables))
         .timeSheetSummary,
+  });
+};
+
+export const useDevice = (id: string) => {
+  return useQuery({
+    enabled: id !== "",
+    queryFn: async () => (await client.request(DeviceDocument, { id })).device,
+    queryKey: ["device", id],
+  });
+};
+
+export const useDevices = (restaurantId: string) => {
+  return useQuery({
+    initialData: [],
+    queryFn: async () =>
+      (await client.request(DevicesDocument, { restaurantId })).devices,
+    queryKey: ["devices", restaurantId],
+  });
+};
+
+export const useDeviceUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: DeviceUpdateMutationVariables) =>
+      client.request(DeviceUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["devices"] });
+    },
+  });
+};
+
+export const useDeviceDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: DeviceDeleteMutationVariables) =>
+      client.request(DeviceDeleteDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["devices"] });
+    },
   });
 };

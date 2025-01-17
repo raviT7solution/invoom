@@ -19,6 +19,7 @@ import { ReportsCustomers } from "./Pages/Reports/Customers";
 import { ReportsLabour } from "./Pages/Reports/Labour";
 import { ReportsSales } from "./Pages/Reports/Sales";
 import { ChangePassword } from "./Pages/Settings/ChangePassword";
+import { Devices } from "./Pages/Settings/Devices";
 import { KitchenProfiles } from "./Pages/Settings/KitchenProfiles";
 import { Restaurants } from "./Pages/Settings/Restaurants";
 import { RestaurantSettings } from "./Pages/Settings/RestaurantSettings";
@@ -69,6 +70,7 @@ const routes = {
   ReportsLabour: "/reports/labour",
   ReportsSales: "/reports/sales",
   RestaurantSettings: "/settings/restaurant-settings",
+  SettingsDevices: "/settings/devices",
   SettingsKitchenProfiles: "/settings/kitchen-profiles",
   SettingsRestaurants: "/settings/restaurants",
   Teams: "/teams",
@@ -177,6 +179,11 @@ export const Switch = () => {
     .with({ name: "SettingsKitchenProfiles" }, () => (
       <PrivateRoute>
         <KitchenProfiles />
+      </PrivateRoute>
+    ))
+    .with({ name: "SettingsDevices" }, () => (
+      <PrivateRoute>
+        <Devices />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");

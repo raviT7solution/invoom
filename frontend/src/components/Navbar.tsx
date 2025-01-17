@@ -19,6 +19,7 @@ import {
   ReconciliationOutlined,
   RiseOutlined,
   SettingOutlined,
+  TabletOutlined,
   TeamOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
@@ -197,6 +198,11 @@ export const Navbar = ({
           ),
           icon: <InsertRowAboveOutlined />,
           key: "8.2",
+        },
+        {
+          label: <Link to={Router.SettingsDevices()}>Device Settings</Link>,
+          icon: <TabletOutlined />,
+          key: "8.3",
         },
       ],
     },

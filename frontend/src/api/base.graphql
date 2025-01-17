@@ -967,3 +967,27 @@ query timeSheetSummary(
     totalHours
   }
 }
+
+query device($id: ID!) {
+  device(id: $id) {
+    fingerprint
+    id
+    name
+  }
+}
+
+query devices($restaurantId: ID!) {
+  devices(restaurantId: $restaurantId) {
+    fingerprint
+    id
+    name
+  }
+}
+
+mutation deviceDelete($id: ID!) {
+  deviceDelete(input: { id: $id })
+}
+
+mutation deviceUpdate($input: DeviceUpdateInput!) {
+  deviceUpdate(input: $input)
+}

@@ -46,6 +46,12 @@ class Types::QueryType < Types::BaseObject
     argument :restaurant_id, ID, required: true
     argument :start_time, GraphQL::Types::ISO8601DateTime, required: false
   end
+  field :device, Types::DeviceType, null: false do
+    argument :id, ID, required: true
+  end
+  field :devices, [Types::DeviceType], null: false do
+    argument :restaurant_id, ID, required: true
+  end
   field :discount, Types::DiscountType, null: false do
     argument :id, ID, required: true
   end
@@ -278,6 +284,16 @@ class Types::QueryType < Types::BaseObject
     bookings = bookings.where(created_at: start_time..end_time) if start_time.present? && end_time.present?
 
     { bookings: bookings, restaurant: restaurant }
+  end
+
+  def device(id:)
+    DevicePolicy.new(context[:current_session]).scope.find(id)
+  end
+
+  def devices(restaurant_id:)
+    records = DevicePolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
+
+    records.order(:name)
   end
 
   def discount(id:)
