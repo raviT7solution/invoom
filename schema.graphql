@@ -1173,7 +1173,7 @@ type Mutation {
     Parameters for DeviceCreate
     """
     input: DeviceCreateInput!
-  ): Boolean!
+  ): ID!
   deviceDelete(
     """
     Parameters for DeviceDelete

@@ -7,9 +7,12 @@ class DevicesTest < ActionDispatch::IntegrationTest
     restaurant = create(:restaurant)
     admin = create(:admin, restaurants: [restaurant])
 
+    token = mobile_admin_token(admin)
+    session = Session.find_signed!(token)
+
     fingerprint = Faker::Device.serial
 
-    authentic_query mobile_admin_token(admin), device_create, variables: {
+    authentic_query token, device_create, variables: {
       input: {
         attributes: {
           fingerprint: fingerprint,
@@ -24,6 +27,8 @@ class DevicesTest < ActionDispatch::IntegrationTest
                       fingerprint: fingerprint,
                       name: "iPad Pro",
                       restaurant_id: restaurant.id
+    assert_attributes session.reload,
+                      device_id: Device.last!.id
   end
 
   private
