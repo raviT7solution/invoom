@@ -24,6 +24,10 @@ const permissions = [
     value: "delete_ticket_item",
   },
   {
+    label: "Edit Item",
+    value: "edit_item",
+  },
+  {
     label: "Floor plan",
     value: "floor_plan",
   },

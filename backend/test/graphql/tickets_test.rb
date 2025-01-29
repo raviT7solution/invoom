@@ -23,9 +23,11 @@ class TicketsTest < ActionDispatch::IntegrationTest
         attributes: [
           {
             addonIds: [addon.id],
+            displayName: item.name,
             itemId: item.id,
             modifiers: ["No cheese"],
             note: "No ice",
+            price: 5,
             quantity: 2
           }
         ]
@@ -72,9 +74,11 @@ class TicketsTest < ActionDispatch::IntegrationTest
         attributes: [
           {
             addonIds: [ticket_item_addon.id],
+            displayName: item.name,
             itemId: item.id,
             modifiers: ["No cheese"],
             note: "No ice",
+            price: 5,
             quantity: -2
           }
         ]

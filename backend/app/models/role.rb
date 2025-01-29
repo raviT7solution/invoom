@@ -5,6 +5,7 @@ class Role < ApplicationRecord
     "apply_discount",
     "clock_in_clock_out",
     "delete_ticket_item",
+    "edit_item",
     "floor_plan",
     "force_clock_out",
     "inventory",

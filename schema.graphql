@@ -2240,10 +2240,12 @@ type TicketItemAddon {
 
 input TicketItemAttributes {
   addonIds: [ID!]
+  displayName: String
   id: ID
   itemId: ID
   modifiers: [String!]
   note: String
+  price: Float
   quantity: Float
   status: TicketItemStatusAttribute
 }
@@ -2472,6 +2474,7 @@ enum UserSessionPermissionsType {
   apply_discount
   clock_in_clock_out
   delete_ticket_item
+  edit_item
   floor_plan
   force_clock_out
   inventory
