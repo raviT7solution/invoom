@@ -49,12 +49,40 @@ class FloorObjectsTest < ActionDispatch::IntegrationTest
     assert_attributes FloorObject.find(existing_speaker.id), name: "Speaker - 1"
   end
 
+  test "floor object force unlock" do
+    restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
+    role = create(:role, permissions: ["orders", "force_unlock"], restaurant: restaurant)
+    user = create(:user, restaurant: restaurant, roles: [role])
+
+    floor_object = create(:floor_object, :rectangular_table, active_user_full_name: user.full_name,
+                                                             restaurant: restaurant)
+
+    authentic_query mobile_user_token(user, device), floor_object_force_unlock, variables: {
+      input: {
+        floorObjectId: floor_object.id
+      }
+    }
+
+    assert_query_success
+
+    assert_nil floor_object.reload.active_user_full_name
+  end
+
   private
 
   def floor_object_update
     <<~GQL
       mutation floorObjectUpdate($input: FloorObjectUpdateInput!) {
         floorObjectUpdate(input: $input)
+      }
+    GQL
+  end
+
+  def floor_object_force_unlock
+    <<~GQL
+      mutation floorObjectForceUnlock($input: FloorObjectForceUnlockInput!) {
+        floorObjectForceUnlock(input: $input)
       }
     GQL
   end

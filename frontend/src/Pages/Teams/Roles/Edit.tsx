@@ -36,6 +36,10 @@ const permissions = [
     value: "force_clock_out",
   },
   {
+    label: "Force unlock",
+    value: "force_unlock",
+  },
+  {
     label: "Inventory",
     value: "inventory",
   },

@@ -26,6 +26,7 @@ class Types::MutationType < Types::BaseObject
   field :discount_create, mutation: Mutations::DiscountCreate, null: false, authorize: "DiscountPolicy#create?"
   field :discount_delete, mutation: Mutations::DiscountDelete, null: false, authorize: "DiscountPolicy#delete?"
   field :discount_update, mutation: Mutations::DiscountUpdate, null: false, authorize: "DiscountPolicy#update?"
+  field :floor_object_force_unlock, mutation: Mutations::FloorObjectForceUnlock, null: false, authorize: "FloorObjectPolicy#force_unlock?"
   field :floor_object_update, mutation: Mutations::FloorObjectUpdate, null: false, authorize: "FloorObjectPolicy#update?"
   field :inventory_category_create, mutation: Mutations::InventoryCategoryCreate, null: false, authorize: "InventoryCategoryPolicy#create?"
   field :inventory_category_delete, mutation: Mutations::InventoryCategoryDelete, null: false, authorize: "InventoryCategoryPolicy#delete?"

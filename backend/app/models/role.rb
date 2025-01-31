@@ -8,6 +8,7 @@ class Role < ApplicationRecord
     "edit_item",
     "floor_plan",
     "force_clock_out",
+    "force_unlock",
     "inventory",
     "orders",
     "payments",
