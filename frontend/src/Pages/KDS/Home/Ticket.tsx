@@ -117,7 +117,8 @@ export const Ticket = ({
       >
         <div className="flex justify-between items-center">
           <b className="text-base">
-            {data.booking.bookingType === "takeout"
+            {data.booking.bookingType === "delivery" ||
+            data.booking.bookingType === "takeout"
               ? data.booking.token
               : data.booking.bookingTables.map((b) => b.name).join(", ") || "-"}
           </b>

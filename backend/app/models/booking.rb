@@ -28,7 +28,7 @@ class Booking < ApplicationRecord
 
   validate :validate_clocked_out_at, if: ->(i) { i.clocked_out_at.present? && i.clocked_out_at_changed? }
 
-  before_create :set_token, if: :takeout?
+  before_create :set_token, if: -> { takeout? || delivery? }
 
   private
 
