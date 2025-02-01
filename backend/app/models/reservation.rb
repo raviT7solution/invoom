@@ -4,7 +4,7 @@ class Reservation < ApplicationRecord
   belongs_to :restaurant
   belongs_to :customer
 
-  enum :status, [:pending, :completed, :confirmed, :wait_listed, :checked_in, :no_show, :cancelled], default: :pending
+  enum :status, [:pending, :seated, :confirmed, :wait_listed, :checked_in, :no_show, :cancelled], default: :pending
 
   validates :adults, presence: true, numericality: { greater_than: 0 }
   validates :kids, presence: true

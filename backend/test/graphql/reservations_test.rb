@@ -16,19 +16,21 @@ class ReservationTest < ActionDispatch::IntegrationTest
           adults: 1,
           customerId: customer.id,
           kids: 0,
+          note: "Test",
           reservationAt: "2024-04-01T11:20:00",
-          specialRequest: "Test"
+          tableName: "T1"
         },
         restaurantId: restaurant.id
       }
     }
 
     assert_query_success
-    assert_attributes Reservation.last!, \
+    assert_attributes Reservation.last!,
                       adults: 1,
                       customer_id: customer.id,
                       kids: 0,
-                      special_request: "Test"
+                      note: "Test",
+                      table_name: "T1"
   end
 
   test "invalid permission" do
@@ -83,14 +85,14 @@ class ReservationTest < ActionDispatch::IntegrationTest
     authentic_query mobile_user_token(user, device), reservation_update_string, variables: {
       input: {
         attributes: {
-          status: "completed"
+          status: "seated"
         },
         id: reservation.id
       }
     }
 
     assert_query_success
-    assert_equal "completed", reservation.reload.status
+    assert_equal "seated", reservation.reload.status
   end
 
   test "reservations" do
@@ -116,9 +118,10 @@ class ReservationTest < ActionDispatch::IntegrationTest
                    "customer" => { "name" => customer.name },
                    "id" => reservation.id,
                    "kids" => reservation.kids,
+                   "note" => reservation.note,
                    "reservationAt" => reservation.reservation_at,
-                   "specialRequest" => reservation.special_request,
-                   "status" => "pending"
+                   "status" => "pending",
+                   "tableName" => reservation.table_name
                  },
                  response.parsed_body["data"]["reservations"]["collection"][0])
   end
@@ -174,9 +177,10 @@ class ReservationTest < ActionDispatch::IntegrationTest
             }
             id
             kids
+            note
             reservationAt
-            specialRequest
             status
+            tableName
           }
         }
       }

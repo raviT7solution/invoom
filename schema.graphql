@@ -1907,18 +1907,20 @@ type Reservation {
   customer: Customer!
   id: ID!
   kids: Int!
+  note: String
   reservationAt: ISO8601DateTime!
-  specialRequest: String
   status: ReservationStatusEnum!
+  tableName: String
 }
 
 input ReservationAttributes {
   adults: Int
   customerId: ID
   kids: Int
+  note: String
   reservationAt: ISO8601DateTime
-  specialRequest: String
   status: ReservationStatusEnum
+  tableName: String
 }
 
 """
@@ -1963,10 +1965,10 @@ input ReservationDeleteInput {
 enum ReservationStatusEnum {
   cancelled
   checked_in
-  completed
   confirmed
   no_show
   pending
+  seated
   wait_listed
 }
 
