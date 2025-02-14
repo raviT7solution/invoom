@@ -60,7 +60,6 @@ class Types::MutationType < Types::BaseObject
   field :product_transaction_create, mutation: Mutations::ProductTransactionCreate, null: false, authorize: "ProductTransactionPolicy#create?"
   field :product_update, mutation: Mutations::ProductUpdate, null: false, authorize: "ProductPolicy#update?"
   field :reservation_create, mutation: Mutations::ReservationCreate, null: false, authorize: "ReservationPolicy#create?"
-  field :reservation_delete, mutation: Mutations::ReservationDelete, null: false, authorize: "ReservationPolicy#delete?"
   field :reservation_update, mutation: Mutations::ReservationUpdate, null: false, authorize: "ReservationPolicy#update?"
   field :restaurant_create, mutation: Mutations::RestaurantCreate, null: false, authorize: "RestaurantPolicy#create?"
   field :restaurant_update, mutation: Mutations::RestaurantUpdate, null: false, authorize: "RestaurantPolicy#update?"

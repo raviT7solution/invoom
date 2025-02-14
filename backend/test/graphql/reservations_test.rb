@@ -56,24 +56,6 @@ class ReservationTest < ActionDispatch::IntegrationTest
     assert_nil Reservation.last
   end
 
-  test "delete reservation" do
-    restaurant = create(:restaurant)
-    device = create(:device, restaurant: restaurant)
-    role = create(:role, permissions: ["reservations"], restaurant: restaurant)
-    user = create(:user, roles: [role], restaurant: restaurant)
-    customer = create(:customer, restaurant: restaurant)
-    reservation = create(:reservation, restaurant: restaurant, customer: customer)
-
-    authentic_query mobile_user_token(user, device), reservation_delete, variables: {
-      input: {
-        id: reservation.id
-      }
-    }
-
-    assert_query_success
-    assert_nil Reservation.last
-  end
-
   test "update reservation" do
     restaurant = create(:restaurant)
     device = create(:device, restaurant: restaurant)
@@ -106,8 +88,6 @@ class ReservationTest < ActionDispatch::IntegrationTest
 
     authentic_query mobile_user_token(user, device), reservations_string, variables: {
       endTime: "2024-04-03T11:20:00",
-      page: 1,
-      perPage: 100,
       restaurantId: restaurant.id,
       startTime: "2024-04-01T11:20:00"
     }
@@ -123,7 +103,7 @@ class ReservationTest < ActionDispatch::IntegrationTest
                    "status" => "pending",
                    "tableName" => reservation.table_name
                  },
-                 response.parsed_body["data"]["reservations"]["collection"][0])
+                 response.parsed_body["data"]["reservations"][0])
   end
 
   private
@@ -132,14 +112,6 @@ class ReservationTest < ActionDispatch::IntegrationTest
     <<~GQL
       mutation reservationCreate($input: ReservationCreateInput!){
         reservationCreate(input: $input)
-      }
-    GQL
-  end
-
-  def reservation_delete
-    <<~GQL
-      mutation reservationDelete($input: ReservationDeleteInput!){
-        reservationDelete(input: $input)
       }
     GQL
   end
@@ -156,32 +128,24 @@ class ReservationTest < ActionDispatch::IntegrationTest
     <<~GQL
       query reservations(
         $endTime: ISO8601DateTime
-        $page: Int!
-        $perPage: Int!
         $restaurantId: ID!
         $startTime: ISO8601DateTime
-        $status: String
       ) {
         reservations(
           endTime: $endTime
-          page: $page
-          perPage: $perPage
           restaurantId: $restaurantId
           startTime: $startTime
-          status: $status
         ) {
-          collection {
-            adults
-            customer {
-              name
-            }
-            id
-            kids
-            note
-            reservationAt
-            status
-            tableName
+          adults
+          customer {
+            name
           }
+          id
+          kids
+          note
+          reservationAt
+          status
+          tableName
         }
       }
     GQL

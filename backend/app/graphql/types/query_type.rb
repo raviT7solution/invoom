@@ -128,13 +128,10 @@ class Types::QueryType < Types::BaseObject
   field :provinces, [Types::ProvinceType], null: false do
     argument :alpha2, String, required: true
   end
-  field :reservations, Types::ReservationType.collection_type, null: false do
+  field :reservations, [Types::ReservationType], null: false do
     argument :end_time, GraphQL::Types::ISO8601DateTime, required: false
-    argument :page, Integer, required: true
-    argument :per_page, Integer, required: true
     argument :restaurant_id, ID, required: true
     argument :start_time, GraphQL::Types::ISO8601DateTime, required: false
-    argument :status, String, required: false
   end
   field :restaurant, Types::RestaurantType, null: false do
     argument :id, String, required: true
@@ -435,14 +432,13 @@ class Types::QueryType < Types::BaseObject
     end
   end
 
-  def reservations(restaurant_id:, page:, per_page:, status: nil, start_time: nil, end_time: nil) # rubocop:disable Metrics/ParameterLists
+  def reservations(restaurant_id:, start_time: nil, end_time: nil)
     records = ReservationPolicy.new(context[:current_session]).scope
     records = records.where(restaurant_id: restaurant_id)
 
-    records = records.where(status: status) if status.present?
     records = records.where(reservation_at: start_time..end_time) if start_time.present? && end_time.present?
 
-    records.order(:reservation_at).page(page).per(per_page)
+    records.order(:created_at)
   end
 
   def restaurant(id:)
