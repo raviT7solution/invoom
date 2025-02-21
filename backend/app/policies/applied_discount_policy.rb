@@ -12,7 +12,7 @@ class AppliedDiscountPolicy < ApplicationPolicy
   def scope
     if web_admin?
       AppliedDiscount.where(restaurant: web_admin!.restaurants)
-    elsif mobile_user?("apply_discount")
+    elsif mobile_user?("orders") || mobile_user?("takeout")
       AppliedDiscount.where(restaurant_id: mobile_user!.restaurant_id)
     else
       AppliedDiscount.none

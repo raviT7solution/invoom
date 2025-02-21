@@ -28,7 +28,7 @@ class AppliedDiscountsTest < ActionDispatch::IntegrationTest
   test "delete applied discount" do
     restaurant = create(:restaurant)
     device = create(:device, restaurant: restaurant)
-    role = create(:role, permissions: ["apply_discount"], restaurant: restaurant)
+    role = create(:role, permissions: ["apply_discount", "orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
     customer = create(:customer, restaurant: restaurant)
