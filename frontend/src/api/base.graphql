@@ -936,6 +936,7 @@ query customers(
   ) {
     collection {
       avgInvoiceAmount
+      countryCode
       email
       id
       invoiceCount

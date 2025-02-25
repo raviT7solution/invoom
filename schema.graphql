@@ -373,6 +373,7 @@ type Country {
 
 type Customer {
   avgInvoiceAmount: Float!
+  countryCode: String!
   email: String
   id: ID!
   invoiceCount: Int!
@@ -382,6 +383,7 @@ type Customer {
 }
 
 input CustomerAttributes {
+  countryCode: String
   email: String
   name: String
   phoneNumber: String

@@ -223,7 +223,7 @@ export const UserEdit = ({
 
           <Col span={8}>
             <Form.Item
-              label="Phone"
+              label="Phone Number"
               name="phoneNumber"
               rules={[{ required: true, message: "Required" }]}
             >

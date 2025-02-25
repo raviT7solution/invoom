@@ -2,6 +2,7 @@
 
 class Types::CustomerType < Types::BaseObject
   field :avg_invoice_amount, Float, null: false
+  field :country_code, String, null: false
   field :email, String, null: true
   field :id, ID, null: false
   field :invoice_count, Integer, null: false

@@ -13,6 +13,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
       input: {
         restaurantId: restaurant.id,
         attributes: {
+          countryCode: "+1",
           name: "Elvis",
           phoneNumber: "1234"
         }
