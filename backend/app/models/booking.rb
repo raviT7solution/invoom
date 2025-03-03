@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Booking < ApplicationRecord
+  scope :search, ->(q) { left_joins(:invoices).where("bookings.number = :q OR invoices.number = :q", q: q).group(:id) }
+  scope :where_payment_modes, ->(i) { joins(invoices: :payments).where(payments: { payment_mode: i }).group(:id) }
+
   enum :booking_type, {
     dine_in: 0,
     takeout: 1,

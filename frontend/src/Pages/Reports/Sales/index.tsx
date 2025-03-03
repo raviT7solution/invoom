@@ -2,12 +2,14 @@ import { DownloadOutlined } from "@ant-design/icons";
 import {
   Button,
   DatePicker,
+  Input,
   Select,
   Table,
   TableColumnsType,
+  TableProps,
   Typography,
 } from "antd";
-import { useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 
 import { Summary } from "./Summary";
 
@@ -17,7 +19,7 @@ import {
   useInvoices,
   useInvoicesExport,
 } from "../../../api";
-import { BookingsQuery } from "../../../api/base";
+import { BookingsQuery, PaymentModeEnum } from "../../../api/base";
 import { Navbar } from "../../../components/Navbar";
 import { TIME_RANGE_PRESETS } from "../../../helpers";
 import {
@@ -26,8 +28,8 @@ import {
   utcToRestaurantTimezone,
 } from "../../../helpers/dateTime";
 import { exportAsCSV } from "../../../helpers/exports";
+import { BOOKING_TYPES, PAYMENT_MODES } from "../../../helpers/mapping";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
-import { BOOKING_TYPES } from "../../KDS/Home/helpers";
 
 type InvoicesType = BookingsQuery["bookings"]["collection"][number]["invoices"];
 
@@ -35,6 +37,14 @@ type DateRangeType = {
   start: string | null;
   end: string | null;
 };
+
+type FiltersType = {
+  bookingTypes: string[];
+  paymentModes: PaymentModeEnum[];
+  query: string;
+};
+
+type SetFiltersType = Dispatch<SetStateAction<FiltersType>>;
 
 const REPORT_TYPES = [
   {
@@ -60,10 +70,18 @@ const invoiceTip = (invoice: InvoicesType[number]) => {
 };
 
 const invoicePaymentModes = (invoice: InvoicesType[number]) => {
-  return invoice.payments.map((i) => i.paymentMode);
+  return invoice.payments.map((i) => PAYMENT_MODES[i.paymentMode]);
 };
 
-const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
+const OrdersWise = ({
+  dateRange,
+  filters,
+  setFilters,
+}: {
+  dateRange: DateRangeType;
+  filters: FiltersType;
+  setFilters: SetFiltersType;
+}) => {
   const { restaurantId, tz } = useRestaurantIdStore();
 
   const [pagination, setPagination] = useState({
@@ -75,9 +93,12 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
     data: { collection, metadata },
     isFetching,
   } = useBookings({
+    bookingTypes: filters.bookingTypes,
     endDate: dateRange.end,
     page: pagination.page,
+    paymentModes: filters.paymentModes,
     perPage: pagination.perPage,
+    query: filters.query,
     restaurantId: restaurantId,
     startDate: dateRange.start,
   });
@@ -99,7 +120,13 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       },
       {
         title: "Order Type",
+        key: "bookingType",
         render: (_, r) => BOOKING_TYPES[r.bookingType],
+        filters: Object.entries(BOOKING_TYPES).map(([value, text]) => ({
+          text,
+          value,
+        })),
+        filteredValue: filters.bookingTypes,
       },
       {
         title: "Start Time",
@@ -158,7 +185,13 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       },
       {
         title: "Payment Type",
+        key: "paymentType",
         render: (_, r) => r.invoices.flatMap(invoicePaymentModes).join(", "),
+        filters: Object.entries(PAYMENT_MODES).map(([value, text]) => ({
+          text,
+          value,
+        })),
+        filteredValue: filters.paymentModes,
       },
       {
         title: "Customer Name",
@@ -169,18 +202,30 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
         dataIndex: ["userFullName"],
       },
     ],
-    [metadata, tz],
+    [filters, metadata, tz],
   );
+
+  const onTableChange: TableProps<(typeof collection)[number]>["onChange"] = (
+    pagination,
+    filters,
+  ) => {
+    setPagination({ page: pagination.current!, perPage: pagination.pageSize! });
+
+    setFilters((i) => ({
+      ...i,
+      bookingTypes: (filters.bookingType ?? []) as string[],
+      paymentModes: (filters.paymentType ?? []) as PaymentModeEnum[],
+    }));
+  };
 
   return (
     <Table
       columns={columns}
       dataSource={collection}
       loading={isFetching}
+      onChange={onTableChange}
       pagination={{
         current: metadata.currentPage,
-        onChange: (page, pageSize) =>
-          setPagination({ page, perPage: pageSize }),
         total: metadata.totalCount,
       }}
       rowKey="id"
@@ -189,7 +234,15 @@ const OrdersWise = ({ dateRange }: { dateRange: DateRangeType }) => {
   );
 };
 
-const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
+const InvoicesWise = ({
+  dateRange,
+  filters,
+  setFilters,
+}: {
+  dateRange: DateRangeType;
+  filters: FiltersType;
+  setFilters: SetFiltersType;
+}) => {
   const { restaurantId, tz } = useRestaurantIdStore();
 
   const [pagination, setPagination] = useState({
@@ -201,9 +254,12 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
     data: { collection, metadata },
     isFetching,
   } = useInvoices({
+    bookingTypes: filters.bookingTypes,
     endDate: dateRange.end,
     page: pagination.page,
+    paymentModes: filters.paymentModes,
     perPage: pagination.perPage,
+    query: filters.query,
     restaurantId: restaurantId,
     startDate: dateRange.start,
   });
@@ -225,7 +281,13 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       },
       {
         title: "Order Type",
+        key: "bookingType",
         render: (_, r) => BOOKING_TYPES[r.booking.bookingType],
+        filters: Object.entries(BOOKING_TYPES).map(([value, text]) => ({
+          text,
+          value,
+        })),
+        filteredValue: filters.bookingTypes,
       },
       {
         title: "Start Time",
@@ -281,7 +343,13 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
       },
       {
         title: "Payment Type",
+        key: "paymentType",
         render: (_, r) => invoicePaymentModes(r).join(", "),
+        filters: Object.entries(PAYMENT_MODES).map(([value, text]) => ({
+          text,
+          value,
+        })),
+        filteredValue: filters.paymentModes,
       },
       {
         title: "Customer Name",
@@ -292,18 +360,30 @@ const InvoicesWise = ({ dateRange }: { dateRange: DateRangeType }) => {
         dataIndex: ["booking", "userFullName"],
       },
     ],
-    [metadata, tz],
+    [filters, metadata, tz],
   );
+
+  const onTableChange: TableProps<(typeof collection)[number]>["onChange"] = (
+    pagination,
+    filters,
+  ) => {
+    setPagination({ page: pagination.current!, perPage: pagination.pageSize! });
+
+    setFilters((i) => ({
+      ...i,
+      bookingTypes: (filters.bookingType ?? []) as string[],
+      paymentModes: (filters.paymentType ?? []) as PaymentModeEnum[],
+    }));
+  };
 
   return (
     <Table
       columns={columns}
       dataSource={collection}
       loading={isFetching}
+      onChange={onTableChange}
       pagination={{
         current: metadata.currentPage,
-        onChange: (page, pageSize) =>
-          setPagination({ page, perPage: pageSize }),
         total: metadata.totalCount,
       }}
       rowKey="id"
@@ -317,6 +397,12 @@ export const ReportsSales = () => {
   const tz = useRestaurantIdStore((s) => s.tz);
 
   const [reportType, setReportType] = useState("orders");
+  const [filters, setFilters] = useState<FiltersType>({
+    bookingTypes: [],
+    paymentModes: [],
+    query: "",
+  });
+
   const [dateRange, setDateRange] = useState<DateRangeType>({
     start: null,
     end: null,
@@ -327,10 +413,13 @@ export const ReportsSales = () => {
 
   const onBookingsExportClick = async () => {
     const { collection } = await bookingsExport.mutateAsync({
+      bookingTypes: filters.bookingTypes,
       endDate: dateRange.end,
       export: true,
       page: 1,
+      paymentModes: filters.paymentModes,
       perPage: -1,
+      query: filters.query,
       restaurantId: restaurantId,
       startDate: dateRange.start,
     });
@@ -388,10 +477,13 @@ export const ReportsSales = () => {
 
   const onInvoicesExportClick = async () => {
     const { collection } = await invoicesExport.mutateAsync({
+      bookingTypes: filters.bookingTypes,
       endDate: dateRange.end,
       export: true,
       page: 1,
+      paymentModes: filters.paymentModes,
       perPage: -1,
+      query: filters.query,
       restaurantId: restaurantId,
       startDate: dateRange.start,
     });
@@ -460,6 +552,14 @@ export const ReportsSales = () => {
         <Typography.Title level={4}>Sales Report</Typography.Title>
 
         <div className="flex flex-1 items-center justify-end gap-2">
+          <Input.Search
+            allowClear
+            className="max-w-xs"
+            enterButton
+            onSearch={(query) => setFilters((i) => ({ ...i, query }))}
+            placeholder="Search by Order ID, Invoice ID"
+          />
+
           <Select
             className="w-1/4"
             defaultValue="orders"
@@ -490,8 +590,21 @@ export const ReportsSales = () => {
 
       <Summary dateRange={dateRange} />
 
-      {reportType === "orders" && <OrdersWise dateRange={dateRange} />}
-      {reportType === "invoices" && <InvoicesWise dateRange={dateRange} />}
+      {reportType === "orders" && (
+        <OrdersWise
+          dateRange={dateRange}
+          filters={filters}
+          setFilters={setFilters}
+        />
+      )}
+
+      {reportType === "invoices" && (
+        <InvoicesWise
+          dateRange={dateRange}
+          filters={filters}
+          setFilters={setFilters}
+        />
+      )}
     </Navbar>
   );
 };

@@ -1,3 +1,5 @@
+import { BookingType, PaymentModeEnum } from "../api/base";
+
 export const UOM: { [key: string]: string } = {
   tonne: "Tonne",
   kilograms: "Kilograms",
@@ -38,4 +40,21 @@ export const UOM_ABBREVIATION: { [key: string]: string } = {
   ounce: "oz",
   grain: "gr",
   item: "",
+};
+
+export const PAYMENT_MODES: Record<PaymentModeEnum, string> = {
+  card: "Card",
+  cash: "Cash",
+  cheque: "Cheque",
+  door_dash: "Door Dash",
+  gift_card: "Gift Card",
+  skip_the_dishes: "Skip The Dishes",
+  uber_eats: "Uber Eats",
+  void: "Void",
+};
+
+export const BOOKING_TYPES: Record<BookingType, string> = {
+  delivery: "Delivery",
+  dine_in: "Dine In",
+  takeout: "Takeout",
 };

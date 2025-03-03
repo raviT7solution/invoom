@@ -19,14 +19,13 @@ import {
 } from "antd";
 import { useState } from "react";
 
-import { BOOKING_TYPES } from "./helpers";
-
 import {
   useCurrentAdmin,
   useKDSSessionCreate,
   useKitchenProfiles,
   useRestaurants,
 } from "../../../api/kds";
+import { BOOKING_TYPES } from "../../../helpers/mapping";
 import { Router } from "../../../Routes";
 import { useKDSConfigStore } from "../../../stores/useKDSConfigStore";
 import { useKDSSessionStore } from "../../../stores/useKDSSessionStore";

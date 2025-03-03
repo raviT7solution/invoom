@@ -2,7 +2,7 @@ import { ClockCircleOutlined } from "@ant-design/icons";
 import { Tree, Tag } from "antd";
 import { useMemo } from "react";
 
-import { BOOKING_TYPES, STATUSES } from "./helpers";
+import { STATUSES } from "./helpers";
 
 import { TicketsQuery } from "../../../api/base";
 import { classNames } from "../../../helpers";
@@ -11,7 +11,7 @@ import {
   useLongPress,
   useRerender,
 } from "../../../helpers/hooks";
-import { UOM_ABBREVIATION } from "../../../helpers/mapping";
+import { BOOKING_TYPES, UOM_ABBREVIATION } from "../../../helpers/mapping";
 
 const durationToString = (i: number) => {
   const minutes = Math.floor(i / 60000);

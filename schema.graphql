@@ -1851,7 +1851,7 @@ type Query {
   addon(id: ID!): Addons!
   addons(restaurantId: ID!): [Addons!]!
   booking(id: ID!): Booking!
-  bookings(bookingTypes: [String!], endDate: ISO8601DateTime, export: Boolean, page: Int!, perPage: Int!, restaurantId: ID!, startDate: ISO8601DateTime, status: String, tableName: String): BookingCollection!
+  bookings(bookingTypes: [String!], endDate: ISO8601DateTime, export: Boolean, page: Int!, paymentModes: [PaymentModeEnum!], perPage: Int!, query: String, restaurantId: ID!, startDate: ISO8601DateTime, status: String, tableName: String): BookingCollection!
   categories(restaurantId: ID!): [Category!]!
   category(id: ID!): Category!
   cities(alpha2: String!, provinceCode: String!): [City!]!
@@ -1868,7 +1868,7 @@ type Query {
   inventoryCategories(restaurantId: ID!): [InventoryCategory!]!
   inventoryCategory(id: ID!): InventoryCategory!
   invoice(id: ID!): Invoice!
-  invoices(bookingTypes: [String!], endDate: ISO8601DateTime, export: Boolean, page: Int!, perPage: Int!, restaurantId: ID!, startDate: ISO8601DateTime, status: String): InvoiceCollection!
+  invoices(bookingTypes: [String!], endDate: ISO8601DateTime, export: Boolean, page: Int!, paymentModes: [PaymentModeEnum!], perPage: Int!, query: String, restaurantId: ID!, startDate: ISO8601DateTime, status: String): InvoiceCollection!
   item(id: ID!): Item!
   items(categoryId: ID, query: String, restaurantId: ID!): [Item!]!
   kitchenProfile(id: ID!): KitchenProfile!

@@ -1,4 +1,4 @@
-import { BookingType, TicketItemStatusType } from "../../../api/base";
+import { TicketItemStatusType } from "../../../api/base";
 
 export const ITEM_STATUSES: TicketItemStatusType[] = [
   "queued",
@@ -28,12 +28,6 @@ export const STATUSES: {
     status: "served",
   },
 ];
-
-export const BOOKING_TYPES: Record<BookingType, string> = {
-  delivery: "Delivery",
-  dine_in: "Dine In",
-  takeout: "Takeout",
-};
 
 export const TABS: {
   key: string;
