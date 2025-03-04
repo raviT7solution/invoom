@@ -8,7 +8,7 @@ class Types::MutationType < Types::BaseObject
   field :admin_session_create, mutation: Mutations::AdminSessionCreate, null: false
   field :applied_discount_create, mutation: Mutations::AppliedDiscountCreate, null: false, authorize: "AppliedDiscountPolicy#create?"
   field :applied_discount_delete, mutation: Mutations::AppliedDiscountDelete, null: false, authorize: "AppliedDiscountPolicy#delete?"
-  field :booking_close, mutation: Mutations::BookingClose, null: false, authorize: "BookingPolicy#close?"
+  field :booking_clocked_out_at_update, mutation: Mutations::BookingClockedOutAtUpdate, null: false, authorize: "BookingPolicy#update?"
   field :booking_create, mutation: Mutations::BookingCreate, null: false, authorize: "BookingPolicy#create?"
   field :booking_force_clock_out, mutation: Mutations::BookingForceClockOut, null: false
   field :booking_service_charges_update, mutation: Mutations::BookingServiceChargesUpdate, null: false, authorize: "BookingServiceChargePolicy#update?"

@@ -8,14 +8,12 @@ class BookingTest < ActiveSupport::TestCase
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking_table = build(:booking_table, floor_object: table)
     booking = build(
       :booking,
-      booking_tables: [booking_table],
       booking_type: :dine_in,
       clocked_in_at: DateTime.current,
       restaurant: restaurant,
+      table_names: ["T1"],
       user: user
     )
 
@@ -36,16 +34,14 @@ class BookingTest < ActiveSupport::TestCase
     restaurant = create(:restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    floor_object = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking_table = build(:booking_table, floor_object: floor_object, name: floor_object.name)
 
     booking = build(
       :booking,
       booking_type: :dine_in,
-      booking_tables: [booking_table],
       clocked_in_at: DateTime.current,
-      restaurant: restaurant,
       pax: 1,
+      restaurant: restaurant,
+      table_names: ["T1"],
       user: user
     )
 

@@ -74,7 +74,7 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
   end
 
   test "no token passed for authorized query" do
-    query booking_close, variables: { id: SecureRandom.uuid }
+    query booking_clocked_out_at_update, variables: { id: SecureRandom.uuid, clockedOut: true }
 
     assert_query_error "Unauthorized"
   end
@@ -87,10 +87,10 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
 
   private
 
-  def booking_close
+  def booking_clocked_out_at_update
     <<~GQL
-      mutation bookingClose($id: ID!) {
-        bookingClose(input: { id: $id })
+      mutation bookingClockedOutAtUpdate($id: ID!,$clockedOut: Boolean!) {
+        bookingClockedOutAtUpdate(input: { id: $id,clockedOut: $clockedOut })
       }
     GQL
   end

@@ -8,9 +8,8 @@ class Mutations::BookingUsersUpdate < Mutations::BaseMutation
 
   def resolve(table_name:, user_id:)
     bookings = BookingPolicy.new(context[:current_session]).scope
-                            .joins(:booking_tables)
-                            .where(booking_tables: { name: table_name })
-                            .where(clocked_out_at: nil)
+                            .where_table_names_in(table_name)
+                            .clocked_in
 
     ApplicationRecord.transaction do
       bookings.each do |i|

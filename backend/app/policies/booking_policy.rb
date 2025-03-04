@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class BookingPolicy < ApplicationPolicy
-  def close?
-    mobile_user?("orders") || mobile_user?("takeout")
-  end
-
   def create?
     mobile_user?("orders") || mobile_user?("takeout")
   end

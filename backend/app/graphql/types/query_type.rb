@@ -208,9 +208,9 @@ class Types::QueryType < Types::BaseObject
     records = records.where(clocked_in_at: start_date..end_date) if start_date.present? && end_date.present?
 
     records = records.where(booking_type: booking_types) if booking_types.present?
-    records = records.where(clocked_out_at: nil) if status == "current"
-    records = records.where.not(clocked_out_at: nil) if status == "completed"
-    records = records.joins(:booking_tables).where(booking_tables: { name: table_name }) if table_name.present?
+    records = records.clocked_in if status == "current"
+    records = records.clocked_out if status == "completed"
+    records = records.where_table_names_in(table_name) if table_name.present?
     records = records.where_payment_modes(payment_modes) if payment_modes.present?
     records = records.search(query) if query.present?
 
@@ -283,7 +283,7 @@ class Types::QueryType < Types::BaseObject
     restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
 
     bookings = BookingPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)
-    bookings = bookings.where.not(clocked_out_at: nil)
+    bookings = bookings.clocked_out
     bookings = bookings.where(created_at: start_time..end_time) if start_time.present? && end_time.present?
 
     { bookings: bookings, restaurant: restaurant }
@@ -344,8 +344,8 @@ class Types::QueryType < Types::BaseObject
                            .joins(:booking).where(bookings: { restaurant_id: restaurant_id })
 
     records = records.where(bookings: { booking_type: booking_types }) if booking_types.present?
-    records = records.completed if status == "completed"
-    records = records.current if status == "current"
+    records = records.clocked_out if status == "completed"
+    records = records.clocked_in if status == "current"
     records = records.where_payment_modes(payment_modes) if payment_modes.present?
     records = records.search(query) if query.present?
 

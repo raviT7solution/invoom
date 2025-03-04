@@ -20,17 +20,9 @@ class Mutations::BookingCreate < Mutations::BaseMutation
       estimated_duration: attributes[:estimated_duration],
       pax: attributes[:pax],
       restaurant: restaurant,
+      table_names: attributes[:table_names],
       user: context[:current_session].mobile_user!
     )
-
-    tables = FloorObjectPolicy.new(context[:current_session]).scope.object_type_table
-                              .find(attributes[:floor_object_ids] || [])
-
-    tables.each do |t|
-      raise_error "#{t.name} is already booked" if t.booking_table.present?
-
-      booking.booking_tables.build(name: t.name, floor_object: t)
-    end
 
     raise_error booking.errors.full_messages.to_sentence unless booking.save
 

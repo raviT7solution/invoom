@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Invoice < ApplicationRecord
-  scope :completed, -> { joins(:booking).where.not(bookings: { clocked_out_at: nil }) }
-  scope :current, -> { joins(:booking).where(bookings: { clocked_out_at: nil }) }
+  scope :clocked_in, -> { joins(:booking).where(bookings: { clocked_out_at: nil }) }
+  scope :clocked_out, -> { joins(:booking).where.not(bookings: { clocked_out_at: nil }) }
   scope :not_void, -> { where(id: Payment.not_void.select(:invoice_id)) }
   scope :search, ->(q) { joins(:booking).where("bookings.number = :q OR invoices.number = :q", q: q) }
   scope :where_payment_modes, ->(i) { joins(:payments).where(payments: { payment_mode: i }).group(:id) }

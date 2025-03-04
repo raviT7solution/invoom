@@ -8,11 +8,11 @@ class Types::BookingType < Types::BaseObject
   field :id, ID, null: false
   field :number, Integer, null: false
   field :pax, Integer, null: true
+  field :table_names, [String], null: true
   field :token, String, null: true
 
   field :applied_discount, Types::AppliedDiscountType, scope: "AppliedDiscountPolicy", preload: :applied_discount, null: true # rubocop:disable Layout/LineLength
   field :booking_service_charges, [Types::BookingServiceChargeType], scope: "BookingServiceChargePolicy", preload: :booking_service_charges, null: false # rubocop:disable Layout/LineLength
-  field :booking_tables, [Types::BookingTableType], scope: "BookingTablePolicy", preload: :booking_tables, null: false
   field :customer, Types::CustomerType, scope: "CustomerPolicy", preload: :customer, null: true
   field :tickets, [Types::TicketType], scope: "TicketPolicy", preload: :tickets, null: false
 

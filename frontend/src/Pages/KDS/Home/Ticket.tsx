@@ -120,7 +120,7 @@ export const Ticket = ({
             {data.booking.bookingType === "delivery" ||
             data.booking.bookingType === "takeout"
               ? data.booking.token
-              : data.booking.bookingTables.map((b) => b.name).join(", ") || "-"}
+              : data.booking.tableNames?.join(", ")}
           </b>
           <Tag color="red">{BOOKING_TYPES[data.booking.bookingType]}</Tag>
         </div>

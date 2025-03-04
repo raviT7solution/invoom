@@ -79,16 +79,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_19_094657) do
     t.index ["service_charge_id"], name: "index_booking_service_charges_on_service_charge_id"
   end
 
-  create_table "booking_tables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.uuid "booking_id", null: false
-    t.uuid "floor_object_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["booking_id"], name: "index_booking_tables_on_booking_id"
-    t.index ["floor_object_id"], name: "index_booking_tables_on_floor_object_id"
-  end
-
   create_table "bookings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "clocked_in_at", null: false
     t.datetime "clocked_out_at"
@@ -102,6 +92,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_19_094657) do
     t.string "estimated_duration"
     t.integer "token"
     t.bigserial "number", null: false
+    t.string "table_names", array: true
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
     t.index ["number"], name: "index_bookings_on_number", unique: true
     t.index ["restaurant_id"], name: "index_bookings_on_restaurant_id"
@@ -578,8 +569,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_19_094657) do
   add_foreign_key "applied_discounts", "restaurants"
   add_foreign_key "booking_service_charges", "bookings"
   add_foreign_key "booking_service_charges", "service_charges"
-  add_foreign_key "booking_tables", "bookings"
-  add_foreign_key "booking_tables", "floor_objects"
   add_foreign_key "bookings", "customers"
   add_foreign_key "bookings", "restaurants"
   add_foreign_key "bookings", "users"

@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
-class Mutations::BookingClose < Mutations::BaseMutation
+class Mutations::BookingClockedOutAtUpdate < Mutations::BaseMutation
+  argument :clocked_out, Boolean, required: true
   argument :id, ID, required: true
 
   type Boolean, null: false
 
-  def resolve(id:)
+  def resolve(id:, clocked_out:)
     booking = BookingPolicy.new(context[:current_session]).scope.find(id)
 
     ApplicationRecord.transaction do
-      booking.booking_tables.update!(floor_object_id: nil)
-      booking.update!(clocked_out_at: DateTime.current)
+      if clocked_out
+        booking.update!(clocked_out_at: Time.current)
+      else
+        booking.update!(clocked_out_at: nil)
+      end
     end
 
     true

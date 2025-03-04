@@ -13,9 +13,7 @@ class KdsTest < ApplicationSystemTestCase
     kitchen_profile = create(:kitchen_profile, name: "Kitchen Profile 1", restaurant: restaurant)
     create(:kitchen_profile_category, kitchen_profile: kitchen_profile, category: category)
 
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant, name: "T1")
-    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                               booking_tables: [build(:booking_table, floor_object: table, name: table.name)])
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2, table_names: ["T1"])
     ticket = create(:ticket, booking: booking)
     ticket_item = create(:ticket_item, ticket: ticket, item: item, status: :queued)
     another_ticket_item = create(:ticket_item, ticket: ticket, item: item, status: :queued)
@@ -54,9 +52,7 @@ class KdsTest < ApplicationSystemTestCase
     kitchen_profile = create(:kitchen_profile, name: "Kitchen Profile 1", restaurant: restaurant)
     create(:kitchen_profile_category, kitchen_profile: kitchen_profile, category: category)
 
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant, name: "T1")
-    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                               booking_tables: [build(:booking_table, floor_object: table, name: table.name)])
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2, table_names: ["T1"])
     ticket = create(:ticket, booking: booking)
     ticket_item = create(:ticket_item, ticket: ticket, item: item, status: :queued, display_name: "Item 1")
 

@@ -5,6 +5,5 @@ class Types::BookingAttributes < Types::BaseInputObject
   argument :customer_id, ID, required: false
   argument :estimated_duration, String, required: false
   argument :pax, Integer, required: false
-
-  argument :floor_object_ids, [ID], required: false
+  argument :table_names, [String], required: false
 end

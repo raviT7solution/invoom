@@ -8,8 +8,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     admin = create(:admin, restaurant_ids: [restaurant.id])
     user = create(:user, restaurant: restaurant)
 
-    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                               booking_tables: [build(:booking_table)])
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2, table_names: ["T1"])
 
     category = create(:category, restaurant: restaurant)
     item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))

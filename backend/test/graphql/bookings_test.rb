@@ -8,14 +8,12 @@ class BookingsTest < ActionDispatch::IntegrationTest
     device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking_table = build(:booking_table, floor_object: table)
     booking = create(:booking,
-                     booking_tables: [booking_table],
                      booking_type: "dine_in",
                      clocked_in_at: "2024-04-02T11:20:00",
                      pax: 1,
                      restaurant: restaurant,
+                     table_names: ["T1"],
                      user: user)
 
     authentic_query mobile_user_token(user, device), bookings, variables: {
@@ -26,7 +24,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
       restaurantId: restaurant.id,
       startDate: "2024-04-01T11:20:00",
       status: "current",
-      tableName: booking_table.name
+      tableName: "T1"
     }
 
     assert_query_success
@@ -39,15 +37,13 @@ class BookingsTest < ActionDispatch::IntegrationTest
     device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table1 = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    table2 = create(:floor_object, :rectangular_table, restaurant: restaurant)
 
     authentic_query mobile_user_token(user, device), booking_create_string, variables: {
       input: {
         attributes: {
           bookingType: "dine_in",
-          floorObjectIds: [table1.id, table2.id],
-          pax: 1
+          pax: 1,
+          tableNames: ["T1", "T2"]
         },
         restaurantId: restaurant.id
       }
@@ -59,8 +55,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_equal booking.id, response.parsed_body["data"]["bookingCreate"]
     assert_attributes booking, \
                       booking_type: "dine_in",
-                      token: nil
-    assert_equal [table1.id, table2.id].sort, booking.booking_tables.map(&:floor_object_id).sort
+                      pax: 1,
+                      table_names: ["T1", "T2"],
+                      token: nil,
+                      user: user
     assert_equal booking.clocked_in_at.to_date, Date.current
   end
 
@@ -71,8 +69,6 @@ class BookingsTest < ActionDispatch::IntegrationTest
     user = create(:user, restaurant: restaurant, roles: [role])
 
     customer = create(:customer, restaurant: restaurant)
-    table1 = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    table2 = create(:floor_object, :rectangular_table, restaurant: restaurant)
 
     authentic_query mobile_user_token(user, device), booking_create_string, variables: {
       input: {
@@ -80,21 +76,21 @@ class BookingsTest < ActionDispatch::IntegrationTest
           bookingType: "takeout",
           customerId: customer.id,
           estimatedDuration: "00:15",
-          floorObjectIds: [table1.id, table2.id]
+          tableNames: ["T1", "T2"]
         },
         restaurantId: restaurant.id
       }
     }
 
-    assert_query_error "Booking tables is the wrong length"
+    assert_query_error "Table names must be blank"
     assert_nil Booking.last
 
     authentic_query mobile_user_token(user, device), booking_create_string, variables: {
       input: {
         attributes: {
           bookingType: "takeout",
-          estimatedDuration: "00:15",
-          customerId: customer.id
+          customerId: customer.id,
+          estimatedDuration: "00:15"
         },
         restaurantId: restaurant.id
       }
@@ -119,62 +115,15 @@ class BookingsTest < ActionDispatch::IntegrationTest
       input: {
         attributes: {
           bookingType: "dine_in",
-          floorObjectIds: []
+          pax: 2,
+          tableNames: []
         },
         restaurantId: restaurant.id
       }
     }
 
-    assert_query_error "Booking tables is too short"
+    assert_query_error "Table names can't be blank"
     assert_nil Booking.last
-  end
-
-  test "floor object must be table for dine_in booking" do
-    restaurant = create(:restaurant)
-    device = create(:device, restaurant: restaurant)
-    role = create(:role, restaurant: restaurant, permissions: ["orders"])
-    user = create(:user, restaurant: restaurant, roles: [role])
-    buffet = create(:floor_object, :speaker, object_type: "speaker", restaurant: restaurant)
-
-    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
-      input: {
-        attributes: {
-          bookingType: "dine_in",
-          floorObjectIds: [buffet.id]
-        },
-        restaurantId: restaurant.id
-      }
-    }
-
-    assert_query_error "FloorObject not found"
-  end
-
-  test "booked table can not be utilized for new booking" do
-    restaurant = create(:restaurant)
-    device = create(:device, restaurant: restaurant)
-    role = create(:role, restaurant: restaurant, permissions: ["orders"])
-    user = create(:user, restaurant: restaurant, roles: [role])
-    other_user = create(:user, restaurant: restaurant)
-
-    used_table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    unused_table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-
-    used_booking_table = build(:booking_table, floor_object: used_table)
-    create(:booking, restaurant: restaurant, user: other_user, booking_type: "dine_in", pax: 1,
-                     booking_tables: [used_booking_table])
-
-    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
-      input: {
-        attributes: {
-          bookingType: "dine_in",
-          floorObjectIds: [used_table.id, unused_table.id]
-        },
-        restaurantId: restaurant.id
-      }
-    }
-
-    assert_query_error "#{used_table.name} is already booked"
-    assert_nil unused_table.reload.booking_table
   end
 
   test "booking update" do
@@ -182,10 +131,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking_table = build(:booking_table, floor_object: table)
-    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 1,
-                               booking_tables: [booking_table])
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 1, table_names: ["T1"])
     customer = create(:customer, restaurant: restaurant)
 
     authentic_query mobile_user_token(user, device), booking_update_string, variables: {
@@ -210,9 +156,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                               booking_tables: [build(:booking_table, floor_object: table)])
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2, table_names: ["T1"])
 
     category = create(:category, restaurant: restaurant)
     item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
@@ -221,7 +165,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     ticket_item = create(:ticket_item, ticket: ticket, item: item)
 
     # without invoices
-    authentic_query mobile_user_token(user, device), booking_close, variables: { id: booking.id }
+    authentic_query mobile_user_token(user, device), booking_clocked_out_at_update, variables: {
+      clockedOut: true,
+      id: booking.id
+    }
 
     assert_query_error "Unprocessed invoice(s)"
     assert_nil booking.reload.clocked_out_at
@@ -230,7 +177,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     create(:invoice_item, ticket_item: ticket_item, invoice: invoice)
 
     # with unpaid invoice
-    authentic_query mobile_user_token(user, device), booking_close, variables: { id: booking.id }
+    authentic_query mobile_user_token(user, device), booking_clocked_out_at_update, variables: {
+      clockedOut: true,
+      id: booking.id
+    }
 
     assert_query_error "Unprocessed invoice(s)"
     assert_nil booking.reload.clocked_out_at
@@ -238,10 +188,12 @@ class BookingsTest < ActionDispatch::IntegrationTest
     create(:payment, invoice: invoice, amount: invoice.invoice_summary.total)
 
     # with paid invoice
-    authentic_query mobile_user_token(user, device), booking_close, variables: { id: booking.id }
+    authentic_query mobile_user_token(user, device), booking_clocked_out_at_update, variables: {
+      clockedOut: true,
+      id: booking.id
+    }
 
     assert_query_success
-    assert_not booking.booking_tables.where.not(floor_object_id: nil).exists?
     assert_not_nil booking.reload.clocked_out_at
   end
 
@@ -251,9 +203,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     role = create(:role, permissions: ["orders", "force_clock_out"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                               booking_tables: [build(:booking_table, floor_object: table)])
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2, table_names: ["T1"])
 
     category = create(:category, restaurant: restaurant)
     item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
@@ -294,9 +244,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                               booking_tables: [build(:booking_table, floor_object: table)])
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2, table_names: ["T1"])
 
     category = create(:category, restaurant: restaurant)
     item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
@@ -337,11 +285,11 @@ class BookingsTest < ActionDispatch::IntegrationTest
     item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))
 
     booking_one = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                                   booking_tables: [build(:booking_table, name: table.name)])
+                                   table_names: [table.name])
     booking_two = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                                   booking_tables: [build(:booking_table, floor_object: table, name: table.name)])
+                                   table_names: [table.name])
     booking_three = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                                     booking_tables: [build(:booking_table, floor_object: table, name: table.name)])
+                                     table_names: [table.name])
 
     ticket = create(:ticket, booking: booking_one)
     ticket_item = create(:ticket_item, ticket: ticket, item: item)
@@ -413,10 +361,10 @@ class BookingsTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def booking_close
+  def booking_clocked_out_at_update
     <<~GQL
-      mutation bookingClose($id: ID!) {
-        bookingClose(input: { id: $id })
+      mutation bookingClockedOutAtUpdate($id: ID!,$clockedOut: Boolean!) {
+        bookingClockedOutAtUpdate(input: { id: $id,clockedOut: $clockedOut })
       }
     GQL
   end

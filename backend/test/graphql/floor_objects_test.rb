@@ -3,6 +3,29 @@
 require "test_helper"
 
 class FloorObjectsTest < ActionDispatch::IntegrationTest
+  test "floor objects" do
+    restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
+    role = create(:role, permissions: ["orders"], restaurant: restaurant)
+    user = create(:user, restaurant: restaurant, roles: [role])
+
+    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
+    booking = create(:booking,
+                     booking_type: "dine_in",
+                     pax: 1,
+                     restaurant: restaurant,
+                     table_names: [table.name],
+                     user: user)
+
+    authentic_query mobile_user_token(user, device), floor_objects, variables: {
+      restaurantId: restaurant.id
+    }
+
+    assert_query_success
+    assert_equal [{ "clockedInBooking" => { "id" => booking.id }, "id" => table.id }],
+                 response.parsed_body["data"]["floorObjects"]
+  end
+
   test "floor object update" do
     admin = create(:admin)
     restaurant = create(:restaurant)
@@ -70,6 +93,19 @@ class FloorObjectsTest < ActionDispatch::IntegrationTest
   end
 
   private
+
+  def floor_objects
+    <<~GQL
+      query floorObjects($restaurantId: ID!) {
+        floorObjects(restaurantId: $restaurantId) {
+          clockedInBooking {
+            id
+          }
+          id
+        }
+      }
+    GQL
+  end
 
   def floor_object_update
     <<~GQL

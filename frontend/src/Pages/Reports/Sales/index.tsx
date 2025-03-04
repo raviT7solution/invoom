@@ -140,8 +140,7 @@ const OrdersWise = ({
       {
         title: "Table/Order No.",
         render: (_, r) => {
-          if (r.bookingType === "dine_in")
-            return r.bookingTables.map((i) => i.name).join(", ");
+          if (r.bookingType === "dine_in") return r.tableNames?.join(", ");
 
           if (r.bookingType === "takeout" || r.bookingType === "delivery")
             return r.token;
@@ -304,7 +303,7 @@ const InvoicesWise = ({
         title: "Table/Order No.",
         render: (_, r) => {
           if (r.booking.bookingType === "dine_in")
-            return r.booking.bookingTables.map((i) => i.name).join(", ");
+            return r.booking.tableNames?.join(", ");
 
           if (
             r.booking.bookingType === "takeout" ||
@@ -455,7 +454,7 @@ export const ReportsSales = () => {
           utcToRestaurantTimezone(r.clockedInAt, tz),
           r.clockedOutAt ? utcToRestaurantTimezone(r.clockedOutAt, tz) : "-",
           r.bookingType === "dine_in"
-            ? r.bookingTables.map((i) => i.name).join(", ")
+            ? r.tableNames?.join(", ")
             : r.bookingType === "takeout" || r.bookingType === "delivery"
             ? r.token
             : "",
@@ -521,7 +520,7 @@ export const ReportsSales = () => {
             ? utcToRestaurantTimezone(r.booking.clockedOutAt, tz)
             : "-",
           r.booking.bookingType === "dine_in"
-            ? r.booking.bookingTables.map((i) => i.name).join(", ")
+            ? r.booking.tableNames?.join(", ")
             : r.booking.bookingType === "takeout" ||
               r.booking.bookingType === "delivery"
             ? r.booking.token

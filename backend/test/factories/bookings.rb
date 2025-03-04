@@ -7,6 +7,7 @@ FactoryBot.define do
     clocked_out_at { nil }
     estimated_duration { nil }
     pax { nil }
+    table_names { nil }
     token { nil }
 
     customer { nil }

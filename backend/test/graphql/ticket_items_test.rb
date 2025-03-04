@@ -9,9 +9,7 @@ class TicketItemsTest < ActionDispatch::IntegrationTest
     role = create(:role, permissions: ["orders"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2,
-                               booking_tables: [build(:booking_table, floor_object: table)])
+    booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 2, table_names: ["T1"])
 
     category = create(:category, restaurant: restaurant)
     item = create(:item, restaurant: restaurant, category: category, tax: create(:tax))

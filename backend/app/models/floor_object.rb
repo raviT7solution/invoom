@@ -18,8 +18,6 @@ class FloorObject < ApplicationRecord
 
   belongs_to :restaurant
 
-  has_one :booking_table, dependent: :restrict_with_error
-
   validate :validate_data
   validate :validate_table_data, if: :object_type_table?
   validates :data, presence: true

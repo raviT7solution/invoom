@@ -8,13 +8,11 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking_table = build(:booking_table, floor_object: table)
     booking = create(:booking,
-                     booking_tables: [booking_table],
                      booking_type: "dine_in",
                      pax: 1,
                      restaurant: restaurant,
+                     table_names: ["T1"],
                      user: user)
 
     invoice = create(:invoice, booking: booking)
@@ -42,13 +40,11 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking_table = build(:booking_table, floor_object: table)
     booking = create(:booking,
-                     booking_tables: [booking_table],
                      booking_type: "dine_in",
                      pax: 1,
                      restaurant: restaurant,
+                     table_names: ["T1"],
                      user: user)
 
     invoice = create(:invoice, booking: booking)
@@ -76,13 +72,11 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking_table = build(:booking_table, floor_object: table)
     booking = create(:booking,
-                     booking_tables: [booking_table],
                      booking_type: "dine_in",
                      pax: 1,
                      restaurant: restaurant,
+                     table_names: ["T1"],
                      user: user)
 
     invoice = create(:invoice, booking: booking)
@@ -108,13 +102,11 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking_table = build(:booking_table, floor_object: table)
     booking = create(:booking,
-                     booking_tables: [booking_table],
                      booking_type: "dine_in",
                      pax: 1,
                      restaurant: restaurant,
+                     table_names: ["T1"],
                      user: user)
 
     invoice = create(:invoice, booking: booking)
@@ -140,13 +132,11 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking_table = build(:booking_table, floor_object: table)
     booking = create(:booking,
-                     booking_tables: [booking_table],
                      booking_type: "dine_in",
                      pax: 1,
                      restaurant: restaurant,
+                     table_names: ["T1"],
                      user: user)
 
     invoice = create(:invoice, booking: booking)
@@ -174,13 +164,11 @@ class PaymentsTest < ActionDispatch::IntegrationTest
     device = create(:device, restaurant: restaurant)
     role = create(:role, restaurant: restaurant, permissions: ["orders", "payments"])
     user = create(:user, restaurant: restaurant, roles: [role])
-    table = create(:floor_object, :rectangular_table, restaurant: restaurant)
-    booking_table = build(:booking_table, floor_object: table)
     booking = create(:booking,
-                     booking_tables: [booking_table],
                      booking_type: "dine_in",
                      pax: 1,
                      restaurant: restaurant,
+                     table_names: ["T1"],
                      user: user)
 
     invoice = create(:invoice, booking: booking)
