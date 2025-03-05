@@ -74,10 +74,7 @@ export const useCurrentAdmin = () => {
 };
 
 export const useRestaurants = () => {
-  const token = useKDSSessionStore((s) => s.token);
-
   return useQuery({
-    enabled: !!token,
     initialData: [],
     queryKey: ["restaurants"],
     queryFn: async () =>

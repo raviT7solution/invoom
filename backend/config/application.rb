@@ -35,4 +35,5 @@ class Backend::Application < Rails::Application
     g.orm :active_record, primary_key_type: :uuid
   end
   config.action_cable.allowed_request_origins = [%r{https://*}] if Rails.env.production?
+  config.action_cable.disable_request_forgery_protection = true if Rails.env.test?
 end

@@ -13,6 +13,8 @@ class Mutations::AdminSessionCreate < Mutations::BaseMutation
     raise_error "Invalid password" unless admin.authenticate(password)
 
     case subject
+    when "cfd_admin"
+      { token: Session.cfd_admin_token(admin) }
     when "kds_admin"
       { token: Session.kds_admin_token(admin) }
     when "mobile_admin"

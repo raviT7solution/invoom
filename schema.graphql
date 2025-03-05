@@ -2139,6 +2139,7 @@ input ServiceChargeUpdateInput {
 }
 
 enum SessionSubjectEnum {
+  cfd_admin
   kds_admin
   mobile_admin
   mobile_user

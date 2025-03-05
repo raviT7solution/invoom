@@ -29,3 +29,6 @@ export const TIME_RANGE_PRESETS: TimeRangePickerProps["presets"] = [
   { label: "Last 30 Days", value: [dayjs().add(-30, "d"), dayjs()] },
   { label: "Last 90 Days", value: [dayjs().add(-90, "d"), dayjs()] },
 ];
+
+export const formatAmount = (v: number) =>
+  `${v < 0 ? "-" : ""}$${Math.abs(v).toFixed(2)}`;

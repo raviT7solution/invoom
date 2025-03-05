@@ -8,6 +8,8 @@ class TicketItemPolicy < ApplicationPolicy
       TicketItem.joins(ticket: :booking).where(bookings: { restaurant_id: mobile_user!.restaurant_id })
     elsif kds_admin?
       TicketItem.joins(ticket: :booking).where(bookings: { restaurant_id: kds_admin!.restaurants })
+    elsif cfd_admin?
+      TicketItem.joins(ticket: :booking).where(bookings: { restaurant_id: cfd_admin!.restaurants })
     else
       TicketItem.none
     end

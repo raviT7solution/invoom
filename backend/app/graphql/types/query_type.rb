@@ -251,6 +251,7 @@ class Types::QueryType < Types::BaseObject
   def current_admin
     current_session = context[:current_session]
 
+    return current_session.cfd_admin! if current_session.cfd_admin?
     return current_session.kds_admin! if current_session.kds_admin?
     return current_session.mobile_admin! if current_session.mobile_admin?
     return current_session.web_admin! if current_session.web_admin?

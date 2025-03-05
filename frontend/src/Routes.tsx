@@ -2,6 +2,8 @@ import { createRouter } from "@swan-io/chicane";
 import { PropsWithChildren } from "react";
 import { match } from "ts-pattern";
 
+import { CFDHome } from "./Pages/CFD/Home";
+import { CFDLogin } from "./Pages/CFD/Login";
 import { Addons } from "./Pages/CuisineHub/Addons";
 import { Categories } from "./Pages/CuisineHub/Categories";
 import { Item } from "./Pages/CuisineHub/Item";
@@ -25,6 +27,7 @@ import { Restaurants } from "./Pages/Settings/Restaurants";
 import { RestaurantSettings } from "./Pages/Settings/RestaurantSettings";
 import { Roles } from "./Pages/Teams/Roles";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
+import { useCFDSessionStore } from "./stores/useCFDSessionStore";
 import { useKDSSessionStore } from "./stores/useKDSSessionStore";
 
 const PrivateRoute = ({ children }: PropsWithChildren) => {
@@ -51,7 +54,21 @@ const KDSPrivateRoute = ({ children }: PropsWithChildren) => {
   return children;
 };
 
+const CFDPrivateRoute = ({ children }: PropsWithChildren) => {
+  const token = useCFDSessionStore((s) => s.token);
+
+  if (!token) {
+    Router.replace("CFDLogin");
+
+    return;
+  }
+
+  return children;
+};
+
 const routes = {
+  CFD: "/cfd",
+  CFDLogin: "/cfd/login",
   ChangePassword: "/settings/change-password",
   CuisineHubAddons: "/cuisine-hub/addons",
   CuisineHubCategories: "/cuisine-hub/categories",
@@ -185,6 +202,12 @@ export const Switch = () => {
       <PrivateRoute>
         <Devices />
       </PrivateRoute>
+    ))
+    .with({ name: "CFDLogin" }, () => <CFDLogin />)
+    .with({ name: "CFD" }, () => (
+      <CFDPrivateRoute>
+        <CFDHome />
+      </CFDPrivateRoute>
     ))
     .otherwise(() => "Not found");
 };

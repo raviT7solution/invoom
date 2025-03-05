@@ -25,6 +25,10 @@ module GraphqlRequestHelper
 
   private
 
+  def cfd_admin_token(admin)
+    Session.cfd_admin_token(admin)
+  end
+
   def kds_admin_token(admin)
     Session.kds_admin_token(admin)
   end

@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class TicketItemAddonPolicy < ApplicationPolicy
-  def scope
+  def scope # rubocop:disable Metrics/AbcSize
     if mobile_user?("orders") || mobile_user?("takeout")
       TicketItemAddon.joins(ticket_item: { ticket: :booking })
                      .where(bookings: { restaurant_id: mobile_user!.restaurant_id })
     elsif kds_admin?
       TicketItemAddon.joins(ticket_item: { ticket: :booking }).where(bookings: { restaurant: kds_admin!.restaurants })
+    elsif cfd_admin?
+      TicketItemAddon.joins(ticket_item: { ticket: :booking }).where(bookings: { restaurant: cfd_admin!.restaurants })
     else
       TicketItemAddon.none
     end

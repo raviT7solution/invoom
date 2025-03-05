@@ -5,7 +5,7 @@ class RestaurantPolicy < ApplicationPolicy
     web_admin?
   end
 
-  def scope # rubocop:disable Metrics/AbcSize
+  def scope # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
     if web_admin?
       web_admin!.restaurants
     elsif mobile_admin?
@@ -14,6 +14,8 @@ class RestaurantPolicy < ApplicationPolicy
       Restaurant.where(id: mobile_user!.restaurant_id)
     elsif kds_admin?
       kds_admin!.restaurants.where(status: :active)
+    elsif cfd_admin?
+      cfd_admin!.restaurants.where(status: :active)
     else
       Restaurant.none
     end

@@ -12,6 +12,10 @@ class DevicePolicy < ApplicationPolicy
   def scope
     if web_admin?
       Device.where(restaurant: web_admin!.restaurants)
+    elsif mobile_user?("payments")
+      Device.where(restaurant_id: mobile_user!.restaurant_id)
+    elsif cfd_admin?
+      Device.where(restaurant: cfd_admin!.restaurants)
     else
       Device.none
     end

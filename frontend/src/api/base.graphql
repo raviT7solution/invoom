@@ -996,3 +996,37 @@ mutation deviceDelete($id: ID!) {
 mutation deviceUpdate($input: DeviceUpdateInput!) {
   deviceUpdate(input: $input)
 }
+
+query invoice($id: ID!) {
+  invoice(id: $id) {
+    id
+    invoiceItems {
+      consumeBill
+      id
+      price
+      ticketItem {
+        modifiers
+        name
+        price
+        quantity
+        ticketItemAddons {
+          id
+          name
+          price
+        }
+      }
+    }
+    invoiceType
+    serviceChargeSummary {
+      name
+      value
+    }
+    subTotal
+    taxSummary {
+      name
+      value
+    }
+    total
+    totalDiscount
+  }
+}
