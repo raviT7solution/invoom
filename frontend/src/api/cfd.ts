@@ -11,7 +11,15 @@ import {
 } from "./base";
 
 import { Router } from "../Routes";
+import { useCFDConfigStore } from "../stores/useCFDConfigStore";
 import { useCFDSessionStore } from "../stores/useCFDSessionStore";
+
+export const logout = () => {
+  useCFDSessionStore.getState().destroy();
+  useCFDConfigStore.getState().reset();
+
+  Router.push("CFDLogin");
+};
 
 const client = new GraphQLClient(
   `${import.meta.env.VITE_BACKEND_BASE_URL}/graphql`,
@@ -27,8 +35,7 @@ const client = new GraphQLClient(
         r.response.errors?.map((i) => i.message).join("") ===
           "Session not found"
       ) {
-        useCFDSessionStore.getState().destroy();
-        Router.push("CFDLogin");
+        logout();
 
         return;
       }

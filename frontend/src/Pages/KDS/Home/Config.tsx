@@ -4,7 +4,6 @@ import {
   LockOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   Button,
   Collapse,
@@ -20,13 +19,13 @@ import {
 import { useState } from "react";
 
 import {
+  logout,
   useCurrentAdmin,
   useKDSSessionCreate,
   useKitchenProfiles,
   useRestaurants,
 } from "../../../api/kds";
 import { BOOKING_TYPES } from "../../../helpers/mapping";
-import { Router } from "../../../Routes";
 import { useKDSConfigStore } from "../../../stores/useKDSConfigStore";
 import { useKDSSessionStore } from "../../../stores/useKDSSessionStore";
 
@@ -43,10 +42,8 @@ const AccountSection = () => {
   const [selectedRestaurantId, setSelectedRestaurantId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const { configure, reset, restaurantId } = useKDSConfigStore();
-  const { create, destroy } = useKDSSessionStore();
-
-  const queryClient = useQueryClient();
+  const { configure, restaurantId } = useKDSConfigStore();
+  const create = useKDSSessionStore((s) => s.create);
 
   const onFinish = async (values: schema) => {
     create(
@@ -55,14 +52,6 @@ const AccountSection = () => {
 
     configure("restaurantId", selectedRestaurantId);
     setIsOpen(false);
-  };
-
-  const onLogout = () => {
-    queryClient.clear();
-    destroy();
-    reset();
-
-    Router.push("KDSLogin");
   };
 
   return (
@@ -129,7 +118,7 @@ const AccountSection = () => {
           value={restaurantId}
         />
 
-        <Button danger onClick={onLogout} type="primary">
+        <Button danger onClick={logout} type="primary">
           Logout
         </Button>
       </Space>

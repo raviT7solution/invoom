@@ -24,7 +24,6 @@ import {
   UserAddOutlined,
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
-import { useQueryClient } from "@tanstack/react-query";
 import {
   Avatar,
   Breadcrumb,
@@ -38,11 +37,10 @@ import {
 } from "antd";
 import { ReactNode, useEffect } from "react";
 
-import { useCurrentAdmin, useRestaurants } from "../api";
+import { logout, useCurrentAdmin, useRestaurants } from "../api";
 import { classNames, initials } from "../helpers";
 import { assetsPath } from "../helpers/assets";
 import { Router } from "../Routes";
-import { useAdminSessionStore } from "../stores/useAdminSessionStore";
 import { useRestaurantIdStore } from "../stores/useRestaurantIdStore";
 
 export const Navbar = ({
@@ -56,10 +54,7 @@ export const Navbar = ({
 }) => {
   const { data: currentAdmin } = useCurrentAdmin();
   const { data: restaurants } = useRestaurants("active");
-  const destroy = useAdminSessionStore((s) => s.destroy);
   const restaurantIdStore = useRestaurantIdStore();
-
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (
@@ -71,14 +66,6 @@ export const Navbar = ({
 
     restaurantIdStore.create(restaurants[0].id, restaurants[0].timezone);
   }, [restaurants, restaurantIdStore]);
-
-  const onLogout = () => {
-    queryClient.clear();
-    restaurantIdStore.destroy();
-    destroy();
-
-    Router.push("Login");
-  };
 
   const items: MenuProps["items"] = [
     {
@@ -210,7 +197,7 @@ export const Navbar = ({
       label: "Logout",
       icon: <LogoutOutlined />,
       key: "9",
-      onClick: onLogout,
+      onClick: logout,
     },
   ];
 

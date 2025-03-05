@@ -16,7 +16,15 @@ import {
 } from "./base";
 
 import { Router } from "../Routes";
+import { useKDSConfigStore } from "../stores/useKDSConfigStore";
 import { useKDSSessionStore } from "../stores/useKDSSessionStore";
+
+export const logout = () => {
+  useKDSSessionStore.getState().destroy();
+  useKDSConfigStore.getState().reset();
+
+  Router.push("KDSLogin");
+};
 
 const client = new GraphQLClient(
   `${import.meta.env.VITE_BACKEND_BASE_URL}/graphql`,
@@ -32,8 +40,7 @@ const client = new GraphQLClient(
         r.response.errors?.map((i) => i.message).join("") ===
           "Session not found"
       ) {
-        useKDSSessionStore.getState().destroy();
-        Router.push("KDSLogin");
+        logout();
 
         return;
       }

@@ -161,8 +161,19 @@ import {
   UsersDocument,
 } from "./base";
 
+import { queryClient } from "../App";
 import { Router } from "../Routes";
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
+import { useRestaurantIdStore } from "../stores/useRestaurantIdStore";
+
+export const logout = () => {
+  queryClient.clear();
+
+  useAdminSessionStore.getState().destroy();
+  useRestaurantIdStore.getState().destroy();
+
+  Router.push("Login");
+};
 
 const client = new GraphQLClient(
   `${import.meta.env.VITE_BACKEND_BASE_URL}/graphql`,
@@ -178,8 +189,7 @@ const client = new GraphQLClient(
         r.response.errors?.map((i) => i.message).join("") ===
           "Session not found"
       ) {
-        useAdminSessionStore.getState().destroy();
-        Router.push("Login");
+        logout();
 
         return;
       }
