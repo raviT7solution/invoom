@@ -1970,6 +1970,9 @@ type Restaurant {
   stripeAccountType: RestaurantStripeAccountTypeEnum
   taxpayerId: String
   timezone: String!
+  twilioAccountSid: String
+  twilioAuthToken: String
+  twilioSmsPhoneNumber: String
   website: String
 }
 
@@ -1995,6 +1998,9 @@ input RestaurantAttributes {
   stripeAccountType: RestaurantStripeAccountTypeEnum
   taxpayerId: String
   timezone: String
+  twilioAccountSid: String
+  twilioAuthToken: String
+  twilioSmsPhoneNumber: String
   website: String
 }
 

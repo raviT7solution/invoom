@@ -1,6 +1,7 @@
 import {
   DollarOutlined,
   InfoCircleFilled,
+  MessageOutlined,
   PercentageOutlined,
   PlusCircleOutlined,
   PrinterOutlined,
@@ -11,6 +12,7 @@ import { OperationPin } from "./OperationPin";
 import { PaymentConfiguration } from "./PaymentConfigurations";
 import { PrinterConfigurations } from "./PrinterConfigurations";
 import { ServiceCharges } from "./ServiceCharge";
+import { SmsConfiguration } from "./SmsConfigurations";
 import { Taxes } from "./Taxes";
 
 import { Navbar } from "../../../components/Navbar";
@@ -76,6 +78,16 @@ export const RestaurantSettings = () => {
             ),
             key: "5",
             children: <ServiceCharges />,
+          },
+          {
+            label: (
+              <span className="flex gap-2">
+                SMS Configurations
+                <MessageOutlined />
+              </span>
+            ),
+            key: "6",
+            children: <SmsConfiguration />,
           },
         ]}
       />

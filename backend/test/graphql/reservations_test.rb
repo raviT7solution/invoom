@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class ReservationTest < ActionDispatch::IntegrationTest
+class ReservationsTest < ActionDispatch::IntegrationTest
   test "create reservation" do
     restaurant = create(:restaurant)
     device = create(:device, restaurant: restaurant)

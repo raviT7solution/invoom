@@ -25,6 +25,9 @@ FactoryBot.define do
     stripe_account_type { nil }
     taxpayer_id { nil }
     timezone { Faker::Address.time_zone }
+    twilio_account_sid { nil }
+    twilio_auth_token { nil }
+    twilio_sms_phone_number { nil }
     website { nil }
   end
 end

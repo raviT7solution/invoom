@@ -22,5 +22,8 @@ class Types::RestaurantAttributes < Types::BaseInputObject
   argument :stripe_account_type, Types::Restaurant::StripeAccountTypeEnum, required: false
   argument :taxpayer_id, String, required: false
   argument :timezone, String, required: false
+  argument :twilio_account_sid, String, required: false
+  argument :twilio_auth_token, String, required: false
+  argument :twilio_sms_phone_number, String, required: false
   argument :website, String, required: false
 end

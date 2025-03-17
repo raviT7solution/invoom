@@ -46,4 +46,9 @@ class Restaurant < ApplicationRecord
   validates :stripe_account_id, absence: true, if: :stripe_account_type_own?
   validates :stripe_account_id, presence: true, if: :stripe_account_type_connect?
   validates :timezone, presence: true
+  validates :twilio_sms_phone_number, allow_blank: true, format: { with: /\A\+[1-9]\d{1,14}\z/ }
+
+  def twilio_configured?
+    twilio_account_sid.present? && twilio_auth_token.present? && twilio_sms_phone_number.present?
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_19_094657) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_24_080120) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -424,6 +424,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_19_094657) do
     t.string "website"
     t.integer "stripe_account_type"
     t.string "stripe_account_id"
+    t.string "twilio_account_sid"
+    t.string "twilio_auth_token"
+    t.string "twilio_sms_phone_number"
   end
 
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

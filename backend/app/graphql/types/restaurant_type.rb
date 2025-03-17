@@ -20,5 +20,8 @@ class Types::RestaurantType < Types::BaseObject
   field :stripe_account_type, Types::Restaurant::StripeAccountTypeEnum, null: true
   field :taxpayer_id, String, null: true
   field :timezone, String, null: false
+  field :twilio_account_sid, String, null: true
+  field :twilio_auth_token, String, null: true
+  field :twilio_sms_phone_number, String, null: true
   field :website, String, null: true
 end

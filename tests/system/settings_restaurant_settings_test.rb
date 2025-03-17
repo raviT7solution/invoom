@@ -76,4 +76,36 @@ class SettingsRestaurantSettingsTest < ApplicationSystemTestCase
 
     assert_text "Uses stripe own account"
   end
+
+  test "sms" do
+    restaurant = create(:restaurant)
+    admin = create(:admin, restaurant_ids: [restaurant.id])
+
+    sign_in(admin)
+    visit path_for(:frontend, "/settings/restaurant-settings")
+
+    find("span", text: "SMS Configurations").click
+    wait_for_pending_requests
+
+    assert_text "Twilio account is not configured"
+
+    click_on "Configure"
+    wait_for_pending_requests
+
+    within ".ant-drawer" do
+      fill_in "Account SID", with: "account_sid"
+      fill_in "Auth Token", with: "auth_token"
+      fill_in "SMS Phone Number", with: "+123456"
+
+      click_on "Submit"
+      wait_for_pending_requests
+    end
+
+    assert_attributes restaurant.reload,
+                      twilio_account_sid: "account_sid",
+                      twilio_auth_token: "auth_token",
+                      twilio_sms_phone_number: "+123456"
+
+    assert_text "Account SID: account_sid"
+  end
 end

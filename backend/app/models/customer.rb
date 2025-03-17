@@ -10,4 +10,8 @@ class Customer < ApplicationRecord
   validates :email, uniqueness: { scope: :restaurant_id }, allow_nil: true
   validates :name, presence: true
   validates :phone_number, presence: true
+
+  def phone_number_in_e164
+    "#{country_code}#{phone_number}"
+  end
 end
