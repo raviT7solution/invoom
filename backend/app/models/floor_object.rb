@@ -25,15 +25,7 @@ class FloorObject < ApplicationRecord
   validates :name, uniqueness: { scope: :restaurant_id }
   validates :object_type, presence: true
 
-  after_update_commit :broadcast_update, if: :saved_change_to_active_user_full_name?
-
   private
-
-  def broadcast_update
-    FloorObjectChannel.broadcast_to(self, { event: "disconnect" }) if active_user_full_name.blank?
-
-    FloorObjectsChannel.broadcast_to(restaurant, {})
-  end
 
   def validate_data
     return if data.keys.sort == DATA_VALID_KEYS

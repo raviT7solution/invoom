@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_24_080120) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_06_074839) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -93,6 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_24_080120) do
     t.integer "token"
     t.bigserial "number", null: false
     t.string "table_names", array: true
+    t.string "active_user_full_name"
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
     t.index ["number"], name: "index_bookings_on_number", unique: true
     t.index ["restaurant_id"], name: "index_bookings_on_restaurant_id"
@@ -179,7 +180,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_24_080120) do
     t.json "data", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "active_user_full_name"
     t.index ["name", "restaurant_id"], name: "index_floor_objects_on_name_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_floor_objects_on_restaurant_id"
   end

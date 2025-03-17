@@ -11,6 +11,7 @@ class Types::MutationType < Types::BaseObject
   field :booking_clocked_out_at_update, mutation: Mutations::BookingClockedOutAtUpdate, null: false, authorize: "BookingPolicy#update?"
   field :booking_create, mutation: Mutations::BookingCreate, null: false, authorize: "BookingPolicy#create?"
   field :booking_force_clock_out, mutation: Mutations::BookingForceClockOut, null: false
+  field :booking_force_unlock, mutation: Mutations::BookingForceUnlock, null: false, authorize: "BookingPolicy#force_unlock?"
   field :booking_service_charges_update, mutation: Mutations::BookingServiceChargesUpdate, null: false, authorize: "BookingServiceChargePolicy#update?"
   field :booking_update, mutation: Mutations::BookingUpdate, null: false, authorize: "BookingPolicy#update?"
   field :booking_users_update, mutation: Mutations::BookingUsersUpdate, null: false, authorize: "BookingPolicy#update?"
@@ -26,7 +27,6 @@ class Types::MutationType < Types::BaseObject
   field :discount_create, mutation: Mutations::DiscountCreate, null: false, authorize: "DiscountPolicy#create?"
   field :discount_delete, mutation: Mutations::DiscountDelete, null: false, authorize: "DiscountPolicy#delete?"
   field :discount_update, mutation: Mutations::DiscountUpdate, null: false, authorize: "DiscountPolicy#update?"
-  field :floor_object_force_unlock, mutation: Mutations::FloorObjectForceUnlock, null: false, authorize: "FloorObjectPolicy#force_unlock?"
   field :floor_object_update, mutation: Mutations::FloorObjectUpdate, null: false, authorize: "FloorObjectPolicy#update?"
   field :inventory_category_create, mutation: Mutations::InventoryCategoryCreate, null: false, authorize: "InventoryCategoryPolicy#create?"
   field :inventory_category_delete, mutation: Mutations::InventoryCategoryDelete, null: false, authorize: "InventoryCategoryPolicy#delete?"

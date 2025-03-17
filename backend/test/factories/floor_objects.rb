@@ -4,7 +4,6 @@ FactoryBot.define do
   factory :floor_object do
     sequence(:name) { |n| "Table - #{n}" }
 
-    active_user_full_name { nil }
     data { nil }
     object_type { "table" }
 

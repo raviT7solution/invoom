@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Types::BookingType < Types::BaseObject
+  field :active_user_full_name, String, null: true
   field :booking_type, enum("BookingType", Booking.booking_types.keys), null: false
   field :clocked_in_at, GraphQL::Types::ISO8601DateTime, null: false
   field :clocked_out_at, GraphQL::Types::ISO8601DateTime, null: true

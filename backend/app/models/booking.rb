@@ -33,12 +33,15 @@ class Booking < ApplicationRecord
 
   validate :validate_clocked_out_at, if: ->(i) { i.clocked_out_at.present? && i.clocked_out_at_changed? }
 
-  after_update_commit :broadcast_update, if: :saved_change_to_clocked_out_at?
   before_create :set_token, if: -> { takeout? || delivery? }
+  after_destroy :broadcast_update
+  after_update_commit :broadcast_update, if: ->(i) { i.saved_change_to_active_user_full_name? || i.saved_change_to_clocked_out_at? } # rubocop:disable Layout/LineLength
 
   private
 
   def broadcast_update
+    BookingChannel.broadcast_to(self, { event: "disconnect" }) if active_user_full_name.blank?
+
     FloorObjectsChannel.broadcast_to(restaurant, {})
   end
 

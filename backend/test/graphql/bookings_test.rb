@@ -313,6 +313,25 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_equal booking_three.reload.user_id, another_user.id
   end
 
+  test "booking force unlock" do
+    restaurant = create(:restaurant)
+    device = create(:device, restaurant: restaurant)
+    role = create(:role, permissions: ["orders", "force_unlock"], restaurant: restaurant)
+    user = create(:user, restaurant: restaurant, roles: [role])
+
+    booking = create(:booking, active_user_full_name: user.full_name, booking_type: "dine_in", pax: 1, restaurant: restaurant, table_names: ["T1"], user: user) # rubocop:disable Layout/LineLength
+
+    authentic_query mobile_user_token(user, device), booking_force_unlock, variables: {
+      input: {
+        bookingId: booking.id
+      }
+    }
+
+    assert_query_success
+
+    assert_nil booking.reload.active_user_full_name
+  end
+
   private
 
   def bookings
@@ -381,6 +400,14 @@ class BookingsTest < ActionDispatch::IntegrationTest
     <<~GQL
       mutation bookingUsersUpdate($input: BookingUsersUpdateInput!) {
         bookingUsersUpdate(input: $input)
+      }
+    GQL
+  end
+
+  def booking_force_unlock
+    <<~GQL
+      mutation bookingForceUnlock($input: BookingForceUnlockInput!) {
+        bookingForceUnlock(input: $input)
       }
     GQL
   end

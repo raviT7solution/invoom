@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class FloorObjectPolicy < ApplicationPolicy
-  def force_unlock?
-    mobile_user?("force_unlock")
-  end
-
   def scope
     if web_admin?
       FloorObject.where(restaurant: web_admin!.restaurants)
