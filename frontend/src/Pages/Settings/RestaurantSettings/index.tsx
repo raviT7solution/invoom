@@ -12,7 +12,7 @@ import { OperationPin } from "./OperationPin";
 import { PaymentConfiguration } from "./PaymentConfigurations";
 import { PrinterConfigurations } from "./PrinterConfigurations";
 import { ServiceCharges } from "./ServiceCharge";
-import { SmsConfiguration } from "./SmsConfigurations";
+import { SmsConfigurations } from "./SmsConfigurations";
 import { Taxes } from "./Taxes";
 
 import { Navbar } from "../../../components/Navbar";
@@ -87,7 +87,7 @@ export const RestaurantSettings = () => {
               </span>
             ),
             key: "6",
-            children: <SmsConfiguration />,
+            children: <SmsConfigurations />,
           },
         ]}
       />

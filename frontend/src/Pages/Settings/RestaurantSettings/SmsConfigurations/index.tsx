@@ -6,7 +6,7 @@ import { Edit } from "./Edit";
 import { useRestaurant } from "../../../../api";
 import { useRestaurantIdStore } from "../../../../stores/useRestaurantIdStore";
 
-export const SmsConfiguration = () => {
+export const SmsConfigurations = () => {
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
   const [modal, setModal] = useState({ open: false });

@@ -26,7 +26,7 @@ export const Edit = ({
 
   const onFinish = async (values: schema) => {
     await restaurantUpdate.mutateAsync({
-      input: { id: id, attributes: values },
+      input: { attributes: values, id: id },
     });
 
     onClose();
