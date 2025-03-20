@@ -14,6 +14,8 @@ class PaymentPolicy < ApplicationPolicy
       Payment.joins(invoice: :booking).where(bookings: { restaurant_id: web_admin!.restaurants })
     elsif mobile_user?("payments")
       Payment.joins(invoice: :booking).where(bookings: { restaurant_id: mobile_user!.restaurant_id })
+    elsif cfd_admin?
+      Payment.joins(invoice: :booking).where(bookings: { restaurant_id: cfd_admin!.restaurants })
     else
       Payment.none
     end

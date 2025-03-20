@@ -1,6 +1,6 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { InvoiceItem } from "./InvoiceItem";
 import { Layout } from "./Layout";
@@ -20,6 +20,11 @@ export const CFDHome = () => {
   const token = useCFDSessionStore((s) => s.token);
 
   const invoice = useInvoice(invoiceId);
+
+  const totalTip = useMemo(
+    () => invoice.data?.payments.reduce((t, i) => t + i.tip, 0) ?? 0,
+    [invoice],
+  );
 
   useEffect(() => {
     const channel = consumer.subscriptions.create(
@@ -97,6 +102,13 @@ export const CFDHome = () => {
                   <span className="text-white">{formatAmount(i.value)}</span>
                 </div>
               ))}
+
+              {totalTip > 0 && (
+                <div className="flex justify-between px-4 py-2">
+                  <span className="text-white">Tip</span>
+                  <span className="text-white">{formatAmount(totalTip)}</span>
+                </div>
+              )}
 
               <div className="flex justify-between px-4 py-2">
                 <span className="text-green-500 text-lg font-bold">Total</span>

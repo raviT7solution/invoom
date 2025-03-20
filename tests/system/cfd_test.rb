@@ -19,6 +19,8 @@ class CfdTest < ApplicationSystemTestCase
     ticket_item = create(:ticket_item, ticket: ticket, item: item)
 
     invoice = create(:invoice, booking: booking)
+    create(:payment, invoice: invoice)
+
     create(:invoice_item, ticket_item: ticket_item, invoice: invoice)
 
     cfd_sign_in(admin, restaurant, device)
@@ -36,6 +38,7 @@ class CfdTest < ApplicationSystemTestCase
 
     assert_selector "span", text: ticket_item.name
     assert_selector "span", text: "$#{invoice.invoice_summary.total.round(2)}"
+    assert_selector "span", text: "$#{invoice.payments.sum(:tip)}"
 
     CustomerFacingDisplayChannel.broadcast_to(device, { invoice_id: "" })
 
