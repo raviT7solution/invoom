@@ -451,6 +451,7 @@ type DashboardSummary {
   giftCardRevenue: Float!
   hourlyRevenue: [Float!]!
   invoiceCount: Int!
+  otherRevenue: Float!
   paxCount: Int!
   skipTheDishesRevenue: Float!
   takeoutRevenue: Float!
@@ -1650,6 +1651,7 @@ enum PaymentModeEnum {
   cheque
   door_dash
   gift_card
+  other
   skip_the_dishes
   uber_eats
   void

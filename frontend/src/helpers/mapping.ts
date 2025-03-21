@@ -48,6 +48,7 @@ export const PAYMENT_MODES: Record<PaymentModeEnum, string> = {
   cheque: "Cheque",
   door_dash: "Door Dash",
   gift_card: "Gift Card",
+  other: "Other",
   skip_the_dishes: "Skip The Dishes",
   uber_eats: "Uber Eats",
   void: "Void",

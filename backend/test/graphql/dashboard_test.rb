@@ -56,6 +56,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
       "cardRevenue" => 0.0,
       "cashRevenue" => 100.0,
       "chequeRevenue" => 0.0,
+      "otherRevenue" => 0.0,
       "deliveryRevenue" => 0.0,
       "dineInRevenue" => 100.0,
       "doorDashRevenue" => 0.0,
@@ -187,6 +188,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
           giftCardRevenue
           hourlyRevenue
           invoiceCount
+          otherRevenue
           paxCount
           skipTheDishesRevenue
           takeoutRevenue

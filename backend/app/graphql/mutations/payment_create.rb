@@ -22,7 +22,7 @@ class Mutations::PaymentCreate < Mutations::BaseMutation
       end
     when "void"
       create_void_payment(invoice, attributes)
-    when "cash", "uber_eats", "door_dash", "skip_the_dishes", "gift_card", "cheque"
+    when "cash", "uber_eats", "door_dash", "skip_the_dishes", "gift_card", "cheque", "other"
       create_payment(invoice, attributes)
     else
       raise_error "Invalid payment mode"

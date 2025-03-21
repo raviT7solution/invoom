@@ -13,6 +13,7 @@ class Types::DashboardSummaryType < Types::BaseObject
   field :gift_card_revenue, Float, null: false
   field :hourly_revenue, [Float], null: false
   field :invoice_count, Integer, null: false
+  field :other_revenue, Float, null: false
   field :pax_count, Integer, null: false
   field :skip_the_dishes_revenue, Float, null: false
   field :takeout_revenue, Float, null: false
@@ -74,6 +75,10 @@ class Types::DashboardSummaryType < Types::BaseObject
 
   def invoice_count
     @invoice_count ||= invoices.size
+  end
+
+  def other_revenue
+    payment_mode_revenue["other"] || 0
   end
 
   def pax_count

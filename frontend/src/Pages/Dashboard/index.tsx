@@ -186,6 +186,7 @@ export const Dashboard = () => {
                     { name: "Cheque", y: data?.chequeRevenue },
                     { name: "Door Dash", y: data?.doorDashRevenue },
                     { name: "Gift Card", y: data?.giftCardRevenue },
+                    { name: "Other", y: data?.otherRevenue },
                     { name: "Skip the dishes", y: data?.skipTheDishesRevenue },
                     { name: "Uber Eats", y: data?.uberEatsRevenue },
                     { name: "Void", y: data?.voidRevenue },

@@ -897,6 +897,7 @@ query dashboardSummary(
     giftCardRevenue
     hourlyRevenue
     invoiceCount
+    otherRevenue
     paxCount
     skipTheDishesRevenue
     takeoutRevenue
