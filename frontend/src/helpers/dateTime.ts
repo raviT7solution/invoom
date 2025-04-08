@@ -87,5 +87,7 @@ export const tzTimePickerGetValueProps = (v?: string, tz?: string) => {
 };
 
 export const tzTimePickerGetValueFromEvent = (v?: string, tz?: string) => {
-  return v ? dayjs.tz(v, TIME_FORMAT, tz).toISOString() : null;
+  return v
+    ? dayjs.tz(`01-01-2000 ${v}`, DATE_TIME_FORMAT, tz).toISOString()
+    : null;
 };
