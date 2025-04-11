@@ -114,6 +114,9 @@ import {
   ProductsDocument,
   ProductsQueryVariables,
   ProvincesDocument,
+  ReceiptConfigurationDocument,
+  ReceiptConfigurationUpdateDocument,
+  ReceiptConfigurationUpdateMutationVariables,
   RestaurantCreateDocument,
   RestaurantCreateMutationVariables,
   RestaurantDocument,
@@ -1253,6 +1256,28 @@ export const useDeviceDelete = () => {
       client.request(DeviceDeleteDocument, variables),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["devices"] });
+    },
+  });
+};
+
+export const useReceiptConfiguration = (restaurantId: string) => {
+  return useQuery({
+    enabled: !!restaurantId,
+    queryFn: async () =>
+      (await client.request(ReceiptConfigurationDocument, { restaurantId }))
+        .receiptConfiguration,
+    queryKey: ["receiptConfiguration", restaurantId],
+  });
+};
+
+export const useReceiptConfigurationUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (variables: ReceiptConfigurationUpdateMutationVariables) =>
+      client.request(ReceiptConfigurationUpdateDocument, variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["receiptConfiguration"] });
     },
   });
 };

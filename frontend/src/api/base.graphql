@@ -1037,3 +1037,17 @@ query invoice($id: ID!) {
     totalDiscount
   }
 }
+
+query receiptConfiguration($restaurantId: ID!) {
+  receiptConfiguration(restaurantId: $restaurantId) {
+    id
+    showCustomerDetails
+    showDiscount
+    showPlatformBranding
+    showUnitPrice
+  }
+}
+
+mutation receiptConfigurationUpdate($input: ReceiptConfigurationUpdateInput!) {
+  receiptConfigurationUpdate(input: $input)
+}

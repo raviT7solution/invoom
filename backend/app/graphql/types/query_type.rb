@@ -132,6 +132,9 @@ class Types::QueryType < Types::BaseObject
   field :provinces, [Types::ProvinceType], null: false do
     argument :alpha2, String, required: true
   end
+  field :receipt_configuration, Types::ReceiptConfigurationType, null: false do
+    argument :restaurant_id, ID, required: true
+  end
   field :reservations, [Types::ReservationType], null: false do
     argument :end_time, GraphQL::Types::ISO8601DateTime, required: false
     argument :restaurant_id, ID, required: true
@@ -439,6 +442,10 @@ class Types::QueryType < Types::BaseObject
     Country[alpha2].subdivision_names_with_codes.map do |i|
       { name: i[0], code: i[1] }
     end
+  end
+
+  def receipt_configuration(restaurant_id:)
+    ReceiptConfigurationPolicy.new(context[:current_session]).scope.find_by!(restaurant_id: restaurant_id)
   end
 
   def reservations(restaurant_id:, start_time: nil, end_time: nil)

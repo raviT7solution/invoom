@@ -26,6 +26,8 @@ class Restaurant < ApplicationRecord
 
   has_many :admins, through: :admin_restaurants
 
+  has_one :receipt_configuration, dependent: :destroy
+
   enum :status, [:pending, :active], default: :pending
   enum :stripe_account_type, [:connect, :own], prefix: true
 
@@ -47,6 +49,8 @@ class Restaurant < ApplicationRecord
   validates :stripe_account_id, presence: true, if: :stripe_account_type_connect?
   validates :timezone, presence: true
   validates :twilio_sms_phone_number, allow_blank: true, format: { with: /\A\+[1-9]\d{1,14}\z/ }
+
+  after_create_commit :create_receipt_configuration!
 
   def twilio_configured?
     twilio_account_sid.present? && twilio_auth_token.present? && twilio_sms_phone_number.present?

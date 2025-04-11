@@ -108,4 +108,42 @@ class SettingsRestaurantSettingsTest < ApplicationSystemTestCase
 
     assert_text "Account SID: account_sid"
   end
+
+  test "receipt configurations" do
+    restaurant = create(:restaurant)
+    admin = create(:admin, restaurant_ids: [restaurant.id])
+
+    sign_in(admin)
+    visit path_for(:frontend, "/settings/restaurant-settings")
+
+    find("span", text: "Receipt Configurations").click
+    wait_for_pending_requests
+
+    within ".ant-form" do
+      within ".ant-form-item", text: "Show customer details" do
+        find(".ant-checkbox-wrapper", text: "Show customer details").click
+      end
+
+      within ".ant-form-item", text: "Show discount" do
+        find(".ant-checkbox-wrapper", text: "Show discount").click
+      end
+
+      within ".ant-form-item", text: "Show platform branding" do
+        find(".ant-checkbox-wrapper", text: "Show platform branding").click
+      end
+
+      within ".ant-form-item", text: "Show unit price" do
+        find(".ant-checkbox-wrapper", text: "Show unit price").click
+      end
+
+      click_on "Update"
+      wait_for_pending_requests
+    end
+
+    assert_attributes restaurant.reload.receipt_configuration,
+                      show_customer_details: false,
+                      show_discount: false,
+                      show_platform_branding: false,
+                      show_unit_price: false
+  end
 end

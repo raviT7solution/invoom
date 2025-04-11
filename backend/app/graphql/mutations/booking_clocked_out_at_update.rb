@@ -20,7 +20,5 @@ class Mutations::BookingClockedOutAtUpdate < Mutations::BaseMutation
     true
   rescue ActiveRecord::ActiveRecordError => e
     raise_error e.record.errors.full_messages.to_sentence
-
-    false
   end
 end

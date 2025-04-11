@@ -69,7 +69,7 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
 
     wait_for_pending_requests
 
-    assert_attributes admin.restaurants.last!, \
+    assert_attributes admin.restaurants.last!,
                       address: "837 Auer Divide",
                       city: "Brampton",
                       country: "CA",
@@ -89,6 +89,12 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
     assert_equal "11:00 PM", admin.restaurants.last!.business_end_time.in_time_zone(tz).strftime("%I:%M %p")
     assert_equal "02:00 PM", admin.restaurants.last!.break_start_time.in_time_zone(tz).strftime("%I:%M %p")
     assert_equal "02:30 PM", admin.restaurants.last!.break_end_time.in_time_zone(tz).strftime("%I:%M %p")
+
+    assert_attributes admin.restaurants.last!.receipt_configuration,
+                      show_customer_details: true,
+                      show_discount: true,
+                      show_platform_branding: true,
+                      show_unit_price: true
 
     assert_text "In Progress (1)"
     assert_text "Active (0)"
