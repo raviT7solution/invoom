@@ -1,21 +1,20 @@
 import { DownloadOutlined } from "@ant-design/icons";
 import { Button, Input, Table, TableColumnsType, Typography } from "antd";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { useCustomers, useCustomersExport } from "../../../api";
 import { Navbar } from "../../../components/Navbar";
 import { exportAsCSV } from "../../../helpers/exports";
-import { useDebounceFn } from "../../../helpers/hooks";
+import { useDebounceFn, useTableState } from "../../../helpers/hooks";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
 export const ReportsCustomers = () => {
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const [query, setQuery] = useState("");
-  const [pagination, setPagination] = useState({
-    page: 1,
-    perPage: 10,
-  });
+  const { filters, pagination, setFilters, setPagination } = useTableState(
+    { query: "" },
+    { page: 1, perPage: 10 },
+  );
 
   const {
     data: { collection, metadata },
@@ -23,13 +22,13 @@ export const ReportsCustomers = () => {
   } = useCustomers({
     page: pagination.page,
     perPage: pagination.perPage,
-    query: query,
+    query: filters.query,
     restaurantId: restaurantId,
   });
 
   const customersExport = useCustomersExport();
 
-  const setDebouncedQuery = useDebounceFn(setQuery, 500);
+  const setDebouncedFilters = useDebounceFn(setFilters, 500);
 
   const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
     () => [
@@ -110,7 +109,7 @@ export const ReportsCustomers = () => {
 
         <div className="flex gap-2">
           <Input.Search
-            onChange={(e) => setDebouncedQuery(e.target.value)}
+            onChange={(e) => setDebouncedFilters({ query: e.target.value })}
             placeholder="Search name, email, phone number"
           />
 
@@ -128,13 +127,10 @@ export const ReportsCustomers = () => {
         columns={columns}
         dataSource={collection}
         loading={isFetching}
-        pagination={{
-          current: metadata.currentPage,
-          onChange: (page, pageSize) =>
-            setPagination({ page, perPage: pageSize }),
-          total: metadata.totalCount,
-          pageSize: pagination.perPage,
-        }}
+        onChange={(i) =>
+          setPagination({ page: i.current!, perPage: i.pageSize! })
+        }
+        pagination={{ total: metadata.totalCount }}
         rowKey="id"
         size="small"
       />

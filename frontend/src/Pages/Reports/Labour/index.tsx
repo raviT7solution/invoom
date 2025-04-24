@@ -28,40 +28,43 @@ import {
   humanizeDuration,
   utcToRestaurantTimezone,
 } from "../../../helpers/dateTime";
+import { useTableState } from "../../../helpers/hooks";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
+
+type FiltersType = {
+  end: string | null;
+  start: string | null;
+  userIds: string[];
+};
 
 export const ReportsLabour = () => {
   const { restaurantId, tz } = useRestaurantIdStore();
 
-  const [dateRange, setDateRange] = useState<{
-    start: string | null;
-    end: string | null;
-  }>({ start: null, end: null });
-  const [userIds, setUserIds] = useState<string[]>([]);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    perPage: 10,
-  });
   const [id, setId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+
+  const { filters, pagination, setFilters, setPagination } = useTableState<
+    FiltersType,
+    { page: number; perPage: number }
+  >({ end: null, start: null, userIds: [] }, { page: 1, perPage: 10 });
 
   const { data: users } = useUsers(restaurantId);
   const {
     data: { collection, metadata },
     isFetching,
   } = useTimeSheets({
-    endDate: dateRange.end,
+    endDate: filters.end,
     page: pagination.page,
     perPage: pagination.perPage,
     restaurantId: restaurantId,
-    startDate: dateRange.start,
-    userIds: userIds,
+    startDate: filters.start,
+    userIds: filters.userIds,
   });
   const timeSheetSummary = useTimeSheetSummary({
-    endTime: dateRange.end,
+    endTime: filters.end,
     restaurantId: restaurantId,
-    startTime: dateRange.start,
-    userIds: userIds,
+    startTime: filters.start,
+    userIds: filters.userIds,
   });
 
   const { mutateAsync: deleteTimeSheet } = useTimeSheetDelete();
@@ -119,7 +122,7 @@ export const ReportsLabour = () => {
   );
 
   const onDateChange = (_: unknown, dates: [string, string]) => {
-    setDateRange(dateRangePickerToString(dates[0], dates[1], tz));
+    setFilters(dateRangePickerToString(dates[0], dates[1], tz));
   };
 
   return (
@@ -135,7 +138,7 @@ export const ReportsLabour = () => {
           <Select
             className="w-1/4"
             mode="multiple"
-            onChange={(ids) => setUserIds(ids)}
+            onChange={(ids) => setFilters({ userIds: ids })}
             optionFilterProp="label"
             options={users.map((r) => ({
               label: r.fullName,
@@ -170,12 +173,10 @@ export const ReportsLabour = () => {
         columns={columns}
         dataSource={collection}
         loading={isFetching}
-        pagination={{
-          current: metadata.currentPage,
-          onChange: (page, pageSize) =>
-            setPagination({ page, perPage: pageSize }),
-          total: metadata.totalCount,
-        }}
+        onChange={(i) =>
+          setPagination({ page: i.current!, perPage: i.pageSize! })
+        }
+        pagination={{ total: metadata.totalCount }}
         rowKey="id"
       />
     </Navbar>
