@@ -9,7 +9,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
     role = create(:role, permissions: ["takeout"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    authentic_query mobile_user_token(user, device), customer_create_string, variables: {
+    authentic_query mobile_user_token(user, device), customer_create, variables: {
       input: {
         restaurantId: restaurant.id,
         attributes: {
@@ -105,6 +105,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
     authentic_query mobile_user_token(user, device), customer_update, variables: {
       input: {
         attributes: {
+          email: "elvis@example.com",
           name: "Elvis",
           phoneNumber: "1234"
         },
@@ -114,6 +115,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
 
     assert_query_success
     assert_attributes customer.reload,
+                      email: "elvis@example.com",
                       name: "Elvis",
                       phone_number: "1234"
   end
@@ -149,7 +151,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def customer_create_string
+  def customer_create
     <<~GQL
       mutation customerCreate($input: CustomerCreateInput!) {
         customerCreate(input: $input)

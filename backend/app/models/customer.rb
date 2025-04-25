@@ -7,9 +7,8 @@ class Customer < ApplicationRecord
   has_many :reservations, dependent: :restrict_with_error
 
   validates :country_code, presence: true
-  validates :email, uniqueness: { scope: :restaurant_id }, allow_nil: true
   validates :name, presence: true
-  validates :phone_number, presence: true
+  validates :phone_number, uniqueness: { scope: :restaurant_id }, presence: true
 
   def phone_number_in_e164
     "#{country_code}#{phone_number}"

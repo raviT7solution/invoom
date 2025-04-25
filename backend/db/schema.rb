@@ -138,7 +138,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_06_074839) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "country_code", null: false
-    t.index ["email", "restaurant_id"], name: "index_customers_on_email_and_restaurant_id", unique: true
+    t.index ["phone_number", "restaurant_id"], name: "index_customers_on_phone_number_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_customers_on_restaurant_id"
   end
 
