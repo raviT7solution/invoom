@@ -547,10 +547,10 @@ export const ReportsSales = () => {
 
   return (
     <Navbar breadcrumbItems={[{ title: "Report" }, { title: "Sales Report" }]}>
-      <div className="flex">
+      <div className="flex flex-col flex-wrap justify-between md:flex-row">
         <Typography.Title level={4}>Sales Report</Typography.Title>
 
-        <div className="flex flex-1 items-center justify-end gap-2">
+        <div className="flex flex-wrap flex-1 items-center justify-end gap-2">
           <Input.Search
             allowClear
             className="max-w-xs"
@@ -560,7 +560,6 @@ export const ReportsSales = () => {
           />
 
           <Select
-            className="w-1/4"
             defaultValue="orders"
             onChange={(i) => setReportType(i)}
             options={REPORT_TYPES}

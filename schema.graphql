@@ -441,6 +441,7 @@ input CustomerUpdateInput {
 type DashboardSummary {
   avgBookingRevenue: Float!
   avgInvoiceRevenue: Float!
+  avgPaxRevenue: Float!
   bookingCount: Int!
   cardRevenue: Float!
   cashRevenue: Float!
@@ -455,9 +456,13 @@ type DashboardSummary {
   paxCount: Int!
   skipTheDishesRevenue: Float!
   takeoutRevenue: Float!
-  totalRevenue: Float!
-  totalTax: Float!
-  totalTip: Float!
+  totalDiscounts: Float!
+  totalGrossSales: Float!
+  totalNetSales: Float!
+  totalServiceCharges: Float!
+  totalTaxes: Float!
+  totalTips: Float!
+  totalVoids: Float!
   uberEatsRevenue: Float!
   voidRevenue: Float!
 }

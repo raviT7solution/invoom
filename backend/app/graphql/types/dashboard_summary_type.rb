@@ -3,6 +3,7 @@
 class Types::DashboardSummaryType < Types::BaseObject
   field :avg_booking_revenue, Float, null: false
   field :avg_invoice_revenue, Float, null: false
+  field :avg_pax_revenue, Float, null: false
   field :booking_count, Integer, null: false
   field :card_revenue, Float, null: false
   field :cash_revenue, Float, null: false
@@ -17,22 +18,32 @@ class Types::DashboardSummaryType < Types::BaseObject
   field :pax_count, Integer, null: false
   field :skip_the_dishes_revenue, Float, null: false
   field :takeout_revenue, Float, null: false
-  field :total_revenue, Float, null: false
-  field :total_tax, Float, null: false
-  field :total_tip, Float, null: false
+  field :total_discounts, Float, null: false
+  field :total_gross_sales, Float, null: false
+  field :total_net_sales, Float, null: false
+  field :total_service_charges, Float, null: false
+  field :total_taxes, Float, null: false
+  field :total_tips, Float, null: false
+  field :total_voids, Float, null: false
   field :uber_eats_revenue, Float, null: false
   field :void_revenue, Float, null: false
 
   def avg_booking_revenue
     return 0 if booking_count.zero?
 
-    total_revenue / booking_count
+    total_net_sales / booking_count
   end
 
   def avg_invoice_revenue
     return 0 if invoice_count.zero?
 
-    total_revenue / invoice_count
+    total_net_sales / invoice_count
+  end
+
+  def avg_pax_revenue
+    return 0 if pax_count.zero?
+
+    total_net_sales / pax_count
   end
 
   def booking_count
@@ -82,7 +93,7 @@ class Types::DashboardSummaryType < Types::BaseObject
   end
 
   def pax_count
-    object[:bookings].sum(:pax)
+    @pax_count ||= object[:bookings].sum(:pax)
   end
 
   def skip_the_dishes_revenue
@@ -93,35 +104,47 @@ class Types::DashboardSummaryType < Types::BaseObject
     booking_type_revenue["takeout"] || 0
   end
 
-  def total_revenue
-    @total_revenue ||= invoices.sum(InvoiceSummary.arel_table[:total])
+  def total_discounts
+    @total_discounts ||= begin
+      invoice_items = InvoiceItem.arel_table
+      invoice_item_summaries = InvoiceItemSummary.arel_table
+
+      expression = invoice_items[:price] - invoice_item_summaries[:discounted_amount]
+
+      invoices.joins(invoice_items: :invoice_item_summary).sum(expression)
+    end
   end
 
-  def total_tax # rubocop:disable Metrics/AbcSize, GraphQL/ResolverMethodLength
-    # object[:invoices] is for only paid invoices
-    invoices = InvoicePolicy.new(context[:current_session]).scope.where(booking_id: object[:bookings])
-    invoice_items = InvoiceItemPolicy.new(context[:current_session]).scope.where(invoice_id: invoices)
-
-    total_tax_percent = invoice_items
-                        .joins(:invoice_item_summary, invoice: { booking: :booking_service_charges })
-                        .where(booking_service_charges: { charge_type: "percentage" })
-                        .sum(percentage_service_charge_expression)
-
-    invoice_counts = Invoice.group(:booking_id).select(:booking_id, "COUNT(invoices.id) AS invoice_count")
-
-    total_tax_flat = invoices
-                     .joins(booking: :booking_service_charges)
-                     .where(booking_service_charges: { charge_type: "flat" })
-                     .joins("INNER JOIN (#{invoice_counts.to_sql}) counts ON counts.booking_id = invoices.booking_id")
-                     .sum(flat_service_charge_expression)
-
-    items_tax = invoice_items.joins(:ticket_item, :invoice_item_summary).sum(items_tax_expression)
-
-    total_tax_percent + total_tax_flat + items_tax
+  def total_gross_sales
+    total_net_sales + total_discounts + total_taxes
   end
 
-  def total_tip
+  def total_net_sales
+    @total_net_sales ||= begin
+      invoice_summaries = InvoiceSummary.arel_table
+
+      invoices.sum(invoice_summaries[:subtotal] + invoice_summaries[:total_service_charge])
+    end
+  end
+
+  def total_service_charges
+    @total_service_charges ||= invoices.sum(InvoiceSummary.arel_table[:total_service_charge])
+  end
+
+  def total_taxes
+    @total_taxes ||= begin
+      invoice_summaries = InvoiceSummary.arel_table
+
+      invoices.sum(invoice_summaries[:subtotal_tax] + invoice_summaries[:total_service_charge_tax])
+    end
+  end
+
+  def total_tips
     payments.sum(:tip)
+  end
+
+  def total_voids
+    payment_mode_revenue["void"] || 0
   end
 
   def uber_eats_revenue
@@ -138,38 +161,8 @@ class Types::DashboardSummaryType < Types::BaseObject
     @booking_type_revenue ||= invoices.group(Booking.arel_table[:booking_type]).sum(InvoiceSummary.arel_table[:total])
   end
 
-  def flat_service_charge_expression # rubocop:disable Metrics/AbcSize
-    invoices = Invoice.arel_table.alias(:counts)
-    service_charges = BookingServiceCharge.arel_table
-
-    tax_expression = (
-      service_charges[:hst] +
-      service_charges[:gst] +
-      service_charges[:rst] +
-      service_charges[:pst] +
-      service_charges[:qst] +
-      service_charges[:cst]
-    ) / 100
-
-    (service_charges[:value] / invoices[:invoice_count]) * tax_expression
-  end
-
   def invoices
     Invoice.joins(:booking, :invoice_summary).where(booking_id: object[:bookings]).not_void
-  end
-
-  def items_tax_expression
-    invoice_item_summaries = InvoiceItemSummary.arel_table
-    ticket_items = TicketItem.arel_table
-
-    invoice_item_summaries[:discounted_amount] * (
-      ticket_items[:cst] +
-      ticket_items[:gst] +
-      ticket_items[:hst] +
-      ticket_items[:pst] +
-      ticket_items[:qst] +
-      ticket_items[:rst]
-    ) / 100
   end
 
   def payment_mode_revenue
@@ -178,21 +171,5 @@ class Types::DashboardSummaryType < Types::BaseObject
 
   def payments
     Payment.joins(invoice: :booking).where(bookings: { id: object[:bookings] })
-  end
-
-  def percentage_service_charge_expression # rubocop:disable Metrics/AbcSize
-    invoice_item_summaries = InvoiceItemSummary.arel_table
-    service_charges = BookingServiceCharge.arel_table
-
-    tax_expression = (
-      service_charges[:hst] +
-      service_charges[:gst] +
-      service_charges[:rst] +
-      service_charges[:pst] +
-      service_charges[:qst] +
-      service_charges[:cst]
-    ) / 100
-
-    invoice_item_summaries[:discounted_amount] * (service_charges[:value] / 100) * tax_expression
   end
 end

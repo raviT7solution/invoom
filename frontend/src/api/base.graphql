@@ -887,6 +887,7 @@ query dashboardSummary(
   ) {
     avgBookingRevenue
     avgInvoiceRevenue
+    avgPaxRevenue
     bookingCount
     cardRevenue
     cashRevenue
@@ -901,7 +902,12 @@ query dashboardSummary(
     paxCount
     skipTheDishesRevenue
     takeoutRevenue
-    totalRevenue
+    totalDiscounts
+    totalGrossSales
+    totalNetSales
+    totalServiceCharges
+    totalTaxes
+    totalTips
     uberEatsRevenue
     voidRevenue
   }
@@ -919,12 +925,15 @@ query salesSummary(
   ) {
     avgBookingRevenue
     avgInvoiceRevenue
+    avgPaxRevenue
     bookingCount
-    invoiceCount
-    paxCount
-    totalRevenue
-    totalTax
-    totalTip
+    totalDiscounts
+    totalGrossSales
+    totalNetSales
+    totalServiceCharges
+    totalTaxes
+    totalTips
+    totalVoids
   }
 }
 

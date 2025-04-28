@@ -1,4 +1,4 @@
-import { Card, Statistic } from "antd";
+import { Statistic, Tooltip } from "antd";
 
 import { useSalesSummary } from "../../../api";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
@@ -20,80 +20,130 @@ export const Summary = ({
   });
 
   return (
-    <div className="flex gap-2 my-2">
-      <Card bordered className="w-full" size="small">
-        <Statistic
-          loading={isFetching}
-          precision={2}
-          prefix="$"
-          title="Total Revenue"
-          value={summary?.totalRevenue}
-        />
-      </Card>
+    <div className="my-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-11 gap-2">
+      <Tooltip title="Sum of invoice item price, plus taxes, plus service charge, plus service charge taxes, minus voids">
+        <div className="border border-gray-200 p-3 rounded-md">
+          <Statistic
+            loading={isFetching}
+            precision={2}
+            prefix="$"
+            title="Total gross sales"
+            value={summary?.totalGrossSales}
+          />
+        </div>
+      </Tooltip>
 
-      <Card bordered className="w-full" size="small">
-        <Statistic
-          loading={isFetching}
-          precision={2}
-          prefix="$"
-          title="Total Tax"
-          value={summary?.totalTax}
-        />
-      </Card>
+      <Tooltip title="Sum of invoice taxes, plus service charge taxes, minus void's taxes">
+        <div className="border border-gray-200 p-3 rounded-md">
+          <Statistic
+            loading={isFetching}
+            precision={2}
+            prefix="$"
+            title="Total taxes"
+            value={summary?.totalTaxes}
+          />
+        </div>
+      </Tooltip>
 
-      <Card bordered className="w-full" size="small">
-        <Statistic
-          loading={isFetching}
-          precision={2}
-          prefix="$"
-          title="Avg order revenue"
-          value={summary?.avgBookingRevenue}
-        />
-      </Card>
+      <Tooltip title="Sum of invoice item discounted amount, plus service charge, minus voids">
+        <div className="border border-gray-200 p-3 rounded-md">
+          <Statistic
+            loading={isFetching}
+            precision={2}
+            prefix="$"
+            title="Total net sales"
+            value={summary?.totalNetSales}
+          />
+        </div>
+      </Tooltip>
 
-      <Card bordered className="w-full" size="small">
-        <Statistic
-          loading={isFetching}
-          precision={2}
-          prefix="$"
-          title="Avg receipt revenue"
-          value={summary?.avgInvoiceRevenue}
-        />
-      </Card>
+      <Tooltip title="Sum of payments tip">
+        <div className="border border-gray-200 p-3 rounded-md">
+          <Statistic
+            loading={isFetching}
+            precision={2}
+            prefix="$"
+            title="Total tips"
+            value={summary?.totalTips}
+          />
+        </div>
+      </Tooltip>
 
-      <Card bordered className="w-full" size="small">
+      <Tooltip title="Sum of service charge without taxes">
+        <div className="border border-gray-200 p-3 rounded-md">
+          <Statistic
+            loading={isFetching}
+            precision={2}
+            prefix="$"
+            title="Total service charges"
+            value={summary?.totalServiceCharges}
+          />
+        </div>
+      </Tooltip>
+
+      <div className="border border-gray-200 p-3 rounded-md">
         <Statistic
           loading={isFetching}
-          title="Total Orders"
+          title="Total orders"
           value={summary?.bookingCount}
         />
-      </Card>
+      </div>
 
-      <Card bordered className="w-full" size="small">
-        <Statistic
-          loading={isFetching}
-          title="Total Invoice"
-          value={summary?.invoiceCount}
-        />
-      </Card>
+      <Tooltip title="Net sales per order">
+        <div className="border border-gray-200 p-3 rounded-md">
+          <Statistic
+            loading={isFetching}
+            precision={2}
+            prefix="$"
+            title="Revenue per order"
+            value={summary?.avgBookingRevenue}
+          />
+        </div>
+      </Tooltip>
 
-      <Card bordered className="w-full" size="small">
-        <Statistic
-          loading={isFetching}
-          title="Total Customers"
-          value={summary?.paxCount}
-        />
-      </Card>
+      <Tooltip title="Net sales per invoice">
+        <div className="border border-gray-200 p-3 rounded-md">
+          <Statistic
+            loading={isFetching}
+            precision={2}
+            prefix="$"
+            title="Revenue per invoice"
+            value={summary?.avgInvoiceRevenue}
+          />
+        </div>
+      </Tooltip>
 
-      <Card bordered className="w-full" size="small">
+      <Tooltip title="Net sales per person">
+        <div className="border border-gray-200 p-3 rounded-md">
+          <Statistic
+            loading={isFetching}
+            precision={2}
+            prefix="$"
+            title="Revenue per person"
+            value={summary?.avgPaxRevenue}
+          />
+        </div>
+      </Tooltip>
+
+      <div className="border border-gray-200 p-3 rounded-md">
         <Statistic
           loading={isFetching}
           precision={2}
           prefix="$"
-          title="Total Tip"
-          value={summary?.totalTip}
+          title="Total voids"
+          value={summary?.totalVoids}
         />
-      </Card>
+      </div>
+
+      <div className="border border-gray-200 p-3 rounded-md">
+        <Statistic
+          loading={isFetching}
+          precision={2}
+          prefix="$"
+          title="Total discounts"
+          value={summary?.totalDiscounts}
+        />
+      </div>
     </div>
   );
 };

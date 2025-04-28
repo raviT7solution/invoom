@@ -1,5 +1,5 @@
 import { AuditOutlined, FormOutlined, UserOutlined } from "@ant-design/icons";
-import { Card, DatePicker, Statistic } from "antd";
+import { Card, DatePicker, Statistic, Tooltip } from "antd";
 import dayjs from "dayjs";
 import { useMemo, useState } from "react";
 
@@ -20,7 +20,7 @@ export const Dashboard = () => {
 
   const [date, setDate] = useState(dayjs().tz(tz).format(DATE_FORMAT));
 
-  const { data } = useDashboardSummary({
+  const { data, isFetching } = useDashboardSummary({
     endTime: dayjs.tz(date, DATE_FORMAT, tz).endOf("day").toISOString(),
     restaurantId: restaurantId,
     startTime: dayjs.tz(date, DATE_FORMAT, tz).startOf("day").toISOString(),
@@ -60,19 +60,25 @@ export const Dashboard = () => {
               title="Revenue"
             >
               <Statistic
+                loading={isFetching}
+                precision={2}
                 prefix="$"
-                title="Total"
-                value={data?.totalRevenue.toFixed(2)}
+                title="Revenue per order"
+                value={data?.avgBookingRevenue}
               />
               <Statistic
+                loading={isFetching}
+                precision={2}
                 prefix="$"
-                title="Avg order value"
-                value={data?.avgBookingRevenue.toFixed(2)}
+                title="Revenue per invoice"
+                value={data?.avgInvoiceRevenue}
               />
               <Statistic
+                loading={isFetching}
+                precision={2}
                 prefix="$"
-                title="Avg receipt value"
-                value={data?.avgInvoiceRevenue.toFixed(2)}
+                title="Revenue per person"
+                value={data?.avgPaxRevenue}
               />
             </Card>
 
@@ -83,16 +89,19 @@ export const Dashboard = () => {
               title="Sale"
             >
               <Statistic
+                loading={isFetching}
                 prefix={<UserOutlined className="text-sm" />}
                 title="Customers"
                 value={data?.paxCount}
               />
               <Statistic
+                loading={isFetching}
                 prefix={<FormOutlined className="text-sm" />}
                 title="Orders"
                 value={data?.bookingCount}
               />
               <Statistic
+                loading={isFetching}
                 prefix={<AuditOutlined className="text-sm" />}
                 title="Receipts"
                 value={data?.invoiceCount}
@@ -101,7 +110,7 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        <div className="border rounded-md col-span-6 lg:col-span-4">
+        <div className="border rounded-md col-span-6 lg:col-span-4 overflow-hidden">
           <ResponsiveChart
             className="max-h-80"
             options={{
@@ -127,6 +136,74 @@ export const Dashboard = () => {
               yAxis: { title: { text: "" } },
             }}
           />
+        </div>
+
+        <div className="col-span-full grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-2">
+          <Tooltip title="Sum of invoice item price, plus taxes, plus service charge, plus service charge taxes, minus voids">
+            <div className="border border-gray-200 p-3 rounded-md">
+              <Statistic
+                loading={isFetching}
+                precision={2}
+                prefix="$"
+                title="Total gross sales"
+                value={data?.totalGrossSales}
+              />
+            </div>
+          </Tooltip>
+
+          <Tooltip title="Sum of invoice item discounted amount, plus service charge, minus voids">
+            <div className="border border-gray-200 p-3 rounded-md">
+              <Statistic
+                loading={isFetching}
+                precision={2}
+                prefix="$"
+                title="Total net sales"
+                value={data?.totalNetSales}
+              />
+            </div>
+          </Tooltip>
+
+          <div className="border border-gray-200 p-3 rounded-md">
+            <Statistic
+              loading={isFetching}
+              precision={2}
+              prefix="$"
+              title="Total taxes"
+              value={data?.totalTaxes}
+            />
+          </div>
+
+          <div className="border border-gray-200 p-3 rounded-md">
+            <Statistic
+              loading={isFetching}
+              precision={2}
+              prefix="$"
+              title="Total tips"
+              value={data?.totalTips}
+            />
+          </div>
+
+          <Tooltip title="Sum of service charge without taxes">
+            <div className="border border-gray-200 p-3 rounded-md">
+              <Statistic
+                loading={isFetching}
+                precision={2}
+                prefix="$"
+                title="Total service charges"
+                value={data?.totalServiceCharges}
+              />
+            </div>
+          </Tooltip>
+
+          <div className="border border-gray-200 p-3 rounded-md">
+            <Statistic
+              loading={isFetching}
+              precision={2}
+              prefix="$"
+              title="Total discounts"
+              value={data?.totalDiscounts}
+            />
+          </div>
         </div>
 
         <div className="border rounded-md col-span-6 flex flex-col items-center p-1 lg:col-span-3">
