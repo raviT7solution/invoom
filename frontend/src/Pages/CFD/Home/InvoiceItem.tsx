@@ -9,17 +9,17 @@ export const InvoiceItem = ({
   item: InvoiceQuery["invoice"]["invoiceItems"][number];
 }) => {
   return (
-    <div className="rounded-lg p-3 m-1 bg-zinc-800">
-      <div className="flex justify-between items-center">
+    <div className="m-1 rounded-lg bg-zinc-800 p-3">
+      <div className="flex items-center justify-between">
         <div>
-          <span className="text-neutral-400 text-lg font-bold">
+          <span className="text-lg font-bold text-neutral-400">
             {invoiceType === "simple"
               ? item.ticketItem.quantity
               : `${item.ticketItem.quantity}/${item.consumeBill}`}{" "}
             &times;{" "}
           </span>
 
-          <span className="text-white text-lg font-bold">
+          <span className="text-lg font-bold text-white">
             {item.ticketItem.name}
           </span>
         </div>
@@ -42,7 +42,7 @@ export const InvoiceItem = ({
         </div>
       ))}
 
-      <div className="text-lg text-white text-end font-bold">
+      <div className="text-end text-lg font-bold text-white">
         {formatAmount(item.price)}
       </div>
     </div>

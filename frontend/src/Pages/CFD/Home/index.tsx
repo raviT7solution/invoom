@@ -52,18 +52,18 @@ export const CFDHome = () => {
   return (
     <Layout>
       {invoiceId && (
-        <div className="h-full w-full md:w-1/2 flex flex-col fixed right-0 bg-zinc-900">
-          <div className="text-center p-2 text-xl text-rose-500 font-bold">
+        <div className="fixed right-0 flex h-full w-full flex-col bg-zinc-900 md:w-1/2">
+          <div className="p-2 text-center text-xl font-bold text-rose-500">
             Checkout
           </div>
 
           {!invoice.data ? (
-            <div className="h-full flex justify-center items-center">
-              <LoadingOutlined className="text-rose-500 text-5xl" />
+            <div className="flex h-full items-center justify-center">
+              <LoadingOutlined className="text-5xl text-rose-500" />
             </div>
           ) : (
             <>
-              <div className="overflow-y-scroll flex-1">
+              <div className="flex-1 overflow-y-scroll">
                 {invoice.data.invoiceItems.map((i) => (
                   <InvoiceItem
                     invoiceType={invoice.data.invoiceType}
@@ -111,8 +111,8 @@ export const CFDHome = () => {
               )}
 
               <div className="flex justify-between px-4 py-2">
-                <span className="text-green-500 text-lg font-bold">Total</span>
-                <span className="text-green-500 text-lg font-bold">
+                <span className="text-lg font-bold text-green-500">Total</span>
+                <span className="text-lg font-bold text-green-500">
                   {formatAmount(invoice.data.total)}
                 </span>
               </div>

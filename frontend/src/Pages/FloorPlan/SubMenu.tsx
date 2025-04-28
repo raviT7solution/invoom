@@ -39,7 +39,7 @@ export const SubMenu = () => {
 
   return (
     <>
-      <div className="w-72 space-y-8 border-r p-4 nested-scroll-overflow-y-scroll">
+      <div className="nested-scroll-overflow-y-scroll w-72 space-y-8 border-r p-4">
         <Space className="w-full" direction="vertical">
           <Button block icon={<PlusOutlined />} onClick={() => setIsOpen(true)}>
             Add object

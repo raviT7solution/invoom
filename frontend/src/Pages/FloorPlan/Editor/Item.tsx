@@ -144,7 +144,7 @@ export const ItemComponent = memo(({ item }: Props) => {
 
       return (
         <div
-          className="bg-neutral-600 rounded-sm z-10 absolute"
+          className="absolute z-10 rounded-sm bg-neutral-600"
           key={c}
           style={{
             right: `${x}px`,
@@ -208,13 +208,13 @@ export const ItemComponent = memo(({ item }: Props) => {
 
       return (
         <div
-          className="flex w-full h-full absolute"
+          className="absolute flex h-full w-full"
           key={randomId()}
           style={styles}
         >
           {chairs.map(() => (
             <div
-              className="bg-neutral-600 rounded-sm z-10 relative"
+              className="relative z-10 rounded-sm bg-neutral-600"
               key={randomId()}
               style={{ height: "9px", width: "27px" }}
             />
@@ -257,8 +257,8 @@ export const ItemComponent = memo(({ item }: Props) => {
           )}
       </div>
 
-      <div className="items-center flex font-semibold h-full justify-center absolute w-full">
-        <ItemIcon className="text-zinc-800 text-4xl opacity-40 absolute" />
+      <div className="absolute flex h-full w-full items-center justify-center font-semibold">
+        <ItemIcon className="absolute text-4xl text-zinc-800 opacity-40" />
 
         {item.name.length > 0 && (
           <Typography className="z-10" style={{ color: styles.color }}>

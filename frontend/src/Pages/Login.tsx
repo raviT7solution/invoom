@@ -30,12 +30,12 @@ export const Login = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center bg-neutral-100">
+    <div className="flex h-screen items-center justify-center bg-neutral-100">
       <Card
-        className="drop-shadow-xl w-11/12 lg:w-1/4"
+        className="w-11/12 drop-shadow-xl lg:w-1/4"
         title={
           <img
-            className="h-14 m-auto"
+            className="m-auto h-14"
             src={assetsPath("logo/horizontal.png")}
           />
         }

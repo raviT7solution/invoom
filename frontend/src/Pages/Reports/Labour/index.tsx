@@ -158,7 +158,7 @@ export const ReportsLabour = () => {
         </div>
       </div>
 
-      <div className="flex my-2">
+      <div className="my-2 flex">
         <Card bordered size="small">
           <Statistic
             loading={timeSheetSummary.isFetching}

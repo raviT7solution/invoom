@@ -67,7 +67,7 @@ const TicketItem = ({
   return (
     <div
       className={classNames(
-        "flex justify-between rounded-md pl-2 items-center",
+        "flex items-center justify-between rounded-md pl-2",
         showColor ? color ?? "" : "",
       )}
       onClick={onTicketItemDoubleClick}
@@ -76,7 +76,7 @@ const TicketItem = ({
       <b>{item.displayName}</b>
       <b
         className={classNames(
-          "px-1 rounded-sm",
+          "rounded-sm px-1",
           item.quantity > 0 ? "bg-gray-100" : "bg-red-100 text-red-600",
         )}
       >
@@ -109,13 +109,13 @@ export const Ticket = ({
   );
 
   return (
-    <div className="h-full w-full flex flex-col bg-white rounded-md overflow-hidden select-none border shadow-md">
+    <div className="flex h-full w-full select-none flex-col overflow-hidden rounded-md border bg-white shadow-md">
       <div
         className={classNames("p-1", color ?? "")}
         onClick={onTicketDoubleClick}
         {...onTicketLongPress}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <b className="text-base">
             {data.booking.bookingType === "delivery" ||
             data.booking.bookingType === "takeout"
@@ -125,7 +125,7 @@ export const Ticket = ({
           <Tag color="red">{BOOKING_TYPES[data.booking.bookingType]}</Tag>
         </div>
 
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           {[`#${data.booking.number}`, data.booking.customer?.name]
             .filter(Boolean)
             .join(" | ")}
@@ -138,7 +138,7 @@ export const Ticket = ({
         </div>
       </div>
 
-      <div className="p-1 overflow-y-scroll h-full">
+      <div className="h-full overflow-y-scroll p-1">
         <Tree
           blockNode
           defaultExpandAll

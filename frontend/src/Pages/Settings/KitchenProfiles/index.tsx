@@ -28,7 +28,7 @@ export const KitchenProfiles = () => {
         <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
       )}
 
-      <div className="flex gap-4 mb-4 justify-end">
+      <div className="mb-4 flex justify-end gap-4">
         <Button
           icon={<PlusOutlined />}
           onClick={() => showEdit(false, "", true)}

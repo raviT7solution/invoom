@@ -39,7 +39,7 @@ export const Dashboard = () => {
   return (
     <Navbar breadcrumbItems={[{ title: "Dashboard" }]}>
       <div className="grid grid-cols-6 gap-2">
-        <div className="flex flex-col col-span-6 lg:col-span-2">
+        <div className="col-span-6 flex flex-col lg:col-span-2">
           <div className="mb-2">
             <DatePicker
               allowClear={false}
@@ -52,7 +52,7 @@ export const Dashboard = () => {
             />
           </div>
 
-          <div className="grow grid grid-cols-2 gap-2">
+          <div className="grid grow grid-cols-2 gap-2">
             <Card
               className="!border-gray-200"
               size="small"
@@ -110,7 +110,7 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        <div className="border rounded-md col-span-6 lg:col-span-4 overflow-hidden">
+        <div className="col-span-6 overflow-hidden rounded-md border lg:col-span-4">
           <ResponsiveChart
             className="max-h-80"
             options={{
@@ -138,9 +138,9 @@ export const Dashboard = () => {
           />
         </div>
 
-        <div className="col-span-full grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-2">
+        <div className="col-span-full grid grid-cols-1 gap-2 md:grid-cols-4 lg:grid-cols-6">
           <Tooltip title="Sum of invoice item price, plus taxes, plus service charge, plus service charge taxes, minus voids">
-            <div className="border border-gray-200 p-3 rounded-md">
+            <div className="rounded-md border border-gray-200 p-3">
               <Statistic
                 loading={isFetching}
                 precision={2}
@@ -152,7 +152,7 @@ export const Dashboard = () => {
           </Tooltip>
 
           <Tooltip title="Sum of invoice item discounted amount, plus service charge, minus voids">
-            <div className="border border-gray-200 p-3 rounded-md">
+            <div className="rounded-md border border-gray-200 p-3">
               <Statistic
                 loading={isFetching}
                 precision={2}
@@ -163,7 +163,7 @@ export const Dashboard = () => {
             </div>
           </Tooltip>
 
-          <div className="border border-gray-200 p-3 rounded-md">
+          <div className="rounded-md border border-gray-200 p-3">
             <Statistic
               loading={isFetching}
               precision={2}
@@ -173,7 +173,7 @@ export const Dashboard = () => {
             />
           </div>
 
-          <div className="border border-gray-200 p-3 rounded-md">
+          <div className="rounded-md border border-gray-200 p-3">
             <Statistic
               loading={isFetching}
               precision={2}
@@ -184,7 +184,7 @@ export const Dashboard = () => {
           </div>
 
           <Tooltip title="Sum of service charge without taxes">
-            <div className="border border-gray-200 p-3 rounded-md">
+            <div className="rounded-md border border-gray-200 p-3">
               <Statistic
                 loading={isFetching}
                 precision={2}
@@ -195,7 +195,7 @@ export const Dashboard = () => {
             </div>
           </Tooltip>
 
-          <div className="border border-gray-200 p-3 rounded-md">
+          <div className="rounded-md border border-gray-200 p-3">
             <Statistic
               loading={isFetching}
               precision={2}
@@ -206,7 +206,7 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        <div className="border rounded-md col-span-6 flex flex-col items-center p-1 lg:col-span-3">
+        <div className="col-span-6 flex flex-col items-center rounded-md border p-1 lg:col-span-3">
           <ResponsiveChart
             className="max-h-72"
             options={{
@@ -242,7 +242,7 @@ export const Dashboard = () => {
           />
         </div>
 
-        <div className="border rounded-md col-span-6 flex flex-col items-center p-1 lg:col-span-3">
+        <div className="col-span-6 flex flex-col items-center rounded-md border p-1 lg:col-span-3">
           <ResponsiveChart
             className="max-h-72"
             options={{

@@ -144,7 +144,7 @@ export const InventoryProducts = () => {
 
   return (
     <Navbar breadcrumbItems={[{ title: "Inventory" }, { title: "Products" }]}>
-      <div className="flex gap-4 mb-4 justify-end">
+      <div className="mb-4 flex justify-end gap-4">
         <Button
           icon={<PlusOutlined />}
           onClick={() => showEdit(false, "", true)}

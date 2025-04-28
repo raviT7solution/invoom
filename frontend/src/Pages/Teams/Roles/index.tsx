@@ -53,7 +53,7 @@ export const Roles = () => {
         showEditRole={showEditRole}
       />
 
-      <div className="flex gap-4 mb-4 justify-end">
+      <div className="mb-4 flex justify-end gap-4">
         <Button
           icon={<UserAddOutlined />}
           onClick={() => showEditRole("", true)}
@@ -70,9 +70,9 @@ export const Roles = () => {
         </Button>
       </div>
 
-      <div className="w-full h-full flex overflow-x-scroll">
+      <div className="flex h-full w-full overflow-x-scroll">
         {roles.length === 0 ? (
-          <div className="h-full w-full flex justify-center items-center">
+          <div className="flex h-full w-full items-center justify-center">
             <Empty />
           </div>
         ) : (
@@ -92,7 +92,7 @@ export const Roles = () => {
                 </Popconfirm>,
               ]}
               bordered={false}
-              className="text-center h-full !mr-4 shadow-md flex flex-col !bg-neutral-50"
+              className="!mr-4 flex h-full flex-col !bg-neutral-50 text-center shadow-md"
               key={role.id}
               size="small"
               styles={{
@@ -128,7 +128,7 @@ export const Roles = () => {
                         size={70}
                         src={`https://picsum.photos/200?id=${user.id}`}
                       />
-                      <div className="p-0.5 bg-sky-100 text-blue-700 border-blue-300 border rounded -mt-2 relative text-xs">
+                      <div className="relative -mt-2 rounded border border-blue-300 bg-sky-100 p-0.5 text-xs text-blue-700">
                         {user.fullName}
                       </div>
                     </Card>

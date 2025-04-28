@@ -134,7 +134,7 @@ export const KDSHome = () => {
       </Drawer>
 
       <Layout className="h-screen">
-        <Layout.Header className="!p-2.5 flex items-center justify-between">
+        <Layout.Header className="flex items-center justify-between !p-2.5">
           <Button
             icon={<MenuOutlined />}
             onClick={() => setOpen(true)}
@@ -184,7 +184,7 @@ export const KDSHome = () => {
           )}
         </Layout.Content>
 
-        <Layout.Footer className="text-center !py-2">
+        <Layout.Footer className="!py-2 text-center">
           <Pagination
             current={page}
             onChange={setPage}

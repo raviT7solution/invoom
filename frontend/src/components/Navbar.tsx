@@ -224,7 +224,7 @@ export const Navbar = ({
     <Layout className="h-screen">
       <Layout.Sider collapsible theme="light">
         <Select
-          className="w-full !h-16 border-4 rounded-lg border-neutral-100"
+          className="!h-16 w-full rounded-lg border-4 border-neutral-100"
           labelRender={({ label }) => (
             <Typography.Text strong>{label}</Typography.Text>
           )}
@@ -237,13 +237,13 @@ export const Navbar = ({
         <Menu items={items} mode="vertical" selectedKeys={[]} />
       </Layout.Sider>
       <Layout>
-        <Layout.Header className="!bg-white flex items-center">
+        <Layout.Header className="flex items-center !bg-white">
           <img
-            className="h-14 absolute left-1/2 -translate-x-1/2"
+            className="absolute left-1/2 h-14 -translate-x-1/2"
             src={assetsPath("logo/horizontal.png")}
           />
 
-          <div className="absolute cursor-pointer right-4">
+          <div className="absolute right-4 cursor-pointer">
             <Dropdown menu={{ items: headerItems }} trigger={["click"]}>
               <Avatar className="!bg-zinc-400">
                 {initials(currentAdmin?.fullName || "")}
@@ -257,7 +257,7 @@ export const Navbar = ({
 
           <div
             className={classNames(
-              "bg-white flex-1 flex flex-col nested-scroll-overflow-y-scroll",
+              "nested-scroll-overflow-y-scroll flex flex-1 flex-col bg-white",
               padding ? "p-4" : "",
             )}
           >

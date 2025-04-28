@@ -20,9 +20,9 @@ export const Summary = ({
   });
 
   return (
-    <div className="my-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-11 gap-2">
+    <div className="my-2 grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-11">
       <Tooltip title="Sum of invoice item price, plus taxes, plus service charge, plus service charge taxes, minus voids">
-        <div className="border border-gray-200 p-3 rounded-md">
+        <div className="rounded-md border border-gray-200 p-3">
           <Statistic
             loading={isFetching}
             precision={2}
@@ -34,7 +34,7 @@ export const Summary = ({
       </Tooltip>
 
       <Tooltip title="Sum of invoice taxes, plus service charge taxes, minus void's taxes">
-        <div className="border border-gray-200 p-3 rounded-md">
+        <div className="rounded-md border border-gray-200 p-3">
           <Statistic
             loading={isFetching}
             precision={2}
@@ -46,7 +46,7 @@ export const Summary = ({
       </Tooltip>
 
       <Tooltip title="Sum of invoice item discounted amount, plus service charge, minus voids">
-        <div className="border border-gray-200 p-3 rounded-md">
+        <div className="rounded-md border border-gray-200 p-3">
           <Statistic
             loading={isFetching}
             precision={2}
@@ -58,7 +58,7 @@ export const Summary = ({
       </Tooltip>
 
       <Tooltip title="Sum of payments tip">
-        <div className="border border-gray-200 p-3 rounded-md">
+        <div className="rounded-md border border-gray-200 p-3">
           <Statistic
             loading={isFetching}
             precision={2}
@@ -70,7 +70,7 @@ export const Summary = ({
       </Tooltip>
 
       <Tooltip title="Sum of service charge without taxes">
-        <div className="border border-gray-200 p-3 rounded-md">
+        <div className="rounded-md border border-gray-200 p-3">
           <Statistic
             loading={isFetching}
             precision={2}
@@ -81,7 +81,7 @@ export const Summary = ({
         </div>
       </Tooltip>
 
-      <div className="border border-gray-200 p-3 rounded-md">
+      <div className="rounded-md border border-gray-200 p-3">
         <Statistic
           loading={isFetching}
           title="Total orders"
@@ -90,7 +90,7 @@ export const Summary = ({
       </div>
 
       <Tooltip title="Net sales per order">
-        <div className="border border-gray-200 p-3 rounded-md">
+        <div className="rounded-md border border-gray-200 p-3">
           <Statistic
             loading={isFetching}
             precision={2}
@@ -102,7 +102,7 @@ export const Summary = ({
       </Tooltip>
 
       <Tooltip title="Net sales per invoice">
-        <div className="border border-gray-200 p-3 rounded-md">
+        <div className="rounded-md border border-gray-200 p-3">
           <Statistic
             loading={isFetching}
             precision={2}
@@ -114,7 +114,7 @@ export const Summary = ({
       </Tooltip>
 
       <Tooltip title="Net sales per person">
-        <div className="border border-gray-200 p-3 rounded-md">
+        <div className="rounded-md border border-gray-200 p-3">
           <Statistic
             loading={isFetching}
             precision={2}
@@ -125,7 +125,7 @@ export const Summary = ({
         </div>
       </Tooltip>
 
-      <div className="border border-gray-200 p-3 rounded-md">
+      <div className="rounded-md border border-gray-200 p-3">
         <Statistic
           loading={isFetching}
           precision={2}
@@ -135,7 +135,7 @@ export const Summary = ({
         />
       </div>
 
-      <div className="border border-gray-200 p-3 rounded-md">
+      <div className="rounded-md border border-gray-200 p-3">
         <Statistic
           loading={isFetching}
           precision={2}

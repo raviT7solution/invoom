@@ -27,7 +27,7 @@ export const Modifiers = () => {
     <Navbar
       breadcrumbItems={[{ title: "Cuisine Hub" }, { title: "Modifiers" }]}
     >
-      <div className="flex gap-4 mb-4 justify-end">
+      <div className="mb-4 flex justify-end gap-4">
         <Button
           icon={<PlusOutlined />}
           onClick={() => showEditModifier("", true)}
@@ -45,7 +45,7 @@ export const Modifiers = () => {
 
       <div>
         {modifiers.length === 0 ? (
-          <div className="h-full w-full flex justify-center items-center">
+          <div className="flex h-full w-full items-center justify-center">
             <Empty />
           </div>
         ) : (
@@ -66,7 +66,7 @@ export const Modifiers = () => {
                   </Popconfirm>,
                 ]}
                 className={classNames(
-                  "w-64 h-44 shadow-md",
+                  "h-44 w-64 shadow-md",
                   modifier.visible ? "" : "opacity-50",
                 )}
                 key={modifier.id}

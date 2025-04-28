@@ -152,7 +152,7 @@ export const Edit = ({
           <div className="flex" key={r}>
             {[...Array(columns)].map((_, c) => (
               <div
-                className="flex-1 border border-gray-400 p-3 m-0.5 bg-gray-200"
+                className="m-0.5 flex-1 border border-gray-400 bg-gray-200 p-3"
                 key={c}
               />
             ))}

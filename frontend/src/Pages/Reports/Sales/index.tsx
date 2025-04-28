@@ -550,7 +550,7 @@ export const ReportsSales = () => {
       <div className="flex flex-col flex-wrap justify-between md:flex-row">
         <Typography.Title level={4}>Sales Report</Typography.Title>
 
-        <div className="flex flex-wrap flex-1 items-center justify-end gap-2">
+        <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
           <Input.Search
             allowClear
             className="max-w-xs"

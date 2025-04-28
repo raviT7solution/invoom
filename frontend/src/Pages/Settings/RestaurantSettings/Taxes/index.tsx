@@ -11,7 +11,7 @@ export const Taxes = () => {
   return (
     <div>
       {taxes.length === 0 ? (
-        <div className="h-full w-full flex justify-center items-center">
+        <div className="flex h-full w-full items-center justify-center">
           <Empty />
         </div>
       ) : (

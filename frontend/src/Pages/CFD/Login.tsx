@@ -105,8 +105,8 @@ export const CFDLogin = () => {
         <ConfigForm />
       </Modal>
 
-      <div className="h-screen flex justify-center items-center bg-neutral-100">
-        <Card className="drop-shadow-xl w-11/12 lg:w-1/4" title="CFD Login">
+      <div className="flex h-screen items-center justify-center bg-neutral-100">
+        <Card className="w-11/12 drop-shadow-xl lg:w-1/4" title="CFD Login">
           <Form onFinish={onFinish}>
             <Form.Item
               name="email"

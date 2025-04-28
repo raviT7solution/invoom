@@ -28,7 +28,7 @@ export const Restaurants = () => {
         <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
       )}
 
-      <div className="flex gap-4 mb-4 justify-end">
+      <div className="mb-4 flex justify-end gap-4">
         <Button
           icon={<PlusOutlined />}
           onClick={() => showEdit(false, "", true)}
@@ -45,7 +45,7 @@ export const Restaurants = () => {
             grid={{ column: 2, gutter: 16 }}
             renderItem={(item, index) => (
               <List.Item>
-                <div className="border p-4 rounded-lg">
+                <div className="rounded-lg border p-4">
                   <List.Item.Meta
                     avatar={
                       <Avatar
@@ -67,7 +67,7 @@ export const Restaurants = () => {
             grid={{ column: 2, gutter: 16 }}
             renderItem={(item, index) => (
               <List.Item>
-                <div className="border p-4 rounded-lg flex items-center">
+                <div className="flex items-center rounded-lg border p-4">
                   <List.Item.Meta
                     avatar={
                       <Avatar

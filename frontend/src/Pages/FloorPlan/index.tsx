@@ -20,7 +20,7 @@ export const FloorPlan = () => {
 
   return (
     <Navbar breadcrumbItems={[{ title: "Floor Plan" }]} padding={false}>
-      <div className="flex nested-scroll-h-full">
+      <div className="nested-scroll-h-full flex">
         <SubMenu />
 
         <div className="w-full">

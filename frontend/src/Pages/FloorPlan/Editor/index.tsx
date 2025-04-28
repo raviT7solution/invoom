@@ -89,7 +89,7 @@ export const Editor = () => {
       />
 
       <Button
-        className="!fixed top-[75px] right-3"
+        className="!fixed right-3 top-[75px]"
         onClick={() => viewerRef.current!.scrollCenter()}
       >
         Scroll center
