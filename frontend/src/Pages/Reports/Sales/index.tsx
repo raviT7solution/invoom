@@ -1,15 +1,14 @@
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined, FileDoneOutlined } from "@ant-design/icons";
 import {
   Button,
   DatePicker,
   Input,
-  Select,
   Table,
   TableColumnsType,
   TableProps,
-  Typography,
+  Tabs,
 } from "antd";
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { Summary } from "./Summary";
 
@@ -28,34 +27,19 @@ import {
   utcToRestaurantTimezone,
 } from "../../../helpers/dateTime";
 import { exportAsCSV } from "../../../helpers/exports";
+import { useTableState } from "../../../helpers/hooks";
 import { BOOKING_TYPES, PAYMENT_MODES } from "../../../helpers/mapping";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
 type InvoicesType = BookingsQuery["bookings"]["collection"][number]["invoices"];
 
-type DateRangeType = {
-  start: string | null;
-  end: string | null;
-};
-
 type FiltersType = {
   bookingTypes: string[];
+  end: string | null;
   paymentModes: PaymentModeEnum[];
   query: string;
+  start: string | null;
 };
-
-type SetFiltersType = Dispatch<SetStateAction<FiltersType>>;
-
-const REPORT_TYPES = [
-  {
-    label: "Sales by Order",
-    value: "orders",
-  },
-  {
-    label: "Sales by Invoice",
-    value: "invoices",
-  },
-];
 
 const invoiceServiceCharge = (invoice: InvoicesType[number]) => {
   return invoice.serviceChargeSummary.reduce((p, i) => p + i.value, 0);
@@ -73,35 +57,31 @@ const invoicePaymentModes = (invoice: InvoicesType[number]) => {
   return invoice.payments.map((i) => PAYMENT_MODES[i.paymentMode]);
 };
 
-const OrdersWise = ({
-  dateRange,
-  filters,
-  setFilters,
-}: {
-  dateRange: DateRangeType;
-  filters: FiltersType;
-  setFilters: SetFiltersType;
-}) => {
+const OrdersWise = () => {
   const { restaurantId, tz } = useRestaurantIdStore();
 
-  const [pagination, setPagination] = useState({
-    page: 1,
-    perPage: 10,
-  });
+  const { filters, pagination, setFilters, setPagination } = useTableState<
+    FiltersType,
+    { page: number; perPage: number }
+  >(
+    { bookingTypes: [], end: null, paymentModes: [], query: "", start: null },
+    { page: 1, perPage: 10 },
+  );
 
   const {
     data: { collection, metadata },
     isFetching,
   } = useBookings({
     bookingTypes: filters.bookingTypes,
-    endDate: dateRange.end,
+    endDate: filters.end,
     page: pagination.page,
     paymentModes: filters.paymentModes,
     perPage: pagination.perPage,
     query: filters.query,
     restaurantId: restaurantId,
-    startDate: dateRange.start,
+    startDate: filters.start,
   });
+  const bookingsExport = useBookingsExport();
 
   const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
     () => [
@@ -208,60 +188,151 @@ const OrdersWise = ({
     pagination,
     filters,
   ) => {
-    setPagination({ page: pagination.current!, perPage: pagination.pageSize! });
-
-    setFilters((i) => ({
-      ...i,
+    setFilters({
       bookingTypes: (filters.bookingType ?? []) as string[],
       paymentModes: (filters.paymentType ?? []) as PaymentModeEnum[],
-    }));
+    });
+
+    setPagination({ page: pagination.current!, perPage: pagination.pageSize! });
+  };
+
+  const onExportClick = async () => {
+    const { collection } = await bookingsExport.mutateAsync({
+      bookingTypes: filters.bookingTypes,
+      endDate: filters.end,
+      export: true,
+      page: 1,
+      paymentModes: filters.paymentModes,
+      perPage: -1,
+      query: filters.query,
+      restaurantId: restaurantId,
+      startDate: filters.start,
+    });
+
+    const header = [
+      "Sr. no",
+      "Order ID",
+      "Invoice ID",
+      "Order type",
+      "Start time",
+      "End time",
+      "Table/Order no.",
+      "Pax",
+      "Subtotal",
+      "Total Dis.",
+      "Total service charge",
+      "Total tax",
+      "Tip",
+      "Total",
+      "Payment type",
+      "Customer name",
+      "Server name",
+    ];
+
+    exportAsCSV(
+      header,
+      collection.map((r, idx) => {
+        return [
+          idx + 1,
+          r.number,
+          r.invoices.map((i) => i.number).join(", "),
+          BOOKING_TYPES[r.bookingType],
+          utcToRestaurantTimezone(r.clockedInAt, tz),
+          r.clockedOutAt ? utcToRestaurantTimezone(r.clockedOutAt, tz) : "-",
+          r.bookingType === "dine_in"
+            ? r.tableNames?.join(", ")
+            : r.bookingType === "takeout" || r.bookingType === "delivery"
+            ? r.token
+            : "",
+          r.pax,
+          r.invoices.reduce((p, i) => p + i.subTotal, 0).toFixed(2),
+          r.invoices.reduce((p, i) => p + i.totalDiscount, 0).toFixed(2),
+          r.invoices.reduce((p, i) => p + invoiceServiceCharge(i), 0),
+          r.invoices.reduce((p, i) => p + invoiceTax(i), 0).toFixed(2),
+          r.invoices.reduce((p, i) => p + invoiceTip(i), 0).toFixed(2),
+          r.invoices.reduce((p, i) => p + i.total, 0).toFixed(2),
+          r.invoices.flatMap(invoicePaymentModes).join(", "),
+          r.customer?.name ?? "-",
+          r.userFullName,
+        ];
+      }),
+      "sales-export",
+    );
+  };
+
+  const onDateChange = (_: unknown, dates: [string, string]) => {
+    setFilters(dateRangePickerToString(dates[0], dates[1], tz));
   };
 
   return (
-    <Table
-      columns={columns}
-      dataSource={collection}
-      loading={isFetching}
-      onChange={onTableChange}
-      pagination={{
-        current: metadata.currentPage,
-        total: metadata.totalCount,
-      }}
-      rowKey="id"
-      size="small"
-    />
+    <>
+      <div className="flex flex-wrap items-center justify-end gap-2">
+        <Input.Search
+          allowClear
+          className="max-w-xs"
+          enterButton
+          onSearch={(query) => setFilters({ query: query })}
+          placeholder="Search by Order ID, Invoice ID"
+        />
+
+        <DatePicker.RangePicker
+          format={DATE_FORMAT}
+          onChange={onDateChange}
+          presets={TIME_RANGE_PRESETS}
+        />
+
+        <Button
+          icon={<DownloadOutlined />}
+          loading={bookingsExport.isPending}
+          onClick={onExportClick}
+        >
+          Export
+        </Button>
+      </div>
+
+      <Summary endTime={filters.end} startTime={filters.start} />
+
+      <Table
+        columns={columns}
+        dataSource={collection}
+        loading={isFetching}
+        onChange={onTableChange}
+        pagination={{
+          current: metadata.currentPage,
+          total: metadata.totalCount,
+        }}
+        rowKey="id"
+        size="small"
+      />
+    </>
   );
 };
 
-const InvoicesWise = ({
-  dateRange,
-  filters,
-  setFilters,
-}: {
-  dateRange: DateRangeType;
-  filters: FiltersType;
-  setFilters: SetFiltersType;
-}) => {
+const InvoicesWise = () => {
   const { restaurantId, tz } = useRestaurantIdStore();
 
-  const [pagination, setPagination] = useState({
-    page: 1,
-    perPage: 10,
-  });
+  const { filters, pagination, setFilters, setPagination } = useTableState<
+    FiltersType,
+    { page: number; perPage: number }
+  >(
+    { bookingTypes: [], end: null, paymentModes: [], query: "", start: null },
+    { page: 1, perPage: 10 },
+  );
 
   const {
     data: { collection, metadata },
     isFetching,
   } = useInvoices({
     bookingTypes: filters.bookingTypes,
-    endDate: dateRange.end,
+    endDate: filters.end,
     page: pagination.page,
     paymentModes: filters.paymentModes,
     perPage: pagination.perPage,
     query: filters.query,
     restaurantId: restaurantId,
-    startDate: dateRange.start,
+    startDate: filters.start,
   });
+  const invoicesExport = useInvoicesExport();
 
   const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
     () => [
@@ -366,125 +437,25 @@ const InvoicesWise = ({
     pagination,
     filters,
   ) => {
-    setPagination({ page: pagination.current!, perPage: pagination.pageSize! });
-
-    setFilters((i) => ({
-      ...i,
+    setFilters({
       bookingTypes: (filters.bookingType ?? []) as string[],
       paymentModes: (filters.paymentType ?? []) as PaymentModeEnum[],
-    }));
-  };
-
-  return (
-    <Table
-      columns={columns}
-      dataSource={collection}
-      loading={isFetching}
-      onChange={onTableChange}
-      pagination={{
-        current: metadata.currentPage,
-        total: metadata.totalCount,
-      }}
-      rowKey="id"
-      size="small"
-    />
-  );
-};
-
-export const ReportsSales = () => {
-  const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
-  const tz = useRestaurantIdStore((s) => s.tz);
-
-  const [reportType, setReportType] = useState("orders");
-  const [filters, setFilters] = useState<FiltersType>({
-    bookingTypes: [],
-    paymentModes: [],
-    query: "",
-  });
-
-  const [dateRange, setDateRange] = useState<DateRangeType>({
-    start: null,
-    end: null,
-  });
-
-  const bookingsExport = useBookingsExport();
-  const invoicesExport = useInvoicesExport();
-
-  const onBookingsExportClick = async () => {
-    const { collection } = await bookingsExport.mutateAsync({
-      bookingTypes: filters.bookingTypes,
-      endDate: dateRange.end,
-      export: true,
-      page: 1,
-      paymentModes: filters.paymentModes,
-      perPage: -1,
-      query: filters.query,
-      restaurantId: restaurantId,
-      startDate: dateRange.start,
     });
 
-    const header = [
-      "Sr. no",
-      "Order ID",
-      "Invoice ID",
-      "Order type",
-      "Start time",
-      "End time",
-      "Table/Order no.",
-      "Pax",
-      "Subtotal",
-      "Total Dis.",
-      "Total service charge",
-      "Total tax",
-      "Tip",
-      "Total",
-      "Payment type",
-      "Customer name",
-      "Server name",
-    ];
-
-    exportAsCSV(
-      header,
-      collection.map((r, idx) => {
-        return [
-          idx + 1,
-          r.number,
-          r.invoices.map((i) => i.number).join(", "),
-          BOOKING_TYPES[r.bookingType],
-          utcToRestaurantTimezone(r.clockedInAt, tz),
-          r.clockedOutAt ? utcToRestaurantTimezone(r.clockedOutAt, tz) : "-",
-          r.bookingType === "dine_in"
-            ? r.tableNames?.join(", ")
-            : r.bookingType === "takeout" || r.bookingType === "delivery"
-            ? r.token
-            : "",
-          r.pax,
-          r.invoices.reduce((p, i) => p + i.subTotal, 0).toFixed(2),
-          r.invoices.reduce((p, i) => p + i.totalDiscount, 0).toFixed(2),
-          r.invoices.reduce((p, i) => p + invoiceServiceCharge(i), 0),
-          r.invoices.reduce((p, i) => p + invoiceTax(i), 0).toFixed(2),
-          r.invoices.reduce((p, i) => p + invoiceTip(i), 0).toFixed(2),
-          r.invoices.reduce((p, i) => p + i.total, 0).toFixed(2),
-          r.invoices.flatMap(invoicePaymentModes).join(", "),
-          r.customer?.name ?? "-",
-          r.userFullName,
-        ];
-      }),
-      "sales-export",
-    );
+    setPagination({ page: pagination.current!, perPage: pagination.pageSize! });
   };
 
-  const onInvoicesExportClick = async () => {
+  const onExportClick = async () => {
     const { collection } = await invoicesExport.mutateAsync({
       bookingTypes: filters.bookingTypes,
-      endDate: dateRange.end,
+      endDate: filters.end,
       export: true,
       page: 1,
       paymentModes: filters.paymentModes,
       perPage: -1,
       query: filters.query,
       restaurantId: restaurantId,
-      startDate: dateRange.start,
+      startDate: filters.start,
     });
 
     const header = [
@@ -542,67 +513,72 @@ export const ReportsSales = () => {
   };
 
   const onDateChange = (_: unknown, dates: [string, string]) => {
-    setDateRange(dateRangePickerToString(dates[0], dates[1], tz));
+    setFilters(dateRangePickerToString(dates[0], dates[1], tz));
   };
 
   return (
-    <Navbar breadcrumbItems={[{ title: "Report" }, { title: "Sales report" }]}>
-      <div className="flex flex-col flex-wrap justify-between md:flex-row">
-        <Typography.Title level={4}>Sales report</Typography.Title>
+    <>
+      <div className="flex flex-wrap items-center justify-end gap-2">
+        <Input.Search
+          allowClear
+          className="max-w-xs"
+          enterButton
+          onSearch={(query) => setFilters({ query: query })}
+          placeholder="Search by Order ID, Invoice ID"
+        />
 
-        <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
-          <Input.Search
-            allowClear
-            className="max-w-xs"
-            enterButton
-            onSearch={(query) => setFilters((i) => ({ ...i, query }))}
-            placeholder="Search by Order ID, Invoice ID"
-          />
+        <DatePicker.RangePicker
+          format={DATE_FORMAT}
+          onChange={onDateChange}
+          presets={TIME_RANGE_PRESETS}
+        />
 
-          <Select
-            defaultValue="orders"
-            onChange={(i) => setReportType(i)}
-            options={REPORT_TYPES}
-            placeholder="Select type"
-          />
-
-          <DatePicker.RangePicker
-            format={DATE_FORMAT}
-            onChange={onDateChange}
-            presets={TIME_RANGE_PRESETS}
-          />
-
-          <Button
-            icon={<DownloadOutlined />}
-            loading={bookingsExport.isPending || invoicesExport.isPending}
-            onClick={
-              reportType === "orders"
-                ? onBookingsExportClick
-                : onInvoicesExportClick
-            }
-          >
-            Export
-          </Button>
-        </div>
+        <Button
+          icon={<DownloadOutlined />}
+          loading={invoicesExport.isPending}
+          onClick={onExportClick}
+        >
+          Export
+        </Button>
       </div>
 
-      <Summary dateRange={dateRange} />
+      <Summary endTime={filters.end} startTime={filters.start} />
 
-      {reportType === "orders" && (
-        <OrdersWise
-          dateRange={dateRange}
-          filters={filters}
-          setFilters={setFilters}
-        />
-      )}
+      <Table
+        columns={columns}
+        dataSource={collection}
+        loading={isFetching}
+        onChange={onTableChange}
+        pagination={{
+          current: metadata.currentPage,
+          total: metadata.totalCount,
+        }}
+        rowKey="id"
+        size="small"
+      />
+    </>
+  );
+};
 
-      {reportType === "invoices" && (
-        <InvoicesWise
-          dateRange={dateRange}
-          filters={filters}
-          setFilters={setFilters}
-        />
-      )}
+export const ReportsSales = () => {
+  return (
+    <Navbar breadcrumbItems={[{ title: "Reports" }, { title: "Sales report" }]}>
+      <Tabs
+        items={[
+          {
+            children: <OrdersWise />,
+            icon: <FileDoneOutlined />,
+            key: "1",
+            label: "Sales by orders",
+          },
+          {
+            children: <InvoicesWise />,
+            icon: <FileDoneOutlined />,
+            key: "2",
+            label: "Sales by invoices",
+          },
+        ]}
+      />
     </Navbar>
   );
 };

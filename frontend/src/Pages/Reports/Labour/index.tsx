@@ -176,7 +176,10 @@ export const ReportsLabour = () => {
         onChange={(i) =>
           setPagination({ page: i.current!, perPage: i.pageSize! })
         }
-        pagination={{ total: metadata.totalCount }}
+        pagination={{
+          current: metadata.currentPage,
+          total: metadata.totalCount,
+        }}
         rowKey="id"
       />
     </Navbar>

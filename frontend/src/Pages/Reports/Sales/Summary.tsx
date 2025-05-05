@@ -4,19 +4,18 @@ import { useSalesSummary } from "../../../api";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
 export const Summary = ({
-  dateRange,
+  endTime,
+  startTime,
 }: {
-  dateRange: {
-    start: string | null;
-    end: string | null;
-  };
+  endTime: string | null;
+  startTime: string | null;
 }) => {
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
   const { data: summary, isFetching } = useSalesSummary({
+    endTime,
     restaurantId: restaurantId,
-    startTime: dateRange.start,
-    endTime: dateRange.end,
+    startTime,
   });
 
   return (
