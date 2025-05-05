@@ -25,7 +25,7 @@ export const Categories = () => {
 
   return (
     <Navbar
-      breadcrumbItems={[{ title: "Cuisine Hub" }, { title: "Categories" }]}
+      breadcrumbItems={[{ title: "Cuisine hub" }, { title: "Categories" }]}
     >
       <div className="mb-4 flex justify-end gap-4">
         <Button
@@ -33,7 +33,7 @@ export const Categories = () => {
           onClick={() => showEditCategory("", true)}
           type="primary"
         >
-          Add Category
+          Add category
         </Button>
       </div>
 

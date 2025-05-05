@@ -13,7 +13,7 @@ class CuisineHubMenusTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/cuisine-hub/menus")
     wait_for_pending_requests
 
-    click_on "Add Menu"
+    click_on "Add menu"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Breakfast"

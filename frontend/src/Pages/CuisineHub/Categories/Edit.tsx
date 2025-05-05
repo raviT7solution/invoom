@@ -70,7 +70,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Category" : "Edit Category"}
+      title={isNew ? "New category" : "Edit category"}
     >
       <Form
         initialValues={isNew ? initialValues : category}

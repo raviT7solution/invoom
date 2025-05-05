@@ -99,7 +99,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Item" : "Edit Item"}
+      title={isNew ? "New item" : "Edit item"}
     >
       <Form
         form={form}
@@ -123,11 +123,11 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          label="Display Name"
+          label="Display name"
           name="displayName"
           rules={[{ required: true, message: "Required" }]}
         >
-          <Input placeholder="Display Name" />
+          <Input placeholder="Display name" />
         </Form.Item>
 
         <Form.Item
@@ -254,7 +254,7 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          label="Takeout Price"
+          label="Takeout price"
           name="takeoutPrice"
           rules={[
             { required: true, message: "Required" },
@@ -263,14 +263,14 @@ export const Edit = ({
         >
           <InputNumber
             disabled={eqPrice}
-            placeholder="TakeOut Price"
+            placeholder="Takeout price"
             prefix="$"
             style={{ width: "100%" }}
           />
         </Form.Item>
 
         <Form.Item
-          label="Delivery Price"
+          label="Delivery price"
           name="deliveryPrice"
           rules={[
             { required: true, message: "Required" },
@@ -279,14 +279,14 @@ export const Edit = ({
         >
           <InputNumber
             disabled={eqPrice}
-            placeholder="Delivery Price"
+            placeholder="Delivery price"
             prefix="$"
             style={{ width: "100%" }}
           />
         </Form.Item>
 
         <Form.Item
-          label="Cost Of Production"
+          label="Cost of production"
           name="costOfProduction"
           rules={[
             { required: true, message: "Required" },
@@ -294,7 +294,7 @@ export const Edit = ({
           ]}
         >
           <InputNumber
-            placeholder="Cost Of Production"
+            placeholder="Cost of production"
             prefix="$"
             style={{ width: "100%" }}
           />

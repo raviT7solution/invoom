@@ -15,7 +15,7 @@ type schema = {
 };
 
 const TITLES: { [key: string]: string } = {
-  day_end: "Day End",
+  day_end: "Day end",
   receive: "Receive",
 };
 
@@ -78,8 +78,8 @@ export const ActionModal = ({
         onFinish={onSave}
         preserve={false}
       >
-        <Form.Item label="Product Name">
-          <Input disabled placeholder="Product Name" value={product?.name} />
+        <Form.Item label="Product name">
+          <Input disabled placeholder="Product name" value={product?.name} />
         </Form.Item>
 
         <Form.Item label="UOM">

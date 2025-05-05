@@ -22,7 +22,7 @@ export const KitchenProfiles = () => {
 
   return (
     <Navbar
-      breadcrumbItems={[{ title: "Settings" }, { title: "Kitchen Profiles" }]}
+      breadcrumbItems={[{ title: "Settings" }, { title: "Kitchen profiles" }]}
     >
       {!modal.destroyed && (
         <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
@@ -34,7 +34,7 @@ export const KitchenProfiles = () => {
           onClick={() => showEdit(false, "", true)}
           type="primary"
         >
-          Add Kitchen Profile
+          Add kitchen profile
         </Button>
       </div>
 

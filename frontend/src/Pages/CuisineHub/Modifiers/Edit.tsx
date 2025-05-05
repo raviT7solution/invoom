@@ -80,7 +80,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Modifier" : "Edit Modifier"}
+      title={isNew ? "New modifier" : "Edit modifier"}
     >
       <Form
         initialValues={isNew ? initialValues : modifier}
@@ -127,7 +127,7 @@ export const Edit = ({
                   onClick={() => add()}
                   type="dashed"
                 >
-                  Add Options
+                  Add options
                 </Button>
               </Form.Item>
             </>
@@ -167,11 +167,11 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item name="multiSelect" valuePropName="checked">
-          <Checkbox>Multi-Select Values</Checkbox>
+          <Checkbox>Multi-select values</Checkbox>
         </Form.Item>
 
         <Form.Item name="globalModifier" valuePropName="checked">
-          <Checkbox>Global Modifier</Checkbox>
+          <Checkbox>Global modifier</Checkbox>
         </Form.Item>
 
         <Form.Item name="visible" valuePropName="checked">

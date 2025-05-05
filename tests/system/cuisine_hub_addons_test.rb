@@ -13,14 +13,14 @@ class CuisineHubAddonsTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/cuisine-hub/addons")
     wait_for_pending_requests
 
-    click_on "Add Addons"
+    click_on "Add addons"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Extra cheese"
       fill_in "Price", with: 10
       find(".ant-checkbox-wrapper", text: "= Price").click
-      fill_in "Takeout Price", with: 10.5
-      fill_in "Delivery Price", with: 11
+      fill_in "Takeout price", with: 10.5
+      fill_in "Delivery price", with: 11
 
       click_on "Submit"
     end
@@ -75,8 +75,8 @@ class CuisineHubAddonsTest < ApplicationSystemTestCase
       fill_in "Name", with: "Extra cheese"
       fill_in "Price", with: 10
       find(".ant-checkbox-wrapper", text: "= Price").click
-      fill_in "Takeout Price", with: 10.5
-      fill_in "Delivery Price", with: 11
+      fill_in "Takeout price", with: 10.5
+      fill_in "Delivery price", with: 11
 
       find(".ant-checkbox-wrapper", text: "Visible").click
 

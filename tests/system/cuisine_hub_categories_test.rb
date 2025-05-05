@@ -14,7 +14,7 @@ class CuisineHubCategoriesTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/cuisine-hub/menus")
     wait_for_pending_requests
 
-    click_on "Add Menu"
+    click_on "Add menu"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Breakfast"
@@ -25,7 +25,7 @@ class CuisineHubCategoriesTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/cuisine-hub/categories")
     wait_for_pending_requests
 
-    click_on "Add Category"
+    click_on "Add category"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Sandwich"
@@ -84,7 +84,7 @@ class CuisineHubCategoriesTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/cuisine-hub/menus")
     wait_for_pending_requests
 
-    click_on "Add Menu"
+    click_on "Add menu"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Breakfast"

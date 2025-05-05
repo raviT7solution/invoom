@@ -66,7 +66,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Printer Configuration" : "Edit Printer Configuration"}
+      title={isNew ? "New printer configuration" : "Edit printer configuration"}
     >
       <Form
         initialValues={isNew ? initialValues : printerConfig}
@@ -92,11 +92,11 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          label="IP Address"
+          label="IP address"
           name="ipAddress"
           rules={[{ required: true, message: "Required" }]}
         >
-          <Input placeholder="IP Address" />
+          <Input placeholder="IP address" />
         </Form.Item>
 
         <Form.Item name="visible" valuePropName="checked">

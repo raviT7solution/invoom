@@ -63,16 +63,16 @@ export const InventoryProducts = () => {
   const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
     () => [
       {
-        title: "Sr. No",
+        title: "Sr. no",
         render: (_, _r, index) =>
           (metadata.currentPage - 1) * metadata.limitValue + index + 1,
       },
       {
-        title: "Product Name",
+        title: "Product name",
         dataIndex: "name",
       },
       {
-        title: "Category Name",
+        title: "Category name",
         dataIndex: ["inventoryCategory", "name"],
       },
       {
@@ -80,11 +80,11 @@ export const InventoryProducts = () => {
         dataIndex: "uom",
       },
       {
-        title: "Reorder Point",
+        title: "Reorder point",
         dataIndex: "reorderPoint",
       },
       {
-        title: "Available Quantity",
+        title: "Available quantity",
         dataIndex: "availableQuantity",
         align: "center",
       },
@@ -113,7 +113,7 @@ export const InventoryProducts = () => {
               />
             </Tooltip>
 
-            <Tooltip title="Day End">
+            <Tooltip title="Day end">
               <HistoryOutlined
                 onClick={() =>
                   setActionModal({
@@ -150,7 +150,7 @@ export const InventoryProducts = () => {
           onClick={() => showEdit(false, "", true)}
           type="primary"
         >
-          Add Product
+          Add product
         </Button>
       </div>
 

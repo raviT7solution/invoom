@@ -24,7 +24,7 @@ export const RestaurantSettings = () => {
     <Navbar
       breadcrumbItems={[
         { title: "Settings" },
-        { title: "Restaurant Settings" },
+        { title: "Restaurant settings" },
       ]}
     >
       <Tabs
@@ -41,39 +41,39 @@ export const RestaurantSettings = () => {
             key: "2",
             label: (
               <Tooltip title="This pin will be used to delete items from orders.">
-                Operation Pin
+                Operation pin
               </Tooltip>
             ),
           },
           {
             children: <PrinterConfigurations />,
             icon: <PrinterOutlined />,
-            label: "Printer Configurations",
+            label: "Printer configurations",
             key: "3",
           },
           {
             children: <PaymentConfiguration />,
             icon: <DollarOutlined />,
             key: "4",
-            label: "Payment Gateway Configurations",
+            label: "Payment gateway configurations",
           },
           {
             children: <ServiceCharges />,
             icon: <PlusCircleOutlined />,
             key: "5",
-            label: "Service Charge",
+            label: "Service charge",
           },
           {
             children: <SmsConfigurations />,
             icon: <MessageOutlined />,
             key: "6",
-            label: "SMS Configurations",
+            label: "SMS configurations",
           },
           {
             children: <ReceiptConfigurations />,
             icon: <FileDoneOutlined />,
             key: "7",
-            label: "Receipt Configurations",
+            label: "Receipt configurations",
           },
         ]}
       />

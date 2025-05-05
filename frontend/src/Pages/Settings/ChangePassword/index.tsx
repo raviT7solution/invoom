@@ -66,14 +66,14 @@ export const ChangePassword = () => {
 
   return (
     <Navbar
-      breadcrumbItems={[{ title: "Setting" }, { title: "Change Password" }]}
+      breadcrumbItems={[{ title: "Setting" }, { title: "Change password" }]}
     >
-      <Typography.Title level={4}>Change Password</Typography.Title>
+      <Typography.Title level={4}>Change password</Typography.Title>
 
       <div className="py-4">
         {showPolicy && (
           <>
-            <Typography.Title level={5}>The Password should:</Typography.Title>
+            <Typography.Title level={5}>The password should:</Typography.Title>
             <ul>
               <li
                 style={{ color: passwordValidation.length ? "green" : "red" }}
@@ -111,11 +111,11 @@ export const ChangePassword = () => {
         <Row gutter={8}>
           <Col span={8}>
             <Form.Item
-              label="Current Password"
+              label="Current password"
               name="currentPassword"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="Current Password" />
+              <Input placeholder="Current password" />
             </Form.Item>
           </Col>
         </Row>
@@ -123,14 +123,14 @@ export const ChangePassword = () => {
         <Row gutter={8}>
           <Col span={8}>
             <Form.Item
-              label="New Password"
+              label="New password"
               name="password"
               rules={[
                 { required: true, message: "Required" },
                 { validator: validatePassword },
               ]}
             >
-              <Input.Password placeholder="New Password" />
+              <Input.Password placeholder="New password" />
             </Form.Item>
           </Col>
         </Row>
@@ -139,14 +139,14 @@ export const ChangePassword = () => {
           <Col span={8}>
             <Form.Item
               dependencies={["password"]}
-              label="Confirm Password"
+              label="Confirm password"
               name="confirmPassword"
               rules={[
                 { required: true, message: "Required" },
                 { validator: validateConfirmPassword },
               ]}
             >
-              <Input.Password placeholder="Confirm Password" />
+              <Input.Password placeholder="Confirm password" />
             </Form.Item>
           </Col>
         </Row>

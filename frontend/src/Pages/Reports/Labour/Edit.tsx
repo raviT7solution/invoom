@@ -72,7 +72,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Timesheet" : "Edit Timesheet"}
+      title={isNew ? "New timesheet" : "Edit timesheet"}
     >
       <Form
         initialValues={timeSheet}
@@ -102,7 +102,7 @@ export const Edit = ({
         <Form.Item
           getValueFromEvent={dateTimePickerGetValueFromEvent}
           getValueProps={dateTimePickerGetValueProps}
-          label="Start Time"
+          label="Start time"
           name="startTime"
           rules={[{ required: true, message: "Required" }]}
         >
@@ -112,7 +112,7 @@ export const Edit = ({
         <Form.Item
           getValueFromEvent={dateTimePickerGetValueFromEvent}
           getValueProps={dateTimePickerGetValueProps}
-          label="End Time"
+          label="End time"
           name="endTime"
         >
           <DatePicker className="w-full" format={DATE_TIME_FORMAT} showTime />

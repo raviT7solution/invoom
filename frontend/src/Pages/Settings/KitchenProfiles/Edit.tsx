@@ -81,7 +81,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Kitchen Profile" : "Edit Kitchen Profile"}
+      title={isNew ? "New kitchen profile" : "Edit kitchen profile"}
     >
       <Form
         form={form}

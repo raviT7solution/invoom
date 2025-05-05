@@ -22,7 +22,7 @@ export const Restaurants = () => {
 
   return (
     <Navbar
-      breadcrumbItems={[{ title: "Settings" }, { title: "My Restaurants" }]}
+      breadcrumbItems={[{ title: "Settings" }, { title: "My restaurants" }]}
     >
       {!modal.destroyed && (
         <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
@@ -34,12 +34,12 @@ export const Restaurants = () => {
           onClick={() => showEdit(false, "", true)}
           type="primary"
         >
-          Add Restaurant
+          Add restaurant
         </Button>
       </div>
 
       <div className="space-y-4">
-        <Card title={`In Progress (${pendingRestaurants.length})`} type="inner">
+        <Card title={`In progress (${pendingRestaurants.length})`} type="inner">
           <List
             dataSource={pendingRestaurants}
             grid={{ column: 2, gutter: 16 }}

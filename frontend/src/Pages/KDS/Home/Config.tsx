@@ -70,7 +70,7 @@ const AccountSection = () => {
         }
         onCancel={() => setIsOpen(false)}
         open={isOpen}
-        title="Admin Verification"
+        title="Admin verification"
       >
         <Form
           layout="vertical"
@@ -135,7 +135,7 @@ export const ConfigureMenu = () => {
   const items: CollapseProps["items"] = [
     {
       key: "1",
-      label: "Booking Type",
+      label: "Booking type",
       children: (
         <Menu
           items={Object.entries(BOOKING_TYPES).map(([k, v]) => ({
@@ -156,7 +156,7 @@ export const ConfigureMenu = () => {
     },
     {
       key: "2",
-      label: "Kitchen Profile",
+      label: "Kitchen profile",
       children: (
         <Menu
           items={kitchenProfiles.map((i) => ({ key: i.id, label: i.name }))}

@@ -26,7 +26,7 @@ export const Devices = () => {
   const columns: TableColumnsType<(typeof devices.data)[number]> = useMemo(
     () => [
       {
-        title: "Sr. No",
+        title: "Sr. no",
         render: (_, _r, index) => index + 1,
       },
       {

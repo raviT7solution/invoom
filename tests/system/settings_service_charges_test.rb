@@ -12,14 +12,14 @@ class SettingsServiceChargesTest < ApplicationSystemTestCase
     sign_in(admin)
 
     visit path_for(:frontend, "/settings/restaurant-settings")
-    find(".ant-tabs-tab", text: "Service Charge").click
+    find(".ant-tabs-tab", text: "Service charge").click
     wait_for_pending_requests
 
-    click_on "Add Charge"
+    click_on "Add charge"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Service Charge"
-      within ".ant-form-item", text: "Charge Type" do
+      within ".ant-form-item", text: "Charge type" do
         fill_in_select with: "Percentage"
       end
       fill_in "Value", with: 10
@@ -55,7 +55,7 @@ class SettingsServiceChargesTest < ApplicationSystemTestCase
     sign_in(admin)
 
     visit path_for(:frontend, "/settings/restaurant-settings")
-    find(".ant-tabs-tab", text: "Service Charge").click
+    find(".ant-tabs-tab", text: "Service charge").click
     wait_for_pending_requests
 
     assert_text service_charge.name
@@ -82,7 +82,7 @@ class SettingsServiceChargesTest < ApplicationSystemTestCase
     sign_in(admin)
 
     visit path_for(:frontend, "/settings/restaurant-settings")
-    find(".ant-tabs-tab", text: "Service Charge").click
+    find(".ant-tabs-tab", text: "Service charge").click
     wait_for_pending_requests
 
     assert_text service_charge.name
@@ -90,8 +90,8 @@ class SettingsServiceChargesTest < ApplicationSystemTestCase
     find(".anticon-edit").click
 
     within ".ant-drawer" do
-      fill_in "Name", with: "Service Charge"
-      within ".ant-form-item", text: "Charge Type" do
+      fill_in "Name", with: "Service charge"
+      within ".ant-form-item", text: "Charge type" do
         fill_in_select with: "Percentage"
       end
       fill_in "Value", with: 10
@@ -109,7 +109,7 @@ class SettingsServiceChargesTest < ApplicationSystemTestCase
 
     assert_attributes service_charge, \
                       charge_type: "percentage",
-                      name: "Service Charge",
+                      name: "Service charge",
                       tax_id: tax.id,
                       value: 10,
                       visible: true

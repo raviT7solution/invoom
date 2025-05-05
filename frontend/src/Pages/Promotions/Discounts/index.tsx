@@ -29,7 +29,7 @@ export const Discounts = () => {
           onClick={() => showEdit(false, "", true)}
           type="primary"
         >
-          Add Discount
+          Add discount
         </Button>
       </div>
 

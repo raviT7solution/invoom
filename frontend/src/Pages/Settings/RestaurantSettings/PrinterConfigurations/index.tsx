@@ -34,7 +34,7 @@ export const PrinterConfigurations = () => {
           onClick={() => showEditPrinter("", true)}
           type="primary"
         >
-          Add Printer
+          Add printer
         </Button>
       </div>
 

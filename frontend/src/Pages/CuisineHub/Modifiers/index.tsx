@@ -25,7 +25,7 @@ export const Modifiers = () => {
 
   return (
     <Navbar
-      breadcrumbItems={[{ title: "Cuisine Hub" }, { title: "Modifiers" }]}
+      breadcrumbItems={[{ title: "Cuisine hub" }, { title: "Modifiers" }]}
     >
       <div className="mb-4 flex justify-end gap-4">
         <Button
@@ -33,7 +33,7 @@ export const Modifiers = () => {
           onClick={() => showEditModifier("", true)}
           type="primary"
         >
-          Add Modifier
+          Add modifier
         </Button>
       </div>
 
@@ -81,7 +81,7 @@ export const Modifiers = () => {
                       }}
                       type="secondary"
                     >
-                      Global Modifier: {modifier.globalModifier ? "Yes" : "No"}
+                      Global modifier: {modifier.globalModifier ? "Yes" : "No"}
                     </Typography.Paragraph>
                   }
                   title={modifier.name}

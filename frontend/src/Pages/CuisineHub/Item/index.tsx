@@ -87,14 +87,14 @@ export const Item = () => {
   }));
 
   return (
-    <Navbar breadcrumbItems={[{ title: "Cuisine Hub" }, { title: "Items" }]}>
+    <Navbar breadcrumbItems={[{ title: "Cuisine hub" }, { title: "Items" }]}>
       <div className="mb-4 flex justify-end gap-4">
         <Button
           icon={<PlusOutlined />}
           onClick={() => showEdit(false, "", true)}
           type="primary"
         >
-          Add Item
+          Add item
         </Button>
       </div>
 

@@ -75,7 +75,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Addons" : "Edit Addons"}
+      title={isNew ? "New addons" : "Edit addons"}
     >
       <Form
         form={form}
@@ -130,7 +130,7 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          label="Takeout Price"
+          label="Takeout price"
           name="takeoutPrice"
           rules={[
             { required: true, message: "Required" },
@@ -139,14 +139,14 @@ export const Edit = ({
         >
           <InputNumber
             disabled={eqPrice}
-            placeholder="Takeout Price"
+            placeholder="Takeout price"
             prefix="$"
             style={{ width: "100%" }}
           />
         </Form.Item>
 
         <Form.Item
-          label="Delivery Price"
+          label="Delivery price"
           name="deliveryPrice"
           rules={[
             { required: true, message: "Required" },
@@ -155,7 +155,7 @@ export const Edit = ({
         >
           <InputNumber
             disabled={eqPrice}
-            placeholder="Delivery Price"
+            placeholder="Delivery price"
             prefix="$"
             style={{ width: "100%" }}
           />

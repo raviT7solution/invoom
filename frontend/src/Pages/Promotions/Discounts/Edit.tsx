@@ -66,7 +66,7 @@ const initialValues = {
 
 export const discountTypes: Record<DiscountTypeEnum, string> = {
   percentage: "Percentage",
-  flat: "Flat Rate",
+  flat: "Flat rate",
   bogo: "BOGO",
   combo: "Combo",
   compoff: "Comp-off",
@@ -82,11 +82,11 @@ const discountTypesOptions = Object.entries(discountTypes).map(
 
 const channels = [
   {
-    label: "Dine-In",
+    label: "Dine-in",
     value: "dine_in",
   },
   {
-    label: "TakeOut",
+    label: "Takeout",
     value: "takeout",
   },
   {
@@ -157,7 +157,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Discount" : "Edit Discount"}
+      title={isNew ? "New discount" : "Edit discount"}
     >
       <Form
         form={form}
@@ -168,7 +168,7 @@ export const Edit = ({
         preserve={false}
       >
         <Form.Item
-          label="Discount Name"
+          label="Discount name"
           name="name"
           rules={[{ required: true, message: "Required" }]}
         >
@@ -176,7 +176,7 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          label="Discount Type"
+          label="Discount type"
           name="discountType"
           rules={[{ required: true, message: "Required" }]}
         >
@@ -197,7 +197,7 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          label="Discount Value"
+          label="Discount value"
           name="value"
           rules={[
             { required: true, message: "Required" },
@@ -224,7 +224,7 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          label="Discount On"
+          label="Discount on"
           name="discountOn"
           rules={[{ required: true, message: "Required" }]}
         >
@@ -233,8 +233,8 @@ export const Edit = ({
               form.setFieldsValue({ categoryIds: [], itemIds: [] })
             }
             options={[
-              { label: "Bill Wise", value: "bill_wise" },
-              { label: "Item Wise", value: "item_wise" },
+              { label: "Bill wise", value: "bill_wise" },
+              { label: "Item wise", value: "item_wise" },
             ]}
           />
         </Form.Item>
@@ -264,7 +264,7 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          label="Auto Apply"
+          label="Auto apply"
           name="autoApply"
           rules={[{ required: true, message: "Required" }]}
         >
@@ -287,7 +287,7 @@ export const Edit = ({
           getValueFromEvent={dateTimePickerGetValueFromEvent}
           getValueProps={dateTimePickerGetValueProps}
           hidden={!autoApply}
-          label="Start Date & Time"
+          label="Start date & time"
           name="startDateTime"
           rules={[{ required: autoApply, message: "Required" }]}
         >
@@ -302,7 +302,7 @@ export const Edit = ({
           getValueFromEvent={dateTimePickerGetValueFromEvent}
           getValueProps={dateTimePickerGetValueProps}
           hidden={!autoApply}
-          label="End Date & Time"
+          label="End date & time"
           name="endDateTime"
           rules={[{ required: autoApply, message: "Required" }]}
         >
@@ -346,7 +346,7 @@ export const Edit = ({
         <Form.Item
           getValueFromEvent={multiDatePickerGetValueFromEvent}
           getValueProps={multiDatePickerGetValueProps}
-          label="Blackout Dates"
+          label="Blackout dates"
           name="blackOutDates"
         >
           <DatePicker format={DATE_FORMAT} multiple />

@@ -23,7 +23,7 @@ export const Addons = () => {
   };
 
   return (
-    <Navbar breadcrumbItems={[{ title: "Cuisine Hub" }, { title: "Addons" }]}>
+    <Navbar breadcrumbItems={[{ title: "Cuisine hub" }, { title: "Addons" }]}>
       {!modal.destroyed && (
         <Edit id={modal.id} open={modal.open} showEdit={showEdit} />
       )}
@@ -34,7 +34,7 @@ export const Addons = () => {
           onClick={() => showEdit(false, "", true)}
           type="primary"
         >
-          Add Addons
+          Add addons
         </Button>
       </div>
 

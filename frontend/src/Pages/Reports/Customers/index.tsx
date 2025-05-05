@@ -33,7 +33,7 @@ export const ReportsCustomers = () => {
   const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
     () => [
       {
-        title: "Sr. No",
+        title: "Sr. no",
         render: (_, _r, index) =>
           (metadata.currentPage - 1) * metadata.limitValue + index + 1,
       },
@@ -46,19 +46,19 @@ export const ReportsCustomers = () => {
         render: (_, r) => r.email ?? "-",
       },
       {
-        title: "Phone Number",
+        title: "Phone number",
         render: (_, i) => `${i.countryCode}${i.phoneNumber}`,
       },
       {
-        title: "Avg Invoice Value",
+        title: "Avg invoice value",
         render: (_, r) => `$${r.avgInvoiceAmount.toFixed(2)}`,
       },
       {
-        title: "Total Invoice",
+        title: "Total invoice",
         render: (_, r) => r.invoiceCount,
       },
       {
-        title: "Total Spend",
+        title: "Total spend",
         render: (_, r) => `$${r.totalInvoiceAmount.toFixed(2)}`,
       },
     ],
@@ -74,13 +74,13 @@ export const ReportsCustomers = () => {
     });
 
     const header = [
-      "Sr. No",
+      "Sr. no",
       "Name",
       "Email",
-      "Phone Number",
-      "Avg Invoice Value",
-      "Total Invoice",
-      "Total Spend",
+      "Phone number",
+      "Avg invoice value",
+      "Total invoice",
+      "Total spend",
     ];
 
     exportAsCSV(
@@ -102,10 +102,10 @@ export const ReportsCustomers = () => {
 
   return (
     <Navbar
-      breadcrumbItems={[{ title: "Reports" }, { title: "Customers Report" }]}
+      breadcrumbItems={[{ title: "Reports" }, { title: "Customers report" }]}
     >
       <div className="flex justify-between">
-        <Typography.Title level={4}>Customers Report</Typography.Title>
+        <Typography.Title level={4}>Customers report</Typography.Title>
 
         <div className="flex gap-2">
           <Input.Search

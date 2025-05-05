@@ -129,7 +129,7 @@ export const Dashboard = () => {
               ],
               title: {
                 style: { fontSize: "0.875rem" },
-                text: "Revenue by Time",
+                text: "Revenue by time",
               },
               tooltip: { pointFormat: "<b>{series.name}: {point.y:.2f}</b>" },
               xAxis: { categories: hourlyRevenue.map((i) => i[0]) },
@@ -222,7 +222,7 @@ export const Dashboard = () => {
               series: [
                 {
                   data: [
-                    { name: "Dine In", y: data?.dineInRevenue },
+                    { name: "Dine-in", y: data?.dineInRevenue },
                     { name: "Takeout", y: data?.takeoutRevenue },
                     { name: "Delivery", y: data?.deliveryRevenue },
                   ],
@@ -232,7 +232,7 @@ export const Dashboard = () => {
               ],
               title: {
                 style: { fontSize: "0.875rem" },
-                text: "Sale Distribution",
+                text: "Sale distribution",
               },
               tooltip: {
                 pointFormat:
@@ -274,7 +274,7 @@ export const Dashboard = () => {
               ],
               title: {
                 style: { fontSize: "0.875rem" },
-                text: "Payment Distribution",
+                text: "Payment distribution",
               },
               tooltip: {
                 pointFormat:

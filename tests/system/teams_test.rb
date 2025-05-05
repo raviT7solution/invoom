@@ -13,7 +13,7 @@ class TeamsTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/teams")
     wait_for_pending_requests
 
-    click_on "Add Role"
+    click_on "Add role"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Chef"
@@ -22,17 +22,17 @@ class TeamsTest < ApplicationSystemTestCase
       click_on "Submit"
     end
 
-    click_on "Add User"
+    click_on "Add user"
 
     within ".ant-drawer" do
-      fill_in "First Name", with: "John"
-      fill_in "Last Name", with: "Doe"
+      fill_in "First name", with: "John"
+      fill_in "Last name", with: "Doe"
       fill_in "Email", with: "john.doe@example.com"
-      fill_in "Preferred Name", with: "john.doe"
+      fill_in "Preferred name", with: "john.doe"
       within ".ant-form-item", text: "Gender" do
         fill_in_select with: "Male"
       end
-      within ".ant-form-item", text: "Employment Type" do
+      within ".ant-form-item", text: "Employment type" do
         fill_in_select with: "Hourly"
       end
       within ".ant-form-item", text: "Phone" do
@@ -51,13 +51,13 @@ class TeamsTest < ApplicationSystemTestCase
         fill_in with: "Brampton"
         fill_in_select with: "Brampton"
       end
-      fill_in "Address Line", with: "837 Auer Divide"
-      fill_in "Postal Code", with: "15721"
-      within ".ant-form-item", text: "Start Date" do
+      fill_in "Address line", with: "837 Auer Divide"
+      fill_in "Postal code", with: "15721"
+      within ".ant-form-item", text: "Start date" do
         fill_in_ant_picker with: "02-01-2016"
       end
       fill_in "Wage", with: 10.5
-      fill_in "Weekly Hour Restriction", with: 11
+      fill_in "Weekly hour restriction", with: 11
       fill_in "Password", with: "Password@123"
       fill_in "Pin", with: "1234"
       within ".ant-form-item", text: "Role" do
@@ -112,7 +112,7 @@ class TeamsTest < ApplicationSystemTestCase
 
     within ".ant-drawer" do
       fill_in "Name", with: "Chef"
-      find(".ant-checkbox-wrapper", text: "Auto Clock-In").click
+      find(".ant-checkbox-wrapper", text: "Auto clock-in").click
       fill_in_select with: "Clock in / Clock out"
 
       click_on "Submit"
@@ -144,8 +144,8 @@ class TeamsTest < ApplicationSystemTestCase
     wait_for_pending_requests
 
     within ".ant-drawer" do
-      fill_in "First Name", with: "John"
-      fill_in "Last Name", with: "Doe"
+      fill_in "First name", with: "John"
+      fill_in "Last name", with: "Doe"
 
       within ".ant-form-item", text: "Phone" do
         fill_in_select with: "+20"
@@ -163,8 +163,8 @@ class TeamsTest < ApplicationSystemTestCase
         fill_in with: "Ahmedabad"
         fill_in_select with: "Ahmedabad"
       end
-      fill_in "Address Line", with: "837 Auer Divide"
-      fill_in "Postal Code", with: "15721"
+      fill_in "Address line", with: "837 Auer Divide"
+      fill_in "Postal code", with: "15721"
 
       click_on "Submit"
     end

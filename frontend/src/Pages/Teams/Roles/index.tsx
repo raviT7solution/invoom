@@ -59,14 +59,14 @@ export const Roles = () => {
           onClick={() => showEditRole("", true)}
           type="primary"
         >
-          Add Role
+          Add role
         </Button>
         <Button
           icon={<UserAddOutlined />}
           onClick={() => showEditUser(false, "", true)}
           type="primary"
         >
-          Add User
+          Add user
         </Button>
       </div>
 

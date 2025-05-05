@@ -28,7 +28,7 @@ export const ServiceCharges = () => {
           onClick={() => showEdit("", true)}
           type="primary"
         >
-          Add Charge
+          Add charge
         </Button>
       </div>
 

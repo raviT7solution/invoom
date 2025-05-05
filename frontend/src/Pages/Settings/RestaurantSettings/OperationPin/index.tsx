@@ -57,14 +57,14 @@ export const OperationPin = () => {
       <Row gutter={8}>
         <Col span={8}>
           <Form.Item
-            label="Confirm Pin"
+            label="Confirm pin"
             name="confirmPin"
             rules={[
               { required: true, message: "Required" },
               { validator: validateConfirmPin },
             ]}
           >
-            <Input placeholder="Confirm Pin" />
+            <Input placeholder="Confirm pin" />
           </Form.Item>
         </Col>
       </Row>

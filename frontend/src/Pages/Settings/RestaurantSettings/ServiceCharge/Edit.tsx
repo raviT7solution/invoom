@@ -24,7 +24,7 @@ const initialValues = {
 
 export const chargeTypes: Record<ServiceChargeTypeEnum, string> = {
   percentage: "Percentage",
-  flat: "Flat Rate",
+  flat: "Flat rate",
 };
 
 const chargeTypesOptions = Object.entries(chargeTypes).map(
@@ -83,7 +83,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Charge" : "Edit Charge"}
+      title={isNew ? "New charge" : "Edit charge"}
     >
       <Form
         initialValues={isNew ? initialValues : serviceCharge}
@@ -101,7 +101,7 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          label="Charge Type"
+          label="Charge type"
           name="chargeType"
           rules={[{ required: true, message: "Required" }]}
         >

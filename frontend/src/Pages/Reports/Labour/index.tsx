@@ -77,29 +77,29 @@ export const ReportsLabour = () => {
   const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
     () => [
       {
-        title: "Sr. No",
+        title: "Sr. no",
         render: (_, _r, index) =>
           (metadata.currentPage - 1) * metadata.limitValue + index + 1,
       },
       {
-        title: "First Name",
+        title: "First name",
         dataIndex: ["user", "firstName"],
       },
       {
-        title: "Last Name",
+        title: "Last name",
         dataIndex: ["user", "lastName"],
       },
       {
-        title: "Start Time",
+        title: "Start time",
         render: (_, r) => utcToRestaurantTimezone(r.startTime, tz),
       },
       {
-        title: "End Time",
+        title: "End time",
         render: (_, r) =>
           r.endTime ? utcToRestaurantTimezone(r.endTime, tz) : "",
       },
       {
-        title: "Shift Duration",
+        title: "Shift duration",
         render: (_, r) => humanizeDuration(r.startTime, r.endTime),
       },
       {
@@ -127,12 +127,12 @@ export const ReportsLabour = () => {
 
   return (
     <Navbar
-      breadcrumbItems={[{ title: "Reports" }, { title: "Labour Report" }]}
+      breadcrumbItems={[{ title: "Reports" }, { title: "Labour report" }]}
     >
       <Edit id={id} open={isOpen} showEdit={showEdit} />
 
       <div className="flex">
-        <Typography.Title level={4}>Labour Report</Typography.Title>
+        <Typography.Title level={4}>Labour report</Typography.Title>
 
         <div className="flex flex-1 items-center justify-end gap-2">
           <Select
@@ -153,7 +153,7 @@ export const ReportsLabour = () => {
           />
 
           <Button onClick={() => showEdit("", true)} type="primary">
-            Add Timesheet
+            Add timesheet
           </Button>
         </div>
       </div>
@@ -163,7 +163,7 @@ export const ReportsLabour = () => {
           <Statistic
             loading={timeSheetSummary.isFetching}
             precision={2}
-            title="Total Hours"
+            title="Total hours"
             value={timeSheetSummary.data?.totalHours}
           />
         </Card>

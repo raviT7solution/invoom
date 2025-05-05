@@ -73,7 +73,7 @@ const genders = [
 
 const employmentTypes = [
   {
-    label: "Salary Per Month",
+    label: "Salary per month",
     value: "salary",
   },
   {
@@ -156,7 +156,7 @@ export const UserEdit = ({
       isFetching={isUserFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New User" : "Edit User"}
+      title={isNew ? "New user" : "Edit user"}
       width={720}
     >
       <Form
@@ -170,21 +170,21 @@ export const UserEdit = ({
         <Row gutter={8}>
           <Col span={8}>
             <Form.Item
-              label="First Name"
+              label="First name"
               name="firstName"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="First Name" />
+              <Input placeholder="First name" />
             </Form.Item>
           </Col>
 
           <Col span={8}>
             <Form.Item
-              label="Last Name"
+              label="Last name"
               name="lastName"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="Last Name" />
+              <Input placeholder="Last name" />
             </Form.Item>
           </Col>
 
@@ -203,11 +203,11 @@ export const UserEdit = ({
 
           <Col span={8}>
             <Form.Item
-              label="Preferred Name"
+              label="Preferred name"
               name="preferredName"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="Preferred Name" />
+              <Input placeholder="Preferred name" />
             </Form.Item>
           </Col>
 
@@ -223,14 +223,14 @@ export const UserEdit = ({
 
           <Col span={8}>
             <Form.Item
-              label="Phone Number"
+              label="Phone number"
               name="phoneNumber"
               rules={[{ required: true, message: "Required" }]}
             >
               <Input
                 addonBefore={
                   <Form.Item
-                    label="Country Code"
+                    label="Country code"
                     name="countryCode"
                     noStyle
                     rules={[{ required: true, message: "Required" }]}
@@ -306,14 +306,14 @@ export const UserEdit = ({
           </Col>
 
           <Col span={8}>
-            <Form.Item label="Address Line" name="address">
-              <Input placeholder="Address Line" />
+            <Form.Item label="Address line" name="address">
+              <Input placeholder="Address line" />
             </Form.Item>
           </Col>
 
           <Col span={8}>
-            <Form.Item label="Postal Code" name="zipCode">
-              <Input placeholder="Postal Code" />
+            <Form.Item label="Postal code" name="zipCode">
+              <Input placeholder="Postal code" />
             </Form.Item>
           </Col>
         </Row>
@@ -327,7 +327,7 @@ export const UserEdit = ({
             <Form.Item
               getValueFromEvent={datePickerGetValueFromEvent}
               getValueProps={datePickerGetValueProps}
-              label="Start Date"
+              label="Start date"
               name="startDate"
               rules={[{ required: true, message: "Required" }]}
             >
@@ -337,7 +337,7 @@ export const UserEdit = ({
 
           <Col span={8}>
             <Form.Item
-              label="Employment Type"
+              label="Employment type"
               name="employmentType"
               rules={[{ required: true, message: "Required" }]}
             >
@@ -347,7 +347,7 @@ export const UserEdit = ({
 
           <Col span={8}>
             <Form.Item
-              label="Weekly Hour Restriction"
+              label="Weekly hour restriction"
               name="maxHour"
               rules={[
                 { required: true, message: "Required" },
@@ -356,7 +356,7 @@ export const UserEdit = ({
             >
               <InputNumber
                 disabled={employmentType !== "hourly"}
-                placeholder="Weekly Hour Restriction"
+                placeholder="Weekly hour restriction"
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -379,9 +379,9 @@ export const UserEdit = ({
             {employmentType && (
               <Tag className="w-full !text-center">
                 {employmentType === "hourly"
-                  ? `Weekly Wage: ${wage * maxHour}/week`
+                  ? `Weekly wage: ${wage * maxHour}/week`
                   : employmentType === "salary"
-                  ? `Daily Wage: ${(wage / 30).toFixed(2)}/day`
+                  ? `Daily wage: ${(wage / 30).toFixed(2)}/day`
                   : ""}
               </Tag>
             )}

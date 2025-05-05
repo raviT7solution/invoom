@@ -19,7 +19,7 @@ export const FloorPlan = () => {
   }, [data, updateItems]);
 
   return (
-    <Navbar breadcrumbItems={[{ title: "Floor Plan" }]} padding={false}>
+    <Navbar breadcrumbItems={[{ title: "Floor plan" }]} padding={false}>
       <div className="nested-scroll-h-full flex">
         <SubMenu />
 

@@ -110,7 +110,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Product" : "Edit Product"}
+      title={isNew ? "New product" : "Edit product"}
       width={720}
     >
       <Form
@@ -124,11 +124,11 @@ export const Edit = ({
         <Row gutter={8}>
           <Col span={12}>
             <Form.Item
-              label="Product Name"
+              label="Product name"
               name="name"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="Product Name" />
+              <Input placeholder="Product name" />
             </Form.Item>
           </Col>
 
@@ -149,7 +149,7 @@ export const Edit = ({
                   />
                 }
                 disabled={!isNew}
-                placeholder="ItemCode"
+                placeholder="Item code"
               />
             </Form.Item>
           </Col>
@@ -233,7 +233,7 @@ export const Edit = ({
 
           <Col span={12}>
             <Form.Item
-              label="Reorder Point"
+              label="Reorder point"
               name="reorderPoint"
               rules={[
                 { required: true, message: "Required" },
@@ -241,7 +241,7 @@ export const Edit = ({
               ]}
             >
               <InputNumber
-                placeholder="Reorder Point"
+                placeholder="Reorder point"
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -249,7 +249,7 @@ export const Edit = ({
 
           <Col span={12}>
             <Form.Item
-              label="Stock Limit"
+              label="Stock limit"
               name="stockLimit"
               rules={[
                 { required: true, message: "Required" },
@@ -257,7 +257,7 @@ export const Edit = ({
               ]}
             >
               <InputNumber
-                placeholder="Stock Limit"
+                placeholder="Stock limit"
                 style={{ width: "100%" }}
               />
             </Form.Item>

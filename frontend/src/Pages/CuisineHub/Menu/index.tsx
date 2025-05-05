@@ -23,7 +23,7 @@ export const Menus = () => {
   };
 
   return (
-    <Navbar breadcrumbItems={[{ title: "Cuisine Hub" }, { title: "Menu" }]}>
+    <Navbar breadcrumbItems={[{ title: "Cuisine hub" }, { title: "Menu" }]}>
       <Edit
         menuId={selectedMenuId}
         open={isModalOpen}
@@ -36,7 +36,7 @@ export const Menus = () => {
           onClick={() => showEditMenu("", true)}
           type="primary"
         >
-          Add Menu
+          Add menu
         </Button>
       </div>
 

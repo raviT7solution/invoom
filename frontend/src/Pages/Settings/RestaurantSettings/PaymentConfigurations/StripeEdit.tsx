@@ -107,11 +107,11 @@ export const StripeEdit = ({
 
         <Form.Item
           hidden={!isConnect}
-          label="Connect account ID"
+          label="Connect account id"
           name="stripeAccountId"
           rules={[{ required: isConnect, message: "Required" }]}
         >
-          <Input placeholder="Connect account ID" />
+          <Input placeholder="Connect account id" />
         </Form.Item>
       </Form>
     </FormDrawer>

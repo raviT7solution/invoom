@@ -65,19 +65,19 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item
-          label="Auth Token"
+          label="Auth token"
           name="twilioAuthToken"
           rules={[{ required: true, message: "Required" }]}
         >
-          <Input placeholder="Auth Token" />
+          <Input placeholder="Auth token" />
         </Form.Item>
 
         <Form.Item
-          label="SMS Phone Number"
+          label="SMS phone number"
           name="twilioSmsPhoneNumber"
           rules={[{ required: true, message: "Required" }]}
         >
-          <Input placeholder="SMS Phone Number" />
+          <Input placeholder="SMS phone number" />
         </Form.Item>
       </Form>
     </FormDrawer>

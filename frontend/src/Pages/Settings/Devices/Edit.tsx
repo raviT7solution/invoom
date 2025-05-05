@@ -44,7 +44,7 @@ export const Edit = ({
       isFetching={device.isFetching}
       onClose={onClose}
       open={open}
-      title="Edit Device"
+      title="Edit device"
     >
       <Form
         initialValues={device.data}

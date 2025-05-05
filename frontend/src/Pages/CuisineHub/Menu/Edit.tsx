@@ -56,7 +56,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Menu" : "Edit Menu"}
+      title={isNew ? "New menu" : "Edit menu"}
     >
       <Form
         initialValues={isNew ? initialValues : menu}

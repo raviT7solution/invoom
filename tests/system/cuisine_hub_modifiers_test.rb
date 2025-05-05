@@ -18,7 +18,7 @@ class CuisineHubModifiersTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/cuisine-hub/modifiers")
     wait_for_pending_requests
 
-    click_on "Add Modifier"
+    click_on "Add modifier"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Spice"

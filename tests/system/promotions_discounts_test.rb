@@ -15,21 +15,21 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/promotions/discounts")
     wait_for_pending_requests
 
-    click_on "Add Discount"
+    click_on "Add discount"
 
     within ".ant-drawer" do
-      fill_in "Discount Name", with: "First"
-      within ".ant-form-item", text: "Discount Type" do
+      fill_in "Discount name", with: "First"
+      within ".ant-form-item", text: "Discount type" do
         fill_in_select with: "Percentage"
       end
       within ".ant-form-item", text: "Channel" do
-        fill_in_select with: "Dine-In"
+        fill_in_select with: "Dine-in"
       end
-      fill_in "Discount Value", with: 10
+      fill_in "Discount value", with: 10
       fill_in "Threshold", with: 1
       fill_in "Capping", with: 2
-      within ".ant-form-item", text: "Discount On" do
-        find(".ant-radio-wrapper", text: "Item Wise").click
+      within ".ant-form-item", text: "Discount on" do
+        find(".ant-radio-wrapper", text: "Item wise").click
       end
       within ".ant-form-item", text: "Categories" do
         fill_in_select with: "Sandwich"
@@ -37,7 +37,7 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
       within ".ant-form-item", text: "Items" do
         fill_in_select with: "Veg. Sandwich"
       end
-      within ".ant-form-item", text: "Auto Apply" do
+      within ".ant-form-item", text: "Auto apply" do
         find(".ant-radio-wrapper", text: "No").click
       end
       within ".ant-form-item", text: "Clubbed" do
@@ -124,26 +124,26 @@ class PromotionsDiscountsTest < ApplicationSystemTestCase
     find(".anticon-edit").click
 
     within ".ant-drawer" do
-      fill_in "Discount Name", with: "First"
-      within ".ant-form-item", text: "Discount Type" do
+      fill_in "Discount name", with: "First"
+      within ".ant-form-item", text: "Discount type" do
         fill_in_select with: "Percentage"
       end
       within ".ant-form-item", text: "Channel" do
-        fill_in_select with: "Dine-In"
+        fill_in_select with: "Dine-in"
       end
-      fill_in "Discount Value", with: 10
+      fill_in "Discount value", with: 10
       fill_in "Threshold", with: 1
       fill_in "Capping", with: 2
-      within ".ant-form-item", text: "Discount On" do
-        find(".ant-radio-wrapper", text: "Bill Wise").click
+      within ".ant-form-item", text: "Discount on" do
+        find(".ant-radio-wrapper", text: "Bill wise").click
       end
-      within ".ant-form-item", text: "Auto Apply" do
+      within ".ant-form-item", text: "Auto apply" do
         find(".ant-radio-wrapper", text: "Yes").click
       end
-      within ".ant-form-item", text: "Start Date & Time" do
+      within ".ant-form-item", text: "Start date & time" do
         fill_in_ant_picker with: "02-01-2016 10:00 AM"
       end
-      within ".ant-form-item", text: "End Date & Time" do
+      within ".ant-form-item", text: "End date & time" do
         fill_in_ant_picker with: "02-01-2016 06:00 PM"
       end
       within ".ant-form-item", text: "Clubbed" do

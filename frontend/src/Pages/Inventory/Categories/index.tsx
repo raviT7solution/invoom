@@ -34,7 +34,7 @@ export const InventoryCategories = () => {
           onClick={() => showEditCategory("", true)}
           type="primary"
         >
-          Add Category
+          Add category
         </Button>
       </div>
 

@@ -47,7 +47,7 @@ type schema = {
 
 const restaurantTypes = [
   {
-    title: "Full Service Restaurant",
+    title: "Full service restaurant",
     description:
       "Turn more tables, upsell with ease, and streamline service with a powerful system built for FSRs.",
   },
@@ -57,22 +57,22 @@ const restaurantTypes = [
       "Turn more tables and delight guests with a POS built for family style restaurants.",
   },
   {
-    title: "Fine Dining",
+    title: "Fine dining",
     description:
       "Deliver elevated experiences and exceptional service with a seamless POS platform.",
   },
   {
-    title: "Quick Service Restaurant",
+    title: "Quick service restaurant",
     description:
       "Reach more customers and keep them coming back with a POS built to run at QSR speed.",
   },
   {
-    title: "Fast Casual",
+    title: "Fast casual",
     description:
       "Deliver quality and convenience at speed with the POS built for fast casual needs.",
   },
   {
-    title: "Coffee Shop",
+    title: "Coffee shop",
     description:
       "Keep lines moving and drive repeat business with an intuitive POS made for coffee shops.",
   },
@@ -82,7 +82,7 @@ const restaurantTypes = [
       "Conquer the rush, maximize margins, and boost loyalty with a powerful cafe POS.",
   },
   {
-    title: "Food Truck",
+    title: "Food truck",
     description:
       "Turn long lines into large profits with a fast and reliable POS for food trucks",
   },
@@ -97,7 +97,7 @@ const restaurantTypes = [
       "Manage your dining room and your wine shop with the all-in-one solution wineries prefer.",
   },
   {
-    title: "Bar & Club",
+    title: "Bar & club",
     description:
       "Serve drinks faster and sell more top-shelf upgrades with the POS built for bars.",
   },
@@ -189,7 +189,7 @@ export const Edit = ({
       isFetching={restaurant.isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "Add Restaurant" : "Edit Restaurant"}
+      title={isNew ? "Add restaurant" : "Edit restaurant"}
       width={900}
     >
       <Form
@@ -201,7 +201,7 @@ export const Edit = ({
         preserve={false}
       >
         <Form.Item
-          label="Restaurant Type"
+          label="Restaurant type"
           name="restaurantType"
           rules={[{ required: true, message: "Required" }]}
         >
@@ -226,11 +226,11 @@ export const Edit = ({
         <Row gutter={8}>
           <Col span={8}>
             <Form.Item
-              label="Restaurant Name"
+              label="Restaurant name"
               name="name"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="Restaurant Name" />
+              <Input placeholder="Restaurant name" />
             </Form.Item>
           </Col>
 
@@ -249,17 +249,17 @@ export const Edit = ({
 
           <Col span={8}>
             <Form.Item
-              label="Phone Number"
+              label="Phone number"
               name="phoneNumber"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="Phone Number" />
+              <Input placeholder="Phone number" />
             </Form.Item>
           </Col>
 
           <Col span={8}>
             <Form.Item
-              label="Operational Since"
+              label="Operational since"
               name="operationalSince"
               rules={[{ required: true, message: "Required" }]}
             >
@@ -268,7 +268,7 @@ export const Edit = ({
           </Col>
 
           <Col span={8}>
-            <Form.Item label="Taxpayer Identification Number" name="taxpayerId">
+            <Form.Item label="Taxpayer identification number" name="taxpayerId">
               <Input placeholder="eg. 123456789" />
             </Form.Item>
           </Col>
@@ -381,11 +381,11 @@ export const Edit = ({
 
           <Col span={8}>
             <Form.Item
-              label="Postal Code"
+              label="Postal code"
               name="postalCode"
               rules={[{ required: true, message: "Required" }]}
             >
-              <Input placeholder="Postal Code" />
+              <Input placeholder="Postal code" />
             </Form.Item>
           </Col>
         </Row>
@@ -399,7 +399,7 @@ export const Edit = ({
             <Form.Item
               getValueFromEvent={(_, v) => tzTimePickerGetValueFromEvent(v, tz)}
               getValueProps={(v) => tzTimePickerGetValueProps(v, tz)}
-              label="Business Start Time"
+              label="Business start time"
               name="businessStartTime"
             >
               <TimePicker
@@ -414,7 +414,7 @@ export const Edit = ({
             <Form.Item
               getValueFromEvent={(_, v) => tzTimePickerGetValueFromEvent(v, tz)}
               getValueProps={(v) => tzTimePickerGetValueProps(v, tz)}
-              label="Business End Time"
+              label="Business end time"
               name="businessEndTime"
             >
               <TimePicker
@@ -429,7 +429,7 @@ export const Edit = ({
             <Form.Item
               getValueFromEvent={(_, v) => tzTimePickerGetValueFromEvent(v, tz)}
               getValueProps={(v) => tzTimePickerGetValueProps(v, tz)}
-              label="Break Start Time"
+              label="Break start time"
               name="breakStartTime"
             >
               <TimePicker
@@ -444,7 +444,7 @@ export const Edit = ({
             <Form.Item
               getValueFromEvent={(_, v) => tzTimePickerGetValueFromEvent(v, tz)}
               getValueProps={(v) => tzTimePickerGetValueProps(v, tz)}
-              label="Break End Time"
+              label="Break end time"
               name="breakEndTime"
             >
               <TimePicker

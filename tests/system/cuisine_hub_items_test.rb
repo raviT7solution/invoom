@@ -17,11 +17,11 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/cuisine-hub/items")
     wait_for_pending_requests
 
-    click_on "Add Item"
+    click_on "Add item"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Vadapav"
-      fill_in "Display Name", with: "Vadapav"
+      fill_in "Display name", with: "Vadapav"
       within ".ant-form-item", text: "Category" do
         fill_in_select with: "Sandwich"
       end
@@ -31,11 +31,11 @@ class CuisineHubItemsTest < ApplicationSystemTestCase
       within ".ant-form-item", text: "Modifiers" do
         fill_in_select with: "Jain"
       end
-      fill_in "Cost Of Production", with: 10
+      fill_in "Cost of production", with: 10
       fill_in "Price", with: 11
       find(".ant-checkbox-wrapper", text: "= Price").click
-      fill_in "Takeout Price", with: 12
-      fill_in "Delivery Price", with: 13
+      fill_in "Takeout price", with: 12
+      fill_in "Delivery price", with: 13
 
       click_on "Submit"
     end

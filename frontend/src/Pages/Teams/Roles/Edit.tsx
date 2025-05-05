@@ -24,7 +24,7 @@ const permissions = [
     value: "delete_ticket_item",
   },
   {
-    label: "Edit Item",
+    label: "Edit item",
     value: "edit_item",
   },
   {
@@ -109,7 +109,7 @@ export const Edit = ({
       isFetching={isFetching}
       onClose={onClose}
       open={open}
-      title={isNew ? "New Role" : "Edit Role"}
+      title={isNew ? "New role" : "Edit role"}
     >
       <Form
         initialValues={isNew ? initialValues : role}
@@ -139,7 +139,7 @@ export const Edit = ({
         </Form.Item>
 
         <Form.Item name="autoClockIn" valuePropName="checked">
-          <Checkbox>Auto Clock-In</Checkbox>
+          <Checkbox>Auto clock-in</Checkbox>
         </Form.Item>
       </Form>
     </FormDrawer>

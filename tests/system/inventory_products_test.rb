@@ -15,10 +15,10 @@ class InventoryProductsTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/inventory/products")
     wait_for_pending_requests
 
-    click_on "Add Product"
+    click_on "Add product"
 
     within ".ant-drawer" do
-      fill_in "Product Name", with: "Egg"
+      fill_in "Product name", with: "Egg"
       within ".ant-form-item", text: "Itemcode / Barcode" do
         click_button
         wait_for_pending_requests
@@ -35,8 +35,8 @@ class InventoryProductsTest < ApplicationSystemTestCase
         fill_in_select with: "Tonne"
       end
       fill_in "Quantity / Weight", with: "10"
-      fill_in "Reorder Point", with: "10"
-      fill_in "Stock Limit", with: "5"
+      fill_in "Reorder point", with: "10"
+      fill_in "Stock limit", with: "5"
 
       click_on "Submit"
     end
@@ -101,15 +101,15 @@ class InventoryProductsTest < ApplicationSystemTestCase
     find(".anticon-edit").click
 
     within ".ant-drawer" do
-      fill_in "Product Name", with: "Egg"
+      fill_in "Product name", with: "Egg"
       fill_in "Description", with: "This is test"
       fill_in "Price", with: "10"
       within ".ant-form-item", text: "UOM" do
         fill_in_select with: "Tonne"
       end
       fill_in "Quantity / Weight", with: "10"
-      fill_in "Reorder Point", with: "10"
-      fill_in "Stock Limit", with: "5"
+      fill_in "Reorder point", with: "10"
+      fill_in "Stock limit", with: "5"
 
       find(".ant-checkbox-wrapper-checked", text: "Visible").click
 

@@ -80,7 +80,7 @@ export const Navbar = ({
     },
 
     {
-      label: "Cuisine Hub",
+      label: "Cuisine hub",
       icon: <ReconciliationOutlined />,
       key: "3",
       children: [
@@ -112,7 +112,7 @@ export const Navbar = ({
       ],
     },
     {
-      label: <Link to={Router.FloorPlan()}>Floor Plan</Link>,
+      label: <Link to={Router.FloorPlan()}>Floor plan</Link>,
       icon: <FormatPainterOutlined />,
       key: "4",
     },
@@ -151,17 +151,17 @@ export const Navbar = ({
       key: "7",
       children: [
         {
-          label: <Link to={Router.ReportsCustomers()}>Customers Report</Link>,
+          label: <Link to={Router.ReportsCustomers()}>Customers report</Link>,
           icon: <ProfileOutlined />,
           key: "7.1",
         },
         {
-          label: <Link to={Router.ReportsLabour()}>Labour Report</Link>,
+          label: <Link to={Router.ReportsLabour()}>Labour report</Link>,
           icon: <FieldTimeOutlined />,
           key: "7.2",
         },
         {
-          label: <Link to={Router.ReportsSales()}>Sales Report</Link>,
+          label: <Link to={Router.ReportsSales()}>Sales report</Link>,
           icon: <FileDoneOutlined />,
           key: "7.3",
         },
@@ -174,20 +174,20 @@ export const Navbar = ({
       children: [
         {
           label: (
-            <Link to={Router.RestaurantSettings()}>Restaurant Settings</Link>
+            <Link to={Router.RestaurantSettings()}>Restaurant settings</Link>
           ),
           icon: <PercentageOutlined />,
           key: "8.1",
         },
         {
           label: (
-            <Link to={Router.SettingsKitchenProfiles()}>Kitchen Profiles</Link>
+            <Link to={Router.SettingsKitchenProfiles()}>Kitchen profiles</Link>
           ),
           icon: <InsertRowAboveOutlined />,
           key: "8.2",
         },
         {
-          label: <Link to={Router.SettingsDevices()}>Device Settings</Link>,
+          label: <Link to={Router.SettingsDevices()}>Device settings</Link>,
           icon: <TabletOutlined />,
           key: "8.3",
         },
@@ -203,12 +203,12 @@ export const Navbar = ({
 
   const headerItems: MenuProps["items"] = [
     {
-      label: <Link to={Router.SettingsRestaurants()}>My Restaurants</Link>,
+      label: <Link to={Router.SettingsRestaurants()}>My restaurants</Link>,
       icon: <UserAddOutlined />,
       key: "1",
     },
     {
-      label: <Link to={Router.ChangePassword()}>Change Password</Link>,
+      label: <Link to={Router.ChangePassword()}>Change password</Link>,
       icon: <KeyOutlined />,
       key: "2",
     },

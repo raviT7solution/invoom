@@ -48,11 +48,11 @@ type SetFiltersType = Dispatch<SetStateAction<FiltersType>>;
 
 const REPORT_TYPES = [
   {
-    label: "Sales By Order",
+    label: "Sales by Order",
     value: "orders",
   },
   {
-    label: "Sales By Invoice",
+    label: "Sales by Invoice",
     value: "invoices",
   },
 ];
@@ -106,7 +106,7 @@ const OrdersWise = ({
   const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
     () => [
       {
-        title: "Sr. No",
+        title: "Sr. no",
         render: (_, _r, index) =>
           (metadata.currentPage - 1) * metadata.limitValue + index + 1,
       },
@@ -119,7 +119,7 @@ const OrdersWise = ({
         render: (_, r) => r.invoices.map((i) => i.number).join(", "),
       },
       {
-        title: "Order Type",
+        title: "Order type",
         key: "bookingType",
         render: (_, r) => BOOKING_TYPES[r.bookingType],
         filters: Object.entries(BOOKING_TYPES).map(([value, text]) => ({
@@ -129,16 +129,16 @@ const OrdersWise = ({
         filteredValue: filters.bookingTypes,
       },
       {
-        title: "Start Time",
+        title: "Start time",
         render: (_, r) => utcToRestaurantTimezone(r.clockedInAt, tz),
       },
       {
-        title: "End Time",
+        title: "End time",
         render: (_, r) =>
           r.clockedOutAt ? utcToRestaurantTimezone(r.clockedOutAt, tz) : "-",
       },
       {
-        title: "Table/Order No.",
+        title: "Table/Order no.",
         render: (_, r) => {
           if (r.bookingType === "dine_in") return r.tableNames?.join(", ");
 
@@ -161,14 +161,14 @@ const OrdersWise = ({
           `$${r.invoices.reduce((p, i) => p + i.totalDiscount, 0).toFixed(2)}`,
       },
       {
-        title: "Total Service Charge",
+        title: "Total service charge",
         render: (_, r) =>
           `$${r.invoices
             .reduce((p, i) => p + invoiceServiceCharge(i), 0)
             .toFixed(2)}`,
       },
       {
-        title: "Total Tax",
+        title: "Total tax",
         render: (_, r) =>
           `$${r.invoices.reduce((p, i) => p + invoiceTax(i), 0).toFixed(2)}`,
       },
@@ -183,7 +183,7 @@ const OrdersWise = ({
           `$${r.invoices.reduce((p, i) => p + i.total, 0).toFixed(2)}`,
       },
       {
-        title: "Payment Type",
+        title: "Payment type",
         key: "paymentType",
         render: (_, r) => r.invoices.flatMap(invoicePaymentModes).join(", "),
         filters: Object.entries(PAYMENT_MODES).map(([value, text]) => ({
@@ -193,11 +193,11 @@ const OrdersWise = ({
         filteredValue: filters.paymentModes,
       },
       {
-        title: "Customer Name",
+        title: "Customer name",
         render: (_, r) => r.customer?.name ?? "-",
       },
       {
-        title: "Server Name",
+        title: "Server name",
         dataIndex: ["userFullName"],
       },
     ],
@@ -266,7 +266,7 @@ const InvoicesWise = ({
   const columns: TableColumnsType<(typeof collection)[number]> = useMemo(
     () => [
       {
-        title: "Sr. No",
+        title: "Sr. no",
         render: (_, _r, index) =>
           (metadata.currentPage - 1) * metadata.limitValue + index + 1,
       },
@@ -279,7 +279,7 @@ const InvoicesWise = ({
         dataIndex: ["number"],
       },
       {
-        title: "Order Type",
+        title: "Order type",
         key: "bookingType",
         render: (_, r) => BOOKING_TYPES[r.booking.bookingType],
         filters: Object.entries(BOOKING_TYPES).map(([value, text]) => ({
@@ -289,18 +289,18 @@ const InvoicesWise = ({
         filteredValue: filters.bookingTypes,
       },
       {
-        title: "Start Time",
+        title: "Start time",
         render: (_, r) => utcToRestaurantTimezone(r.booking.clockedInAt, tz),
       },
       {
-        title: "End Time",
+        title: "End time",
         render: (_, r) =>
           r.booking.clockedOutAt
             ? utcToRestaurantTimezone(r.booking.clockedOutAt, tz)
             : "-",
       },
       {
-        title: "Table/Order No.",
+        title: "Table/Order no.",
         render: (_, r) => {
           if (r.booking.bookingType === "dine_in")
             return r.booking.tableNames?.join(", ");
@@ -325,11 +325,11 @@ const InvoicesWise = ({
         render: (_, r) => `$${r.totalDiscount.toFixed(2)}`,
       },
       {
-        title: "Total Service Charge",
+        title: "Total service charge",
         render: (_, r) => `$${invoiceServiceCharge(r).toFixed(2)}`,
       },
       {
-        title: "Total Tax",
+        title: "Total tax",
         render: (_, r) => `$${invoiceTax(r).toFixed(2)}`,
       },
       {
@@ -341,7 +341,7 @@ const InvoicesWise = ({
         render: (_, r) => `$${r.total.toFixed(2)}`,
       },
       {
-        title: "Payment Type",
+        title: "Payment type",
         key: "paymentType",
         render: (_, r) => invoicePaymentModes(r).join(", "),
         filters: Object.entries(PAYMENT_MODES).map(([value, text]) => ({
@@ -351,11 +351,11 @@ const InvoicesWise = ({
         filteredValue: filters.paymentModes,
       },
       {
-        title: "Customer Name",
+        title: "Customer name",
         render: (_, r) => r.booking.customer?.name ?? "-",
       },
       {
-        title: "Server Name",
+        title: "Server name",
         dataIndex: ["booking", "userFullName"],
       },
     ],
@@ -424,23 +424,23 @@ export const ReportsSales = () => {
     });
 
     const header = [
-      "Sr. No",
+      "Sr. no",
       "Order ID",
       "Invoice ID",
-      "Order Type",
-      "Start Time",
-      "End Time",
-      "Table/Order No.",
+      "Order type",
+      "Start time",
+      "End time",
+      "Table/Order no.",
       "Pax",
       "Subtotal",
       "Total Dis.",
-      "Total Service Charge",
-      "Total Tax",
+      "Total service charge",
+      "Total tax",
       "Tip",
       "Total",
-      "Payment Type",
-      "Customer Name",
-      "Server Name",
+      "Payment type",
+      "Customer name",
+      "Server name",
     ];
 
     exportAsCSV(
@@ -488,23 +488,23 @@ export const ReportsSales = () => {
     });
 
     const header = [
-      "Sr. No",
+      "Sr. no",
       "Order ID",
       "Invoice ID",
-      "Order Type",
-      "Start Time",
-      "End Time",
-      "Table/Order No.",
+      "Order type",
+      "Start time",
+      "End time",
+      "Table/Order no.",
       "Pax",
       "Subtotal",
       "Total Dis.",
-      "Total Service Charge",
-      "Total Tax",
+      "Total service charge",
+      "Total tax",
       "Tip",
       "Total",
-      "Payment Type",
-      "Customer Name",
-      "Server Name",
+      "Payment type",
+      "Customer name",
+      "Server name",
     ];
 
     exportAsCSV(
@@ -546,9 +546,9 @@ export const ReportsSales = () => {
   };
 
   return (
-    <Navbar breadcrumbItems={[{ title: "Report" }, { title: "Sales Report" }]}>
+    <Navbar breadcrumbItems={[{ title: "Report" }, { title: "Sales report" }]}>
       <div className="flex flex-col flex-wrap justify-between md:flex-row">
-        <Typography.Title level={4}>Sales Report</Typography.Title>
+        <Typography.Title level={4}>Sales report</Typography.Title>
 
         <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
           <Input.Search

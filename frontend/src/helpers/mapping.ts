@@ -46,16 +46,16 @@ export const PAYMENT_MODES: Record<PaymentModeEnum, string> = {
   card: "Card",
   cash: "Cash",
   cheque: "Cheque",
-  door_dash: "Door Dash",
-  gift_card: "Gift Card",
+  door_dash: "Door dash",
+  gift_card: "Gift card",
   other: "Other",
-  skip_the_dishes: "Skip The Dishes",
-  uber_eats: "Uber Eats",
+  skip_the_dishes: "Skip the dishes",
+  uber_eats: "Uber eats",
   void: "Void",
 };
 
 export const BOOKING_TYPES: Record<BookingType, string> = {
   delivery: "Delivery",
-  dine_in: "Dine In",
+  dine_in: "Dine-in",
   takeout: "Takeout",
 };

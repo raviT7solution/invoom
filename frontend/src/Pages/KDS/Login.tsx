@@ -66,7 +66,7 @@ const ConfigForm = () => {
       </Form.Item>
 
       <Form.Item
-        label="Kitchen Profile"
+        label="Kitchen profile"
         name="kitchenProfileId"
         rules={[{ required: true, message: "Required" }]}
       >

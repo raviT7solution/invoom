@@ -26,7 +26,7 @@ class KdsConfigTest < ApplicationSystemTestCase
     end
 
     within ".ant-modal" do
-      assert_selector ".ant-modal-title", text: "Admin Verification"
+      assert_selector ".ant-modal-title", text: "Admin verification"
 
       fill_in "Email", with: kds_admin.email
       fill_in "Password", with: kds_admin.password

@@ -26,7 +26,7 @@ class SettingsRestaurantSettingsTest < ApplicationSystemTestCase
     sign_in(admin)
     visit path_for(:frontend, "/settings/restaurant-settings")
 
-    find("span", text: "Payment Gateway Configurations").click
+    find("span", text: "Payment gateway configurations").click
     wait_for_pending_requests
 
     assert_text "Stripe account is not configured"
@@ -39,7 +39,7 @@ class SettingsRestaurantSettingsTest < ApplicationSystemTestCase
         find(".ant-radio-wrapper", text: "Connect account").click
       end
 
-      fill_in "Connect account ID", with: "connect_id"
+      fill_in "Connect account id", with: "connect_id"
 
       click_on "Submit"
       wait_for_pending_requests
@@ -51,7 +51,7 @@ class SettingsRestaurantSettingsTest < ApplicationSystemTestCase
                       stripe_account_id: "connect_id",
                       stripe_account_type: "connect"
 
-    assert_text "Uses stripe connect account ID: connect_id"
+    assert_text "Uses stripe connect account id: connect_id"
 
     click_on "Reconfigure"
     wait_for_pending_requests
@@ -84,7 +84,7 @@ class SettingsRestaurantSettingsTest < ApplicationSystemTestCase
     sign_in(admin)
     visit path_for(:frontend, "/settings/restaurant-settings")
 
-    find("span", text: "SMS Configurations").click
+    find("span", text: "SMS configurations").click
     wait_for_pending_requests
 
     assert_text "Twilio account is not configured"
@@ -94,8 +94,8 @@ class SettingsRestaurantSettingsTest < ApplicationSystemTestCase
 
     within ".ant-drawer" do
       fill_in "Account SID", with: "account_sid"
-      fill_in "Auth Token", with: "auth_token"
-      fill_in "SMS Phone Number", with: "+123456"
+      fill_in "Auth token", with: "auth_token"
+      fill_in "SMS phone number", with: "+123456"
 
       click_on "Submit"
       wait_for_pending_requests
@@ -116,7 +116,7 @@ class SettingsRestaurantSettingsTest < ApplicationSystemTestCase
     sign_in(admin)
     visit path_for(:frontend, "/settings/restaurant-settings")
 
-    find("span", text: "Receipt Configurations").click
+    find("span", text: "Receipt configurations").click
     wait_for_pending_requests
 
     within ".ant-form" do

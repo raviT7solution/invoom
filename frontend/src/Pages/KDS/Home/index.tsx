@@ -128,7 +128,7 @@ export const KDSHome = () => {
         onClose={() => setOpen(false)}
         open={open}
         placement="left"
-        title="Configure Menu"
+        title="Configure menu"
       >
         <ConfigureMenu />
       </Drawer>

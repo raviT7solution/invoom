@@ -13,7 +13,7 @@ class InventoryCategoriesTest < ApplicationSystemTestCase
     visit path_for(:frontend, "/inventory/categories")
     wait_for_pending_requests
 
-    click_on "Add Category"
+    click_on "Add category"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Fruit"

@@ -32,7 +32,7 @@ class KdsLoginTest < ApplicationSystemTestCase
       within ".ant-form-item", text: "Restaurant" do
         fill_in_select with: "Restaurant 1"
       end
-      within ".ant-form-item", text: "Kitchen Profile" do
+      within ".ant-form-item", text: "Kitchen profile" do
         fill_in_select with: "Kitchen Profile 1"
       end
       click_on "OK"

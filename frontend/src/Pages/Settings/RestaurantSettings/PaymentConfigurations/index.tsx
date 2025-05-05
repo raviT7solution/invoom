@@ -36,7 +36,7 @@ export const PaymentConfiguration = () => {
         description={
           <Typography.Text type="secondary">
             {isConnect &&
-              `Uses stripe connect account ID: ${restaurant.data?.stripeAccountId}`}
+              `Uses stripe connect account id: ${restaurant.data?.stripeAccountId}`}
             {isOwn && "Uses stripe own account"}
           </Typography.Text>
         }

@@ -11,25 +11,25 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
 
     visit path_for(:frontend, "/settings/restaurants")
 
-    assert_text "In Progress (0)"
+    assert_text "In progress (0)"
     assert_text "Active (0)"
 
-    click_on "Add Restaurant"
+    click_on "Add restaurant"
 
     within ".ant-drawer" do
       wait_for_pending_requests
 
-      within ".ant-form-item", text: "Restaurant Type" do
+      within ".ant-form-item", text: "Restaurant type" do
         fill_in with: "Cafe"
         fill_in_select with: "Cafe\nConquer the rush, maximize margins, and boost loyalty with a powerful cafe POS."
       end
-      fill_in "Restaurant Name", with: "Cafe 1"
+      fill_in "Restaurant name", with: "Cafe 1"
       fill_in "Email", with: "cafe@example.com"
-      fill_in "Phone Number", with: "1111111111"
-      within ".ant-form-item", text: "Operational Since" do
+      fill_in "Phone number", with: "1111111111"
+      within ".ant-form-item", text: "Operational since" do
         fill_in_select with: Date.current.year.to_s
       end
-      fill_in "Taxpayer Identification Number", with: "123456789"
+      fill_in "Taxpayer identification number", with: "123456789"
       fill_in "Website", with: "example.com"
       within ".ant-form-item", text: "Country" do
         fill_in with: "Canada"
@@ -50,17 +50,17 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
         fill_in_select with: "#{zone.identifier} (UTC #{zone.strftime('%:z')})"
       end
       fill_in "Address", with: "837 Auer Divide"
-      fill_in "Postal Code", with: "15721"
-      within ".ant-form-item", text: "Business Start Time" do
+      fill_in "Postal code", with: "15721"
+      within ".ant-form-item", text: "Business start time" do
         fill_in_ant_picker with: "09:00 AM"
       end
-      within ".ant-form-item", text: "Business End Time" do
+      within ".ant-form-item", text: "Business end time" do
         fill_in_ant_picker with: "11:00 PM"
       end
-      within ".ant-form-item", text: "Break Start Time" do
+      within ".ant-form-item", text: "Break start time" do
         fill_in_ant_picker with: "02:00 PM"
       end
-      within ".ant-form-item", text: "Break End Time" do
+      within ".ant-form-item", text: "Break end time" do
         fill_in_ant_picker with: "02:30 PM"
       end
 
@@ -96,7 +96,7 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
                       show_platform_branding: true,
                       show_unit_price: true
 
-    assert_text "In Progress (1)"
+    assert_text "In progress (1)"
     assert_text "Active (0)"
     assert_text "Cafe 1"
   end

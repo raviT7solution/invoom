@@ -15,7 +15,7 @@ class SettingsKitchenProfilesTest < ApplicationSystemTestCase
 
     visit path_for(:frontend, "/settings/kitchen-profiles")
 
-    click_on "Add Kitchen Profile"
+    click_on "Add kitchen profile"
 
     within ".ant-drawer" do
       fill_in "Name", with: "Kitchen Profile 1"
