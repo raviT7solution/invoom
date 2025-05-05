@@ -106,7 +106,6 @@ const OrdersWise = () => {
           text,
           value,
         })),
-        filteredValue: filters.bookingTypes,
       },
       {
         title: "Start time",
@@ -170,7 +169,6 @@ const OrdersWise = () => {
           text,
           value,
         })),
-        filteredValue: filters.paymentModes,
       },
       {
         title: "Customer name",
@@ -181,7 +179,7 @@ const OrdersWise = () => {
         dataIndex: ["userFullName"],
       },
     ],
-    [filters, metadata, tz],
+    [metadata, tz],
   );
 
   const onTableChange: TableProps<(typeof collection)[number]>["onChange"] = (
@@ -357,7 +355,6 @@ const InvoicesWise = () => {
           text,
           value,
         })),
-        filteredValue: filters.bookingTypes,
       },
       {
         title: "Start time",
@@ -419,7 +416,6 @@ const InvoicesWise = () => {
           text,
           value,
         })),
-        filteredValue: filters.paymentModes,
       },
       {
         title: "Customer name",
@@ -430,7 +426,7 @@ const InvoicesWise = () => {
         dataIndex: ["booking", "userFullName"],
       },
     ],
-    [filters, metadata, tz],
+    [metadata, tz],
   );
 
   const onTableChange: TableProps<(typeof collection)[number]>["onChange"] = (
