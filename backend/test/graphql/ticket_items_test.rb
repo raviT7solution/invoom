@@ -19,7 +19,7 @@ class TicketItemsTest < ActionDispatch::IntegrationTest
     another_ticket_item = create(:ticket_item, ticket: ticket, name: item.name, price: item.price, quantity: 2,
                                                status: "queued", item: item)
 
-    authentic_query mobile_user_token(user, device), ticket_items_update_string, variables: {
+    authentic_query mobile_user_token(user, device), ticket_items_update, variables: {
       input: {
         attributes: [
           {
@@ -34,7 +34,7 @@ class TicketItemsTest < ActionDispatch::IntegrationTest
     assert_attributes ticket_item.reload, status: "preparing"
     assert_attributes another_ticket_item.reload, status: "queued"
 
-    authentic_query mobile_user_token(user, device), ticket_items_update_string, variables: {
+    authentic_query mobile_user_token(user, device), ticket_items_update, variables: {
       input: {
         attributes: [
           {
@@ -56,7 +56,7 @@ class TicketItemsTest < ActionDispatch::IntegrationTest
 
   private
 
-  def ticket_items_update_string
+  def ticket_items_update
     <<~GQL
       mutation ticketItemsUpdate($input: TicketItemsUpdateInput!){
         ticketItemsUpdate(input: $input)

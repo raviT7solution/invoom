@@ -12,7 +12,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
   end
 
   test "returns token for valid pin" do
-    authentic_query mobile_admin_token(@admin, @device), create_string, variables: {
+    authentic_query mobile_admin_token(@admin, @device), user_session_create, variables: {
       input: {
         restaurantId: @restaurant.id,
         attributes: {
@@ -32,7 +32,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
   end
 
   test "returns token for valid password" do
-    authentic_query mobile_admin_token(@admin, @device), create_string, variables: {
+    authentic_query mobile_admin_token(@admin, @device), user_session_create, variables: {
       input: {
         restaurantId: @restaurant.id,
         attributes: {
@@ -55,7 +55,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
   test "when already clocked in" do
     time_sheet = create(:time_sheet, user: @user, start_time: 2.days.ago)
 
-    authentic_query mobile_admin_token(@admin, @device), create_string, variables: {
+    authentic_query mobile_admin_token(@admin, @device), user_session_create, variables: {
       input: {
         restaurantId: @restaurant.id,
         attributes: {
@@ -78,7 +78,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
   test "when already clocked out" do
     create(:time_sheet, user: @user, start_time: 2.days.ago, end_time: 1.day.ago)
 
-    authentic_query mobile_admin_token(@admin, @device), create_string, variables: {
+    authentic_query mobile_admin_token(@admin, @device), user_session_create, variables: {
       input: {
         restaurantId: @restaurant.id,
         attributes: {
@@ -101,7 +101,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     assert_query_error "User is already clocked-in"
 
-    authentic_query mobile_user_token(@user, @device), destroy_string, variables: { input: {} }
+    authentic_query mobile_user_token(@user, @device), user_session_destroy, variables: { input: {} }
     authentic_query mobile_user_token(@user, @device), user_session_time_sheet_create, variables: { input: {} }
 
     assert_query_success
@@ -112,14 +112,14 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
   test "destroy session" do
     create(:time_sheet, user: @user, start_time: 2.days.ago)
 
-    authentic_query mobile_user_token(@user, @device), destroy_string, variables: { input: {} }
+    authentic_query mobile_user_token(@user, @device), user_session_destroy, variables: { input: {} }
 
     assert_query_success
     assert_nil @user.time_sheets.find_by(end_time: nil)
 
     create(:time_sheet, user: @user, start_time: 2.days.ago, end_time: 1.day.ago)
 
-    authentic_query mobile_user_token(@user, @device), destroy_string, variables: { input: {} }
+    authentic_query mobile_user_token(@user, @device), user_session_destroy, variables: { input: {} }
 
     assert_query_success
   end
@@ -129,20 +129,20 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
 
     travel 16.minutes
 
-    authentic_query token, current_user_string
+    authentic_query token, current_user
 
     assert_query_error "Session not found"
   end
 
   test "invalid token with different secrets" do
-    authentic_query "fake-token", current_user_string
+    authentic_query "fake-token", current_user
 
     assert_query_error "Session not found"
   end
 
   private
 
-  def current_user_string
+  def current_user
     <<~GQL
       query currentUser {
         currentUser {
@@ -154,7 +154,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def create_string
+  def user_session_create
     <<~GQL
       mutation userSessionCreate($input: UserSessionCreateInput!) {
         userSessionCreate(input: $input) {
@@ -167,7 +167,7 @@ class UserSessionsTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def destroy_string
+  def user_session_destroy
     <<~GQL
       mutation userSessionDestroy($input: UserSessionDestroyInput!) {
         userSessionDestroy(input: $input)

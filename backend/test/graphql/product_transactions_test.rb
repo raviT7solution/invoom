@@ -16,7 +16,7 @@ class ProductTransactionsTest < ActionDispatch::IntegrationTest
                      restaurant: restaurant,
                      tax: create(:tax))
 
-    authentic_query mobile_user_token(user, device), product_transaction_create_string, variables: {
+    authentic_query mobile_user_token(user, device), product_transaction_create, variables: {
       input: {
         attributes: {
           price: 12,
@@ -50,7 +50,7 @@ class ProductTransactionsTest < ActionDispatch::IntegrationTest
                      restaurant: restaurant,
                      tax: create(:tax))
 
-    authentic_query mobile_user_token(user, device), product_transaction_create_string, variables: {
+    authentic_query mobile_user_token(user, device), product_transaction_create, variables: {
       input: {
         attributes: {
           price: 0,
@@ -73,7 +73,7 @@ class ProductTransactionsTest < ActionDispatch::IntegrationTest
 
   private
 
-  def product_transaction_create_string
+  def product_transaction_create
     <<~GQL
       mutation productTransactionCreate($input: ProductTransactionCreateInput!) {
         productTransactionCreate(input: $input)

@@ -10,7 +10,7 @@ class ReservationsTest < ActionDispatch::IntegrationTest
     user = create(:user, roles: [role], restaurant: restaurant)
     customer = create(:customer, restaurant: restaurant)
 
-    authentic_query mobile_user_token(user, device), reservation_create_string, variables: {
+    authentic_query mobile_user_token(user, device), reservation_create, variables: {
       input: {
         attributes: {
           adults: 1,
@@ -40,7 +40,7 @@ class ReservationsTest < ActionDispatch::IntegrationTest
     user = create(:user, roles: [role], restaurant: restaurant)
     customer = create(:customer, restaurant: restaurant)
 
-    authentic_query mobile_user_token(user, device), reservation_create_string, variables: {
+    authentic_query mobile_user_token(user, device), reservation_create, variables: {
       input: {
         attributes: {
           adults: 1,
@@ -64,7 +64,7 @@ class ReservationsTest < ActionDispatch::IntegrationTest
     customer = create(:customer, restaurant: restaurant)
     reservation = create(:reservation, restaurant: restaurant, customer: customer)
 
-    authentic_query mobile_user_token(user, device), reservation_update_string, variables: {
+    authentic_query mobile_user_token(user, device), reservation_update, variables: {
       input: {
         attributes: {
           status: "seated"
@@ -86,7 +86,7 @@ class ReservationsTest < ActionDispatch::IntegrationTest
     reservation = create(:reservation, restaurant: restaurant, customer: customer,
                                        reservation_at: "2024-04-02T11:20:00")
 
-    authentic_query mobile_user_token(user, device), reservations_string, variables: {
+    authentic_query mobile_user_token(user, device), reservations, variables: {
       endTime: "2024-04-03T11:20:00",
       restaurantId: restaurant.id,
       startTime: "2024-04-01T11:20:00"
@@ -108,7 +108,7 @@ class ReservationsTest < ActionDispatch::IntegrationTest
 
   private
 
-  def reservation_create_string
+  def reservation_create
     <<~GQL
       mutation reservationCreate($input: ReservationCreateInput!){
         reservationCreate(input: $input)
@@ -116,7 +116,7 @@ class ReservationsTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def reservation_update_string
+  def reservation_update
     <<~GQL
       mutation reservationUpdate($input: ReservationUpdateInput!){
         reservationUpdate(input: $input)
@@ -124,7 +124,7 @@ class ReservationsTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def reservations_string
+  def reservations
     <<~GQL
       query reservations(
         $endTime: ISO8601DateTime

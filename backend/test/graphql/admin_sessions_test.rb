@@ -8,7 +8,9 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
   end
 
   test "valid credentials" do
-    query create_string, variables: { input: { email: @admin.email, password: @admin.password, subject: "web_admin" } }
+    query admin_session_create, variables: {
+      input: { email: @admin.email, password: @admin.password, subject: "web_admin" }
+    }
 
     assert_query_success
 
@@ -23,13 +25,13 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
   end
 
   test "invalid credentials" do
-    query create_string, variables: { input: { email: @admin.email, password: "wrong", subject: "web_admin" } }
+    query admin_session_create, variables: { input: { email: @admin.email, password: "wrong", subject: "web_admin" } }
 
     assert_query_error "Invalid password"
   end
 
   test "invalid admin" do
-    query create_string, variables: { input: { email: "hacker", password: "wrong", subject: "web_admin" } }
+    query admin_session_create, variables: { input: { email: "hacker", password: "wrong", subject: "web_admin" } }
 
     assert_query_error "Admin not found"
   end
@@ -80,7 +82,7 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
   end
 
   test "public query" do
-    query countries_query
+    query countries
 
     assert_query_success
   end
@@ -95,7 +97,7 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def countries_query
+  def countries
     <<~GQL
       query countries {
         countries {
@@ -106,7 +108,7 @@ class AdminSessionsTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def create_string
+  def admin_session_create
     <<~GQL
       mutation adminSessionCreate($input: AdminSessionCreateInput!) {
         adminSessionCreate(input: $input) {

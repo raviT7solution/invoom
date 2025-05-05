@@ -38,7 +38,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_create, variables: {
       input: {
         attributes: {
           bookingType: "dine_in",
@@ -70,7 +70,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
     customer = create(:customer, restaurant: restaurant)
 
-    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_create, variables: {
       input: {
         attributes: {
           bookingType: "takeout",
@@ -85,7 +85,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     assert_query_error "Table names must be blank"
     assert_nil Booking.last
 
-    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_create, variables: {
       input: {
         attributes: {
           bookingType: "takeout",
@@ -111,7 +111,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     role = create(:role, restaurant: restaurant, permissions: ["orders"])
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    authentic_query mobile_user_token(user, device), booking_create_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_create, variables: {
       input: {
         attributes: {
           bookingType: "dine_in",
@@ -134,7 +134,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     booking = create(:booking, restaurant: restaurant, user: user, booking_type: "dine_in", pax: 1, table_names: ["T1"])
     customer = create(:customer, restaurant: restaurant)
 
-    authentic_query mobile_user_token(user, device), booking_update_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_update, variables: {
       input: {
         attributes: {
           customerId: customer.id,
@@ -300,7 +300,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
 
     booking_one.update(clocked_out_at: Time.current)
 
-    authentic_query mobile_user_token(user, device), booking_users_update_string, variables: {
+    authentic_query mobile_user_token(user, device), booking_users_update, variables: {
       input: {
         tableName: table.name,
         userId: another_user.id
@@ -364,17 +364,17 @@ class BookingsTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def booking_create_string
+  def booking_create
     <<~GQL
-      mutation BookingCreate($input: BookingCreateInput!) {
+      mutation bookingCreate($input: BookingCreateInput!) {
         bookingCreate(input: $input)
       }
     GQL
   end
 
-  def booking_update_string
+  def booking_update
     <<~GQL
-      mutation BookingUpdate($input: BookingUpdateInput!) {
+      mutation bookingUpdate($input: BookingUpdateInput!) {
         bookingUpdate(input: $input)
       }
     GQL
@@ -396,7 +396,7 @@ class BookingsTest < ActionDispatch::IntegrationTest
     GQL
   end
 
-  def booking_users_update_string
+  def booking_users_update
     <<~GQL
       mutation bookingUsersUpdate($input: BookingUsersUpdateInput!) {
         bookingUsersUpdate(input: $input)

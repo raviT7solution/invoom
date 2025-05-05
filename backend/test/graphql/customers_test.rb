@@ -59,7 +59,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
     create(:invoice_item, ticket_item: ticket_item1, invoice: invoice1, price: 100)
     create(:invoice_item, ticket_item: ticket_item2, invoice: invoice2, price: 50)
 
-    authentic_query mobile_user_token(user, device), index_string,
+    authentic_query mobile_user_token(user, device), customers,
                     variables: { restaurantId: restaurant.id, query: "El", page: 1, perPage: 10 }
 
     assert_query_success
@@ -84,7 +84,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
     create(:customer, restaurant: restaurant)
     create(:customer, restaurant: restaurant)
 
-    authentic_query mobile_user_token(user, device), index_string, variables: {
+    authentic_query mobile_user_token(user, device), customers, variables: {
       export: true,
       page: 0,
       perPage: 0,
@@ -122,7 +122,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
 
   private
 
-  def index_string
+  def customers
     <<~GQL
       query customers(
         $export: Boolean

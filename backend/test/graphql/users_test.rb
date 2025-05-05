@@ -11,7 +11,7 @@ class UsersTest < ActionDispatch::IntegrationTest
     role = create(:role, permissions: ["clock_in_clock_out"], restaurant: restaurant)
     user = create(:user, roles: [role], restaurant: restaurant)
 
-    authentic_query mobile_user_token(user, device), current_user_string, variables: {}
+    authentic_query mobile_user_token(user, device), current_user, variables: {}
 
     assert_query_success
     assert_equal \
@@ -21,7 +21,7 @@ class UsersTest < ActionDispatch::IntegrationTest
 
   private
 
-  def current_user_string
+  def current_user
     <<~GQL
       query currentUser {
         currentUser {

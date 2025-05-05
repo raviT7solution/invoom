@@ -15,7 +15,7 @@ class ModifiersTest < ActionDispatch::IntegrationTest
     m2 = create(:modifier, restaurant: restaurant, category_ids: [category.id])
     m3 = create(:modifier, restaurant: restaurant, global_modifier: true)
 
-    authentic_query web_admin_token(admin), modifiers_query, variables: {
+    authentic_query web_admin_token(admin), modifiers, variables: {
       restaurantId: restaurant.id,
       itemId: item.id
     }
@@ -28,7 +28,7 @@ class ModifiersTest < ActionDispatch::IntegrationTest
 
   private
 
-  def modifiers_query
+  def modifiers
     <<~GQL
       query modifiers(
         $restaurantId: ID!

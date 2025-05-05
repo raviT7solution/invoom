@@ -17,7 +17,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -49,7 +49,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -81,7 +81,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -111,7 +111,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -141,7 +141,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -173,7 +173,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
     invoice = create(:invoice, booking: booking)
 
-    authentic_query mobile_user_token(user, device), payment_create_string, variables: {
+    authentic_query mobile_user_token(user, device), payment_create, variables: {
       input: {
         attributes: {
           amount: 10,
@@ -193,7 +193,7 @@ class PaymentsTest < ActionDispatch::IntegrationTest
 
   private
 
-  def payment_create_string
+  def payment_create
     <<~GQL
       mutation paymentCreate($input: PaymentCreateInput!) {
         paymentCreate(input: $input)
