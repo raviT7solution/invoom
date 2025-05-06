@@ -35,10 +35,10 @@ class TeamsTest < ApplicationSystemTestCase
       within ".ant-form-item", text: "Employment type" do
         fill_in_select with: "Hourly"
       end
-      within ".ant-form-item", text: "Phone" do
+      within ".ant-form-item", text: "Phone number" do
         fill_in_select with: "+1"
       end
-      fill_in "Phone", with: "555-333-8888"
+      fill_in "Phone number", with: "2015550123"
       within ".ant-form-item", text: "Country" do
         fill_in with: "Canada"
         fill_in_select with: "Canada"
@@ -77,14 +77,13 @@ class TeamsTest < ApplicationSystemTestCase
     assert_attributes john_doe, address: "837 Auer Divide",
                                 city: "Brampton",
                                 country: "CA",
-                                country_code: "+1",
                                 email: "john.doe@example.com",
                                 employment_type: "hourly",
                                 first_name: "John",
                                 gender: "male",
                                 last_name: "Doe",
                                 max_hour: 11,
-                                phone_number: "555-333-8888",
+                                phone_number: "+12015550123",
                                 pin: "1234",
                                 preferred_name: "john.doe",
                                 province: "ON",
@@ -146,11 +145,13 @@ class TeamsTest < ApplicationSystemTestCase
     within ".ant-drawer" do
       fill_in "First name", with: "John"
       fill_in "Last name", with: "Doe"
-
-      within ".ant-form-item", text: "Phone" do
-        fill_in_select with: "+20"
+      within ".ant-form-item", text: "Phone number" do
+        within ".ant-select" do
+          fill_in with: "+1"
+          fill_in_select with: "+1"
+        end
       end
-      fill_in "Phone", with: "1111111111"
+      fill_in "Phone number", with: "2015550123"
       within ".ant-form-item", text: "Country" do
         fill_in with: "India"
         fill_in_select with: "India"
@@ -174,10 +175,9 @@ class TeamsTest < ApplicationSystemTestCase
     assert_attributes user.reload, address: "837 Auer Divide",
                                    city: "Ahmedabad",
                                    country: "IN",
-                                   country_code: "+20",
                                    first_name: "John",
                                    last_name: "Doe",
-                                   phone_number: "1111111111",
+                                   phone_number: "+12015550123",
                                    province: "GJ",
                                    zip_code: "15721"
   end

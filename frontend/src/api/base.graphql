@@ -98,7 +98,6 @@ query user($id: ID!) {
     address
     city
     country
-    countryCode
     email
     employmentType
     endDate
@@ -953,7 +952,6 @@ query customers(
   ) {
     collection {
       avgInvoiceAmount
-      countryCode
       email
       id
       invoiceCount

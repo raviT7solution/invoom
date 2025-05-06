@@ -23,6 +23,7 @@
     "graphql-request": "^6.2.0-next.4",
     "highcharts": "^11.4.7",
     "highcharts-react-official": "^3.2.1",
+    "libphonenumber-js": "^1.12.6",
     "moveable-helper": "^0.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

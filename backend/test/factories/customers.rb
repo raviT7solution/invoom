@@ -2,10 +2,9 @@
 
 FactoryBot.define do
   factory :customer do
-    country_code { Faker::PhoneNumber.country_code }
     email { Faker::Internet.email }
     name { Faker::Name.name }
-    phone_number { Faker::Number.number(digits: 10) }
+    phone_number { Faker::PhoneNumber.cell_phone_in_e164 }
 
     restaurant { nil }
   end

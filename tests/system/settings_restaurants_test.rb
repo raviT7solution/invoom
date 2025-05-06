@@ -25,7 +25,10 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
       end
       fill_in "Restaurant name", with: "Cafe 1"
       fill_in "Email", with: "cafe@example.com"
-      fill_in "Phone number", with: "1111111111"
+      within ".ant-form-item", text: "Phone number" do
+        fill_in_select with: "+1"
+      end
+      fill_in "Phone number", with: "2015550123"
       within ".ant-form-item", text: "Operational since" do
         fill_in_select with: Date.current.year.to_s
       end
@@ -76,7 +79,7 @@ class SettingsRestaurantsTest < ApplicationSystemTestCase
                       email: "cafe@example.com",
                       name: "Cafe 1",
                       operational_since: Date.current.year.to_s,
-                      phone_number: "1111111111",
+                      phone_number: "+12015550123",
                       postal_code: "15721",
                       province: "ON",
                       restaurant_type: "Cafe",

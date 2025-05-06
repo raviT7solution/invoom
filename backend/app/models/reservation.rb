@@ -29,7 +29,7 @@ class Reservation < ApplicationRecord
       See you soon!
     BODY
 
-    TwilioJob.perform_later(restaurant, body: body, to: customer.phone_number_in_e164)
+    TwilioJob.perform_later(restaurant, body: body, to: customer.phone_number)
   end
 
   def send_update_sms # rubocop:disable Metrics/AbcSize

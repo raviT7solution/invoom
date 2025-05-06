@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_06_074839) do
+ActiveRecord::Schema[7.0].define(version: 2025_04_10_073004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -137,7 +137,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_06_074839) do
     t.uuid "restaurant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "country_code", null: false
     t.index ["phone_number", "restaurant_id"], name: "index_customers_on_phone_number_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_customers_on_restaurant_id"
   end
@@ -571,7 +570,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_06_074839) do
     t.string "pin", null: false
     t.uuid "restaurant_id", null: false
     t.string "country"
-    t.string "country_code", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["pin", "restaurant_id"], name: "index_users_on_pin_and_restaurant_id", unique: true
     t.index ["restaurant_id"], name: "index_users_on_restaurant_id"

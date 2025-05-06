@@ -20,6 +20,11 @@ import {
 } from "../../../api";
 import { FormDrawer } from "../../../components/FormDrawer";
 import {
+  PhoneNumber,
+  phoneNumberGetValueFromEvent,
+  phoneNumberValidator,
+} from "../../../components/PhoneNumber";
+import {
   tzTimePickerGetValueFromEvent,
   tzTimePickerGetValueProps,
   TIME_FORMAT,
@@ -249,11 +254,15 @@ export const Edit = ({
 
           <Col span={8}>
             <Form.Item
+              getValueFromEvent={phoneNumberGetValueFromEvent}
               label="Phone number"
               name="phoneNumber"
-              rules={[{ required: true, message: "Required" }]}
+              rules={[
+                { required: true, message: "Required" },
+                { validator: phoneNumberValidator },
+              ]}
             >
-              <Input placeholder="Phone number" />
+              <PhoneNumber />
             </Form.Item>
           </Col>
 

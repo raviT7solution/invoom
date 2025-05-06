@@ -10,7 +10,6 @@ import {
   Select,
   Tag,
 } from "antd";
-import { useMemo } from "react";
 
 import {
   useCities,
@@ -22,7 +21,11 @@ import {
   useUserUpdate,
 } from "../../../../api";
 import { FormDrawer } from "../../../../components/FormDrawer";
-import { selectLabelFilterSort } from "../../../../helpers";
+import {
+  PhoneNumber,
+  phoneNumberGetValueFromEvent,
+  phoneNumberValidator,
+} from "../../../../components/PhoneNumber";
 import {
   DATE_FORMAT,
   datePickerGetValueFromEvent,
@@ -34,7 +37,6 @@ type schema = {
   address?: string;
   city?: string;
   country?: string;
-  countryCode: string;
   email: string;
   employmentType: string;
   firstName: string;
@@ -95,12 +97,6 @@ export const UserEdit = ({
 
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const { data: roles } = useRoles({ restaurantId: restaurantId });
-  const { data: user, isFetching: isUserFetching } = useUser(id);
-
-  const { mutateAsync: userCreate, isPending: isCreating } = useUserCreate();
-  const { mutateAsync: userUpdate, isPending: isUpdating } = useUserUpdate();
-
   const [form] = Form.useForm<schema>();
   const wage = Form.useWatch("wage", form) || 0;
   const employmentType = Form.useWatch("employmentType", form);
@@ -108,37 +104,29 @@ export const UserEdit = ({
   const country = Form.useWatch("country", form) || "";
   const province = Form.useWatch("province", form) || "";
 
-  const { data: countries, isFetching: isCountryFetching } = useCountries();
-  const { data: provinces, isFetching: isProvinceFetching } =
-    useProvinces(country);
-  const { data: cities, isFetching: isCityFetching } = useCities(
-    country,
-    province,
-  );
+  const cities = useCities(country, province);
+  const countries = useCountries();
+  const provinces = useProvinces(country);
+  const roles = useRoles({ restaurantId: restaurantId });
+  const user = useUser(id);
+
+  const userCreate = useUserCreate();
+  const userUpdate = useUserUpdate();
 
   const onClose = () => showEdit(false, "", false);
   const afterClose = () => showEdit(true, "", false);
 
-  const onFinish = async (values: schema) => {
-    const attributes = { ...values };
-
+  const onFinish = async (attributes: schema) => {
     isNew
-      ? await userCreate({
+      ? await userCreate.mutateAsync({
           input: { restaurantId: restaurantId, attributes: attributes },
         })
-      : await userUpdate({ input: { attributes: attributes, id: id } });
+      : await userUpdate.mutateAsync({
+          input: { attributes: attributes, id: id },
+        });
 
     onClose();
   };
-
-  const countyCodesOptions = useMemo(
-    () =>
-      [...new Set(countries.map((country) => country.code))].map((i) => ({
-        label: `+${i}`,
-        value: `+${i}`,
-      })),
-    [countries],
-  );
 
   return (
     <FormDrawer
@@ -147,13 +135,13 @@ export const UserEdit = ({
         <Button
           form="user-form"
           htmlType="submit"
-          loading={isCreating || isUpdating}
+          loading={userCreate.isPending || userUpdate.isPending}
           type="primary"
         >
           Submit
         </Button>
       }
-      isFetching={isUserFetching}
+      isFetching={user.isFetching}
       onClose={onClose}
       open={open}
       title={isNew ? "New user" : "Edit user"}
@@ -161,7 +149,7 @@ export const UserEdit = ({
     >
       <Form
         form={form}
-        initialValues={isNew ? initialValues : user}
+        initialValues={isNew ? initialValues : user.data}
         layout="vertical"
         name="user-form"
         onFinish={onFinish}
@@ -223,30 +211,15 @@ export const UserEdit = ({
 
           <Col span={8}>
             <Form.Item
+              getValueFromEvent={phoneNumberGetValueFromEvent}
               label="Phone number"
               name="phoneNumber"
-              rules={[{ required: true, message: "Required" }]}
+              rules={[
+                { required: true, message: "Required" },
+                { validator: phoneNumberValidator },
+              ]}
             >
-              <Input
-                addonBefore={
-                  <Form.Item
-                    label="Country code"
-                    name="countryCode"
-                    noStyle
-                    rules={[{ required: true, message: "Required" }]}
-                  >
-                    <Select
-                      filterSort={selectLabelFilterSort}
-                      optionFilterProp="label"
-                      options={countyCodesOptions}
-                      placeholder="Select"
-                      showSearch
-                      style={{ width: 80 }}
-                    />
-                  </Form.Item>
-                }
-                style={{ width: "100%" }}
-              />
+              <PhoneNumber />
             </Form.Item>
           </Col>
         </Row>
@@ -259,12 +232,12 @@ export const UserEdit = ({
           <Col span={8}>
             <Form.Item label="Country" name="country">
               <Select
-                disabled={isCountryFetching}
+                disabled={countries.isFetching}
                 onChange={() =>
                   form.setFieldsValue({ province: undefined, city: undefined })
                 }
                 optionFilterProp="label"
-                options={countries.map((i) => ({
+                options={countries.data.map((i) => ({
                   label: i.name,
                   value: i.alpha2,
                 }))}
@@ -277,10 +250,10 @@ export const UserEdit = ({
           <Col span={8}>
             <Form.Item label="Province" name="province">
               <Select
-                disabled={isProvinceFetching}
+                disabled={provinces.isFetching}
                 onChange={() => form.setFieldsValue({ city: undefined })}
                 optionFilterProp="label"
-                options={provinces.map((i) => ({
+                options={provinces.data.map((i) => ({
                   label: i.name,
                   value: i.code,
                 }))}
@@ -293,9 +266,9 @@ export const UserEdit = ({
           <Col span={8}>
             <Form.Item label="City" name="city">
               <Select
-                disabled={isCityFetching}
+                disabled={cities.isFetching}
                 optionFilterProp="label"
-                options={cities.map((i) => ({
+                options={cities.data.map((i) => ({
                   label: i.name,
                   value: i.name,
                 }))}
@@ -428,7 +401,10 @@ export const UserEdit = ({
               <Select
                 mode="multiple"
                 optionFilterProp="label"
-                options={roles.map((r) => ({ label: r.name, value: r.id }))}
+                options={roles.data.map((r) => ({
+                  label: r.name,
+                  value: r.id,
+                }))}
                 placeholder="Select"
               />
             </Form.Item>

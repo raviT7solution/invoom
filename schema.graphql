@@ -381,7 +381,6 @@ type Country {
 
 type Customer {
   avgInvoiceAmount: Float!
-  countryCode: String!
   email: String
   id: ID!
   invoiceCount: Int!
@@ -391,7 +390,6 @@ type Customer {
 }
 
 input CustomerAttributes {
-  countryCode: String
   email: String
   name: String
   phoneNumber: String
@@ -2390,7 +2388,6 @@ type User {
   city: String
   clockedInAt: ISO8601DateTime
   country: String
-  countryCode: String!
   email: String!
   employmentType: String!
   endDate: String
@@ -2414,7 +2411,6 @@ input UserAttributes {
   address: String
   city: String
   country: String
-  countryCode: String
   email: String
   employmentType: String
   endDate: String

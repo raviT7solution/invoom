@@ -13,16 +13,15 @@ class CustomersTest < ActionDispatch::IntegrationTest
       input: {
         restaurantId: restaurant.id,
         attributes: {
-          countryCode: "+1",
           name: "Elvis",
-          phoneNumber: "1234"
+          phoneNumber: "+12015550123"
         }
       }
     }
 
     assert_query_success
     assert response.parsed_body["data"]["customerCreate"]
-    assert_attributes Customer.last, name: "Elvis", phone_number: "1234"
+    assert_attributes Customer.last, name: "Elvis", phone_number: "+12015550123"
   end
 
   test "customers" do

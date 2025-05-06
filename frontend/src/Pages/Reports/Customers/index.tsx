@@ -47,7 +47,7 @@ export const ReportsCustomers = () => {
       },
       {
         title: "Phone number",
-        render: (_, i) => `${i.countryCode}${i.phoneNumber}`,
+        render: (_, i) => i.phoneNumber,
       },
       {
         title: "Avg invoice value",

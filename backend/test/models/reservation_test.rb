@@ -33,7 +33,7 @@ class ReservationTest < ActiveSupport::TestCase
       See you soon!
     MSG
 
-    assert_enqueued_with args: [restaurant, { body: expected_message, to: customer.phone_number_in_e164 }],
+    assert_enqueued_with args: [restaurant, { body: expected_message, to: customer.phone_number }],
                          job: TwilioJob
   end
 end

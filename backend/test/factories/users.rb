@@ -5,7 +5,6 @@ FactoryBot.define do
     address { nil }
     city { nil }
     country { "CA" }
-    country_code { "+1" }
     email { Faker::Internet.email }
     employment_type { "salary" }
     end_date { nil }
