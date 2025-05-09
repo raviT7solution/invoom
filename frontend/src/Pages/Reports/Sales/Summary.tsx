@@ -19,7 +19,7 @@ export const Summary = ({
   });
 
   return (
-    <div className="my-2 grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-11">
+    <div className="my-2 grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
       <Tooltip title="Sum of invoice item price, plus taxes, plus service charge, plus service charge taxes, minus voids">
         <div className="rounded-md border border-gray-200 p-3">
           <Statistic

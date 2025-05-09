@@ -283,7 +283,7 @@ class Types::QueryType < Types::BaseObject
     records.page(page).per(per_page)
   end
 
-  def dashboard_summary(restaurant_id:, start_time:, end_time:)
+  def dashboard_summary(restaurant_id:, start_time: nil, end_time: nil)
     restaurant = RestaurantPolicy.new(context[:current_session]).scope.find(restaurant_id)
 
     bookings = BookingPolicy.new(context[:current_session]).scope.where(restaurant_id: restaurant_id)

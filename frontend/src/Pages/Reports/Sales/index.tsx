@@ -8,6 +8,7 @@ import {
   TableProps,
   Tabs,
 } from "antd";
+import dayjs from "dayjs";
 import { useMemo } from "react";
 
 import { Summary } from "./Summary";
@@ -64,7 +65,13 @@ const OrdersWise = () => {
     FiltersType,
     { page: number; perPage: number }
   >(
-    { bookingTypes: [], end: null, paymentModes: [], query: "", start: null },
+    {
+      bookingTypes: [],
+      end: dayjs().tz(tz).endOf("day").toISOString(),
+      paymentModes: [],
+      query: "",
+      start: dayjs().tz(tz).add(-30, "d").startOf("day").toISOString(),
+    },
     { page: 1, perPage: 10 },
   );
 
@@ -270,13 +277,17 @@ const OrdersWise = () => {
           className="max-w-xs"
           enterButton
           onSearch={(query) => setFilters({ query: query })}
-          placeholder="Search by Order ID, Invoice ID"
+          placeholder="Search by order ID, invoice ID"
         />
 
         <DatePicker.RangePicker
           format={DATE_FORMAT}
           onChange={onDateChange}
           presets={TIME_RANGE_PRESETS}
+          value={[
+            filters.start ? dayjs(filters.start).tz(tz) : null,
+            filters.end ? dayjs(filters.end).tz(tz) : null,
+          ]}
         />
 
         <Button
@@ -313,7 +324,13 @@ const InvoicesWise = () => {
     FiltersType,
     { page: number; perPage: number }
   >(
-    { bookingTypes: [], end: null, paymentModes: [], query: "", start: null },
+    {
+      bookingTypes: [],
+      end: dayjs().tz(tz).endOf("day").toISOString(),
+      paymentModes: [],
+      query: "",
+      start: dayjs().tz(tz).add(-30, "d").startOf("day").toISOString(),
+    },
     { page: 1, perPage: 10 },
   );
 
@@ -527,6 +544,10 @@ const InvoicesWise = () => {
           format={DATE_FORMAT}
           onChange={onDateChange}
           presets={TIME_RANGE_PRESETS}
+          value={[
+            filters.start ? dayjs(filters.start).tz(tz) : null,
+            filters.end ? dayjs(filters.end).tz(tz) : null,
+          ]}
         />
 
         <Button

@@ -24,10 +24,10 @@ export const initials = (name: string) =>
   name.split(" ").map((i) => i.charAt(0).toUpperCase());
 
 export const TIME_RANGE_PRESETS: TimeRangePickerProps["presets"] = [
-  { label: "Last 7 Days", value: [dayjs().add(-7, "d"), dayjs()] },
-  { label: "Last 14 Days", value: [dayjs().add(-14, "d"), dayjs()] },
-  { label: "Last 30 Days", value: [dayjs().add(-30, "d"), dayjs()] },
-  { label: "Last 90 Days", value: [dayjs().add(-90, "d"), dayjs()] },
+  { label: "Last 7 days", value: [dayjs().add(-7, "d"), dayjs()] },
+  { label: "Last 14 days", value: [dayjs().add(-14, "d"), dayjs()] },
+  { label: "Last 30 days", value: [dayjs().add(-30, "d"), dayjs()] },
+  { label: "Last 90 days", value: [dayjs().add(-90, "d"), dayjs()] },
 ];
 
 export const formatAmount = (v: number) =>
