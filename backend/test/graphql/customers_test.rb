@@ -9,19 +9,21 @@ class CustomersTest < ActionDispatch::IntegrationTest
     role = create(:role, permissions: ["takeout"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
 
-    authentic_query mobile_user_token(user, device), customer_create, variables: {
+    authentic_query mobile_user_token(user, device), customer_update, variables: {
       input: {
-        restaurantId: restaurant.id,
         attributes: {
           name: "Elvis",
           phoneNumber: "+12015550123"
-        }
+        },
+        restaurantId: restaurant.id
       }
     }
 
     assert_query_success
-    assert response.parsed_body["data"]["customerCreate"]
-    assert_attributes Customer.last, name: "Elvis", phone_number: "+12015550123"
+    assert_attributes Customer.last,
+                      email: nil,
+                      name: "Elvis",
+                      phone_number: "+12015550123"
   end
 
   test "customers" do
@@ -99,16 +101,16 @@ class CustomersTest < ActionDispatch::IntegrationTest
     device = create(:device, restaurant: restaurant)
     role = create(:role, permissions: ["takeout"], restaurant: restaurant)
     user = create(:user, restaurant: restaurant, roles: [role])
-    customer = create(:customer, restaurant: restaurant)
+    customer = create(:customer, restaurant: restaurant, phone_number: "+12015550123")
 
     authentic_query mobile_user_token(user, device), customer_update, variables: {
       input: {
         attributes: {
           email: "elvis@example.com",
           name: "Elvis",
-          phoneNumber: "1234"
+          phoneNumber: customer.phone_number
         },
-        id: customer.id
+        restaurantId: restaurant.id
       }
     }
 
@@ -116,7 +118,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
     assert_attributes customer.reload,
                       email: "elvis@example.com",
                       name: "Elvis",
-                      phone_number: "1234"
+                      phone_number: "+12015550123"
   end
 
   private
@@ -146,14 +148,6 @@ class CustomersTest < ActionDispatch::IntegrationTest
             totalInvoiceAmount
           }
         }
-      }
-    GQL
-  end
-
-  def customer_create
-    <<~GQL
-      mutation customerCreate($input: CustomerCreateInput!) {
-        customerCreate(input: $input)
       }
     GQL
   end

@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class CustomerPolicy < ApplicationPolicy
-  def create?
-    mobile_user?("orders") || mobile_user?("takeout") || mobile_user?("reservations")
-  end
-
   def scope
     if web_admin?
       Customer.where(restaurant: web_admin!.restaurants)
