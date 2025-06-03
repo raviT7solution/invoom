@@ -210,7 +210,7 @@ export const UserEdit = ({
                 { validator: phoneNumberValidator },
               ]}
             >
-              <PhoneNumber />
+              {/* <PhoneNumber /> */}
             </Form.Item>
           </Col>
         </Row>

@@ -19,7 +19,6 @@ import { ReactNode } from "react";
 
 import { Router } from "../Routes";
 import { classNames } from "../helpers";
-import { assetsPath } from "../helpers/assets";
 import { useRestaurantIdStore } from "../stores/useRestaurantIdStore";
 
 export const Navbar = ({
@@ -104,13 +103,15 @@ export const Navbar = ({
         <Layout.Header className="flex items-center !bg-white">
           <img
             className="absolute left-1/2 h-14 -translate-x-1/2"
-            src={assetsPath("logo/horizontal.png")}
+            // src={assetsPath("logo/horizontal.png")}
+            src="./src/./assets/logo.png"
           />
 
           <div className="absolute right-4 cursor-pointer">
             <Dropdown menu={{ items: headerItems }} trigger={["click"]}>
               <Avatar className="!bg-zinc-400">
                 {/* {initials(currentAdmin?.fullName || "")} */}
+                RS
               </Avatar>
             </Dropdown>
           </div>

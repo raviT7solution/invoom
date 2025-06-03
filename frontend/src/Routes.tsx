@@ -5,10 +5,9 @@ import { match } from "ts-pattern";
 import { Dashboard } from "./Pages/Dashboard";
 import { Login } from "./Pages/Login";
 import { Roles } from "./Pages/Teams/Roles";
-import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 
 const PrivateRoute = ({ children }: PropsWithChildren) => {
-  const token = useAdminSessionStore((s) => s.token);
+  const token = "test"; //useAdminSessionStore((s) => s.token);
 
   if (!token) {
     Router.replace("Login");
