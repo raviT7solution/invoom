@@ -1,12 +1,8 @@
-import { AuditOutlined, FormOutlined, UserOutlined } from "@ant-design/icons";
-import { Card, DatePicker, Statistic, Tooltip } from "antd";
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-import { useDashboardSummary } from "../../api";
 import { Navbar } from "../../components/Navbar";
-import { ResponsiveChart } from "../../components/ResponsiveChart";
-import { DATE_FORMAT, TIME_FORMAT } from "../../helpers/dateTime";
+import { DATE_FORMAT } from "../../helpers/dateTime";
 import { useRestaurantIdStore } from "../../stores/useRestaurantIdStore";
 
 const COLORS = {
@@ -20,25 +16,25 @@ export const Dashboard = () => {
 
   const [date, setDate] = useState(dayjs().tz(tz).format(DATE_FORMAT));
 
-  const { data, isFetching } = useDashboardSummary({
-    endTime: dayjs.tz(date, DATE_FORMAT, tz).endOf("day").toISOString(),
-    restaurantId: restaurantId,
-    startTime: dayjs.tz(date, DATE_FORMAT, tz).startOf("day").toISOString(),
-  });
+  // const { data, isFetching } = useDashboardSummary({
+  //   endTime: dayjs.tz(date, DATE_FORMAT, tz).endOf("day").toISOString(),
+  //   restaurantId: restaurantId,
+  //   startTime: dayjs.tz(date, DATE_FORMAT, tz).startOf("day").toISOString(),
+  // });
 
-  const hourlyRevenue = useMemo(() => {
-    const arr: [string, number][] =
-      data?.hourlyRevenue.map((v, i) => [
-        dayjs().hour(i).minute(0).format(TIME_FORMAT),
-        v,
-      ]) ?? [];
+  // const hourlyRevenue = useMemo(() => {
+  //   const arr: [string, number][] =
+  //     data?.hourlyRevenue.map((v, i) => [
+  //       dayjs().hour(i).minute(0).format(TIME_FORMAT),
+  //       v,
+  //     ]) ?? [];
 
-    return arr;
-  }, [data?.hourlyRevenue]);
+  //   return arr;
+  // }, [data?.hourlyRevenue]);
 
   return (
     <Navbar breadcrumbItems={[{ title: "Dashboard" }]}>
-      <div className="grid grid-cols-6 gap-2">
+      {/* <div className="grid grid-cols-6 gap-2">
         <div className="col-span-6 flex flex-col lg:col-span-2">
           <div className="mb-2">
             <DatePicker
@@ -283,7 +279,7 @@ export const Dashboard = () => {
             }}
           />
         </div>
-      </div>
+      </div> */}
     </Navbar>
   );
 };

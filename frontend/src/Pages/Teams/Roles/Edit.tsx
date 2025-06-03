@@ -1,6 +1,5 @@
 import { Button, Checkbox, Form, Input, Select } from "antd";
 
-import { useRole, useRoleCreate, useRoleUpdate } from "../../../api";
 import { FormDrawer } from "../../../components/FormDrawer";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
@@ -78,18 +77,18 @@ export const Edit = ({
 
   const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
 
-  const { data: role, isFetching } = useRole(roleId);
-  const { mutateAsync: roleCreate, isPending: isCreating } = useRoleCreate();
-  const { mutateAsync: roleUpdate, isPending: isUpdating } = useRoleUpdate();
+  // const { data: role, isFetching } = useRole(roleId);
+  // const { mutateAsync: roleCreate, isPending: isCreating } = useRoleCreate();
+  // const { mutateAsync: roleUpdate, isPending: isUpdating } = useRoleUpdate();
 
   const onClose = () => showEditRole("", false);
 
   const onFinish = async (values: schema) => {
-    isNew
-      ? await roleCreate({
-          input: { attributes: values, restaurantId: restaurantId },
-        })
-      : await roleUpdate({ input: { attributes: values, id: roleId } });
+    // isNew
+    //   ? await roleCreate({
+    //       input: { attributes: values, restaurantId: restaurantId },
+    //     })
+    //   : await roleUpdate({ input: { attributes: values, id: roleId } });
 
     onClose();
   };
@@ -100,13 +99,13 @@ export const Edit = ({
         <Button
           form="role-form"
           htmlType="submit"
-          loading={isCreating || isUpdating}
+          // loading={isCreating || isUpdating}
           type="primary"
         >
           Submit
         </Button>
       }
-      isFetching={isFetching}
+      // isFetching={isFetching}
       onClose={onClose}
       open={open}
       title={isNew ? "New role" : "Edit role"}

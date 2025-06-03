@@ -11,21 +11,12 @@ import {
   Tag,
 } from "antd";
 
-import {
-  useCities,
-  useCountries,
-  useProvinces,
-  useRoles,
-  useUser,
-  useUserCreate,
-  useUserUpdate,
-} from "../../../../api";
 import { FormDrawer } from "../../../../components/FormDrawer";
-import {
-  PhoneNumber,
-  phoneNumberGetValueFromEvent,
-  phoneNumberValidator,
-} from "../../../../components/PhoneNumber";
+// import {
+//   PhoneNumber,
+//   phoneNumberGetValueFromEvent,
+//   phoneNumberValidator,
+// } from "../../../../components/PhoneNumber";
 import {
   DATE_FORMAT,
   datePickerGetValueFromEvent,
@@ -104,26 +95,26 @@ export const UserEdit = ({
   const country = Form.useWatch("country", form) || "";
   const province = Form.useWatch("province", form) || "";
 
-  const cities = useCities(country, province);
-  const countries = useCountries();
-  const provinces = useProvinces(country);
-  const roles = useRoles({ restaurantId: restaurantId });
-  const user = useUser(id);
+  // const cities = useCities(country, province);
+  // const countries = useCountries();
+  // const provinces = useProvinces(country);
+  // const roles = useRoles({ restaurantId: restaurantId });
+  // const user = useUser(id);
 
-  const userCreate = useUserCreate();
-  const userUpdate = useUserUpdate();
+  // const userCreate = useUserCreate();
+  // const userUpdate = useUserUpdate();
 
   const onClose = () => showEdit(false, "", false);
   const afterClose = () => showEdit(true, "", false);
 
   const onFinish = async (attributes: schema) => {
-    isNew
-      ? await userCreate.mutateAsync({
-          input: { restaurantId: restaurantId, attributes: attributes },
-        })
-      : await userUpdate.mutateAsync({
-          input: { attributes: attributes, id: id },
-        });
+    // isNew
+    //   ? await userCreate.mutateAsync({
+    //       input: { restaurantId: restaurantId, attributes: attributes },
+    //     })
+    //   : await userUpdate.mutateAsync({
+    //       input: { attributes: attributes, id: id },
+    //     });
 
     onClose();
   };
@@ -135,13 +126,13 @@ export const UserEdit = ({
         <Button
           form="user-form"
           htmlType="submit"
-          loading={userCreate.isPending || userUpdate.isPending}
+          // loading={userCreate.isPending || userUpdate.isPending}
           type="primary"
         >
           Submit
         </Button>
       }
-      isFetching={user.isFetching}
+      // isFetching={user.isFetching}
       onClose={onClose}
       open={open}
       title={isNew ? "New user" : "Edit user"}
@@ -149,7 +140,7 @@ export const UserEdit = ({
     >
       <Form
         form={form}
-        initialValues={isNew ? initialValues : user.data}
+        // initialValues={isNew ? initialValues : user.data}
         layout="vertical"
         name="user-form"
         onFinish={onFinish}

@@ -1,15 +1,12 @@
 import {
-  DeleteOutlined,
-  EditOutlined,
-  UserAddOutlined,
+  UserAddOutlined
 } from "@ant-design/icons";
-import { Avatar, Button, Card, Empty, Popconfirm, Space } from "antd";
+import { Button } from "antd";
 import { useState } from "react";
 
 import { Edit } from "./Edit";
 import { UserEdit } from "./User/Edit";
 
-import { useRoleDelete, useUserDelete, useRoles } from "../../../api/index";
 import { Navbar } from "../../../components/Navbar";
 import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
 
@@ -24,9 +21,9 @@ export const Roles = () => {
     open: false,
   });
 
-  const { data: roles } = useRoles({ restaurantId: restaurantId });
-  const { mutateAsync: deleteRole } = useRoleDelete();
-  const { mutateAsync: deleteUser } = useUserDelete();
+  // const { data: roles } = useRoles({ restaurantId: restaurantId });
+  // const { mutateAsync: deleteRole } = useRoleDelete();
+  // const { mutateAsync: deleteUser } = useUserDelete();
 
   const showEditUser = (destroyed: boolean, id: string, open: boolean) => {
     setUserModal({ destroyed, id, open });
@@ -71,7 +68,7 @@ export const Roles = () => {
       </div>
 
       <div className="flex h-full w-full overflow-x-scroll">
-        {roles.length === 0 ? (
+        {/* {roles.length === 0 ? (
           <div className="flex h-full w-full items-center justify-center">
             <Empty />
           </div>
@@ -139,7 +136,7 @@ export const Roles = () => {
               </Space>
             </Card>
           ))
-        )}
+        )} */}
       </div>
     </Navbar>
   );

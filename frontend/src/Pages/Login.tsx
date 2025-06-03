@@ -1,12 +1,11 @@
 import {
-  UserOutlined,
   EyeInvisibleOutlined,
   EyeTwoTone,
   LockOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { Button, Card, Checkbox, Form, Input } from "antd";
 
-import { useAdminSessionCreate } from "../api";
 import { assetsPath } from "../helpers/assets";
 import { Router } from "../Routes";
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
@@ -17,14 +16,14 @@ type schema = {
 };
 
 export const Login = () => {
-  const { isPending, mutateAsync } = useAdminSessionCreate();
+  // const { isPending, mutateAsync } = useAdminSessionCreate();
   const create = useAdminSessionStore((s) => s.create);
 
   const onFinish = async (values: schema) => {
-    create(
-      (await mutateAsync({ input: { ...values, subject: "web_admin" } }))
-        .adminSessionCreate.token,
-    );
+    // create(
+    //   (await mutateAsync({ input: { ...values, subject: "web_admin" } }))
+    //     .adminSessionCreate.token,
+    // );
 
     Router.push("Dashboard");
   };
@@ -66,7 +65,7 @@ export const Login = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button block htmlType="submit" loading={isPending} type="primary">
+            <Button block htmlType="submit"  type="primary">
               Login
             </Button>
           </Form.Item>
