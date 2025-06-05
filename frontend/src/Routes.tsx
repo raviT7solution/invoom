@@ -2,9 +2,9 @@ import { createRouter } from "@swan-io/chicane";
 import { PropsWithChildren } from "react";
 import { match } from "ts-pattern";
 
+import { Client } from "./Pages/Client";
 import { Dashboard } from "./Pages/Dashboard";
 import { Login } from "./Pages/Login";
-import { Roles } from "./Pages/Teams/Roles";
 
 const PrivateRoute = ({ children }: PropsWithChildren) => {
   const token = "test"; //useAdminSessionStore((s) => s.token);
@@ -22,7 +22,7 @@ const PrivateRoute = ({ children }: PropsWithChildren) => {
 const routes = {
   Dashboard: "/",
   Login: "/login",
-  Teams: "/teams",
+  Client: "/client",
 } as const;
 
 const paths = Object.keys(routes) as (keyof typeof routes)[];
@@ -39,9 +39,9 @@ export const Switch = () => {
         <Dashboard />
       </PrivateRoute>
     ))
-    .with({ name: "Teams" }, () => (
+    .with({ name: "Client" }, () => (
       <PrivateRoute>
-        <Roles />
+        <Client />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");

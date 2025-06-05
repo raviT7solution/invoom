@@ -13,7 +13,9 @@ import {
   Dropdown,
   Layout,
   Menu,
-  MenuProps
+  MenuProps,
+  Select,
+  Typography
 } from "antd";
 import { ReactNode } from "react";
 
@@ -52,7 +54,7 @@ export const Navbar = ({
       key: "1",
     },
     {
-      label: <Link to={Router.Teams()}>Teams</Link>,
+      label: <Link to={Router.Client()}>Client</Link>,
       icon: <TeamOutlined />,
       key: "2",
     },
@@ -77,25 +79,25 @@ export const Navbar = ({
     },
   ];
 
-  // const restaurantOptions = restaurants.map((r) => ({
-  //   value: r.id,
-  //   label: r.name,
-  //   tz: r.timezone,
-  // }));
+  const restaurantOptions = [{
+    value: 1,
+    label: "Invom",
+    // tz: r.timezone,
+  }];
 
   return (
     <Layout className="h-screen">
       <Layout.Sider collapsible theme="light">
-        {/* <Select
+        <Select
           className="!h-16 w-full rounded-lg border-4 border-neutral-100"
           labelRender={({ label }) => (
             <Typography.Text strong>{label}</Typography.Text>
           )}
-          onSelect={(_, i) => restaurantIdStore.create(i.value, i.tz)}
+          // onSelect={(_, i) => restaurantIdStore.create(i.value, i.tz)}
           options={restaurantOptions}
-          value={restaurantIdStore.restaurantId}
+          value={1}
           variant="borderless"
-        /> */}
+        />
 
         <Menu items={items} mode="vertical" selectedKeys={[]} />
       </Layout.Sider>
