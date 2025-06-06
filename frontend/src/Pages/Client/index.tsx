@@ -36,9 +36,14 @@ export const Client = () => {
       key: "country",
     },
     {
-      title: "Client Type / Plan",
-      dataIndex: "typePlan",
-      key: "typePlan",
+      title: "Client Type",
+      dataIndex: "type",
+      key: "type",
+    },
+    {
+      title: "Plan",
+      dataIndex: "plan",
+      key: "plan",
     },
     {
       title: "Status",
@@ -79,7 +84,8 @@ export const Client = () => {
       email: "john@example.com",
       phone: "+1 555 123 4567",
       country: "USA",
-      typePlan: "Enterprise",
+      type: "Enterprise",
+      plan: "Silver",
       status: "Active",
       createdAt: "2024-06-01",
     },
@@ -89,7 +95,8 @@ export const Client = () => {
       email: "jane@example.com",
       phone: "+44 1234 567890",
       country: "UK",
-      typePlan: "Standard",
+      type: "Enterprise",
+      plan: "Silver",
       status: "Inactive",
       createdAt: "2024-05-10",
     },
@@ -99,14 +106,15 @@ export const Client = () => {
       email: "ravi@example.in",
       phone: "+91 98765 43210",
       country: "India",
-      typePlan: "Basic",
+      type: "Enterprise",
+      plan: "Silver",
       status: "Active",
       createdAt: "2024-04-20",
     },
   ];
 
   return (
-    <Navbar breadcrumbItems={[{ title: "Client" }, { title: "All" }]}>
+    <Navbar breadcrumbItems={[{ title: "Client" }]}>
       <Edit
         menuId={selectedMenuId}
         open={isModalOpen}
@@ -114,11 +122,11 @@ export const Client = () => {
       />
 
       <div className="flex mb-4">
-        <Typography.Title level={4}>Labour report</Typography.Title>
+        <Typography.Title level={4}>All Client</Typography.Title>
 
         <div className="flex flex-1 items-center justify-end gap-2">
           <Button onClick={() => showEditMenu("", true)} type="primary">
-            Add timesheet
+            Add client
           </Button>
         </div>
       </div>
