@@ -1,4 +1,5 @@
-import { Button, Col, Form, Input, Radio, Row, Select } from "antd";
+import { Button, Col, Form, Input, Row, Select } from "antd";
+import { useState } from "react";
 import { FormDrawer } from "../../components/FormDrawer";
 
 // import { useMenu, useMenuCreate, useMenuUpdate } from "../../../api";
@@ -11,7 +12,7 @@ type schema = {
   visible: boolean;
 };
 
-const initialValues = { description: "", visible: true };
+const initialValues = { description: "", visible: true,clientType: "practice" };
 
 export const Edit = ({
   menuId,
@@ -30,6 +31,7 @@ export const Edit = ({
       description: "Delicious breakfast items to start your day.",
       visible: true,
     };
+    const [clientType, setClientType] = useState("practice");
 
 
   // const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
@@ -70,7 +72,7 @@ export const Edit = ({
     >
       <Form
         // form={form}
-        // initialValues={isNew ? initialValues : user.data}
+        initialValues={initialValues }
         layout="vertical"
         name="user-form"
         onFinish={onFinish}
@@ -167,30 +169,41 @@ export const Edit = ({
           </Col>
 
           <Col span={6}>
-          <Form.Item
-          label="Client type"
-          name="discountOn"
-          rules={[{ required: true, message: "Required" }]}
-        >
-          <Radio.Group
-            // onChange={() =>
-              // form.setFieldsValue({ categoryIds: [], itemIds: [] })
-            // }
-            options={[
-              { label: "Practice", value: "bill_wise" },
-              { label: "Business", value: "item_wise" },
-            ]}
-          />
-        </Form.Item>
-        </Col>
+            <Form.Item
+              label="Client type"
+              name="clientType"
+              rules={[{ required: true, message: "Required" }]}
+            >
+              <Select
+                            onChange={(value) => setClientType(value)}
+
+                options={[
+                  { label: "Practice", value: "practice" },
+                  { label: "Business", value: "business" },
+                ]}
+
+                placeholder="Select client type"
+              />
+            </Form.Item>
+          </Col>
         </Row>
 
         <Row gutter={8}>
-        <Col span={6}>
-            <Form.Item label="Practice Name" name="zipCode">
+        {clientType === "practice" && (
+          <Col span={6}>
+            <Form.Item label="Practice Name" name="practiceName">
               <Input placeholder="Practice Name" />
             </Form.Item>
           </Col>
+        )}
+
+        {clientType === "business" && (
+          <Col span={6}>
+            <Form.Item label="Business Name" name="businessName">
+              <Input placeholder="Business Name" />
+            </Form.Item>
+          </Col>
+        )}
       </Row>
       </Form>
     </FormDrawer>

@@ -1,7 +1,20 @@
 import {
+  BarChartOutlined,
+  BgColorsOutlined,
+  CreditCardOutlined,
   DashboardOutlined,
+  DollarOutlined,
+  FileSearchOutlined,
+  GlobalOutlined,
   KeyOutlined,
+  LinkOutlined,
   LogoutOutlined,
+  MailOutlined,
+  ProfileOutlined,
+  QuestionCircleOutlined,
+  RobotOutlined,
+  SafetyOutlined,
+  SettingOutlined,
   TeamOutlined,
   UserAddOutlined
 } from "@ant-design/icons";
@@ -13,9 +26,7 @@ import {
   Dropdown,
   Layout,
   Menu,
-  MenuProps,
-  Select,
-  Typography
+  MenuProps
 } from "antd";
 import { ReactNode } from "react";
 
@@ -49,14 +60,83 @@ export const Navbar = ({
 
   const items: MenuProps["items"] = [
     {
-      label: <Link to={Router.Dashboard()}>Dashboard</Link>,
+      label: "Dashboard",
       icon: <DashboardOutlined />,
       key: "1",
+      children: [
+        {
+          label: <Link to={Router.Dashboard()}>Overview</Link>,
+          icon: <BarChartOutlined />,
+          key: "1.1",
+        },
+        {
+          label: <Link to="">System Logs</Link>,
+          icon: <FileSearchOutlined />,
+          key: "1.2",
+        },
+      ],
     },
     {
       label: <Link to={Router.Client()}>Client</Link>,
       icon: <TeamOutlined />,
       key: "2",
+    },
+    {
+      label: <Link to="">Plan</Link>,
+      icon: <ProfileOutlined />,
+      key: "3",
+    },
+    {
+      label: <Link to={Router.Subscription()}>Subscription</Link>,
+      icon: <CreditCardOutlined />,
+      key: "4",
+    },
+    {
+      label: <Link to="">OCR & AI Engine</Link>,
+      icon: <RobotOutlined />,
+      key: "5",
+    },
+    {
+      label: <Link to="">User & Roles</Link>,
+      icon: <SafetyOutlined />,
+      key: "6",
+    },
+    {
+      label: "Settings",
+      icon: <SettingOutlined />,
+      key: "7",
+      children: [
+        {
+          label: <Link to="">Branding</Link>,
+          icon: <BgColorsOutlined />,
+          key: "7.1",
+        },
+        {
+          label: <Link to="">Email Template</Link>,
+          icon: <MailOutlined />,
+          key: "7.2",
+        },
+        {
+          label: <Link to="">Billing Settings</Link>,
+          icon: <DollarOutlined />,
+          key: "7.3",
+        },
+        {
+          label: <Link to="">Webhook</Link>,
+          icon: <LinkOutlined />,
+          key: "7.4",
+        },
+        {
+          label: <Link to="">Regional Preferences</Link>,
+          icon: <GlobalOutlined />,
+          key: "7.5",
+        },
+      ],
+    },
+    {
+      label: <Link to="">Support</Link>,
+      icon: <QuestionCircleOutlined />,
+      key: "8",
     },
     {
       label: "Logout",
@@ -88,26 +168,24 @@ export const Navbar = ({
   return (
     <Layout className="h-screen">
       <Layout.Sider collapsible theme="light">
-        <Select
-          className="!h-16 w-full rounded-lg border-4 border-neutral-100"
-          labelRender={({ label }) => (
-            <Typography.Text strong>{label}</Typography.Text>
-          )}
-          // onSelect={(_, i) => restaurantIdStore.create(i.value, i.tz)}
-          options={restaurantOptions}
-          value={1}
-          variant="borderless"
-        />
+      <div className="flex justify-center items-center h-20  border-neutral-200">
+    <img
+      className="h-10"
+      src="./src/assets/logo.png"
+      alt="Logo"
+    />
+  </div>
+
 
         <Menu items={items} mode="vertical" selectedKeys={[]} />
       </Layout.Sider>
       <Layout>
         <Layout.Header className="flex items-center !bg-white">
-          <img
-            className="absolute left-1/2 h-14 -translate-x-1/2"
-            // src={assetsPath("logo/horizontal.png")}
-            src="./src/./assets/logo.png"
-          />
+            {/* <img
+              className="absolute left-1/2 h-14 -translate-x-1/2"
+              // src={assetsPath("logo/horizontal.png")}
+              src="./src/./assets/logo.png"
+            /> */}
 
           <div className="absolute right-4 cursor-pointer">
             <Dropdown menu={{ items: headerItems }} trigger={["click"]}>

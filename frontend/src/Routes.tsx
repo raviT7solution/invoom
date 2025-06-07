@@ -5,6 +5,7 @@ import { match } from "ts-pattern";
 import { Client } from "./Pages/Client";
 import { Dashboard } from "./Pages/Dashboard";
 import { Login } from "./Pages/Login";
+import { Subscription } from "./Pages/Subscription";
 
 const PrivateRoute = ({ children }: PropsWithChildren) => {
   const token = "test"; //useAdminSessionStore((s) => s.token);
@@ -23,6 +24,7 @@ const routes = {
   Dashboard: "/",
   Login: "/login",
   Client: "/client",
+  Subscription: "/subscription",
 } as const;
 
 const paths = Object.keys(routes) as (keyof typeof routes)[];
@@ -42,6 +44,11 @@ export const Switch = () => {
     .with({ name: "Client" }, () => (
       <PrivateRoute>
         <Client />
+      </PrivateRoute>
+    ))
+    .with({ name: "Subscription" }, () => (
+      <PrivateRoute>
+        <Subscription />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");

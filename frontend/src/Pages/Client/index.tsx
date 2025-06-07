@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Space, Table, Tag, Typography } from "antd";
+import { Button, Input, Select, Space, Table, Tag } from "antd";
 import { useState } from "react";
 
 import { Navbar } from "../../components/Navbar";
@@ -96,7 +96,7 @@ export const Client = () => {
       phone: "+44 1234 567890",
       country: "UK",
       type: "Enterprise",
-      plan: "Silver",
+      plan: "Gold",
       status: "Inactive",
       createdAt: "2024-05-10",
     },
@@ -107,14 +107,14 @@ export const Client = () => {
       phone: "+91 98765 43210",
       country: "India",
       type: "Enterprise",
-      plan: "Silver",
+      plan: "Platinum",
       status: "Active",
       createdAt: "2024-04-20",
     },
   ];
 
   return (
-    <Navbar breadcrumbItems={[{ title: "Client" }]}>
+    <Navbar breadcrumbItems={[{ title: "All clients" }]}>
       <Edit
         menuId={selectedMenuId}
         open={isModalOpen}
@@ -122,9 +122,40 @@ export const Client = () => {
       />
 
       <div className="flex mb-4">
-        <Typography.Title level={4}>All Client</Typography.Title>
 
         <div className="flex flex-1 items-center justify-end gap-2">
+        <Input.Search
+          allowClear
+          className="max-w-xs"
+          enterButton
+          // onSearch={(query) => setFilters({ query: query })}
+          placeholder="Search clients by name"
+        />
+
+        <Select
+            className="w-1/4"
+            mode="multiple"
+            // onChange={(ids) => setFilters({ userIds: ids })}
+            optionFilterProp="label"
+            // options={users.map((r) => ({
+            //   label: r.fullName,
+            //   value: r.id,
+            // }))}
+            placeholder="Select plan"
+          />
+
+          <Select
+            className="w-1/4"
+            mode="multiple"
+            // onChange={(ids) => setFilters({ userIds: ids })}
+            optionFilterProp="label"
+            // options={users.map((r) => ({
+            //   label: r.fullName,
+            //   value: r.id,
+            // }))}
+            placeholder="Select status"
+          />
+
           <Button onClick={() => showEditMenu("", true)} type="primary">
             Add client
           </Button>
