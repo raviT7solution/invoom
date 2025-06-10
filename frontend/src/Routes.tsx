@@ -6,9 +6,10 @@ import { Client } from "./Pages/Client";
 import { Dashboard } from "./Pages/Dashboard";
 import { Login } from "./Pages/Login";
 import { Subscription } from "./Pages/Subscription";
+import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 
 const PrivateRoute = ({ children }: PropsWithChildren) => {
-  const token = "test"; //useAdminSessionStore((s) => s.token);
+  const token =  useAdminSessionStore((s) => s.token);
 
   if (!token) {
     Router.replace("Login");
@@ -18,7 +19,6 @@ const PrivateRoute = ({ children }: PropsWithChildren) => {
 
   return children;
 };
-
 
 const routes = {
   Dashboard: "/",

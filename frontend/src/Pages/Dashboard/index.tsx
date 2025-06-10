@@ -1,9 +1,6 @@
-import dayjs from "dayjs";
-import { useState } from "react";
 
 import { Navbar } from "../../components/Navbar";
-import { DATE_FORMAT } from "../../helpers/dateTime";
-import { useRestaurantIdStore } from "../../stores/useRestaurantIdStore";
+// import { useRestaurantIdStore } from "../../stores/useRestaurantIdStore";
 
 const COLORS = {
   line: "#2563eb",
@@ -12,9 +9,9 @@ const COLORS = {
 const COLORS_FILL_OPACITY = 0.4;
 
 export const Dashboard = () => {
-  const { restaurantId, tz } = useRestaurantIdStore();
+  // const { restaurantId, tz } = useRestaurantIdStore();
 
-  const [date, setDate] = useState(dayjs().tz(tz).format(DATE_FORMAT));
+  // const [date, setDate] = useState(dayjs().tz(tz).format(DATE_FORMAT));
 
   // const { data, isFetching } = useDashboardSummary({
   //   endTime: dayjs.tz(date, DATE_FORMAT, tz).endOf("day").toISOString(),

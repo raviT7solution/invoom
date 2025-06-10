@@ -6,27 +6,29 @@ import {
 } from "@ant-design/icons";
 import { Button, Card, Checkbox, Form, Input } from "antd";
 
-import { assetsPath } from "../helpers/assets";
 import { Router } from "../Routes";
+import { useAdminSessionCreate } from "../api";
+import { useAdminDataStore } from "../stores/useAdminDataStore";
 import { useAdminSessionStore } from "../stores/useAdminSessionStore";
 
 type schema = {
-  email: string;
+  username: string;
   password: string;
 };
 
 export const Login = () => {
-  // const { isPending, mutateAsync } = useAdminSessionCreate();
-  const create = useAdminSessionStore((s) => s.create);
+  const { isPending, mutateAsync } = useAdminSessionCreate();
+  const createSession = useAdminSessionStore((s) => s.create);
+const createAdminData = useAdminDataStore((s) => s.create);
 
-  const onFinish = async (values: schema) => {
-    // create(
-    //   (await mutateAsync({ input: { ...values, subject: "web_admin" } }))
-    //     .adminSessionCreate.token,
-    // );
+const onFinish = async (values: schema) => {
+  const res = await mutateAsync(values);
 
-    Router.push("Dashboard");
-  };
+  createSession(res.response.token);
+  createAdminData(res.response.user.userfrontid, res.response.user.name);
+
+  Router.push("Dashboard");
+};
 
   return (
     <div className="flex h-screen items-center justify-center bg-neutral-100">
@@ -34,17 +36,17 @@ export const Login = () => {
         className="w-11/12 drop-shadow-xl lg:w-1/4"
         title={
           <img
-            className="m-auto h-14"
-            src={assetsPath("logo/horizontal.png")}
+            className="m-auto h-10"
+            src="./src/assets/logo.png"
           />
         }
       >
         <Form onFinish={onFinish}>
           <Form.Item
-            name="email"
+            name="username"
             rules={[{ required: true, message: "Required" }]}
           >
-            <Input placeholder="Email" prefix={<UserOutlined />} />
+            <Input placeholder="Username" prefix={<UserOutlined />} />
           </Form.Item>
 
           <Form.Item
@@ -65,7 +67,7 @@ export const Login = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button block htmlType="submit"  type="primary">
+            <Button block htmlType="submit" loading={isPending}  type="primary">
               Login
             </Button>
           </Form.Item>

@@ -111,12 +111,6 @@ export const Active = () => {
 
   return (
     <>
-      {/* <Edit
-        menuId={selectedMenuId}
-        open={isModalOpen}
-        showEditMenu={showEditMenu}
-      /> */}
-
       <div className="flex mb-4">
         <div className="flex flex-1 items-center justify-end gap-2">
 

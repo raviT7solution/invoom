@@ -31,8 +31,9 @@ import {
 import { ReactNode } from "react";
 
 import { Router } from "../Routes";
-import { classNames } from "../helpers";
-import { useRestaurantIdStore } from "../stores/useRestaurantIdStore";
+import { logout } from "../api";
+import { classNames, initials } from "../helpers";
+import { useAdminDataStore } from "../stores/useAdminDataStore";
 
 export const Navbar = ({
   breadcrumbItems,
@@ -43,20 +44,8 @@ export const Navbar = ({
   children: ReactNode;
   padding?: boolean;
 }) => {
-  // const { data: currentAdmin } = useCurrentAdmin();
-  // const { data: restaurants } = useRestaurants("active");
-  const restaurantIdStore = useRestaurantIdStore();
 
-  // useEffect(() => {
-  //   if (
-  //     !restaurants.length ||
-  //     !restaurants[0] ||
-  //     restaurantIdStore.restaurantId
-  //   )
-  //     return;
-
-  //   restaurantIdStore.create(restaurants[0].id, restaurants[0].timezone);
-  // }, [restaurants, restaurantIdStore]);
+  const name = useAdminDataStore((s) => s.name);
 
   const items: MenuProps["items"] = [
     {
@@ -142,7 +131,7 @@ export const Navbar = ({
       label: "Logout",
       icon: <LogoutOutlined />,
       key: "9",
-      // onClick: logout,
+      onClick: logout,
     },
   ];
 
@@ -158,12 +147,6 @@ export const Navbar = ({
       key: "2",
     },
   ];
-
-  const restaurantOptions = [{
-    value: 1,
-    label: "Invom",
-    // tz: r.timezone,
-  }];
 
   return (
     <Layout className="h-screen">
@@ -181,17 +164,12 @@ export const Navbar = ({
       </Layout.Sider>
       <Layout>
         <Layout.Header className="flex items-center !bg-white">
-            {/* <img
-              className="absolute left-1/2 h-14 -translate-x-1/2"
-              // src={assetsPath("logo/horizontal.png")}
-              src="./src/./assets/logo.png"
-            /> */}
 
           <div className="absolute right-4 cursor-pointer">
             <Dropdown menu={{ items: headerItems }} trigger={["click"]}>
               <Avatar className="!bg-zinc-400">
-                {/* {initials(currentAdmin?.fullName || "")} */}
-                RS
+                {initials(name || "")}
+
               </Avatar>
             </Dropdown>
           </div>
