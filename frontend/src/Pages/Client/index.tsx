@@ -70,7 +70,6 @@ export const Client = () => {
           <Button
             icon={<DeleteOutlined />}
             danger
-            // onClick={() => handleDelete(record.id)}
           />
         </Space>
       ),
@@ -128,31 +127,20 @@ export const Client = () => {
           allowClear
           className="max-w-xs"
           enterButton
-          // onSearch={(query) => setFilters({ query: query })}
           placeholder="Search clients by name"
         />
 
         <Select
             className="w-1/4"
             mode="multiple"
-            // onChange={(ids) => setFilters({ userIds: ids })}
             optionFilterProp="label"
-            // options={users.map((r) => ({
-            //   label: r.fullName,
-            //   value: r.id,
-            // }))}
             placeholder="Select plan"
           />
 
           <Select
             className="w-1/4"
             mode="multiple"
-            // onChange={(ids) => setFilters({ userIds: ids })}
             optionFilterProp="label"
-            // options={users.map((r) => ({
-            //   label: r.fullName,
-            //   value: r.id,
-            // }))}
             placeholder="Select status"
           />
 

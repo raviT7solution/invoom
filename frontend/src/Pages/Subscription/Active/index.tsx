@@ -1,7 +1,6 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Menu, Select, Table } from "antd";
 import { useState } from "react";
-// import { Edit } from "./Edit";
 
 export const Active = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -113,12 +112,8 @@ export const Active = () => {
     <>
       <div className="flex mb-4">
         <div className="flex flex-1 items-center justify-end gap-2">
-
-
           <Select className="w-1/4" mode="multiple" placeholder="Select plan" />
-
           <Select className="w-1/4" mode="multiple" placeholder="Select billing cycle" />
-
         </div>
       </div>
 

@@ -2,10 +2,6 @@ import { Button, Col, Form, Input, Row, Select } from "antd";
 import { useState } from "react";
 import { FormDrawer } from "../../components/FormDrawer";
 
-// import { useMenu, useMenuCreate, useMenuUpdate } from "../../../api";
-// import { FormDrawer } from "../../../components/FormDrawer";
-// import { useRestaurantIdStore } from "../../../stores/useRestaurantIdStore";
-
 type schema = {
   description: string;
   name: string;
@@ -23,22 +19,8 @@ export const Edit = ({
   open: boolean;
   showEditMenu: (id: string, open: boolean) => void;
 }) => {
-  const isNew = menuId === "";
-  const menu =
-    {
-      id: "1",
-      name: "Breakfast Menu",
-      description: "Delicious breakfast items to start your day.",
-      visible: true,
-    };
+    const isNew = menuId === "";
     const [clientType, setClientType] = useState("practice");
-
-
-  // const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
-
-  // const { data: menu, isFetching } = useMenu(menuId);
-  // const { mutateAsync: menuCreate, isPending: isCreating } = useMenuCreate();
-  // const { mutateAsync: menuUpdate, isPending: isUpdating } = useMenuUpdate();
 
   const onFinish = async (values: schema) => {
     // isNew
@@ -121,26 +103,18 @@ export const Edit = ({
               <Input placeholder="Password" />
             </Form.Item>
           </Col>
-
-
-
-
         </Row>
-
 
         <Row gutter={8}>
           <Col span={6}>
             <Form.Item
-              // getValueFromEvent={phoneNumberGetValueFromEvent}
               label="Phone number"
               name="phoneNumber"
               rules={[
                 { required: true, message: "Required" },
-                // { validator: phoneNumberValidator },
               ]}
             >
                <Input placeholder="Phone number" />
-              {/* <PhoneNumber /> */}
             </Form.Item>
           </Col>
 
@@ -153,15 +127,7 @@ export const Edit = ({
           <Col span={6}>
             <Form.Item label="Country" name="country">
               <Select
-                // disabled={countries.isFetching}
-                // onChange={() =>
-                //   form.setFieldsValue({ province: undefined, city: undefined })
-                // }
                 optionFilterProp="label"
-                // options={countries.data.map((i) => ({
-                //   label: i.name,
-                //   value: i.alpha2,
-                // }))}
                 placeholder="Select"
                 showSearch
               />
@@ -175,8 +141,7 @@ export const Edit = ({
               rules={[{ required: true, message: "Required" }]}
             >
               <Select
-                            onChange={(value) => setClientType(value)}
-
+              onChange={(value) => setClientType(value)}
                 options={[
                   { label: "Practice", value: "practice" },
                   { label: "Business", value: "business" },

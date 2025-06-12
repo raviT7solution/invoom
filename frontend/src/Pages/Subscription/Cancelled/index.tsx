@@ -4,16 +4,13 @@ import { useState } from "react";
 
 export const Cancelled = () => {
   const [selectedId, setSelectedId] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAction = (key: string, id: string) => {
     setSelectedId(id);
     if (key === "history") {
-      // open history modal or redirect
       console.log("Viewing history for:", id);
     }
     if (key === "reactivate") {
-      // trigger reactivation logic
       console.log("Reactivating subscription for:", id);
     }
   };
@@ -103,7 +100,6 @@ export const Cancelled = () => {
         <div className="flex flex-1 items-center justify-end gap-2">
           <Select className="w-1/4" mode="multiple" placeholder="Select plan type"/>
           <Select className="w-1/4" mode="multiple" placeholder="Select reason" />
-          {/* add cancelled month */}
         </div>
       </div>
 
