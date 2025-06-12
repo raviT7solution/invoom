@@ -25,7 +25,7 @@ const onFinish = async (values: schema) => {
   const res = await mutateAsync(values);
 
   createSession(res.response.token);
-  createAdminData(res.response.user.userfrontid, res.response.user.name);
+  createAdminData(res.response.user.userFrontId, res.response.user.name);
 
   Router.push("Dashboard");
 };
