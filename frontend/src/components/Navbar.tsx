@@ -86,9 +86,21 @@ export const Navbar = ({
       key: "5",
     },
     {
-      label: <Link to="">User & Roles</Link>,
+      label: "User & Roles",
       icon: <SafetyOutlined />,
       key: "6",
+      children: [
+        {
+          label: <Link to={Router.Roles()}>Roles</Link>,
+          icon: <BarChartOutlined />,
+          key: "6.1",
+        },
+        {
+          label: <Link to={Router.Users()}>Users</Link>,
+          icon: <FileSearchOutlined />,
+          key: "6.2",
+        },
+      ],
     },
     {
       label: "Settings",
