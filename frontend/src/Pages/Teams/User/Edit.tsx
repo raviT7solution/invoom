@@ -1,5 +1,4 @@
 import { Button, Form, Input, Select } from "antd";
-import { useState } from "react";
 import { FormDrawer } from "../../../components/FormDrawer";
 
 type schema = {
@@ -8,7 +7,7 @@ type schema = {
   visible: boolean;
 };
 
-const initialValues = { description: "", visible: true,clientType: "practice" };
+const initialValues = { description: "", visible: true };
 
 export const Edit = ({
   menuId,
@@ -20,15 +19,6 @@ export const Edit = ({
   showEditMenu: (id: string, open: boolean) => void;
 }) => {
   const isNew = menuId === "";
-
-    const [clientType, setClientType] = useState("practice");
-
-
-  // const restaurantId = useRestaurantIdStore((s) => s.restaurantId);
-
-  // const { data: menu, isFetching } = useMenu(menuId);
-  // const { mutateAsync: menuCreate, isPending: isCreating } = useMenuCreate();
-  // const { mutateAsync: menuUpdate, isPending: isUpdating } = useMenuUpdate();
 
   const onFinish = async (values: schema) => {
     // isNew
@@ -46,7 +36,7 @@ export const Edit = ({
     <FormDrawer
       footer={
         <Button
-          form="client-form"
+          form="user- form"
           htmlType="submit"
           // loading={isCreating || isUpdating}
           type="primary"
@@ -57,7 +47,7 @@ export const Edit = ({
       isFetching={false}
       onClose={onClose}
       open={open}
-      title={isNew ? "New client" : "Edit client"}
+      title={isNew ? "New user" : "Edit user"}
     >
       <Form
         // initialValues={isNew ? initialValues : user}
