@@ -1,7 +1,20 @@
 import {
+  BarChartOutlined,
+  BgColorsOutlined,
+  CreditCardOutlined,
   DashboardOutlined,
+  DollarOutlined,
+  FileSearchOutlined,
+  GlobalOutlined,
   KeyOutlined,
+  LinkOutlined,
   LogoutOutlined,
+  MailOutlined,
+  ProfileOutlined,
+  QuestionCircleOutlined,
+  RobotOutlined,
+  SafetyOutlined,
+  SettingOutlined,
   TeamOutlined,
   UserAddOutlined
 } from "@ant-design/icons";
@@ -18,8 +31,9 @@ import {
 import { ReactNode } from "react";
 
 import { Router } from "../Routes";
-import { classNames } from "../helpers";
-import { useRestaurantIdStore } from "../stores/useRestaurantIdStore";
+import { logout } from "../api";
+import { classNames, initials } from "../helpers";
+import { useAdminDataStore } from "../stores/useAdminDataStore";
 
 export const Navbar = ({
   breadcrumbItems,
@@ -30,37 +44,118 @@ export const Navbar = ({
   children: ReactNode;
   padding?: boolean;
 }) => {
-  // const { data: currentAdmin } = useCurrentAdmin();
-  // const { data: restaurants } = useRestaurants("active");
-  const restaurantIdStore = useRestaurantIdStore();
 
-  // useEffect(() => {
-  //   if (
-  //     !restaurants.length ||
-  //     !restaurants[0] ||
-  //     restaurantIdStore.restaurantId
-  //   )
-  //     return;
-
-  //   restaurantIdStore.create(restaurants[0].id, restaurants[0].timezone);
-  // }, [restaurants, restaurantIdStore]);
+  const name = useAdminDataStore((s) => s.name);
 
   const items: MenuProps["items"] = [
     {
-      label: <Link to={Router.Dashboard()}>Dashboard</Link>,
+      label: "Dashboard",
       icon: <DashboardOutlined />,
       key: "1",
+      children: [
+        {
+          label: <Link to={Router.Dashboard()}>Overview</Link>,
+          icon: <BarChartOutlined />,
+          key: "1.1",
+        },
+        {
+          label: <Link to="">System Logs</Link>,
+          icon: <FileSearchOutlined />,
+          key: "1.2",
+        },
+      ],
     },
     {
-      label: <Link to={Router.Teams()}>Teams</Link>,
+      label: <Link to={Router.Client()}>Client</Link>,
       icon: <TeamOutlined />,
       key: "2",
+    },
+    // {
+    //   label: <Link to="">Plan</Link>,
+    //   icon: <ProfileOutlined />,
+    //   key: "3",
+    // },
+    {
+      label: <Link to={Router.Plan()}>Plan</Link>,
+      icon: <ProfileOutlined />,
+      key: "3",
+    },
+
+    {
+      label: <Link to={Router.Subscription()}>Subscription</Link>,
+      icon: <CreditCardOutlined />,
+      key: "4",
+    },
+    {
+      label: <Link to="">OCR & AI Engine</Link>,
+      icon: <RobotOutlined />,
+      key: "5",
+    },
+    {
+      label: <Link to="">User & Roles</Link>,
+      icon: <SafetyOutlined />,
+      key: "6",
+    },
+    {
+      label: "Settings",
+      icon: <SettingOutlined />,
+      key: "7",
+      children: [
+        {
+          label: <Link to="">Branding</Link>,
+          icon: <BgColorsOutlined />,
+          key: "7.1",
+        },
+        {
+          label: <Link to="">Email Template</Link>,
+          icon: <MailOutlined />,
+          key: "7.2",
+        },
+        {
+          label: <Link to="">Billing Settings</Link>,
+          icon: <DollarOutlined />,
+          key: "7.3",
+        },
+        {
+          label: <Link to="">Webhook</Link>,
+          icon: <LinkOutlined />,
+          key: "7.4",
+        },
+        {
+          label: <Link to="">Regional Preferences</Link>,
+          icon: <GlobalOutlined />,
+          key: "7.5",
+        },
+      ],
+    },
+    {
+      label: <Link to="">Support</Link>,
+      icon: <QuestionCircleOutlined />,
+      key: "8",
+    },
+    {
+      label: "Masters",
+      icon: <SettingOutlined />,
+      key: "9",
+      children: [
+        // {
+        //   label: <Link to="">Features</Link>,
+        //   icon: <TeamOutlined />,
+        //   key: "9.1",
+        // },
+        
+        {
+          label: <Link to={Router.Feature()}>Feature</Link>,
+          icon: <TeamOutlined />,
+          key: "9.1",
+        },
+      ],
     },
     {
       label: "Logout",
       icon: <LogoutOutlined />,
-      key: "9",
-      // onClick: logout,
+      key: "10",
+      onClick: logout,
     },
   ];
 
@@ -77,25 +172,17 @@ export const Navbar = ({
     },
   ];
 
-  // const restaurantOptions = restaurants.map((r) => ({
-  //   value: r.id,
-  //   label: r.name,
-  //   tz: r.timezone,
-  // }));
-
   return (
     <Layout className="h-screen">
       <Layout.Sider collapsible theme="light">
-        {/* <Select
-          className="!h-16 w-full rounded-lg border-4 border-neutral-100"
-          labelRender={({ label }) => (
-            <Typography.Text strong>{label}</Typography.Text>
-          )}
-          onSelect={(_, i) => restaurantIdStore.create(i.value, i.tz)}
-          options={restaurantOptions}
-          value={restaurantIdStore.restaurantId}
-          variant="borderless"
-        /> */}
+      <div className="flex justify-center items-center h-20  border-neutral-200">
+    <img
+      className="h-10"
+      src="./src/assets/logo.png"
+      alt="Logo"
+    />
+  </div>
+
 
         <Menu items={items} mode="vertical" selectedKeys={[]} />
       </Layout.Sider>
@@ -110,8 +197,8 @@ export const Navbar = ({
           <div className="absolute right-4 cursor-pointer">
             <Dropdown menu={{ items: headerItems }} trigger={["click"]}>
               <Avatar className="!bg-zinc-400">
-                {/* {initials(currentAdmin?.fullName || "")} */}
-                RS
+                {initials(name || "")}
+
               </Avatar>
             </Dropdown>
           </div>
