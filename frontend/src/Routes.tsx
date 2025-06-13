@@ -7,6 +7,8 @@ import { Dashboard } from "./Pages/Dashboard";
 import { Login } from "./Pages/Login";
 import { Subscription } from "./Pages/Subscription";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
+import Plan from "./Pages/Plan";
+import Feature from "./Pages/Master/Feature";
 
 const PrivateRoute = ({ children }: PropsWithChildren) => {
   const token =  useAdminSessionStore((s) => s.token);
@@ -25,6 +27,8 @@ const routes = {
   Login: "/login",
   Client: "/client",
   Subscription: "/subscription",
+  Plan: "/plan",
+  Feature: "/feature",
 } as const;
 
 const paths = Object.keys(routes) as (keyof typeof routes)[];
@@ -49,6 +53,16 @@ export const Switch = () => {
     .with({ name: "Subscription" }, () => (
       <PrivateRoute>
         <Subscription />
+      </PrivateRoute>
+    ))
+    .with({ name: "Plan" }, () => (
+      <PrivateRoute>
+        <Plan />
+      </PrivateRoute>
+    ))
+    .with({ name: "Feature" }, () => (
+      <PrivateRoute>
+        <Feature />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");

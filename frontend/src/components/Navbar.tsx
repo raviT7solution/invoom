@@ -70,11 +70,17 @@ export const Navbar = ({
       icon: <TeamOutlined />,
       key: "2",
     },
+    // {
+    //   label: <Link to="">Plan</Link>,
+    //   icon: <ProfileOutlined />,
+    //   key: "3",
+    // },
     {
-      label: <Link to="">Plan</Link>,
+      label: <Link to={Router.Plan()}>Plan</Link>,
       icon: <ProfileOutlined />,
       key: "3",
     },
+
     {
       label: <Link to={Router.Subscription()}>Subscription</Link>,
       icon: <CreditCardOutlined />,
@@ -128,9 +134,27 @@ export const Navbar = ({
       key: "8",
     },
     {
+      label: "Masters",
+      icon: <SettingOutlined />,
+      key: "9",
+      children: [
+        // {
+        //   label: <Link to="">Features</Link>,
+        //   icon: <TeamOutlined />,
+        //   key: "9.1",
+        // },
+        
+        {
+          label: <Link to={Router.Feature()}>Feature</Link>,
+          icon: <TeamOutlined />,
+          key: "9.1",
+        },
+      ],
+    },
+    {
       label: "Logout",
       icon: <LogoutOutlined />,
-      key: "9",
+      key: "10",
       onClick: logout,
     },
   ];
@@ -164,6 +188,11 @@ export const Navbar = ({
       </Layout.Sider>
       <Layout>
         <Layout.Header className="flex items-center !bg-white">
+          <img
+            className="absolute left-1/2 h-14 -translate-x-1/2"
+            // src={assetsPath("logo/horizontal.png")}
+            src="./src/./assets/logo.png"
+          />
 
           <div className="absolute right-4 cursor-pointer">
             <Dropdown menu={{ items: headerItems }} trigger={["click"]}>
