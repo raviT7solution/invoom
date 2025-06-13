@@ -2,12 +2,16 @@ import { createRouter } from "@swan-io/chicane";
 import { PropsWithChildren } from "react";
 import { match } from "ts-pattern";
 
+import { Client } from "./Pages/Client";
 import { Dashboard } from "./Pages/Dashboard";
 import { Login } from "./Pages/Login";
-import { Roles } from "./Pages/Teams/Roles";
+import { Subscription } from "./Pages/Subscription";
+import { useAdminSessionStore } from "./stores/useAdminSessionStore";
+import Plan from "./Pages/Plan";
+import Feature from "./Pages/Master/Feature";
 
 const PrivateRoute = ({ children }: PropsWithChildren) => {
-  const token = "test"; //useAdminSessionStore((s) => s.token);
+  const token =  useAdminSessionStore((s) => s.token);
 
   if (!token) {
     Router.replace("Login");
@@ -18,11 +22,13 @@ const PrivateRoute = ({ children }: PropsWithChildren) => {
   return children;
 };
 
-
 const routes = {
   Dashboard: "/",
   Login: "/login",
-  Teams: "/teams",
+  Client: "/client",
+  Subscription: "/subscription",
+  Plan: "/plan",
+  Feature: "/feature",
 } as const;
 
 const paths = Object.keys(routes) as (keyof typeof routes)[];
@@ -39,9 +45,24 @@ export const Switch = () => {
         <Dashboard />
       </PrivateRoute>
     ))
-    .with({ name: "Teams" }, () => (
+    .with({ name: "Client" }, () => (
       <PrivateRoute>
-        <Roles />
+        <Client />
+      </PrivateRoute>
+    ))
+    .with({ name: "Subscription" }, () => (
+      <PrivateRoute>
+        <Subscription />
+      </PrivateRoute>
+    ))
+    .with({ name: "Plan" }, () => (
+      <PrivateRoute>
+        <Plan />
+      </PrivateRoute>
+    ))
+    .with({ name: "Feature" }, () => (
+      <PrivateRoute>
+        <Feature />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");

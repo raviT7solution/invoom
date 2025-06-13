@@ -13,3 +13,68 @@
 .infinite-viewer-scroll-area {
   background-image: url("/src/assets/grid.svg");
 }
+
+.sectionRow {
+  border: 1px solid #dadada;
+  border-radius: 7px;
+  padding: 30px 10px;
+  position: relative;
+}
+
+.sectionTitle {
+  position: absolute;
+  top: -17px;
+  left: 14px;
+  background: #fff;
+  padding: 4px 50px 5px;
+  border: 1px solid #dadada;
+  border-radius: 50px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.sectionTitle h5{font-weight: 500;}
+.country-table .ant-table-thead >tr>th{background: #e4e3e3 !important;}
+.country-table td {padding: 6px !important;}
+.ant-select-focused .ant-select-selector, .ant-select-selector:hover {border-color: #0d1d34 !important; box-shadow: 0 0 0 2px rgba(13, 29, 52, 0.2) !important;}
+.customToggle label.ant-segmented-item-selected{background-color: #0d1d34 !important;color: #fff !important;border-radius: 20px !important;transition: all 0.9s ease;}
+.customToggle.ant-segmented .ant-segmented-item:hover{background-color: #0d1d34 !important;color: #fff !important;border-radius: 20px !important;}
+.customToggle{
+  max-width: 250px;
+  border-radius: 20px !important;
+  background: #fff !important;
+  padding: 5px !important;
+  margin: 0 auto !important;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.ant-radio-button-wrapper-checked {
+  background-color: #0d1d34 !important;
+  color: #fff !important;
+  border-color: #0d1d34 !important;
+}
+/* Override selected button color */
+.custom-radio-button .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  background-color: #0d1d34;
+  border-color: #0d1d34;
+  color: #fff;
+}
+
+/* Optional: Adjust hover for better UX */
+.custom-radio-button .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+  background-color: #0d1d34;
+  border-color: #0d1d34;
+}
+.header-row {
+  background: #d1d1d182;
+  font-weight: bold;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.plan-title {font-size: 18px;}
+
+.plan-name {font-size: 20px;font-weight: 600;}
+
+.plan-monthly {font-size: 16px;}
+
+.plan-annual {font-size: 14px;}
+
+.plan-col {text-align: center;}
