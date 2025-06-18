@@ -7,7 +7,7 @@ type schema = {
   visible: boolean;
 };
 
-const initialValues = { description: "", visible: true };
+const initialValues = { description: "", visible: true,clientType: "practice" };
 
 export const Edit = ({
   menuId,
