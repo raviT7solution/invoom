@@ -6,6 +6,7 @@ import {
   DollarOutlined,
   FileSearchOutlined,
   GlobalOutlined,
+  IdcardOutlined,
   KeyOutlined,
   LinkOutlined,
   LogoutOutlined,
@@ -13,10 +14,10 @@ import {
   ProfileOutlined,
   QuestionCircleOutlined,
   RobotOutlined,
-  SafetyOutlined,
   SettingOutlined,
   TeamOutlined,
-  UserAddOutlined
+  UserAddOutlined,
+  UserOutlined
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
 import {
@@ -87,17 +88,17 @@ export const Navbar = ({
     },
     {
       label: "User & Roles",
-      icon: <SafetyOutlined />,
+      icon: <TeamOutlined />, // Changed to reflect users/roles context
       key: "6",
       children: [
         {
           label: <Link to={Router.Roles()}>Roles</Link>,
-          icon: <BarChartOutlined />,
+          icon: <IdcardOutlined />, // Represents roles or identity
           key: "6.1",
         },
         {
           label: <Link to={Router.Users()}>Users</Link>,
-          icon: <FileSearchOutlined />,
+          icon: <UserOutlined />, // Clear representation of users
           key: "6.2",
         },
       ],
