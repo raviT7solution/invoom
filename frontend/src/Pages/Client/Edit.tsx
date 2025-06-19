@@ -1,11 +1,19 @@
 import { Button, Col, Form, Input, Row, Select } from "antd";
 import { useState } from "react";
+import { useClientCreate } from "../../api";
 import { FormDrawer } from "../../components/FormDrawer";
 
 type schema = {
-  description: string;
-  name: string;
-  visible: boolean;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string; // Optional when editing
+  phoneNumber: string;
+  address: string;
+  country: string;
+  clientType: "practice" | "business";
+  practiceName: string;
+  businessName: string;
 };
 
 const initialValues = { description: "", visible: true,clientType: "practice" };
@@ -24,10 +32,13 @@ export const Edit = ({
 
   const onFinish = async (values: schema) => {
     // isNew
-    //   ? await menuCreate({
-    //       input: { restaurantId: restaurantId, attributes: values },
-    //     })
-    //   : await menuUpdate({ input: { attributes: values, id: menuId } });
+    //   ?
+       await useClientCreate(
+        {
+          input: { attributes: values },
+        }
+        )
+      // : await menuUpdate({ input: { attributes: values, id: menuId } });
 
     onClose();
   };

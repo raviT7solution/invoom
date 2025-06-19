@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { notification } from "antd";
 import axios from "axios";
 import { Router } from "../Routes";
@@ -55,5 +55,21 @@ export const useAdminSessionCreate = () => {
   return useMutation({
     mutationFn: (data: { username: string; password: string }) =>
       apiClient.post("/auth/login", data).then((res) => res.data),
+  });
+};
+
+export const useClientCreate =async ({}) => {
+  return useMutation({
+    mutationFn: (data: { attributes: any }) =>
+      apiClient.post("/api/v1/clients", data).then((res) => res.data),
+  });
+};
+
+export const useClients = () => {
+  return useQuery({
+    // initialData: collectionInitialData,
+    queryKey: ["clients", ],
+    queryFn: async () =>
+    apiClient.post("/api/v1/clients/datatable", ).then((res) => res.data),
   });
 };
