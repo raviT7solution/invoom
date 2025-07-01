@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { notification } from "antd";
 import axios from "axios";
 import { Router } from "../Routes";
@@ -51,6 +51,17 @@ apiClient.interceptors.response.use(
   }
 );
 
+const collectionInitialData = {
+  data: [],
+  dataTableMetaDTO: {
+    page: 1,
+    perpage: 0,
+    total: 0,
+    pages: 0,
+  },
+};
+
+
 export const useAdminSessionCreate = () => {
   return useMutation({
     mutationFn: (data: { username: string; password: string }) =>
@@ -58,18 +69,47 @@ export const useAdminSessionCreate = () => {
   });
 };
 
-export const useClientCreate =async ({}) => {
+export const useClientCreate = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: (data: { attributes: any }) =>
+    mutationFn: (data: any) =>
       apiClient.post("/api/v1/clients", data).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
   });
 };
 
-export const useClients = () => {
+export const useClientUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: any) =>
+      apiClient.put(`/api/v1/clients`, data).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
+  });
+};
+
+export const useClient = (id: string) => {
   return useQuery({
-    // initialData: collectionInitialData,
-    queryKey: ["clients", ],
+    enabled: !!id,
+    queryKey: ["client", id],
     queryFn: async () =>
-    apiClient.post("/api/v1/clients/datatable", ).then((res) => res.data),
+      apiClient.get(`/api/v1/clients/${id}`).then((res) => res.data.response), // 👈 extract response
+  });
+};
+
+
+export const useClients = ({ start, length }: { start: number; length: number }) => {
+  return useQuery({
+    queryKey: ["clients", start, length],
+    queryFn: async () =>
+      apiClient
+        .post("/api/v1/clients/datatable", { start, length })
+        .then((res) => res.data),
+    initialData: collectionInitialData,
   });
 };

@@ -2,23 +2,24 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Input, Select, Space, Table, Tag } from "antd";
 import { useState } from "react";
 
+import { useClients } from "../../api";
 import { Navbar } from "../../components/Navbar";
+import { useTableState } from "../../helpers/hooks";
 import { Edit } from "./Edit";
 
 export const Client = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMenuId, setSelectedMenuId] = useState("");
 
-  const showEditMenu = (id: string, open: boolean) => {
+  const showEditClient = (id: string, open: boolean) => {
     setSelectedMenuId(id);
     setIsModalOpen(open);
   };
-
   const columns = [
     {
       title: "Client Name",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "clientName", // updated from 'name'
+      key: "clientName",
     },
     {
       title: "Email",
@@ -27,8 +28,8 @@ export const Client = () => {
     },
     {
       title: "Phone No",
-      dataIndex: "phone",
-      key: "phone",
+      dataIndex: "mobileNumber", // updated from 'phone'
+      key: "mobileNumber",
     },
     {
       title: "Country",
@@ -37,13 +38,13 @@ export const Client = () => {
     },
     {
       title: "Client Type",
-      dataIndex: "type",
-      key: "type",
+      dataIndex: "signupType", // updated from 'type'
+      key: "signupType",
     },
     {
       title: "Plan",
-      dataIndex: "plan",
-      key: "plan",
+      dataIndex: "businessName", // 'plan' doesn't exist, showing business name instead
+      key: "businessName",
     },
     {
       title: "Status",
@@ -55,8 +56,8 @@ export const Client = () => {
     },
     {
       title: "Created On",
-      dataIndex: "createdAt",
-      key: "createdAt",
+      dataIndex: "createdOn", // updated from 'createdAt'
+      key: "createdOn",
     },
     {
       title: "Actions",
@@ -65,7 +66,7 @@ export const Client = () => {
         <Space>
           <Button
             icon={<EditOutlined />}
-            onClick={() => showEditMenu(record.id, true)}
+            onClick={() => showEditClient(record.clientId, true)} // updated from record.id
           />
           <Button
             icon={<DeleteOutlined />}
@@ -76,48 +77,27 @@ export const Client = () => {
     },
   ];
 
-  const collection = [
-    {
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      phone: "+1 555 123 4567",
-      country: "USA",
-      type: "Enterprise",
-      plan: "Silver",
-      status: "Active",
-      createdAt: "2024-06-01",
-    },
-    {
-      id: "2",
-      name: "Jane Smith",
-      email: "jane@example.com",
-      phone: "+44 1234 567890",
-      country: "UK",
-      type: "Enterprise",
-      plan: "Gold",
-      status: "Inactive",
-      createdAt: "2024-05-10",
-    },
-    {
-      id: "3",
-      name: "Ravi Kumar",
-      email: "ravi@example.in",
-      phone: "+91 98765 43210",
-      country: "India",
-      type: "Enterprise",
-      plan: "Platinum",
-      status: "Active",
-      createdAt: "2024-04-20",
-    },
-  ];
+
+  const { pagination,  setPagination } = useTableState(
+    {},
+    { page: 0, perPage: 10 },
+  );
+
+
+  const {
+    data: { data, dataTableMetaDTO },
+    isFetching,
+  } = useClients({
+    start: pagination.page,
+    length: pagination.perPage,
+  });
 
   return (
     <Navbar breadcrumbItems={[{ title: "All clients" }]}>
       <Edit
-        menuId={selectedMenuId}
+        clientId={selectedMenuId}
         open={isModalOpen}
-        showEditMenu={showEditMenu}
+        showEditClient={showEditClient}
       />
 
       <div className="flex mb-4">
@@ -144,7 +124,7 @@ export const Client = () => {
             placeholder="Select status"
           />
 
-          <Button onClick={() => showEditMenu("", true)} type="primary">
+          <Button onClick={() => showEditClient("", true)} type="primary">
             Add client
           </Button>
         </div>
@@ -152,8 +132,18 @@ export const Client = () => {
 
       <Table
         columns={columns}
-        dataSource={collection}
-        rowKey="id"
+        dataSource={data}
+        loading={isFetching}
+        onChange={(i) =>
+          setPagination({ page: i.current!, perPage: i.pageSize! })
+        }
+        pagination={{
+          current: pagination.page + 1, // AntD uses 1-based index
+          pageSize: pagination.perPage,
+          total: dataTableMetaDTO.total,
+        }}
+        rowKey="clientId"
+        size="small"
       />
     </Navbar>
   );
