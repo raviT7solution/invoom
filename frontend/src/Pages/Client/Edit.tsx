@@ -14,6 +14,7 @@ type schema = {
   signupType: "practice" | "business";
   practiceName?: string;
   businessName?: string;
+  clientName: string;
 };
 
 
@@ -26,8 +27,7 @@ const initialValues = {
   address: "",
   country: "",
   signupType: "practice",
-  practiceName: "",
-  businessName: "",
+  clientName: "",
 };
 
 export const Edit = ({
@@ -50,7 +50,6 @@ export const Edit = ({
       const payload = {
         ...values,
         signupType: values.signupType === "practice" ? "Practice" : "Business",
-        clientName: values.signupType === "practice" ? values.practiceName : values.businessName,
         clientId,
       };
 
@@ -187,21 +186,14 @@ export const Edit = ({
         </Row>
 
         <Row gutter={8}>
-        {signupType === "practice" && (
-          <Col span={6}>
-            <Form.Item label="Practice Name" name="practiceName">
-              <Input placeholder="Practice Name" />
-            </Form.Item>
-          </Col>
-        )}
-
-        {signupType === "business" && (
-          <Col span={6}>
-            <Form.Item label="Business Name" name="businessName">
-              <Input placeholder="Business Name" />
-            </Form.Item>
-          </Col>
-        )}
+        <Col span={6}>
+          <Form.Item
+            label={signupType === "practice" ? "Practice Name" : "Business Name"}
+            name="clientName"
+          >
+            <Input placeholder={signupType === "practice" ? "Practice Name" : "Business Name"} />
+          </Form.Item>
+        </Col>
       </Row>
       </Form>
     </FormDrawer>

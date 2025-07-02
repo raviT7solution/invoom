@@ -13,7 +13,7 @@ export const logout = () => {
 };
 
 const apiClient = axios.create({
-  baseURL: " https://test-api-invoom.t7solution.com",
+  baseURL: "https://test-api-invoom.t7solution.com",
   headers: {
     "Content-Type": "application/json",
   },
@@ -111,5 +111,18 @@ export const useClients = ({ start, length }: { start: number; length: number })
         .post("/api/v1/clients/datatable", { start, length })
         .then((res) => res.data),
     initialData: collectionInitialData,
+  });
+};
+
+
+export const useClientDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiClient.delete(`/api/v1/clients/${id}`).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
   });
 };

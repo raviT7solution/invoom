@@ -1,8 +1,8 @@
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Input, Select, Space, Table, Tag } from "antd";
+import { DeleteOutlined, EditOutlined, StopOutlined, UserSwitchOutlined } from "@ant-design/icons";
+import { Button, Input, Popconfirm, Select, Space, Table, Tag } from "antd";
 import { useState } from "react";
 
-import { useClients } from "../../api";
+import { useClientDelete, useClients } from "../../api";
 import { Navbar } from "../../components/Navbar";
 import { useTableState } from "../../helpers/hooks";
 import { Edit } from "./Edit";
@@ -10,7 +10,10 @@ import { Edit } from "./Edit";
 export const Client = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMenuId, setSelectedMenuId] = useState("");
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
+
+  const { mutateAsync: deleteClient } = useClientDelete();
   const showEditClient = (id: string, open: boolean) => {
     setSelectedMenuId(id);
     setIsModalOpen(open);
@@ -75,14 +78,47 @@ export const Client = () => {
             icon={<EditOutlined />}
             onClick={() => showEditClient(record.clientId, true)} // updated from record.id
           />
+          <Popconfirm
+            key="delete"
+            onConfirm={() => deleteClient(record.clientId)}
+            title="Are you sure you'd like to delete this?"
+          >
+            <DeleteOutlined />
+          </Popconfirm>
+
           <Button
-            icon={<DeleteOutlined />}
-            danger
-          />
+            size="small"
+            icon={<StopOutlined />}
+            onClick={() => {
+              // Implement suspend logic here
+              console.log(`Suspending client: ${record.clientId}`);
+            }}
+          >
+            Suspend
+          </Button>
+
+        <Button
+          size="small"
+          icon={<UserSwitchOutlined />}
+          type="dashed"
+          onClick={() => {
+            // Implement impersonation logic here
+            console.log(`Impersonating client: ${record.clientId}`);
+          }}
+        >
+          Impersonate
+        </Button>
         </Space>
       ),
     },
   ];
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (selectedKeys: React.Key[]) => {
+      setSelectedRowKeys(selectedKeys);
+    },
+  };
 
 
   const { pagination,  setPagination } = useTableState(
@@ -124,12 +160,18 @@ export const Client = () => {
             placeholder="Select plan"
           />
 
-          <Select
-            className="w-1/4"
-            mode="multiple"
-            optionFilterProp="label"
-            placeholder="Select status"
-          />
+        <Select
+          className="w-1/4"
+          mode="multiple"
+          optionFilterProp="label"
+          placeholder="Select status"
+          options={[
+            { label: "Active", value: "Active" },
+            { label: "Suspended", value: "Suspended" },
+            { label: "Inactive", value: "Inactive" },
+          ]}
+        />
+
 
           <Button onClick={() => showEditClient("", true)} type="primary">
             Add client
@@ -138,6 +180,7 @@ export const Client = () => {
       </div>
 
       <Table
+        rowSelection={rowSelection}
         columns={columns}
         dataSource={data}
         loading={isFetching}
