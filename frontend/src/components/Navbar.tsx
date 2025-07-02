@@ -166,7 +166,7 @@ export const Navbar = ({
         <div className="invoom-logo-container">
           <img
             className="invoom-logo"
-            src="./src/assets/logo.png"
+            src="/images/logo.png"
             alt="Invoom - Automate. Account. Accelerate."
           />
           <div className="invoom-tagline">

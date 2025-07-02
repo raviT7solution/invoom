@@ -61,14 +61,14 @@ const stats = [
 
 const lineChartOptions = {
     chart: {
-      type: 'line',
+      type: 'line' as const,
       height: 350,
       toolbar: { show: false },
     },
     stroke: {
-      curve: 'smooth',
+      curve: 'smooth' as const,
       width: 3,
-      colors: '#0d1d34',
+      colors: ['#0d1d34'],
     },
 
     xaxis: {
@@ -78,7 +78,7 @@ const lineChartOptions = {
     dataLabels: { enabled: false },
     title: {
       text: 'Weekly Trend',
-      align: 'left',
+      align: 'left' as const,
       style: { fontSize: '16px', fontWeight: 600 }
     },
   };

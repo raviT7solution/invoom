@@ -7,8 +7,6 @@ import {
   Row,
   Col,
   Radio,
-  Form,
-  Select,
   Space,
   message,
   Dropdown,
@@ -61,10 +59,9 @@ const Plan = () => {
   const [selectedMenuId, setSelectedMenuId] = useState("");
   const [defaultPlanData, setDefaultPlanData] = useState<any>(null);
   const [clientType, setClientType] = useState("business");
-  const [selectedCurrency, setSelectedCurrency] = useState("USD");
+  const [selectedCurrency] = useState("USD");
   const [plans, setPlans] = useState<PlanType[]>([]);
   const [featuresList, setFeaturesList] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const showEditMenu = async (id: string, open: boolean) => {
     setSelectedMenuId(id);
@@ -119,7 +116,6 @@ const Plan = () => {
   };
 
   const fetchPlans = async () => {
-    setLoading(true);
     try {
       const headers = createAuthHeaders();
 
@@ -161,8 +157,6 @@ const Plan = () => {
     } catch (err) {
       console.error("Error fetching plans", err);
       message.error("Failed to fetch plans");
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -3,7 +3,7 @@ import { Button, Typography, Row, Col, Table } from "antd";
 import Edit from "./Edit";
 import { useEffect, useState } from "react";
 import { TEST_API_URL } from "../../../utils/Constant";
-import { getAuthToken, createAuthHeaders } from "../../../helpers";
+import { createAuthHeaders } from "../../../helpers";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 type FeatureType = {

@@ -37,7 +37,7 @@ const onFinish = async (values: schema) => {
         title={
           <img
             className="m-auto h-10"
-            src="./src/assets/logo.png"
+            src="/images/logo.png"
           />
         }
       >
