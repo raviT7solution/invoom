@@ -1,12 +1,9 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Menu, Select, Table, Tag } from "antd";
-import { useState } from "react";
 
 export const Cancelled = () => {
-  const [selectedId, setSelectedId] = useState("");
 
   const handleAction = (key: string, id: string) => {
-    setSelectedId(id);
     if (key === "history") {
       console.log("Viewing history for:", id);
     }

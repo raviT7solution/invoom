@@ -1,15 +1,7 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Menu, Select, Table } from "antd";
-import { useState } from "react";
 
 export const Active = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMenuId, setSelectedMenuId] = useState("");
-
-  const showEditMenu = (id: string, open: boolean) => {
-    setSelectedMenuId(id);
-    setIsModalOpen(open);
-  };
 
   const columns = [
     {
@@ -46,10 +38,10 @@ export const Active = () => {
     {
       title: "Actions",
       key: "actions",
-      render: (_: any, record: any) => {
+      render: (_: any) => {
         const menu = (
           <Menu>
-            <Menu.Item key="modify" onClick={() => showEditMenu(record.id, true)}>
+            <Menu.Item key="modify">
               Modify
             </Menu.Item>
             <Menu.Item key="cancel" danger>

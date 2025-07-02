@@ -2,7 +2,6 @@ import { Tabs } from "antd";
 import { Navbar } from "../../components/Navbar";
 import { Active } from "./Active";
 import { Cancelled } from "./Cancelled";
-import { Renewals } from "./Renewals";
 
 export const Subscription = () => {
   return (
@@ -17,7 +16,7 @@ export const Subscription = () => {
           {
             key: "1",
             label: "Active",
-            children: <Active/>,
+            children: <Active />,
           },
           {
             key: "2",
@@ -26,8 +25,8 @@ export const Subscription = () => {
           },
           {
             key: "3",
-            label: "Renewals",
-            children: <Renewals/>,
+            label: "Renew",
+            children: <div>Renew Content</div>,
           },
         ]}
       />

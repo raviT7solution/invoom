@@ -1,12 +1,10 @@
 import { createRouter } from "@swan-io/chicane";
 import { PropsWithChildren } from "react";
 import { match } from "ts-pattern";
-
 import { Client } from "./Pages/Client";
 import { Dashboard } from "./Pages/Dashboard";
 import { Login } from "./Pages/Login";
 import { Subscription } from "./Pages/Subscription";
-import { Roles } from "./Pages/Teams/Roles";
 import { Users } from "./Pages/Teams/User";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 
@@ -57,7 +55,7 @@ export const Switch = () => {
     ))
     .with({ name: "Roles" }, () => (
       <PrivateRoute>
-        <Roles />
+        <Client />
       </PrivateRoute>
     ))
     .with({ name: "Users" }, () => (

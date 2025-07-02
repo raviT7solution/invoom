@@ -30,7 +30,6 @@ import {
   MenuProps
 } from "antd";
 import { ReactNode } from "react";
-
 import { Router } from "../Routes";
 import { logout } from "../api";
 import { classNames, initials } from "../helpers";
@@ -164,20 +163,18 @@ export const Navbar = ({
   return (
     <Layout className="h-screen">
       <Layout.Sider collapsible theme="light">
-      <div className="flex justify-center items-center h-20  border-neutral-200">
-    <img
-      className="h-10"
-      src="./src/assets/logo.png"
-      alt="Logo"
-    />
-  </div>
-
-
+        <div className="flex justify-center items-center h-20  border-neutral-200">
+          <img
+            className="h-10"
+            src="./src/assets/logo.png"
+            alt="Logo"
+          />
+        </div>
         <Menu items={items} mode="vertical" selectedKeys={[]} />
       </Layout.Sider>
+
       <Layout>
         <Layout.Header className="flex items-center !bg-white">
-
           <div className="absolute right-4 cursor-pointer">
             <Dropdown menu={{ items: headerItems }} trigger={["click"]}>
               <Avatar className="!bg-zinc-400">
@@ -190,9 +187,7 @@ export const Navbar = ({
 
         <Layout.Content className="mx-4 flex flex-col">
           <Breadcrumb className="!my-4" items={breadcrumbItems} />
-
-          <div
-            className={classNames(
+          <div className={classNames(
               "nested-scroll-overflow-y-scroll flex flex-1 flex-col bg-white",
               padding ? "p-4" : "",
             )}
