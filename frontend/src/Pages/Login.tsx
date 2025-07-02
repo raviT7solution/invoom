@@ -26,8 +26,11 @@ export const Login = () => {
     createSession(res.response.token);
     createAdminData(res.response.user.userFrontId, res.response.user.name);
 
-    Router.push("Dashboard");
-  };
+  createSession(res.response.token);
+  createAdminData(res.response.user.userFrontId, res.response.user.name);
+
+  Router.push("Dashboard");
+};
 
   return (
     <div className="flex h-screen items-center justify-center bg-neutral-100">
@@ -36,7 +39,7 @@ export const Login = () => {
         title={
           <img
             className="m-auto h-10"
-            src="./src/assets/logo.png"
+            src="/images/logo.png"
           />
         }
       >

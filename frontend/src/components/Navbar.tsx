@@ -71,7 +71,7 @@ export const Navbar = ({
       key: "2",
     },
     {
-      label: <Link to="">Plan</Link>,
+      label: <Link to={Router.Plan()}>Plan</Link>,
       icon: <ProfileOutlined />,
       key: "3",
     },
@@ -128,9 +128,21 @@ export const Navbar = ({
       key: "8",
     },
     {
+      label: "Masters",
+      icon: <SettingOutlined />,
+      key: "9",
+      children: [ 
+        {
+          label: <Link to={Router.Feature()}>Feature</Link>,
+          icon: <TeamOutlined />,
+          key: "9.1",
+        },
+      ],
+    },
+    {
       label: "Logout",
       icon: <LogoutOutlined />,
-      key: "9",
+      key: "10",
       onClick: logout,
     },
   ];
@@ -150,32 +162,36 @@ export const Navbar = ({
 
   return (
     <Layout className="h-screen">
-      <Layout.Sider collapsible theme="light">
-        <div className="flex justify-center items-center h-20  border-neutral-200">
+      <Layout.Sider collapsible theme="light" className="invoom-sidebar">
+        <div className="invoom-logo-container">
           <img
-            className="h-10"
-            src="./src/assets/logo.png"
-            alt="Logo"
+            className="invoom-logo"
+            src="/images/logo.png"
+            alt="Invoom - Automate. Account. Accelerate."
           />
+          <div className="invoom-tagline">
+            Automate. Account. Accelerate.
+          </div>
         </div>
-        <Menu items={items} mode="vertical" selectedKeys={[]} />
-      </Layout.Sider>
 
+        <Menu items={items} mode="vertical" selectedKeys={[]} className="invoom-menu" />
+      </Layout.Sider>
       <Layout>
-        <Layout.Header className="flex items-center !bg-white">
+        <Layout.Header className="flex items-center !bg-white invoom-header">
           <div className="absolute right-4 cursor-pointer">
             <Dropdown menu={{ items: headerItems }} trigger={["click"]}>
-              <Avatar className="!bg-zinc-400">
+              <Avatar className="invoom-avatar">
                 {initials(name || "")}
-
               </Avatar>
             </Dropdown>
           </div>
         </Layout.Header>
 
         <Layout.Content className="mx-4 flex flex-col">
-          <Breadcrumb className="!my-4" items={breadcrumbItems} />
-          <div className={classNames(
+          <Breadcrumb className="!my-4 invoom-breadcrumb" items={breadcrumbItems} />
+
+          <div
+            className={classNames(
               "nested-scroll-overflow-y-scroll flex flex-1 flex-col bg-white",
               padding ? "p-4" : "",
             )}

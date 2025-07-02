@@ -10,6 +10,519 @@
   @apply overflow-y-scroll;
 }
 
+* {
+  font-family: "Montserrat", sans-serif !important;
+}
+
 .infinite-viewer-scroll-area {
   background-image: url("/src/assets/grid.svg");
+}
+
+/* Invoom Navbar Styling - Primary Background with Secondary Text */
+.invoom-sidebar {
+  background-color: #1e2a5c !important;
+  border-right: 1px solid rgba(255, 184, 0, 0.2) !important;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.invoom-sidebar .ant-layout-sider-children {
+  background-color: #1e2a5c !important;
+}
+
+.invoom-logo-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 8px;
+  background-color: #1e2a5c;
+  border-bottom: 1px solid #1e2a5c;
+  position: relative;
+  overflow: hidden;
+}
+
+.invoom-logo-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background: linear-gradient(45deg, rgba(255, 184, 0, 0.15) 0%, transparent 50%); */
+  pointer-events: none;
+}
+
+.invoom-logo {
+  height: 23px;
+  width: auto;
+  margin-bottom: 8px;
+  transition: transform 0.3s ease;
+}
+
+/* .invoom-logo:hover {
+  transform: scale(1.05);
+} */
+
+.invoom-tagline {
+  font-size: 10px;
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.invoom-menu {
+  border-right: none !important;
+  background-color: #1e2a5c !important;
+}
+
+.invoom-menu .ant-menu-item {
+  color: #fff !important;
+  font-weight: 600 !important;
+  background-color: transparent !important;
+}
+
+.invoom-menu .ant-menu-item:hover {
+  background-color: rgba(255, 184, 0, 0.15) !important;
+  color: #f6b50a !important;
+}
+
+.invoom-menu .ant-menu-item-selected {
+  background-color: rgba(255, 184, 0, 0.25) !important;
+  color: #f6b50a !important;
+  border-right: 3px solid #f6b50a !important;
+  font-weight: 600 !important;
+}
+
+.invoom-menu .ant-menu-submenu-title {
+  color: #fff !important;
+  font-weight: 500 !important;
+  background-color: transparent !important;
+}
+
+.invoom-menu .ant-menu-submenu-title:hover {
+  background-color: rgba(255, 184, 0, 0.15) !important;
+  color: #f6b50a !important;
+}
+
+.invoom-menu .ant-menu-submenu-open .ant-menu-submenu-title {
+  color: #f6b50a !important;
+  background-color: rgba(255, 184, 0, 0.1) !important;
+}
+
+.invoom-menu .ant-menu-sub {
+  background-color: rgba(18, 18, 34, 0.3) !important;
+}
+
+.invoom-menu .ant-menu-sub .ant-menu-item {
+  color: rgba(255, 184, 0, 0.8) !important;
+}
+
+.invoom-menu .ant-menu-sub .ant-menu-item:hover {
+  background-color: rgba(255, 184, 0, 0.2) !important;
+  color: #f6b50a !important;
+}
+
+.invoom-menu .ant-menu-item-icon {
+  color: #f6b50a !important;
+}
+
+.invoom-menu .ant-menu-title-content {
+  color: #fff !important;
+  font-weight: 500 !important;
+}
+
+.invoom-menu .ant-menu-submenu .ant-menu-title-content a {
+  color: #f6b50a !important;
+  font-weight: 500 !important;
+}
+
+.invoom-header {
+  background-color: #1e2a5c !important;
+  border-bottom: 1px solid rgba(255, 184, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.invoom-avatar {
+  background-color: #f6b50a !important;
+  color: #1e2a5c !important;
+  font-weight: 700 !important;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.invoom-breadcrumb .ant-breadcrumb-link {
+  color: #1e2a5c !important;
+  font-weight: 600 !important;
+}
+
+.invoom-breadcrumb .ant-breadcrumb-link:hover {
+  color: #f6b50a !important;
+}
+
+.invoom-breadcrumb .ant-breadcrumb-separator {
+  color: #1e2a5c !important;
+}
+
+/* Sidebar Trigger Button */
+.ant-layout-sider-trigger {
+  background-color: #1e2a5c !important;
+  color: #f6b50a !important;
+  /* border-top: 1px solid rgba(255, 184, 0, 0.3) !important; */
+}
+
+.ant-layout-sider-trigger:hover {
+  background-color: rgba(255, 184, 0, 0.1) !important;
+  color: #f6b50a !important;
+}
+
+.sectionRow {
+  border: 1px solid #dadada;
+  border-radius: 7px;
+  padding: 30px 10px;
+  position: relative;
+}
+
+.sectionTitle {
+  position: absolute;
+  top: -17px;
+  left: 14px;
+  background: #fff;
+  padding: 4px 50px 5px;
+  border: 1px solid #dadada;
+  border-radius: 50px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.sectionTitle h5 {
+  font-weight: 500;
+}
+
+.country-table .ant-table-thead > tr > th {
+  background: #e4e3e3 !important;
+}
+
+.country-table td {
+  padding: 6px !important;
+}
+
+/* Invoom Brand Color Updates */
+.ant-select-focused .ant-select-selector, 
+.ant-select-selector:hover {
+  border-color: #1e2a5c !important; 
+  box-shadow: 0 0 0 2px rgba(30, 42, 92, 0.2) !important;
+}
+
+.customToggle label.ant-segmented-item-selected {
+  background-color: #1e2a5c !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+  transition: all 0.9s ease;
+}
+
+.customToggle.ant-segmented .ant-segmented-item:hover {
+  background-color: #1e2a5c !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+}
+
+.customToggle {
+  max-width: 250px;
+  border-radius: 20px !important;
+  background: #fff !important;
+  padding: 5px !important;
+  margin: 0 auto !important;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.ant-radio-button-wrapper-checked {
+  background-color: #1e2a5c !important;
+  color: #fff !important;
+  border-color: #1e2a5c !important;
+}
+
+/* Override selected button color */
+.custom-radio-button .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+  background-color: #1e2a5c;
+  border-color: #1e2a5c;
+  color: #fff;
+}
+
+/* Optional: Adjust hover for better UX */
+.custom-radio-button .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
+  background-color: #1e2a5c;
+  border-color: #1e2a5c;
+}
+
+.header-row {
+  background: #d1d1d182;
+  font-weight: bold;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.centerDiv {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.plan-title {
+  font-size: 18px;
+  color: #121222;
+  font-weight: 600;
+}
+
+.plan-name strong {
+  font-size: 20px;
+  font-weight: 600;
+  color: #121222;
+}
+
+.plan-monthly {
+  font-size: 16px;
+  color: #1e2a5c;
+  font-weight: 600;
+}
+
+.plan-monthly span, .plan-annual span {
+  font-weight: normal;
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.plan-annual {
+  font-size: 14px;
+  color: #1e2a5c;
+  font-weight: 500;
+}
+
+.plan-col {
+  text-align: center;
+  position: relative;
+}
+
+.listLimit svg {
+  fill: #f6b50a;
+  margin-right: 6px;
+}
+
+.listLimit {
+  font-weight: normal;
+  margin-top: 10px;
+  color: #121222;
+}
+
+.planEdit {
+  position: absolute !important;
+  top: 0;
+  right: 42px;
+}
+
+.planEdit button {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+}
+
+.planDelete {
+  position: absolute !important;
+  top: 0;
+  right: 0;
+}
+
+.planDelete button {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+}
+
+/* Primary button styling with Invoom brand colors */
+.ant-btn-primary {
+  background-color: #1e2a5c !important;
+  border-color: #1e2a5c !important;
+  color: #fff !important;
+}
+
+.ant-btn-primary:hover {
+  background-color: #121222 !important;
+  border-color: #121222 !important;
+}
+
+.ant-btn-primary:focus {
+  background-color: #1e2a5c !important;
+  border-color: #1e2a5c !important;
+  box-shadow: 0 0 0 2px rgba(30, 42, 92, 0.2) !important;
+}
+
+.plan_main_div .ant-card-body {
+  padding: 4px !important;
+}
+
+/* Dashboard CSS - Overview with Invoom branding */
+.stat-row {
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+.stat-col {
+  display: flex;
+}
+
+.stat-card {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.13) !important;
+  text-align: left;
+  border: 1px solid #f0f0f0;
+}
+
+.stat-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-icon-box {
+  background-color: #1e2a5c;
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(30, 42, 92, 0.3);
+}
+
+.stat-icon-box svg {
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  display: block !important;
+}
+
+.stat-count {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e2a5c;
+  margin-bottom: 4px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* Dashboard CSS - Overview end */
+
+.plan_main_div {
+  overflow-x: auto;
+}
+
+.plan_main_div div {
+  box-sizing: border-box;
+}
+
+.dotAction {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.planCountryTable th {
+  padding: 7px !important;
+  background-color: #f8f9fa !important;
+  border-bottom: 2px solid #1e2a5c !important;
+}
+
+.planCountryTable td {
+  padding: 5px !important;
+}
+
+/* Additional Invoom brand styling */
+.ant-table-thead > tr > th {
+  background-color: #f8f9fa !important;
+  border-bottom: 2px solid #1e2a5c !important;
+  color: #121222 !important;
+  font-weight: 600 !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background-color: rgba(30, 42, 92, 0.05) !important;
+}
+
+/* Form elements */
+.ant-input:focus,
+.ant-input-focused {
+  border-color: #1e2a5c !important;
+  box-shadow: 0 0 0 2px rgba(30, 42, 92, 0.2) !important;
+}
+
+.ant-input:hover {
+  border-color: #1e2a5c !important;
+}
+
+/* Checkbox and radio styling */
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #1e2a5c !important;
+  border-color: #1e2a5c !important;
+}
+
+.ant-radio-checked .ant-radio-inner {
+  border-color: #1e2a5c !important;
+}
+
+.ant-radio-inner:after {
+  background-color: #1e2a5c !important;
+}
+
+/* Links and interactive elements */
+/* a {
+  color: #1e2a5c !important;
+}
+
+a:hover {
+  color: #121222 !important;
+} */
+
+/* Success/accent colors using the yellow */
+.ant-btn-success {
+  background-color: #f6b50a !important;
+  border-color: #f6b50a !important;
+  color: #121222 !important;
+  font-weight: 600 !important;
+}
+
+.ant-btn-success:hover {
+  background-color: #e6a600 !important;
+  border-color: #e6a600 !important;
+}
+
+/* Tags and badges */
+.ant-tag {
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* Custom utility classes for Invoom branding */
+.invoom-gradient {
+  background: linear-gradient(135deg, #1e2a5c 0%, #121222 100%);
+  color: white;
+}
+
+.invoom-accent {
+  color: #f6b50a;
+}
+
+.invoom-primary {
+  color: #1e2a5c;
+}
+
+.invoom-dark {
+  color: #121222;
 }
