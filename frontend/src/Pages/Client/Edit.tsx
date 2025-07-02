@@ -1,49 +1,65 @@
 import { Button, Col, Form, Input, Row, Select } from "antd";
 import { useState } from "react";
-import { useClientCreate } from "../../api";
+import { useClient, useClientCreate, useClientUpdate } from "../../api";
 import { FormDrawer } from "../../components/FormDrawer";
 
 type schema = {
   firstName: string;
   lastName: string;
   email: string;
-  password: string; // Optional when editing
-  phoneNumber: string;
+  password?: string;
+  mobileNumber: string;
   address: string;
   country: string;
-  clientType: "practice" | "business";
-  practiceName: string;
-  businessName: string;
+  signupType: "practice" | "business";
+  practiceName?: string;
+  businessName?: string;
+  clientName: string;
 };
 
-const initialValues = { description: "", visible: true,clientType: "practice" };
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  mobileNumber: "",
+  address: "",
+  country: "",
+  signupType: "practice",
+  clientName: "",
+};
 
 export const Edit = ({
-  menuId,
+  clientId,
   open,
-  showEditMenu,
+  showEditClient,
 }: {
-  menuId: string;
+  clientId: string;
   open: boolean;
-  showEditMenu: (id: string, open: boolean) => void;
+  showEditClient: (id: string, open: boolean) => void;
 }) => {
-    const isNew = menuId === "";
-    const [clientType, setClientType] = useState("practice");
+    const isNew = clientId === "";
+    const [signupType, setSignupType] = useState("practice");
 
-  const onFinish = async (values: schema) => {
-    // isNew
-    //   ?
-       await useClientCreate(
-        {
-          input: { attributes: values },
-        }
-        )
-      // : await menuUpdate({ input: { attributes: values, id: menuId } });
+    const { data: client, isFetching } = useClient(clientId);
+    const { mutateAsync: clientCreate, isPending: isCreating } = useClientCreate();
+    const { mutateAsync: clientUpdate, isPending: isUpdating } = useClientUpdate();
 
-    onClose();
-  };
+    const onFinish = async (values: schema) => {
+      const payload = {
+        ...values,
+        signupType: values.signupType === "practice" ? "Practice" : "Business",
+        clientId,
+      };
 
-  const onClose = () => showEditMenu("", false);
+      isNew
+        ? await clientCreate(payload) // 👈 send directly
+        : await clientUpdate(payload); // assuming update still needs this shape
+
+      onClose();
+    };
+
+  const onClose = () => showEditClient("", false);
 
   return (
     <FormDrawer
@@ -51,23 +67,22 @@ export const Edit = ({
         <Button
           form="client-form"
           htmlType="submit"
-          // loading={isCreating || isUpdating}
+          loading={isCreating || isUpdating}
           type="primary"
         >
           Submit
         </Button>
       }
-      isFetching={false}
+      isFetching={isFetching}
       onClose={onClose}
       open={open}
       title={isNew ? "New client" : "Edit client"}
       width={1000}
     >
       <Form
-        // form={form}
-        initialValues={initialValues }
+        initialValues={isNew ? initialValues : client}
         layout="vertical"
-        name="user-form"
+        name="client-form"
         onFinish={onFinish}
         preserve={false}
       >
@@ -120,7 +135,7 @@ export const Edit = ({
           <Col span={6}>
             <Form.Item
               label="Phone number"
-              name="phoneNumber"
+              name="mobileNumber"
               rules={[
                 { required: true, message: "Required" },
               ]}
@@ -129,30 +144,26 @@ export const Edit = ({
             </Form.Item>
           </Col>
 
-        <Col span={6}>
-            <Form.Item label="Address line" name="address">
-              <Input placeholder="Address line" />
-            </Form.Item>
+          <Col span={6}>
+              <Form.Item label="Address line" name="address">
+                <Input placeholder="Address line" />
+              </Form.Item>
           </Col>
 
           <Col span={6}>
             <Form.Item label="Country" name="country">
-              <Select
-                optionFilterProp="label"
-                placeholder="Select"
-                showSearch
-              />
+              <Input placeholder="Country" />
             </Form.Item>
           </Col>
 
           <Col span={6}>
             <Form.Item
               label="Client type"
-              name="clientType"
+              name="signupType"
               rules={[{ required: true, message: "Required" }]}
             >
               <Select
-              onChange={(value) => setClientType(value)}
+              onChange={(value) => setSignupType(value)}
                 options={[
                   { label: "Practice", value: "practice" },
                   { label: "Business", value: "business" },
@@ -165,21 +176,14 @@ export const Edit = ({
         </Row>
 
         <Row gutter={8}>
-        {clientType === "practice" && (
-          <Col span={6}>
-            <Form.Item label="Practice Name" name="practiceName">
-              <Input placeholder="Practice Name" />
-            </Form.Item>
-          </Col>
-        )}
-
-        {clientType === "business" && (
-          <Col span={6}>
-            <Form.Item label="Business Name" name="businessName">
-              <Input placeholder="Business Name" />
-            </Form.Item>
-          </Col>
-        )}
+        <Col span={6}>
+          <Form.Item
+            label={signupType === "practice" ? "Practice Name" : "Business Name"}
+            name="clientName"
+          >
+            <Input placeholder={signupType === "practice" ? "Practice Name" : "Business Name"} />
+          </Form.Item>
+        </Col>
       </Row>
       </Form>
     </FormDrawer>

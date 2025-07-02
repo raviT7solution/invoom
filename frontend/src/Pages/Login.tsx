@@ -5,7 +5,6 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Card, Checkbox, Form, Input } from "antd";
-
 import { Router } from "../Routes";
 import { useAdminSessionCreate } from "../api";
 import { useAdminDataStore } from "../stores/useAdminDataStore";
@@ -19,10 +18,13 @@ type schema = {
 export const Login = () => {
   const { isPending, mutateAsync } = useAdminSessionCreate();
   const createSession = useAdminSessionStore((s) => s.create);
-const createAdminData = useAdminDataStore((s) => s.create);
+  const createAdminData = useAdminDataStore((s) => s.create);
 
-const onFinish = async (values: schema) => {
-  const res = await mutateAsync(values);
+  const onFinish = async (values: schema) => {
+    const res = await mutateAsync(values);
+
+    createSession(res.response.token);
+    createAdminData(res.response.user.userFrontId, res.response.user.name);
 
   createSession(res.response.token);
   createAdminData(res.response.user.userFrontId, res.response.user.name);
