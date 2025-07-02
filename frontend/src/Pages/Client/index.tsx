@@ -12,12 +12,24 @@ export const Client = () => {
   const [selectedMenuId, setSelectedMenuId] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
-
   const { mutateAsync: deleteClient } = useClientDelete();
   const showEditClient = (id: string, open: boolean) => {
     setSelectedMenuId(id);
     setIsModalOpen(open);
   };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (selectedKeys: React.Key[]) => {
+      setSelectedRowKeys(selectedKeys);
+    },
+  };
+
+  const { pagination,  setPagination } = useTableState(
+    {},
+    { page: 0, perPage: 10 },
+  );
+
   const columns = [
     {
       title: "Client Name",
@@ -89,10 +101,6 @@ export const Client = () => {
           <Button
             size="small"
             icon={<StopOutlined />}
-            onClick={() => {
-              // Implement suspend logic here
-              console.log(`Suspending client: ${record.clientId}`);
-            }}
           >
             Suspend
           </Button>
@@ -101,10 +109,6 @@ export const Client = () => {
           size="small"
           icon={<UserSwitchOutlined />}
           type="dashed"
-          onClick={() => {
-            // Implement impersonation logic here
-            console.log(`Impersonating client: ${record.clientId}`);
-          }}
         >
           Impersonate
         </Button>
@@ -112,20 +116,6 @@ export const Client = () => {
       ),
     },
   ];
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (selectedKeys: React.Key[]) => {
-      setSelectedRowKeys(selectedKeys);
-    },
-  };
-
-
-  const { pagination,  setPagination } = useTableState(
-    {},
-    { page: 0, perPage: 10 },
-  );
-
 
   const {
     data: { data, dataTableMetaDTO },
@@ -144,7 +134,6 @@ export const Client = () => {
       />
 
       <div className="flex mb-4">
-
         <div className="flex flex-1 items-center justify-end gap-2">
         <Input.Search
           allowClear
@@ -172,10 +161,9 @@ export const Client = () => {
           ]}
         />
 
-
-          <Button onClick={() => showEditClient("", true)} type="primary">
-            Add client
-          </Button>
+        <Button onClick={() => showEditClient("", true)} type="primary">
+          Add client
+        </Button>
         </div>
       </div>
 

@@ -17,7 +17,6 @@ type schema = {
   clientName: string;
 };
 
-
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -53,15 +52,12 @@ export const Edit = ({
         clientId,
       };
 
-      console.log("Payload:", payload);
-
       isNew
         ? await clientCreate(payload) // 👈 send directly
         : await clientUpdate(payload); // assuming update still needs this shape
 
       onClose();
     };
-
 
   const onClose = () => showEditClient("", false);
 
@@ -83,7 +79,6 @@ export const Edit = ({
       title={isNew ? "New client" : "Edit client"}
       width={1000}
     >
-
       <Form
         initialValues={isNew ? initialValues : client}
         layout="vertical"
@@ -149,19 +144,14 @@ export const Edit = ({
             </Form.Item>
           </Col>
 
-        <Col span={6}>
-            <Form.Item label="Address line" name="address">
-              <Input placeholder="Address line" />
-            </Form.Item>
+          <Col span={6}>
+              <Form.Item label="Address line" name="address">
+                <Input placeholder="Address line" />
+              </Form.Item>
           </Col>
 
           <Col span={6}>
             <Form.Item label="Country" name="country">
-              {/* <Select
-                optionFilterProp="label"
-                placeholder="Select"
-                showSearch
-              /> */}
               <Input placeholder="Country" />
             </Form.Item>
           </Col>
