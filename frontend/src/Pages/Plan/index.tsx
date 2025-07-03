@@ -4,8 +4,6 @@ import {
   Button,
   Typography,
   Card,
-  Row,
-  Col,
   Radio,
   Space,
   message,
@@ -182,21 +180,35 @@ const Plan = () => {
   };
 
   useEffect(() => {
-    const init = async () => {
-      await fetchFeatureData();
-    };
-    init();
+  const scrollContainer = document.querySelector(".nested-scroll-overflow-y-scroll");
+  const header = document.querySelector(".headPlanModule");
+
+  if (!scrollContainer || !header) return;
+
+  const handleScroll = () => {
+    if (scrollContainer.scrollTop > 10) {
+      header.classList.add("sticky-shadow");
+    } else {
+      header.classList.remove("sticky-shadow");
+    }
+  };
+
+  scrollContainer.addEventListener("scroll", handleScroll);
+  return () => scrollContainer.removeEventListener("scroll", handleScroll);
+}, []);
+
+  useEffect(() => {
+    fetchFeatureData();
   }, []);
 
   useEffect(() => {
-    if (featuresList.length > 0) {
-      fetchPlans();
-    }
+    if (featuresList.length > 0) fetchPlans();
   }, [featuresList]);
 
   const filteredPlans = plans.filter((p) => p.clientTypes.includes(clientType));
 
   return (
+      <div className="planModule">
     <Navbar breadcrumbItems={[{ title: "Plan" }]}>
       <Edit
         menuId={selectedMenuId}
@@ -206,7 +218,7 @@ const Plan = () => {
         defaultData={defaultPlanData}
       />
 
-      <div className="mb-4 flex">
+      <div className="mb-4 flex headPlanModule">
         <Typography.Title level={4}>All Plans</Typography.Title>
         <div className="flex flex-1 items-center justify-end gap-2">
           <Button onClick={() => showEditMenu("", true)} type="primary">
@@ -232,161 +244,113 @@ const Plan = () => {
           </Radio.Group>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginBottom: 5,
-          }}
-        >
-          {/* <div style={{ width: 180 }}>
-            <Form.Item
-              label="Default Currency"
-              name="defaultcurrency"
-              style={{ margin: 0 }}
-            >
-              <Select
-                showSearch
-                value={selectedCurrency}
-                onChange={(value) => setSelectedCurrency(value)}
-                options={Object.keys(currencySymbols).map((cur) => ({
-                  value: cur,
-                  label: cur,
-                }))}
-              />
-            </Form.Item>
-          </div> */}
-        </div>
-
         <Card
           variant="borderless"
           className="plan_main_div"
-          style={{ 
-            borderRadius: 10,
-            overflowX: 'auto'
-          }}
-          bodyStyle={{ 
-            overflowX: 'auto',
-            minWidth: 'max-content'
-          }}
+          style={{ borderRadius: 10, overflowX: "auto" }}
+          bodyStyle={{ padding: 0 }}
         >
-          <Row gutter={16} className="header-row">
-            <Col span={6} className="centerDiv">
-              <div className="plan-title">Compare our plans</div>
-            </Col>
-            {filteredPlans.map((plan, i) => {
-              const items: MenuProps["items"] = [
-                {
-                  key: "edit",
-                  label: "Edit",
-                  icon: <EditOutlined />,
-                },
-                {
-                  key: "delete",
-                  label: "Delete",
-                  icon: <DeleteOutlined />,
-                  danger: true,
-                },
-              ];
-
-              const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
-                if (key === "edit") {
-                  showEditMenu(plan.id, true);
-                }
-
-                if (key === "delete") {
-                  Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!",
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      handleDeletePlan(plan.id);
-                      Swal.fire(
-                        "Deleted!",
-                        "Plan has been deleted.",
-                        "success",
-                      );
-                    }
-                  });
-                }
-              };
-
-              return (
-                <Col span={6} key={i} className="plan-col">
-                  <div className="dotAction">
-                    <Dropdown
-                      menu={{ items, onClick: handleMenuClick }}
-                      placement="bottomRight"
-                      trigger={["click"]}
-                    >
-                      <a onClick={(e) => e.preventDefault()}>
-                        <Space>
-                          <EllipsisOutlined
-                            style={{
-                              transform: "rotate(90deg)",
-                              fontSize: 20,
-                              cursor: "pointer",
-                              color: "#000",
-                              fontWeight: "bold",
-                            }}
-                          />
-                        </Space>
-                      </a>
-                    </Dropdown>
-                  </div>
-
-                  <div className="plan-name">
-                    <Text strong>{plan.name}</Text>
-                  </div>
-                  <div className="plan-monthly">
-                    {currencySymbols[selectedCurrency]}
-                    {plan.monthly} <span>/Per Month</span>
-                  </div>
-                  <div className="plan-annual">
-                    {currencySymbols[selectedCurrency]}
-                    {plan.annual} <span>/Per Annual</span>
-                  </div>
-                  <ul className="listLimit">
-                    {plan.limits.map((limit, index) => (
-                      <li key={index}>
-                        <CheckOutlined /> Limit {limit.limitType} :{" "}
-                        {limit.limitValue}
-                      </li>
-                    ))}
-                  </ul>
-                </Col>
-              );
-            })}
-          </Row>
-
-          {featuresList.map((feature, index) => (
-            <Row
-              key={index}
-              gutter={16}
-              style={{
-                padding: "12px 0",
-                borderTop: "1px solid #f0f0f0",
-                alignItems: "center",
-              }}
-            >
-              <Col span={6}>
-                <Text>{feature}</Text>
-              </Col>
-              {filteredPlans.map((plan, i) => (
-                <Col span={6} key={i} style={{ textAlign: "center" }}>
-                  {getIcon(plan.features[index])}
-                </Col>
+          <div className="plan-grid-container">
+            <div className="left-column">
+              <div className="plan-title fixedTitle centerDiv">Compare our plans</div>
+              {featuresList.map((feature, index) => (
+                <div key={index} className="feature-item">
+                  <Text>{feature}</Text>
+                </div>
               ))}
-            </Row>
-          ))}
+            </div>
+
+            <div className="plan-scrollable-columns">
+              {filteredPlans.map((plan, i) => {
+                const items: MenuProps["items"] = [
+                  {
+                    key: "edit",
+                    label: "Edit",
+                    icon: <EditOutlined />,
+                  },
+                  {
+                    key: "delete",
+                    label: "Delete",
+                    icon: <DeleteOutlined />,
+                    danger: true,
+                  },
+                ];
+
+                const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
+                  if (key === "edit") showEditMenu(plan.id, true);
+                  if (key === "delete") {
+                    Swal.fire({
+                      title: "Are you sure?",
+                      text: "You won't be able to revert this!",
+                      icon: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#3085d6",
+                      cancelButtonColor: "#d33",
+                      confirmButtonText: "Yes, delete it!",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        handleDeletePlan(plan.id);
+                        Swal.fire("Deleted!", "Plan has been deleted.", "success");
+                      }
+                    });
+                  }
+                };
+
+                return (
+                  <div key={i} className="plan-column">
+                    <div className="dotAction">
+                      <Dropdown
+                        menu={{ items, onClick: handleMenuClick }}
+                        placement="bottomRight"
+                        trigger={["click"]}
+                      >
+                        <a onClick={(e) => e.preventDefault()}>
+                          <Space>
+                            <EllipsisOutlined
+                              style={{
+                                transform: "rotate(90deg)",
+                                fontSize: 20,
+                                cursor: "pointer",
+                                color: "#000",
+                                fontWeight: "bold",
+                              }}
+                            />
+                          </Space>
+                        </a>
+                      </Dropdown>
+                    </div>
+                    <div className="plan-name">
+                      <Text strong>{plan.name}</Text>
+                    </div>
+                    <div className="plan-monthly">
+                      {currencySymbols[selectedCurrency]}
+                      {plan.monthly} <span>/Per Month</span>
+                    </div>
+                    <div className="plan-annual">
+                      {currencySymbols[selectedCurrency]}
+                      {plan.annual} <span>/Per Annual</span>
+                    </div>
+                    <ul className="listLimit">
+                      {plan.limits.map((limit, index) => (
+                        <li key={index}>
+                          <CheckOutlined /> Limit {limit.limitType} : {limit.limitValue}
+                        </li>
+                      ))}
+                    </ul>
+                    {featuresList.map((_, fi) => (
+                      <div key={fi} className="feature-icon">
+                        {getIcon(plan.features[fi])}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </Card>
       </div>
     </Navbar>
+      </div>
   );
 };
 
