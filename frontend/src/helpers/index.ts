@@ -32,3 +32,6 @@ export const TIME_RANGE_PRESETS: TimeRangePickerProps["presets"] = [
 
 export const formatAmount = (v: number) =>
   `${v < 0 ? "-" : ""}$${Math.abs(v).toFixed(2)}`;
+
+// Export authentication utilities
+export { getAuthToken, hasValidAuthToken, clearAuthToken, createAuthHeaders } from './auth';

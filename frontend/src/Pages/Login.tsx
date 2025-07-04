@@ -39,7 +39,7 @@ export const Login = () => {
         title={
           <img
             className="m-auto h-10"
-            src="./src/assets/logo.png"
+            src="/images/logo.png"
           />
         }
       >

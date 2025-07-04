@@ -2,8 +2,10 @@ import { createRouter } from "@swan-io/chicane";
 import { PropsWithChildren } from "react";
 import { match } from "ts-pattern";
 import { Client } from "./Pages/Client";
-import { Dashboard } from "./Pages/Dashboard";
+import { DashboardOverview } from "./Pages/Dashboard/Overview";
 import { Login } from "./Pages/Login";
+import Feature from "./Pages/Master/Feature";
+import Plan from "./Pages/Plan";
 import { Subscription } from "./Pages/Subscription";
 import { Users } from "./Pages/Teams/User";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
@@ -26,7 +28,9 @@ const routes = {
   Client: "/client",
   Subscription: "/subscription",
   Roles: "/roles",
-  Users: "/users"
+  Users: "/users",
+  Plan: "/plan",
+  Feature: "/feature",
 } as const;
 
 const paths = Object.keys(routes) as (keyof typeof routes)[];
@@ -40,7 +44,7 @@ export const Switch = () => {
     .with({ name: "Login" }, () => <Login />)
     .with({ name: "Dashboard" }, () => (
       <PrivateRoute>
-        <Dashboard />
+        <DashboardOverview />
       </PrivateRoute>
     ))
     .with({ name: "Client" }, () => (
@@ -61,6 +65,16 @@ export const Switch = () => {
     .with({ name: "Users" }, () => (
       <PrivateRoute>
         <Users />
+      </PrivateRoute>
+    ))
+    .with({ name: "Plan" }, () => (
+      <PrivateRoute>
+        <Plan />
+      </PrivateRoute>
+    ))
+    .with({ name: "Feature" }, () => (
+      <PrivateRoute>
+        <Feature />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");
