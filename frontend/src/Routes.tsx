@@ -7,6 +7,7 @@ import { Login } from "./Pages/Login";
 import Feature from "./Pages/Master/Feature";
 import Plan from "./Pages/Plan";
 import { Subscription } from "./Pages/Subscription";
+import { Roles } from "./Pages/Teams/Role";
 import { Users } from "./Pages/Teams/User";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 
@@ -59,7 +60,7 @@ export const Switch = () => {
     ))
     .with({ name: "Roles" }, () => (
       <PrivateRoute>
-        <Client />
+        <Roles />
       </PrivateRoute>
     ))
     .with({ name: "Users" }, () => (

@@ -1,8 +1,8 @@
-import { DeleteOutlined, EditOutlined, StopOutlined, UserSwitchOutlined } from "@ant-design/icons";
-import { Button, Input, Popconfirm, Select, Space, Table, Tag } from "antd";
+import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined, EditOutlined, EllipsisOutlined, PauseCircleOutlined, UserSwitchOutlined } from "@ant-design/icons";
+import { Button, Dropdown, Input, Menu, Popconfirm, Select, Space, Table, Tag } from "antd";
 import { useState } from "react";
 
-import { useClientDelete, useClients } from "../../api";
+import { useClientDelete, useClients, useClientStatusUpdate } from "../../api";
 import { Navbar } from "../../components/Navbar";
 import { useTableState } from "../../helpers/hooks";
 import { Edit } from "./Edit";
@@ -13,6 +13,7 @@ export const Client = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const { mutateAsync: deleteClient } = useClientDelete();
+  const { mutateAsync: clientStatusUpdate } = useClientStatusUpdate();
   const showEditClient = (id: string, open: boolean) => {
     setSelectedMenuId(id);
     setIsModalOpen(open);
@@ -84,37 +85,66 @@ export const Client = () => {
     {
       title: "Actions",
       key: "actions",
-      render: (_: any, record: any) => (
-        <Space>
-          <Button
-            icon={<EditOutlined />}
-            onClick={() => showEditClient(record.clientId, true)} // updated from record.id
-          />
-          <Popconfirm
-            key="delete"
-            onConfirm={() => deleteClient(record.clientId)}
-            title="Are you sure you'd like to delete this?"
-          >
-            <DeleteOutlined />
-          </Popconfirm>
+      render: (_: any, record: any) => {
+        const handleStatusChange = async (status: string) => {
+          await clientStatusUpdate({
+            clientId: record.clientId,
+            status,
+          });
+        };
 
-          <Button
-            size="small"
-            icon={<StopOutlined />}
+        const menu = (
+          <Menu
+            onClick={({ key }) => {
+              if (["active", "inactive", "suspended"].includes(key)) {
+                handleStatusChange(
+                  key === "active"
+                    ? "Active"
+                    : key === "inactive"
+                    ? "Inactive"
+                    : "Suspended"
+                );
+              } else if (key === "impersonate") {
+                console.log("Impersonate:", record.clientId);
+              }
+            }}
           >
-            Suspend
-          </Button>
+           <Menu.Item key="active" icon={<CheckCircleOutlined style={{ color: "green" }} />}>
+      Mark as Active
+    </Menu.Item>
+    <Menu.Item key="inactive" icon={<CloseCircleOutlined style={{ color: "red" }} />}>
+      Mark as Inactive
+    </Menu.Item>
+    <Menu.Item key="suspended" icon={<PauseCircleOutlined style={{ color: "#faad14" }} />}>
+      Mark as Suspended
+    </Menu.Item>
+    <Menu.Divider />
+    <Menu.Item key="impersonate" icon={<UserSwitchOutlined />}>
+      Impersonate
+    </Menu.Item>
+          </Menu>
+        );
 
-        <Button
-          size="small"
-          icon={<UserSwitchOutlined />}
-          type="dashed"
-        >
-          Impersonate
-        </Button>
-        </Space>
-      ),
-    },
+        return (
+          <Space>
+            <Button
+              icon={<EditOutlined />}
+              onClick={() => showEditClient(record.clientId, true)}
+            />
+            <Popconfirm
+              title="Are you sure you want to delete this client?"
+              onConfirm={() => deleteClient(record.clientId)}
+            >
+              <Button icon={<DeleteOutlined />} danger />
+            </Popconfirm>
+
+            <Dropdown overlay={menu} trigger={["click"]}>
+              <Button icon={<EllipsisOutlined />} />
+            </Dropdown>
+          </Space>
+        );
+      },
+    }
   ];
 
   const {
