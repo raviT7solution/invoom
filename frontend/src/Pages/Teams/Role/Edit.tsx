@@ -1,5 +1,5 @@
 import { Button, Checkbox, Col, Form, Input, Row } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useListUserRoles,
   useUserRole,
@@ -40,11 +40,11 @@ export const Edit = ({
   const isNew = roleId === "";
 
   const { data } = useListUserRoles("1");
-  const { mutateAsync: userRoleCreate, isPending: isCreating } =
-    useUserRoleCreate();
-    const { mutateAsync: userRoleUpdate, isPending: isUpdating } =
-    useUserRoleUpdate(roleId);
+  const { mutateAsync: userRoleCreate, isPending: isCreating } = useUserRoleCreate();
+  const { mutateAsync: userRoleUpdate, isPending: isUpdating } = useUserRoleUpdate(roleId);
   const { data: userRole, isFetching } = useUserRole(roleId);
+
+  const [permissionsState, setPermissionsState] = useState<Record<string, number[]>>({});
 
   const onFinish = async (values: any) => {
     const permissions: RoleSchema["permissions"] = [];
@@ -52,7 +52,7 @@ export const Edit = ({
     if (data?.navMenus) {
       data.navMenus.forEach((navMenu: any) => {
         (navMenu.subMenus || []).forEach((sub: any) => {
-          const checkedActions = values.permissions?.[sub.title] || [];
+          const checkedActions = permissionsState[sub.title] || [];
           (sub.actions || []).forEach((action: any) => {
             if (checkedActions.includes(action.navMenuActionId)) {
               permissions.push({
@@ -74,41 +74,39 @@ export const Edit = ({
       permissions,
     };
 
-    isNew
-        ? await userRoleCreate(payload) // 👈 send directly
-        : await userRoleUpdate(payload);
+    isNew ? await userRoleCreate(payload) : await userRoleUpdate(payload);
     onClose();
   };
 
-  const onClose = () => showEditRole("", false);
+  const onClose = () => {
+    setPermissionsState({});
+    form.resetFields();
+    showEditRole("", false);
+  };
 
-  // 👉 Auto populate permission checkboxes from existing data
   useEffect(() => {
-    if (userRole && data?.navMenus) {
+    if (userRole?.response?.navMenus) {
       const permissionMap: Record<string, number[]> = {};
 
-      userRole.permissions?.forEach((perm: any) => {
-        const subMenu = findSubMenuTitle(data.navMenus, perm.navSubMenuId);
-        if (subMenu) {
-          if (!permissionMap[subMenu]) permissionMap[subMenu] = [];
-          permissionMap[subMenu].push(perm.navMenuActionId);
-        }
+      userRole.response.navMenus.forEach((menu: any) => {
+        (menu.subMenus || []).forEach((sub: any) => {
+          const activeActionIds = (sub.actions || [])
+            .filter((action: any) => action.status === "active")
+            .map((action: any) => action.navMenuActionId);
+
+          if (activeActionIds.length > 0) {
+            permissionMap[sub.title] = activeActionIds;
+          }
+        });
       });
 
       form.setFieldsValue({
-        userRoleName: userRole.userRoleName,
-        permissions: permissionMap,
+        userRoleName: userRole.response.userRoleName,
       });
-    }
-  }, [userRole, data?.navMenus, form]);
 
-  const findSubMenuTitle = (menus: any[], subMenuId: number): string | null => {
-    for (let menu of menus) {
-      const found = menu.subMenus?.find((sub: any) => sub.navSubMenuId === subMenuId);
-      if (found) return found.title;
+      setPermissionsState(permissionMap);
     }
-    return null;
-  };
+  }, [userRole, form]);
 
   return (
     <FormDrawer
@@ -134,7 +132,7 @@ export const Edit = ({
         onFinish={onFinish}
         preserve={false}
         form={form}
-        initialValues={initialValues}
+        initialValues={isNew ? initialValues : userRole}
       >
         <Form.Item
           label="Role Name"
@@ -154,19 +152,25 @@ export const Edit = ({
               {navMenu.subMenus?.map((sub: any) => (
                 <Col span={8} key={sub.navSubMenuId}>
                   <div className="font-medium mb-1">{sub.title}</div>
-                  <Form.Item name={["permissions", sub.title]} noStyle>
-                    <Checkbox.Group>
-                      <Row>
-                        {sub.actions?.map((action: any) => (
-                          <Col span={24} key={action.navMenuActionId}>
-                            <Checkbox value={action.navMenuActionId}>
-                              {action.actionName}
-                            </Checkbox>
-                          </Col>
-                        ))}
-                      </Row>
-                    </Checkbox.Group>
-                  </Form.Item>
+                  <Checkbox.Group
+                    value={permissionsState[sub.title] || []}
+                    onChange={(checked) => {
+                      setPermissionsState((prev) => ({
+                        ...prev,
+                        [sub.title]: checked as number[],
+                      }));
+                    }}
+                  >
+                    <Row>
+                      {sub.actions?.map((action: any) => (
+                        <Col span={24} key={action.navMenuActionId}>
+                          <Checkbox value={action.navMenuActionId}>
+                            {action.actionName}
+                          </Checkbox>
+                        </Col>
+                      ))}
+                    </Row>
+                  </Checkbox.Group>
                 </Col>
               ))}
             </Row>

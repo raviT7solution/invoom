@@ -16,7 +16,6 @@ import {
   RobotOutlined,
   SettingOutlined,
   TeamOutlined,
-  UserAddOutlined,
   UserOutlined
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
@@ -161,14 +160,9 @@ export const Navbar = ({
 
   const headerItems: MenuProps["items"] = [
     {
-      label: <Link to="">My restaurants</Link>,
-      icon: <UserAddOutlined />,
-      key: "1",
-    },
-    {
       label: <Link to="">Change password</Link>,
       icon: <KeyOutlined />,
-      key: "2",
+      key: "1",
     },
   ];
 

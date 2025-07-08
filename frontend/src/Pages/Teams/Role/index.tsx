@@ -24,21 +24,6 @@ export const Roles = () => {
     },
   };
 
-  const [roles, setRoles] = useState([
-    {
-      id: "1",
-      roleName: "Manager",
-    },
-    {
-      id: "2",
-      roleName: "Admin",
-    },
-    {
-      id: "3",
-      roleName: "Support",
-    },
-  ]);
-
   const { pagination,  setPagination } = useTableState(
     {},
     { page: 0, perPage: 10 },
@@ -113,7 +98,7 @@ export const Roles = () => {
       </div>
 
       <Table
-        rowSelection={rowSelection}
+        // rowSelection={rowSelection}
         columns={columns}
         dataSource={data}
         loading={isFetching}
@@ -125,7 +110,7 @@ export const Roles = () => {
           pageSize: pagination.perPage,
           total: dataTableMetaDTO.total,
         }}
-        rowKey="clientId"
+        rowKey="userRoleId"
         size="small"
       />
     </Navbar>
