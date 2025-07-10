@@ -6,17 +6,24 @@ import { useClientDelete, useClients, useClientStatusUpdate } from "../../api";
 import { Navbar } from "../../components/Navbar";
 import { useTableState } from "../../helpers/hooks";
 import { Edit } from "./Edit";
+import { View } from "./View";
 
 export const Client = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedMenuId, setSelectedMenuId] = useState("");
+  const [isViewModalOpen, setViewIsModalOpen] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const { mutateAsync: deleteClient } = useClientDelete();
   const { mutateAsync: clientStatusUpdate } = useClientStatusUpdate();
   const showEditClient = (id: string, open: boolean) => {
-    setSelectedMenuId(id);
+    setSelectedClientId(id);
     setIsModalOpen(open);
+  };
+
+  const showViewClient = (id: string, open: boolean) => {
+    setSelectedClientId(id);
+    setViewIsModalOpen(open);
   };
 
   const rowSelection = {
@@ -34,8 +41,11 @@ export const Client = () => {
   const columns = [
     {
       title: "Client Name",
-      dataIndex: "clientName", // updated from 'name'
+      dataIndex: "clientName",
       key: "clientName",
+      render: (text: string, record: any) => (
+        <a onClick={() => showViewClient(record.clientId, true)}>{text}</a>
+      ),
     },
     {
       title: "Email",
@@ -158,9 +168,15 @@ export const Client = () => {
   return (
     <Navbar breadcrumbItems={[{ title: "All clients" }]}>
       <Edit
-        clientId={selectedMenuId}
+        clientId={selectedClientId}
         open={isModalOpen}
         showEditClient={showEditClient}
+      />
+
+      <View
+        clientId={selectedClientId}
+        open={isViewModalOpen}
+        showViewClient={showViewClient}
       />
 
       <div className="flex mb-4">
