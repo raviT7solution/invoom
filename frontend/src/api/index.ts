@@ -93,6 +93,18 @@ export const useClientUpdate = () => {
   });
 };
 
+export const useClientStatusUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: any) =>
+      apiClient.put(`/api/v1/clients/status`, data).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
+  });
+};
+
 export const useClient = (id: string) => {
   return useQuery({
     enabled: !!id,
@@ -123,6 +135,83 @@ export const useClientDelete = () => {
       apiClient.delete(`/api/v1/clients/${id}`).then((res) => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
+  });
+};
+
+export const useRoles = ({ start, length }: { start: number; length: number }) => {
+  return useQuery({
+    queryKey: ["clients", start, length],
+    queryFn: async () =>
+      apiClient
+        .post("/api/v1/clients/datatable", { start, length })
+        .then((res) => res.data),
+    initialData: collectionInitialData,
+  });
+};
+
+export const useUserRoles = ({ start, length }: { start: number; length: number }) => {
+  return useQuery({
+    queryKey: ["user-roles", start, length],
+    queryFn: async () =>
+      apiClient
+        .post("/api/user-role/datatable", { start, length })
+        .then((res) => res.data),
+    initialData: collectionInitialData,
+  });
+};
+
+export const useListUserRoles = (id: string) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: ["list-user-role", id],
+    queryFn: async () =>
+      apiClient.get(`/api/user-role/${id}`).then((res) => res.data.response),
+  });
+};
+
+
+export const useUserRoleCreate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: any) =>
+      apiClient.post("/api/user-role", data).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-roles"] });
+    },
+  });
+};
+
+export const useUserRole = (id: string) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: ["user-role", id],
+    queryFn: async () =>
+      apiClient.get(`/api/user-role/${id}`).then((res) => res.data.response), // 👈 extract response
+  });
+};
+
+export const useUserRoleUpdate = (id: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: any) =>
+      apiClient.put(`/api/user-role/${id}`, data).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-roles"] });
+    },
+  });
+};
+
+export const useUserRoleDelete = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) =>
+      apiClient.delete(`/api/user-role/${id}`).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-roles"] });
     },
   });
 };

@@ -20,13 +20,13 @@
 
 /* Invoom Navbar Styling - Primary Background with Secondary Text */
 .invoom-sidebar {
-  background-color: #1e2a5c !important;
-  border-right: 1px solid rgba(255, 184, 0, 0.2) !important;
+  background-color: #1a2a5c !important;
+  border-right: 1px solid rgba(230, 184, 48, 0.2) !important;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .invoom-sidebar .ant-layout-sider-children {
-  background-color: #1e2a5c !important;
+  background-color: #1a2a5c !important;
 }
 
 .invoom-logo-container {
@@ -35,8 +35,8 @@
   justify-content: center;
   align-items: center;
   padding: 10px 8px;
-  background-color: #1e2a5c;
-  border-bottom: 1px solid #1e2a5c;
+  background-color: #1a2a5c;
+  border-bottom: 1px solid #1a2a5c;
   position: relative;
   overflow: hidden;
 }
@@ -48,7 +48,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  /* background: linear-gradient(45deg, rgba(255, 184, 0, 0.15) 0%, transparent 50%); */
+  /* background: linear-gradient(45deg, rgba(230, 184, 48, 0.15) 0%, transparent 50%); */
   pointer-events: none;
 }
 
@@ -75,7 +75,7 @@
 
 .invoom-menu {
   border-right: none !important;
-  background-color: #1e2a5c !important;
+  background-color: #1a2a5c !important;
 }
 
 .invoom-menu .ant-menu-item {
@@ -85,14 +85,14 @@
 }
 
 .invoom-menu .ant-menu-item:hover {
-  background-color: rgba(255, 184, 0, 0.15) !important;
-  color: #f6b50a !important;
+  background-color: rgba(230, 184, 48, 0.15) !important;
+  color: #e6b830 !important;
 }
 
 .invoom-menu .ant-menu-item-selected {
-  background-color: rgba(255, 184, 0, 0.25) !important;
-  color: #f6b50a !important;
-  border-right: 3px solid #f6b50a !important;
+  background-color: rgba(230, 184, 48, 0.25) !important;
+  color: #e6b830 !important;
+  border-right: 3px solid #e6b830 !important;
   font-weight: 600 !important;
 }
 
@@ -103,13 +103,13 @@
 }
 
 .invoom-menu .ant-menu-submenu-title:hover {
-  background-color: rgba(255, 184, 0, 0.15) !important;
-  color: #f6b50a !important;
+  background-color: rgba(230, 184, 48, 0.15) !important;
+  color: #e6b830 !important;
 }
 
 .invoom-menu .ant-menu-submenu-open .ant-menu-submenu-title {
-  color: #f6b50a !important;
-  background-color: rgba(255, 184, 0, 0.1) !important;
+  color: #e6b830 !important;
+  background-color: rgba(230, 184, 48, 0.1) !important;
 }
 
 .invoom-menu .ant-menu-sub {
@@ -117,16 +117,16 @@
 }
 
 .invoom-menu .ant-menu-sub .ant-menu-item {
-  color: rgba(255, 184, 0, 0.8) !important;
+  color: rgba(230, 184, 48, 0.8) !important;
 }
 
 .invoom-menu .ant-menu-sub .ant-menu-item:hover {
-  background-color: rgba(255, 184, 0, 0.2) !important;
-  color: #f6b50a !important;
+  background-color: rgba(230, 184, 48, 0.2) !important;
+  color: #e6b830 !important;
 }
 
 .invoom-menu .ant-menu-item-icon {
-  color: #f6b50a !important;
+  color: #e6b830 !important;
 }
 
 .invoom-menu .ant-menu-title-content {
@@ -135,46 +135,46 @@
 }
 
 .invoom-menu .ant-menu-submenu .ant-menu-title-content a {
-  color: #f6b50a !important;
+  color: #e6b830 !important;
   font-weight: 500 !important;
 }
 
 .invoom-header {
-  background-color: #1e2a5c !important;
-  border-bottom: 1px solid rgba(255, 184, 0, 0.3);
+  background-color: #1a2a5c !important;
+  border-bottom: 1px solid rgba(230, 184, 48, 0.3);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .invoom-avatar {
-  background-color: #f6b50a !important;
-  color: #1e2a5c !important;
+  background-color: #e6b830 !important;
+  color: #1a2a5c !important;
   font-weight: 700 !important;
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .invoom-breadcrumb .ant-breadcrumb-link {
-  color: #1e2a5c !important;
+  color: #1a2a5c !important;
   font-weight: 600 !important;
 }
 
 .invoom-breadcrumb .ant-breadcrumb-link:hover {
-  color: #f6b50a !important;
+  color: #e6b830 !important;
 }
 
 .invoom-breadcrumb .ant-breadcrumb-separator {
-  color: #1e2a5c !important;
+  color: #1a2a5c !important;
 }
 
 /* Sidebar Trigger Button */
 .ant-layout-sider-trigger {
-  background-color: #1e2a5c !important;
-  color: #f6b50a !important;
-  /* border-top: 1px solid rgba(255, 184, 0, 0.3) !important; */
+  background-color: #1a2a5c !important;
+  color: #e6b830 !important;
+  /* border-top: 1px solid rgba(230, 184, 48, 0.3) !important; */
 }
 
 .ant-layout-sider-trigger:hover {
-  background-color: rgba(255, 184, 0, 0.1) !important;
-  color: #f6b50a !important;
+  background-color: rgba(230, 184, 48, 0.1) !important;
+  color: #e6b830 !important;
 }
 
 .sectionRow {
@@ -210,19 +210,19 @@
 /* Invoom Brand Color Updates */
 .ant-select-focused .ant-select-selector, 
 .ant-select-selector:hover {
-  border-color: #1e2a5c !important; 
-  box-shadow: 0 0 0 2px rgba(30, 42, 92, 0.2) !important;
+  border-color: #1a2a5c !important; 
+  box-shadow: 0 0 0 2px rgba(26, 42, 92, 0.2) !important;
 }
 
 .customToggle label.ant-segmented-item-selected {
-  background-color: #1e2a5c !important;
+  background-color: #1a2a5c !important;
   color: #fff !important;
   border-radius: 20px !important;
   transition: all 0.9s ease;
 }
 
 .customToggle.ant-segmented .ant-segmented-item:hover {
-  background-color: #1e2a5c !important;
+  background-color: #1a2a5c !important;
   color: #fff !important;
   border-radius: 20px !important;
 }
@@ -237,22 +237,22 @@
 }
 
 .ant-radio-button-wrapper-checked {
-  background-color: #1e2a5c !important;
+  background-color: #1a2a5c !important;
   color: #fff !important;
-  border-color: #1e2a5c !important;
+  border-color: #1a2a5c !important;
 }
 
 /* Override selected button color */
 .custom-radio-button .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-  background-color: #1e2a5c;
-  border-color: #1e2a5c;
+  background-color: #1a2a5c;
+  border-color: #1a2a5c;
   color: #fff;
 }
 
 /* Optional: Adjust hover for better UX */
 .custom-radio-button .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
-  background-color: #1e2a5c;
-  border-color: #1e2a5c;
+  background-color: #1a2a5c;
+  border-color: #1a2a5c;
 }
 
 .header-row {
@@ -282,7 +282,7 @@
 
 .plan-monthly {
   font-size: 16px;
-  color: #1e2a5c;
+  color: #1a2a5c;
   font-weight: 600;
 }
 
@@ -294,7 +294,7 @@
 
 .plan-annual {
   font-size: 14px;
-  color: #1e2a5c;
+  color: #1a2a5c;
   font-weight: 500;
 }
 
@@ -304,7 +304,7 @@
 }
 
 .listLimit svg {
-  fill: #f6b50a;
+  fill: #e6b830;
   margin-right: 6px;
 }
 
@@ -340,20 +340,22 @@
 
 /* Primary button styling with Invoom brand colors */
 .ant-btn-primary {
-  background-color: #1e2a5c !important;
-  border-color: #1e2a5c !important;
-  color: #fff !important;
+  background-color: #e6b830 !important;
+  border-color: #e6b830 !important;
+  color: #121222 !important;
+  font-weight: 600 !important;
 }
 
 .ant-btn-primary:hover {
-  background-color: #121222 !important;
-  border-color: #121222 !important;
+  background-color: #d4a72c !important;
+  border-color: #d4a72c !important;
+  color: #121222 !important;
 }
 
 .ant-btn-primary:focus {
-  background-color: #1e2a5c !important;
-  border-color: #1e2a5c !important;
-  box-shadow: 0 0 0 2px rgba(30, 42, 92, 0.2) !important;
+  background-color: #e6b830 !important;
+  border-color: #e6b830 !important;
+  box-shadow: 0 0 0 2px rgba(230, 184, 48, 0.3) !important;
 }
 
 .plan_main_div .ant-card-body {
@@ -386,7 +388,7 @@
 }
 
 .stat-icon-box {
-  background-color: #1e2a5c;
+  background-color: #1a2a5c;
   border-radius: 10px;
   width: 40px;
   height: 40px;
@@ -394,7 +396,7 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  box-shadow: 0 4px 8px rgba(30, 42, 92, 0.3);
+  box-shadow: 0 4px 8px rgba(26, 42, 92, 0.3);
 }
 
 .stat-icon-box svg {
@@ -407,7 +409,7 @@
 .stat-count {
   font-size: 28px;
   font-weight: 700;
-  color: #1e2a5c;
+  color: #1a2a5c;
   margin-bottom: 4px;
   font-family: 'Montserrat', sans-serif;
 }
@@ -447,38 +449,38 @@
 /* Additional Invoom brand styling */
 .ant-table-thead > tr > th {
   background-color: #f8f9fa !important;
-  /* border-bottom: 2px solid #1e2a5c !important; */
+  /* border-bottom: 2px solid #1a2a5c !important; */
   color: #121222 !important;
   font-weight: 600 !important;
 }
 
 .ant-table-tbody > tr:hover > td {
-  background-color: rgba(30, 42, 92, 0.05) !important;
+  background-color: rgba(26, 42, 92, 0.05) !important;
 }
 
 /* Form elements */
 .ant-input:focus,
 .ant-input-focused {
-  border-color: #1e2a5c !important;
-  box-shadow: 0 0 0 2px rgba(30, 42, 92, 0.2) !important;
+  border-color: #1a2a5c !important;
+  box-shadow: 0 0 0 2px rgba(26, 42, 92, 0.2) !important;
 }
 
 .ant-input:hover {
-  border-color: #1e2a5c !important;
+  border-color: #1a2a5c !important;
 }
 
 /* Checkbox and radio styling */
 .ant-checkbox-checked .ant-checkbox-inner {
-  background-color: #1e2a5c !important;
-  border-color: #1e2a5c !important;
+  background-color: #1a2a5c !important;
+  border-color: #1a2a5c !important;
 }
 
 .ant-radio-checked .ant-radio-inner {
-  border-color: #1e2a5c !important;
+  border-color: #1a2a5c !important;
 }
 
 .ant-radio-inner:after {
-  background-color: #1e2a5c !important;
+  background-color: #1a2a5c !important;
 }
 
 /* Links and interactive elements */
@@ -492,10 +494,145 @@ a:hover {
 
 /* Success/accent colors using the yellow */
 .ant-btn-success {
-  background-color: #f6b50a !important;
-  border-color: #f6b50a !important;
+  background-color: #e6b830 !important;
+  border-color: #e6b830 !important;
   color: #121222 !important;
   font-weight: 600 !important;
+}
+
+/* Secondary button styling - Navy blue for non-primary actions */
+.ant-btn-secondary {
+  background-color: #1a2a5c !important;
+  border-color: #1a2a5c !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+}
+
+.ant-btn-secondary:hover {
+  background-color: #121222 !important;
+  border-color: #121222 !important;
+  color: #fff !important;
+}
+
+.ant-btn-secondary:focus {
+  background-color: #1a2a5c !important;
+  border-color: #1a2a5c !important;
+  box-shadow: 0 0 0 2px rgba(26, 42, 92, 0.2) !important;
+}
+
+/* Outline button styling */
+.ant-btn-outline-primary {
+  background-color: transparent !important;
+  border-color: #e6b830 !important;
+  color: #e6b830 !important;
+  font-weight: 600 !important;
+}
+
+.ant-btn-outline-primary:hover {
+  background-color: #e6b830 !important;
+  border-color: #e6b830 !important;
+  color: #121222 !important;
+}
+
+/* Tabs styling */
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #e6b830 !important;
+  font-weight: 600 !important;
+}
+
+.ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: #e6b830 !important;
+}
+
+.ant-tabs-ink-bar {
+  background-color: #e6b830 !important;
+}
+
+/* Brand Color Utility Classes */
+.invoom-primary-bg {
+  background-color: #1a2a5c !important;
+}
+
+.invoom-primary-text {
+  color: #1a2a5c !important;
+}
+
+.invoom-secondary-bg {
+  background-color: #e6b830 !important;
+}
+
+.invoom-secondary-text {
+  color: #e6b830 !important;
+}
+
+.invoom-dark-bg {
+  background-color: #121222 !important;
+}
+
+.invoom-dark-text {
+  color: #121222 !important;
+}
+
+.invoom-white-bg {
+  background-color: #ffffff !important;
+}
+
+.invoom-white-text {
+  color: #ffffff !important;
+}
+
+/* Switch and Toggle styling */
+.ant-switch-checked {
+  background-color: #e6b830 !important;
+}
+
+.ant-switch-loading-icon,
+.ant-switch-checked .ant-switch-handle::before {
+  background-color: #e6b830 !important;
+}
+
+/* Pagination styling */
+.ant-pagination-item-active {
+  border-color: #e6b830 !important;
+}
+
+.ant-pagination-item-active a {
+  color: #e6b830 !important;
+}
+
+.ant-pagination-item:hover {
+  border-color: #e6b830 !important;
+}
+
+.ant-pagination-item:hover a {
+  color: #e6b830 !important;
+}
+
+/* Progress bar styling */
+.ant-progress-bg {
+  background-color: #e6b830 !important;
+}
+
+/* Text truncation utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .ant-btn-success:hover {

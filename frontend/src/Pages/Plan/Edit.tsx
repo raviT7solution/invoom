@@ -42,7 +42,7 @@ const initialData = [
 
 const currencyOptions = ["USD", "GBP", "EUR", "AED", "AUD", "INR", "CAD", "ZAR"];
 
-const Edit = ({ menuId, open, showEditMenu, refreshPlans }: any) => {
+const Edit = ({ menuId, open, showEditMenu, refreshPlans,type }: any) => {
   const [form] = Form.useForm();
   const isNew = menuId === "";
   const [data, setData] = useState(initialData);
@@ -274,14 +274,16 @@ const Edit = ({ menuId, open, showEditMenu, refreshPlans }: any) => {
 
   return (
     <FormDrawer
-      title={isNew ? "New Plan" : "Edit Plan"}
+      title={type === "add" ? "New Plan" : type === "edit" ? "Edit Plan" : "View Plan"}
       open={open}
       onClose={onClose}
       width={1000}
       footer={
-        <Button form="client-form" htmlType="submit" type="primary" loading={loading}>
-          Submit
-        </Button>
+        (type === "add" || type === "edit")  && ( 
+          <Button form="client-form" htmlType="submit" type="primary" loading={loading}>
+            Submit
+          </Button>
+        )
       }
       isFetching={false}
     >

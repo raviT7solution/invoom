@@ -6,6 +6,7 @@ import {
   DollarOutlined,
   FileSearchOutlined,
   GlobalOutlined,
+  IdcardOutlined,
   KeyOutlined,
   LinkOutlined,
   LogoutOutlined,
@@ -16,7 +17,7 @@ import {
   SafetyOutlined,
   SettingOutlined,
   TeamOutlined,
-  UserAddOutlined
+  UserOutlined
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
 import {
@@ -29,7 +30,6 @@ import {
   MenuProps
 } from "antd";
 import { ReactNode } from "react";
-
 import { Router } from "../Routes";
 import { logout } from "../api";
 import { classNames, initials } from "../helpers";
@@ -81,14 +81,26 @@ export const Navbar = ({
       key: "4",
     },
     {
-      label: <Link to="">OCR & AI Engine</Link>,
+      label: <Link to={Router.OCREngines()}>OCR & AI Engine</Link>,
       icon: <RobotOutlined />,
       key: "5",
     },
     {
-      label: <Link to="">User & Roles</Link>,
-      icon: <SafetyOutlined />,
+      label: "User & Roles",
+      icon: <TeamOutlined />, // Changed to reflect users/roles context
       key: "6",
+      children: [
+        {
+          label: <Link to={Router.Roles()}>Roles</Link>,
+          icon: <IdcardOutlined />, // Represents roles or identity
+          key: "6.1",
+        },
+        {
+          label: <Link to={Router.Users()}>Users</Link>,
+          icon: <UserOutlined />, // Clear representation of users
+          key: "6.2",
+        },
+      ],
     },
     {
       label: "Settings",
@@ -96,7 +108,7 @@ export const Navbar = ({
       key: "7",
       children: [
         {
-          label: <Link to="">Branding</Link>,
+          label: <Link to={Router.Integration()}>Integrations</Link>,
           icon: <BgColorsOutlined />,
           key: "7.1",
         },
@@ -123,15 +135,27 @@ export const Navbar = ({
       ],
     },
     {
-      label: <Link to="">Support</Link>,
+      label: "Support",
       icon: <QuestionCircleOutlined />,
       key: "8",
+      children: [
+        {
+          label: <Link to={Router.Support()}>Help Center</Link>,
+          icon: <MailOutlined />,
+          key: "8.1",
+        },
+        {
+          label: <Link to={Router.AdminSupport()}>Ticket Management</Link>,
+          icon: <SafetyOutlined />,
+          key: "8.2",
+        },
+      ],
     },
     {
       label: "Masters",
       icon: <SettingOutlined />,
       key: "9",
-      children: [ 
+      children: [
         {
           label: <Link to={Router.Feature()}>Feature</Link>,
           icon: <TeamOutlined />,
@@ -139,24 +163,25 @@ export const Navbar = ({
         },
       ],
     },
+    // {
+    //   label: "Logout",
+    //   icon: <LogoutOutlined />,
+    //   key: "10",
+    //   onClick: logout,
+    // },
+  ];
+
+  const headerItems: MenuProps["items"] = [
     {
       label: "Logout",
       icon: <LogoutOutlined />,
       key: "10",
       onClick: logout,
     },
-  ];
-
-  const headerItems: MenuProps["items"] = [
-    {
-      label: <Link to="">My restaurants</Link>,
-      icon: <UserAddOutlined />,
-      key: "1",
-    },
     {
       label: <Link to="">Change password</Link>,
       icon: <KeyOutlined />,
-      key: "2",
+      key: "1",
     },
   ];
 
