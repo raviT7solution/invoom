@@ -3,11 +3,7 @@ import {
   BgColorsOutlined,
   CreditCardOutlined,
   DashboardOutlined,
-  DollarOutlined,
-  FileSearchOutlined,
-  GlobalOutlined,
   KeyOutlined,
-  LinkOutlined,
   LogoutOutlined,
   MailOutlined,
   ProfileOutlined,
@@ -15,8 +11,7 @@ import {
   RobotOutlined,
   SafetyOutlined,
   SettingOutlined,
-  TeamOutlined,
-  UserAddOutlined
+  TeamOutlined
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
 import {
@@ -58,11 +53,11 @@ export const Navbar = ({
           icon: <BarChartOutlined />,
           key: "1.1",
         },
-        {
-          label: <Link to="">System Logs</Link>,
-          icon: <FileSearchOutlined />,
-          key: "1.2",
-        },
+        // {
+        //   label: <Link to="">System Logs</Link>,
+        //   icon: <FileSearchOutlined />,
+        //   key: "1.2",
+        // },
       ],
     },
     {
@@ -81,7 +76,7 @@ export const Navbar = ({
       key: "4",
     },
     {
-      label: <Link to="">OCR & AI Engine</Link>,
+      label: <Link to={Router.OCREngines()}>OCR & AI Engine</Link>,
       icon: <RobotOutlined />,
       key: "5",
     },
@@ -96,36 +91,48 @@ export const Navbar = ({
       key: "7",
       children: [
         {
-          label: <Link to="">Branding</Link>,
+          label: <Link to={Router.Integration()}>Integrations</Link>,
           icon: <BgColorsOutlined />,
           key: "7.1",
         },
-        {
-          label: <Link to="">Email Template</Link>,
-          icon: <MailOutlined />,
-          key: "7.2",
-        },
-        {
-          label: <Link to="">Billing Settings</Link>,
-          icon: <DollarOutlined />,
-          key: "7.3",
-        },
-        {
-          label: <Link to="">Webhook</Link>,
-          icon: <LinkOutlined />,
-          key: "7.4",
-        },
-        {
-          label: <Link to="">Regional Preferences</Link>,
-          icon: <GlobalOutlined />,
-          key: "7.5",
-        },
+        // {
+        //   label: <Link to="">Email Template</Link>,
+        //   icon: <MailOutlined />,
+        //   key: "7.2",
+        // },
+        // {
+        //   label: <Link to="">Billing Settings</Link>,
+        //   icon: <DollarOutlined />,
+        //   key: "7.3",
+        // },
+        // {
+        //   label: <Link to="">Webhook</Link>,
+        //   icon: <LinkOutlined />,
+        //   key: "7.4",
+        // },
+        // {
+        //   label: <Link to="">Regional Preferences</Link>,
+        //   icon: <GlobalOutlined />,
+        //   key: "7.5",
+        // },
       ],
     },
     {
-      label: <Link to="">Support</Link>,
+      label: "Support",
       icon: <QuestionCircleOutlined />,
       key: "8",
+      children: [
+        {
+          label: <Link to={Router.Support()}>Help Center</Link>,
+          icon: <MailOutlined />,
+          key: "8.1",
+        },
+        {
+          label: <Link to={Router.AdminSupport()}>Ticket Management</Link>,
+          icon: <SafetyOutlined />,
+          key: "8.2",
+        },
+      ],
     },
     {
       label: "Masters",
@@ -139,20 +146,26 @@ export const Navbar = ({
         },
       ],
     },
+    // {
+    //   label: "Logout",
+    //   icon: <LogoutOutlined />,
+    //   key: "10",
+    //   onClick: logout,
+    // },
+  ];
+
+  const headerItems: MenuProps["items"] = [
     {
       label: "Logout",
       icon: <LogoutOutlined />,
       key: "10",
       onClick: logout,
     },
-  ];
-
-  const headerItems: MenuProps["items"] = [
-    {
-      label: <Link to="">My restaurants</Link>,
-      icon: <UserAddOutlined />,
-      key: "1",
-    },
+    // {
+    //   label: <Link to="">My restaurants</Link>,
+    //   icon: <UserAddOutlined />,
+    //   key: "1",
+    // },
     {
       label: <Link to="">Change password</Link>,
       icon: <KeyOutlined />,

@@ -8,8 +8,13 @@ import { Login } from "./Pages/Login";
 import { Subscription } from "./Pages/Subscription";
 import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 import { DashboardOverview } from "./Pages/Dashboard/Overview";
-import Plan from "./Pages/Plan";
+// import PlanTableView from "./Pages/Plan/PlanTableView";
 import Feature from "./Pages/Master/Feature";
+import Plan from "./Pages/Plan";
+import { Integration } from "./Pages/Integration";
+import { OCREngines } from "./Pages/OCREngines";
+import { Support } from "./Pages/Support";
+import { AdminSupport } from "./Pages/AdminSupport";
 // import { Dashboard } from "./Pages/Dashboard";
 const PrivateRoute = ({ children }: PropsWithChildren) => {
   const token =  useAdminSessionStore((s) => s.token);
@@ -30,6 +35,10 @@ const routes = {
   Subscription: "/subscription",
   Plan: "/plan",
   Feature: "/feature",
+  Integration: "/integration",
+  OCREngines: "/ocr-engines",
+  Support: "/support",
+  AdminSupport: "/admin/support",
 } as const;
 
 const paths = Object.keys(routes) as (keyof typeof routes)[];
@@ -64,6 +73,26 @@ export const Switch = () => {
     .with({ name: "Feature" }, () => (
       <PrivateRoute>
         <Feature />
+      </PrivateRoute>
+    ))
+    .with({ name: "Integration" }, () => (
+      <PrivateRoute>
+        <Integration />
+      </PrivateRoute>
+    ))
+    .with({ name: "OCREngines" }, () => (
+      <PrivateRoute>
+        <OCREngines />
+      </PrivateRoute>
+    ))
+    .with({ name: "Support" }, () => (
+      <PrivateRoute>
+        <Support />
+      </PrivateRoute>
+    ))
+    .with({ name: "AdminSupport" }, () => (
+      <PrivateRoute>
+        <AdminSupport />
       </PrivateRoute>
     ))
     .otherwise(() => "Not found");

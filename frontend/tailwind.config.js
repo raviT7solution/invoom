@@ -4,12 +4,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Invoom Brand Colors
+        // Invoom Brand Colors - Updated to match Brand Kit
         invoom: {
-          primary: '#1e2a5c',      // Dark Blue (main brand color)
-          secondary: '#FFB800',    // Yellow/Orange (accent color)
+          primary: '#1a2a5c',      // Navy Blue (main brand color)
+          secondary: '#e6b830',    // Yellow (accent color)
           dark: '#121222',         // Very Dark (text/dark elements)
           light: '#f8f9fa',       // Light background
+          white: '#FFFFFF',        // Pure white
         },
         // Alias for primary colors
         primary: {
@@ -22,7 +23,7 @@ export default {
           600: '#4f46e5',
           700: '#4338ca',
           800: '#3730a3',
-          900: '#1e2a5c',  // Main brand blue
+          900: '#1a2a5c',  // Main brand navy blue
           950: '#121222',  // Very dark
         },
         secondary: {
@@ -31,9 +32,9 @@ export default {
           200: '#fde68a',
           300: '#fcd34d',
           400: '#fbbf24',
-          500: '#FFB800',  // Main brand yellow
-          600: '#d97706',
-          700: '#b45309',
+          500: '#e6b830',  // Main brand yellow
+          600: '#d4a72c',
+          700: '#b8941f',
           800: '#92400e',
           900: '#78350f',
         }
