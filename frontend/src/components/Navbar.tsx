@@ -3,7 +3,12 @@ import {
   BgColorsOutlined,
   CreditCardOutlined,
   DashboardOutlined,
+  DollarOutlined,
+  FileSearchOutlined,
+  GlobalOutlined,
+  IdcardOutlined,
   KeyOutlined,
+  LinkOutlined,
   LogoutOutlined,
   MailOutlined,
   ProfileOutlined,
@@ -11,7 +16,8 @@ import {
   RobotOutlined,
   SafetyOutlined,
   SettingOutlined,
-  TeamOutlined
+  TeamOutlined,
+  UserOutlined
 } from "@ant-design/icons";
 import { Link } from "@swan-io/chicane";
 import {
@@ -24,7 +30,6 @@ import {
   MenuProps
 } from "antd";
 import { ReactNode } from "react";
-
 import { Router } from "../Routes";
 import { logout } from "../api";
 import { classNames, initials } from "../helpers";
@@ -53,11 +58,11 @@ export const Navbar = ({
           icon: <BarChartOutlined />,
           key: "1.1",
         },
-        // {
-        //   label: <Link to="">System Logs</Link>,
-        //   icon: <FileSearchOutlined />,
-        //   key: "1.2",
-        // },
+        {
+          label: <Link to="">System Logs</Link>,
+          icon: <FileSearchOutlined />,
+          key: "1.2",
+        },
       ],
     },
     {
@@ -81,9 +86,21 @@ export const Navbar = ({
       key: "5",
     },
     {
-      label: <Link to="">User & Roles</Link>,
-      icon: <SafetyOutlined />,
+      label: "User & Roles",
+      icon: <TeamOutlined />, // Changed to reflect users/roles context
       key: "6",
+      children: [
+        {
+          label: <Link to={Router.Roles()}>Roles</Link>,
+          icon: <IdcardOutlined />, // Represents roles or identity
+          key: "6.1",
+        },
+        {
+          label: <Link to={Router.Users()}>Users</Link>,
+          icon: <UserOutlined />, // Clear representation of users
+          key: "6.2",
+        },
+      ],
     },
     {
       label: "Settings",
@@ -95,26 +112,26 @@ export const Navbar = ({
           icon: <BgColorsOutlined />,
           key: "7.1",
         },
-        // {
-        //   label: <Link to="">Email Template</Link>,
-        //   icon: <MailOutlined />,
-        //   key: "7.2",
-        // },
-        // {
-        //   label: <Link to="">Billing Settings</Link>,
-        //   icon: <DollarOutlined />,
-        //   key: "7.3",
-        // },
-        // {
-        //   label: <Link to="">Webhook</Link>,
-        //   icon: <LinkOutlined />,
-        //   key: "7.4",
-        // },
-        // {
-        //   label: <Link to="">Regional Preferences</Link>,
-        //   icon: <GlobalOutlined />,
-        //   key: "7.5",
-        // },
+        {
+          label: <Link to="">Email Template</Link>,
+          icon: <MailOutlined />,
+          key: "7.2",
+        },
+        {
+          label: <Link to="">Billing Settings</Link>,
+          icon: <DollarOutlined />,
+          key: "7.3",
+        },
+        {
+          label: <Link to="">Webhook</Link>,
+          icon: <LinkOutlined />,
+          key: "7.4",
+        },
+        {
+          label: <Link to="">Regional Preferences</Link>,
+          icon: <GlobalOutlined />,
+          key: "7.5",
+        },
       ],
     },
     {
@@ -138,7 +155,7 @@ export const Navbar = ({
       label: "Masters",
       icon: <SettingOutlined />,
       key: "9",
-      children: [ 
+      children: [
         {
           label: <Link to={Router.Feature()}>Feature</Link>,
           icon: <TeamOutlined />,
@@ -161,15 +178,10 @@ export const Navbar = ({
       key: "10",
       onClick: logout,
     },
-    // {
-    //   label: <Link to="">My restaurants</Link>,
-    //   icon: <UserAddOutlined />,
-    //   key: "1",
-    // },
     {
       label: <Link to="">Change password</Link>,
       icon: <KeyOutlined />,
-      key: "2",
+      key: "1",
     },
   ];
 

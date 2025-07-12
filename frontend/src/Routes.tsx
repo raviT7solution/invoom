@@ -1,16 +1,16 @@
 import { createRouter } from "@swan-io/chicane";
 import { PropsWithChildren } from "react";
 import { match } from "ts-pattern";
-
 import { Client } from "./Pages/Client";
-// import { Dashboard } from "./Pages/Dashboard";
-import { Login } from "./Pages/Login";
-import { Subscription } from "./Pages/Subscription";
-import { useAdminSessionStore } from "./stores/useAdminSessionStore";
 import { DashboardOverview } from "./Pages/Dashboard/Overview";
-// import PlanTableView from "./Pages/Plan/PlanTableView";
+import { Login } from "./Pages/Login";
 import Feature from "./Pages/Master/Feature";
 import Plan from "./Pages/Plan";
+import { Subscription } from "./Pages/Subscription";
+import { Roles } from "./Pages/Teams/Role";
+import { Users } from "./Pages/Teams/User";
+import { useAdminSessionStore } from "./stores/useAdminSessionStore";
+// import PlanTableView from "./Pages/Plan/PlanTableView";
 import { Integration } from "./Pages/Integration";
 import { OCREngines } from "./Pages/OCREngines";
 import { Support } from "./Pages/Support";
@@ -33,6 +33,8 @@ const routes = {
   Login: "/login",
   Client: "/client",
   Subscription: "/subscription",
+  Roles: "/roles",
+  Users: "/users",
   Plan: "/plan",
   Feature: "/feature",
   Integration: "/integration",
@@ -63,6 +65,16 @@ export const Switch = () => {
     .with({ name: "Subscription" }, () => (
       <PrivateRoute>
         <Subscription />
+      </PrivateRoute>
+    ))
+    .with({ name: "Roles" }, () => (
+      <PrivateRoute>
+        <Roles />
+      </PrivateRoute>
+    ))
+    .with({ name: "Users" }, () => (
+      <PrivateRoute>
+        <Users />
       </PrivateRoute>
     ))
     .with({ name: "Plan" }, () => (

@@ -16,7 +16,7 @@ export const Subscription = () => {
           {
             key: "1",
             label: "Active",
-            children: <Active/>,
+            children: <Active />,
           },
           {
             key: "2",

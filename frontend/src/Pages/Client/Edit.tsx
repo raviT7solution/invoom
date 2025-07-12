@@ -7,9 +7,7 @@ type schema = {
   firstName: string;
   lastName: string;
   email: string;
-  password?: string;
   mobileNumber: string;
-  address: string;
   country: string;
   signupType: "practice" | "business";
   practiceName?: string;
@@ -21,9 +19,7 @@ const initialValues = {
   firstName: "",
   lastName: "",
   email: "",
-  password: "",
   mobileNumber: "",
-  address: "",
   country: "",
   signupType: "practice",
   clientName: "",
@@ -122,33 +118,18 @@ export const Edit = ({
 
           <Col span={6}>
             <Form.Item
-              label="Password"
-              name="password"
-              rules={[{ required: isNew, message: "Required" }]}
-            >
-              <Input placeholder="Password" />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={8}>
-          <Col span={6}>
-            <Form.Item
-              label="Phone number"
+              label="Mobile number"
               name="mobileNumber"
               rules={[
                 { required: true, message: "Required" },
               ]}
             >
-               <Input placeholder="Phone number" />
+               <Input placeholder="Mobile number" />
             </Form.Item>
           </Col>
+        </Row>
 
-          <Col span={6}>
-              <Form.Item label="Address line" name="address">
-                <Input placeholder="Address line" />
-              </Form.Item>
-          </Col>
+        <Row gutter={8}>
 
           <Col span={6}>
             <Form.Item label="Country" name="country">
@@ -173,9 +154,7 @@ export const Edit = ({
               />
             </Form.Item>
           </Col>
-        </Row>
 
-        <Row gutter={8}>
         <Col span={6}>
           <Form.Item
             label={signupType === "practice" ? "Practice Name" : "Business Name"}
