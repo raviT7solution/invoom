@@ -49,15 +49,15 @@ export const Edit = ({
   const onFinish = async (values: any) => {
     const permissions: RoleSchema["permissions"] = [];
 
-    if (data?.navMenus) {
-      data.navMenus.forEach((navMenu: any) => {
-        (navMenu.subMenus || []).forEach((sub: any) => {
+    if (data?.menupermissions) {
+      data.menupermissions.forEach((navMenu: any) => {
+        (navMenu.subMenu || []).forEach((sub: any) => {
           const checkedActions = permissionsState[sub.title] || [];
-          (sub.actions || []).forEach((action: any) => {
+          (sub.action || []).forEach((action: any) => {
             if (checkedActions.includes(action.navMenuActionId)) {
               permissions.push({
-                navMenuId: navMenu.navMenuId,
-                navSubMenuId: sub.navSubMenuId,
+                navMenuId: parseInt(navMenu.navMenuId),
+                navSubMenuId: parseInt(sub.navSubMenuId),
                 navMenuActionId: action.navMenuActionId,
                 status: "active",
               });
@@ -85,13 +85,12 @@ export const Edit = ({
   };
 
   useEffect(() => {
-    if (userRole?.response?.navMenus) {
+    if (userRole?.menupermissions) {
       const permissionMap: Record<string, number[]> = {};
 
-      userRole.response.navMenus.forEach((menu: any) => {
-        (menu.subMenus || []).forEach((sub: any) => {
-          const activeActionIds = (sub.actions || [])
-            .filter((action: any) => action.status === "active")
+      userRole.menupermissions.forEach((menu: any) => {
+        (menu.subMenu || []).forEach((sub: any) => {
+          const activeActionIds = (sub.action || [])
             .map((action: any) => action.navMenuActionId);
 
           if (activeActionIds.length > 0) {
@@ -101,7 +100,7 @@ export const Edit = ({
       });
 
       form.setFieldsValue({
-        userRoleName: userRole.response.userRoleName,
+        userRoleName: userRole.roleName,
       });
 
       setPermissionsState(permissionMap);
@@ -132,7 +131,7 @@ export const Edit = ({
         onFinish={onFinish}
         preserve={false}
         form={form}
-        initialValues={isNew ? initialValues : userRole}
+        initialValues={isNew ? initialValues : { ...userRole, userRoleName: userRole?.roleName }}
       >
         <Form.Item
           label="Role Name"
@@ -143,13 +142,13 @@ export const Edit = ({
         </Form.Item>
 
         {/* Permission Grid */}
-        {data?.navMenus?.map((navMenu: any) => (
+        {data?.menupermissions?.map((navMenu: any) => (
           <div key={navMenu.navMenuId} style={{ marginBottom: 24 }}>
             <div className="bg-gray-200 font-semibold px-4 py-2 rounded mb-2">
               {navMenu.title}
             </div>
             <Row gutter={[16, 16]}>
-              {navMenu.subMenus?.map((sub: any) => (
+              {navMenu.subMenu?.map((sub: any) => (
                 <Col span={8} key={sub.navSubMenuId}>
                   <div className="font-medium mb-1">{sub.title}</div>
                   <Checkbox.Group
@@ -162,7 +161,7 @@ export const Edit = ({
                     }}
                   >
                     <Row>
-                      {sub.actions?.map((action: any) => (
+                      {sub.action?.map((action: any) => (
                         <Col span={24} key={action.navMenuActionId}>
                           <Checkbox value={action.navMenuActionId}>
                             {action.actionName}

@@ -1,6 +1,7 @@
 import {
   DeleteOutlined,
   EditOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 import { Button, Input, Popconfirm, Space, Table } from "antd";
 import { useState } from "react";
@@ -9,11 +10,13 @@ import { useUserRoleDelete, useUserRoles } from "../../../api";
 import { Navbar } from "../../../components/Navbar";
 import { useTableState } from "../../../helpers/hooks";
 import { Edit } from "./Edit";
+import { View } from "./View";
 
 export const Roles = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRoleId, setSelectedRoleId] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [isViewOpen, setIsViewOpen] = useState(false);
 
   const { mutateAsync: deleteUserRole } = useUserRoleDelete();
 
@@ -43,6 +46,11 @@ export const Roles = () => {
     setIsModalOpen(open);
   };
 
+  const showViewRole = (id: string, open: boolean) => {
+    setSelectedRoleId(id);
+    setIsViewOpen(open);
+  };
+
   const columns = [
     {
       title: "#",
@@ -59,6 +67,10 @@ export const Roles = () => {
       key: "actions",
       render: (_: any, record: any) => (
         <Space>
+          <Button
+            icon={<EyeOutlined />}
+            onClick={() => showViewRole(record.userRoleId, true)}
+          />
           <Button
             icon={<EditOutlined />}
             onClick={() => showEditRole(record.userRoleId, true)}
@@ -80,6 +92,11 @@ export const Roles = () => {
         roleId={selectedRoleId}
         open={isModalOpen}
         showEditRole={showEditRole}
+      />
+      <View
+        roleId={selectedRoleId}
+        open={isViewOpen}
+        onClose={() => setIsViewOpen(false)}
       />
 
       <div className="flex mb-4">

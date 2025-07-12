@@ -186,7 +186,7 @@ export const useUserRoleCreate = () => {
 export const useUserRole = (id: string) => {
   return useQuery({
     enabled: !!id,
-    queryKey: ["client", id],
+    queryKey: ["user-role", id],
     queryFn: async () =>
       apiClient.get(`/api/user-role/${id}`).then((res) => res.data.response), // 👈 extract response
   });
